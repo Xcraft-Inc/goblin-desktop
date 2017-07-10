@@ -63,8 +63,8 @@ class Hinter extends Widget {
       return (
         <HinterColumn
           kind={kind}
-          title-text={title}
-          title-glyph={glyph}
+          titleText={title}
+          titleGlyph={glyph}
           rows={rows}
           selectedIndex={selectedIndex}
           onRowClick={(index, text) => this.do ('select-row', {index, text})}
