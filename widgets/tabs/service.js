@@ -1,0 +1,93 @@
+'use strict';
+
+const Goblin = require ('xcraft-core-goblin');
+const goblinName = 'tabs';
+const uuidV4 = require ('uuid/v4');
+// Define initial logic values
+const logicState = {};
+
+// Define logic handlers according rc.json
+const logicHandlers = {
+  create: (state, action) => {
+    const id = action.get ('id');
+    const desktopId = action.get ('desktopId');
+    return state.set ('', {
+      id: id,
+      tabs: {},
+      desktopId,
+      current: {},
+    });
+  },
+  add: (state, action) => {
+    const tabId = action.get ('tabId');
+    const contextId = action.get ('contextId');
+    const current = state.get (`current.${contextId}`, null);
+    const tab = {
+      id: tabId,
+      view: action.get ('view'),
+      workitemId: action.get ('workitemId'),
+    };
+    if (!current) {
+      return state
+        .set (`current.${contextId}`, action.get ('workitemId'))
+        .set (`tabs.${contextId}.${tabId}`, tab);
+    }
+    return state.set (`tabs.${contextId}.${tabId}`, tab);
+  },
+  'set-current': (state, action) => {
+    const wid = action.get ('workitemId');
+    const contextId = action.get ('contextId');
+    return state.set (`current.${contextId}`, wid);
+  },
+  remove: (state, action) => {
+    const tabId = action.get ('tabId');
+    const contextId = action.get ('contextId');
+    return state.del (`tabs.${contextId}.${tabId}`);
+  },
+  delete: state => {
+    return state.set ('', {});
+  },
+};
+
+// Register quest's according rc.json
+
+Goblin.registerQuest (goblinName, 'create', function (quest, id, desktopId) {
+  quest.do ({id, desktopId});
+  return quest.goblin.id;
+});
+
+Goblin.registerQuest (goblinName, 'delete', function (quest, id) {
+  quest.do ({id});
+});
+
+Goblin.registerQuest (goblinName, 'set-current', function (
+  quest,
+  contextId,
+  workitemId
+) {
+  quest.do ({contextId, workitemId});
+});
+
+Goblin.registerQuest (goblinName, 'add', function* (
+  quest,
+  contextId,
+  name,
+  view,
+  workitemId
+) {
+  const tab = yield quest.create (`button@${uuidV4 ()}`, {
+    id: `${contextId}-tab@${workitemId}`,
+    text: name,
+    kind: 'view-tab',
+  });
+  quest.do ({tabId: tab.id, contextId, view, name, workitemId});
+  quest.goblin.defer (tab.delete);
+  return tab.id;
+});
+
+Goblin.registerQuest (goblinName, 'remove', function (quest, ctxId) {
+  quest.do ({ctxId});
+});
+
+// Create a Goblin with initial state and handlers
+module.exports = Goblin.configure (goblinName, logicState, logicHandlers);

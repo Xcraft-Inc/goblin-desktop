@@ -1,0 +1,1 @@
+# %GOBLIN_NAME%

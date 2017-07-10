@@ -1,0 +1,22 @@
+{
+  "name": "goblin-desktop",
+  "version": "0.0.1",
+  "description": "Goblin Desktop",
+  "main": "desktop.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "config": {
+    "xcraft": {
+      "commands": true
+    }
+  },
+  "dependencies": {
+    "xcraft-core-goblin": "^2.0.0"
+  },
+  "devDependencies": {
+    "xcraft-dev-rules": "^0.1.8"
+  }
+}
