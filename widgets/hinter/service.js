@@ -100,8 +100,8 @@ Goblin.registerQuest (goblinName, 'set-selections', function (
   }
 });
 
-Goblin.registerQuest (goblinName, 'delete', function (quest, id) {
-  quest.do ({id});
+Goblin.registerQuest (goblinName, 'delete', function (quest) {
+  quest.log.info ('Deleting hinter...');
 });
 
 // Create a Goblin with initial state and handlers

@@ -50,8 +50,8 @@ Goblin.registerQuest (goblinName, 'create', function (quest, id, desktopId) {
   return quest.goblin.id;
 });
 
-Goblin.registerQuest (goblinName, 'delete', function (quest, id) {
-  quest.do ({id});
+Goblin.registerQuest (goblinName, 'delete', function (quest) {
+  quest.log.info ('deleting contexts...');
 });
 
 Goblin.registerQuest (goblinName, 'set-current', function (quest, contextId) {

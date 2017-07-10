@@ -348,5 +348,9 @@ Goblin.registerQuest (goblinName, 'change-mandate', function (quest) {
   }
 });
 
+Goblin.registerQuest (goblinName, 'delete', function (quest) {
+  quest.log.info ('Deleting desktop...');
+});
+
 // Create a Goblin with initial state and handlers
 module.exports = Goblin.configure (goblinName, logicState, logicHandlers);

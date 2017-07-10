@@ -21,9 +21,6 @@ const logicHandlers = {
   'set-entity': (state, action) => {
     return state.set ('detailWidgetId', action.get ('widgetId'));
   },
-  delete: state => {
-    return state.set ('', {});
-  },
 };
 
 // Register quest's according rc.json
@@ -60,8 +57,8 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (quest, entityId) {
   quest.do ({widgetId: newWidget.id});
 });
 
-Goblin.registerQuest (goblinName, 'delete', function (quest, id) {
-  quest.do ({id});
+Goblin.registerQuest (goblinName, 'delete', function (quest) {
+  quest.info.log ('Deleting detail...');
 });
 
 // Create a Goblin with initial state and handlers
