@@ -10,12 +10,12 @@ class Tasks extends Widget {
     super (props, context);
   }
 
-  doQuest (quest) {
-    this.cmd (quest, {});
+  doQuest (quest, desktopId) {
+    this.cmd (quest, {desktopId});
   }
 
   render () {
-    const {isDisplayed, context} = this.props;
+    const {isDisplayed, context, desktopId} = this.props;
 
     if (!isDisplayed) {
       return null;
@@ -34,7 +34,7 @@ class Tasks extends Widget {
               key={i}
               text={task.text}
               glyph={task.glyph}
-              onClick={() => this.doQuest (task.quest)}
+              onClick={() => this.doQuest (task.quest, desktopId)}
             />
           );
         })}
