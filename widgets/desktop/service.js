@@ -134,14 +134,15 @@ Goblin.registerQuest (goblinName, 'create', function* (
 
 Goblin.registerQuest (goblinName, 'create-form-for', function* (
   quest,
-  workitemId
+  workitemId,
+  value
 ) {
   if (!workitemId) {
     throw new Error ('Cannot create form without a workitemId');
   }
   const labId = quest.goblin.getX ('labId');
   const lab = quest.useAs ('laboratory', labId);
-  lab.createFormFor ({workitemId});
+  lab.createFormFor ({workitemId, value});
 });
 
 Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
