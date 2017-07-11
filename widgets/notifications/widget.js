@@ -92,11 +92,12 @@ class Notifications extends Widget {
   }
 
   render () {
-    const data = this.props.data;
-    const show = this.props.show;
     if (!this.props.id) {
       return null;
     }
+
+    const data = this.props.data;
+    const show = this.props.show;
 
     const panelClass = show === 'true'
       ? this.styles.classNames.panel
