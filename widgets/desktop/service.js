@@ -191,6 +191,27 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
   return hinter.id;
 });
 
+Goblin.registerQuest (goblinName, 'add-workitem', function* (
+  quest,
+  workitemId,
+  payload
+) {
+  let name = workitemId;
+  if (workitemId.indexOf ('@') !== -1) {
+    name = workitemId.split ('@')[0];
+  }
+  return yield quest.create (
+    name,
+    Object.assign (
+      {
+        id: workitemId,
+        desktopId: quest.goblin.id,
+      },
+      payload
+    )
+  );
+});
+
 Goblin.registerQuest (goblinName, 'add-context', function (
   quest,
   contextId,
