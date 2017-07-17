@@ -8,13 +8,13 @@ class HinterView extends Widget {
   }
 
   render () {
-    const {isDisplayed, hinter, workitem} = this.props;
+    const {isDisplayed, hinter, workitemId} = this.props;
     if (!isDisplayed) {
       return null;
     }
 
     const wireHinter = Widget.Wired (Hinter);
-    const WiredHinter = wireHinter (`${hinter}-hinter@${workitem}`);
+    const WiredHinter = wireHinter (`${hinter}-hinter@${workitemId}`);
     return <WiredHinter />;
   }
 }

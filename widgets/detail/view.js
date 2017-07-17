@@ -8,13 +8,13 @@ class DetailView extends Widget {
   }
 
   render () {
-    const {isDisplayed, hinter, workitem} = this.props;
+    const {isDisplayed, hinter, workitemId} = this.props;
     if (!isDisplayed) {
       return null;
     }
 
     const wireDetail = Widget.Wired (Detail);
-    const WiredDetail = wireDetail (`${hinter}-detail@${workitem}`);
+    const WiredDetail = wireDetail (`${hinter}-detail@${workitemId}`);
     return <WiredDetail />;
   }
 }
