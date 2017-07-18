@@ -1,8 +1,7 @@
 {
     "presets": [
         "node6",
-        "react",
-        "stage-0"
+        "react"
     ],
     "env": {
         "development": {
@@ -34,20 +33,13 @@
                     }
                 ],
                 [
-                    "react-intl",
-                    {
-                        "messagesDir": "./dist/messages/",
-                        "enforceDescriptions": false
-                    }
-                ],
-                [
-                    "transform-decorators-legacy"
-                ],
-                [
                     "transform-class-properties"
                 ],
                 [
-                    "transform-es2015-classes"
+                    "transform-object-rest-spread"
+                ],
+                [
+                    "transform-function-bind"
                 ]
             ]
         },
@@ -69,20 +61,13 @@
                     }
                 ],
                 [
-                    "react-intl",
-                    {
-                        "messagesDir": "./dist/messages/",
-                        "enforceDescriptions": false
-                    }
-                ],
-                [
-                    "transform-decorators-legacy"
-                ],
-                [
                     "transform-class-properties"
                 ],
                 [
-                    "transform-es2015-classes"
+                    "transform-object-rest-spread"
+                ],
+                [
+                    "transform-function-bind"
                 ]
             ]
         }
