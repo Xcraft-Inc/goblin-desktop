@@ -1,14 +1,11 @@
 {
     "presets": [
-        "es2016",
         "react"
     ],
     "env": {
         "development": {
             "plugins": [
-                [
-                    "react-hot-loader/babel"
-                ],
+                "react-hot-loader/babel",
                 [
                     "react-transform",
                     {
@@ -32,15 +29,9 @@
                         ]
                     }
                 ],
-                [
-                    "transform-class-properties"
-                ],
-                [
-                    "transform-object-rest-spread"
-                ],
-                [
-                    "transform-function-bind"
-                ]
+                "transform-class-properties",
+                "transform-object-rest-spread",
+                "transform-function-bind"
             ]
         },
         "production": {
@@ -60,15 +51,9 @@
                         ]
                     }
                 ],
-                [
-                    "transform-class-properties"
-                ],
-                [
-                    "transform-object-rest-spread"
-                ],
-                [
-                    "transform-function-bind"
-                ]
+                "transform-class-properties",
+                "transform-object-rest-spread",
+                "transform-function-bind"
             ]
         }
     }
