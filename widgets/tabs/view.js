@@ -5,8 +5,8 @@ import Tabs from 'desktop/tabs/widget';
 const wireTabs = Widget.Wired (Tabs);
 
 class TabsView extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   render () {

@@ -6,8 +6,8 @@ import Container from 'gadgets/container/widget';
 const widgetImporter = importer ('widget');
 
 class Detail extends Widget {
-  constructor (props) {
-    super (props);
+  constructor () {
+    super (...arguments);
   }
 
   static get wiring () {

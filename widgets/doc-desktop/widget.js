@@ -4,8 +4,8 @@ import Container from 'gadgets/container/widget';
 import Readme from '../../README.md';
 
 class DesktopDoc extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   renderPanel () {

@@ -10,8 +10,8 @@ const wiredNotifications = Widget.Wired (Notifications);
 const viewImporter = importer ('view');
 
 class Desktop extends Widget {
-  constructor (props) {
-    super (props);
+  constructor () {
+    super (...arguments);
   }
 
   static get wiring () {

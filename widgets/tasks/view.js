@@ -6,8 +6,8 @@ import Button from 'gadgets/button/widget';
 
 const tasksImporter = importer ('tasks');
 class Tasks extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   doQuest (quest, desktopId) {

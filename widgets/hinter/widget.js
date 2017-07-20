@@ -6,8 +6,8 @@ import MouseTrap from 'mousetrap';
 const widgetImporter = importer ('widget');
 
 class Hinter extends Widget {
-  constructor (props) {
-    super (props);
+  constructor () {
+    super (...arguments);
   }
 
   static get wiring () {

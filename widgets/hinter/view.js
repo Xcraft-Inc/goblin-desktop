@@ -3,8 +3,8 @@ import Widget from 'laboratory/widget';
 import Hinter from 'desktop/hinter/widget';
 
 class HinterView extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   render () {

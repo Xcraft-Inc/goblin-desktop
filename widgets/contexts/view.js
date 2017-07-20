@@ -4,8 +4,8 @@ import Contexts from 'desktop/contexts/widget';
 const wireContexts = Widget.Wired (Contexts);
 
 class ContextsView extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   render () {

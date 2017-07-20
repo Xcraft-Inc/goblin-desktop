@@ -7,8 +7,8 @@ import NotificationsButton from 'desktop/notifications-button/widget';
 const wireButton = Widget.Wired (Button);
 const wireNotifsButton = Widget.Wired (NotificationsButton);
 class Tabs extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   static get wiring () {

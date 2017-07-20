@@ -3,8 +3,8 @@ import Widget from 'laboratory/widget';
 import Detail from 'desktop/detail/widget';
 
 class DetailView extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   render () {

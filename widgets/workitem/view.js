@@ -3,8 +3,8 @@ import Widget from 'laboratory/widget';
 import importer from 'laboratory/importer/';
 const viewImporter = importer ('view');
 class WorkItem extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   render () {

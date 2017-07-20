@@ -5,8 +5,8 @@ import Container from 'gadgets/container/widget';
 const Wired = Widget.Wired (Button);
 
 class Contexts extends Widget {
-  constructor (props, context) {
-    super (props, context);
+  constructor () {
+    super (...arguments);
   }
 
   static get wiring () {

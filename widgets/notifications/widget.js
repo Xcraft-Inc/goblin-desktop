@@ -8,8 +8,8 @@ import Notification from 'gadgets/notification/widget';
 /******************************************************************************/
 
 class Notifications extends Widget {
-  constructor (props) {
-    super (props);
+  constructor () {
+    super (...arguments);
   }
 
   static get wiring () {
