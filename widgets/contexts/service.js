@@ -69,9 +69,9 @@ Goblin.registerQuest (goblinName, 'add', function* (quest, contextId, name) {
   });
 
   quest.create (`taskbar@${useId}`, {
-    id: `taskbar@${ctx.id}`,
+    id: `taskbar@${contextId}`,
     desktopId: quest.goblin.getX ('desktopId'),
-    contextId: ctx.id,
+    contextId: contextId,
   });
 
   quest.do ({widgetId, contextId, name});

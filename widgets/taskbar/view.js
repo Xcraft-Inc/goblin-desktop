@@ -1,6 +1,6 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import Tasks from 'desktop/taskbar/widget';
+import Taskbar from 'desktop/taskbar/widget';
 
 class TaskbarView extends Widget {
   constructor () {
@@ -13,8 +13,8 @@ class TaskbarView extends Widget {
     if (!isDisplayed) {
       return null;
     }
-    const WiredTasks = Widget.Wired (Tasks) (`tasks@${context}`);
-    return <WiredTasks />;
+    const WiredTaskbar = Widget.Wired (Taskbar) (`taskbar@${context}`);
+    return <WiredTaskbar />;
   }
 }
 
