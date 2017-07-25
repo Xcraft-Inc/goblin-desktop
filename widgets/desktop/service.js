@@ -155,10 +155,7 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
     title = type;
   }
 
-  let goblinName = workitemId;
-  if (workitemId.indexOf ('@') !== -1) {
-    goblinName = workitemId.split ('@')[0];
-  }
+  let goblinName = Goblin.getGoblinName (workitemId);
 
   const hinter = yield quest.createFor (
     goblinName,
@@ -183,10 +180,7 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
   workitemId,
   payload
 ) {
-  let name = workitemId;
-  if (workitemId.indexOf ('@') !== -1) {
-    name = workitemId.split ('@')[0];
-  }
+  const name = Goblin.getGoblinName (workitemId);
   return yield quest.create (
     name,
     Object.assign (
