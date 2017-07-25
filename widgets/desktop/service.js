@@ -11,7 +11,7 @@ const defaultRoutes = {
   tabs: '/before-content/:context',
   workitem: '/content/:context/:view',
   hinter: '/hinter/:context/:view/:hinter',
-  tasks: '/task-bar/:context',
+  taskbar: '/task-bar/:context',
   contexts: '/top-bar/',
 };
 

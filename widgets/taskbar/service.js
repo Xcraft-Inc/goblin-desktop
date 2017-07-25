@@ -1,7 +1,7 @@
 'use strict';
 
 const Goblin = require ('xcraft-core-goblin');
-const goblinName = 'tasks';
+const goblinName = 'taskbar';
 // Define initial logic values
 const logicState = {};
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import Tasks from 'desktop/tasks/widget';
+import Tasks from 'desktop/taskbar/widget';
 
-class TasksView extends Widget {
+class TaskbarView extends Widget {
   constructor () {
     super (...arguments);
   }
@@ -18,4 +18,4 @@ class TasksView extends Widget {
   }
 }
 
-export default TasksView;
+export default TaskbarView;

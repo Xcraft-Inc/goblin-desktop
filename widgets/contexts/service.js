@@ -68,8 +68,8 @@ Goblin.registerQuest (goblinName, 'add', function* (quest, contextId, name) {
     kind: 'main-tab',
   });
 
-  quest.create (`tasks@${useId}`, {
-    id: `tasks@${ctx.id}`,
+  quest.create (`taskbar@${useId}`, {
+    id: `taskbar@${ctx.id}`,
     desktopId: quest.goblin.getX ('desktopId'),
     contextId: ctx.id,
   });

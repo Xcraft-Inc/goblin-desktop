@@ -5,7 +5,7 @@ import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 
 const tasksImporter = importer ('tasks');
-class Tasks extends Widget {
+class Taskbar extends Widget {
   constructor () {
     super (...arguments);
   }
@@ -44,4 +44,4 @@ class Tasks extends Widget {
   }
 }
 
-export default Tasks;
+export default Taskbar;
