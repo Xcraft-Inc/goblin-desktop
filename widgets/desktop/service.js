@@ -180,9 +180,8 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
   workitemId,
   payload
 ) {
-  const name = Goblin.getGoblinName (workitemId);
   return yield quest.create (
-    name,
+    workitemId,
     Object.assign (
       {
         id: workitemId,

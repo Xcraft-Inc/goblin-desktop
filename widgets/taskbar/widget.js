@@ -35,7 +35,11 @@ class Taskbar extends Widget {
               key={i}
               text={task.text}
               glyph={task.glyph}
-              onClick={() => this.do ('run', {task: task.quest})}
+              onClick={() =>
+                this.do ('run', {
+                  workitem: task.workitem,
+                  payload: task.payload,
+                })}
             />
           );
         })}

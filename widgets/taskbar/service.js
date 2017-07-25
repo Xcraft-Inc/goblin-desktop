@@ -2,9 +2,10 @@
 
 const Goblin = require ('xcraft-core-goblin');
 const goblinName = 'taskbar';
+const uuidV4 = require ('uuid/v4');
+
 // Define initial logic values
 const logicState = {};
-
 // Define logic handlers according rc.json
 const logicHandlers = {
   create: (state, action) => {
@@ -28,17 +29,10 @@ Goblin.registerQuest (goblinName, 'delete', function (quest) {
   quest.log.info ('deleting tasks...');
 });
 
-Goblin.registerQuest (goblinName, 'run', function (quest, task) {
-  if (task.endsWith ('.create')) {
-    const goblin = task.split ('.')[0];
-    quest.create (goblin, {
-      desktopId: quest.goblin.getX ('desktopId'),
-    });
-  } else {
-    quest.cmd (task, {
-      desktopId: quest.goblin.getX ('desktopId'),
-    });
-  }
+Goblin.registerQuest (goblinName, 'run', function (quest, workitem, payload) {
+  const desk = quest.useAs ('desktop', quest.goblin.getX ('desktopId'));
+  const workitemId = `${workitem}@${uuidV4 ()}`;
+  desk.addWorkitem ({workitemId, payload});
 });
 
 // Create a Goblin with initial state and handlers

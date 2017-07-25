@@ -51,14 +51,16 @@ You can write a `tasks.js` file in a folder named like the context id, in the wi
 // goblin-name/widgets/codispatch/tasks.js
 export default [
   {
-    text: 'Search',
-    glyph: 'search',
-    quest: 'mission-search.create',
+    text: 'Search', 
+    glyph: 'search', 
+    woritem: 'mission-search',
+    payload: {} //dedicated payload of parameters for the workitem
   },
   {
     text: 'Mission',
     glyph: 'plus',
-    quest: 'mission-workflow.create',
+    woritem: 'mission-workflow',
+    payload: {}
   },
 ];
 ```
