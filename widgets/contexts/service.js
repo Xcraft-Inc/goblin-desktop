@@ -46,6 +46,7 @@ const logicHandlers = {
 // Register quest's according rc.json
 
 Goblin.registerQuest (goblinName, 'create', function (quest, id, desktopId) {
+  quest.goblin.setX ('desktopId', desktopId);
   quest.do ({id, desktopId});
   return quest.goblin.id;
 });
@@ -60,11 +61,19 @@ Goblin.registerQuest (goblinName, 'set-current', function (quest, contextId) {
 
 Goblin.registerQuest (goblinName, 'add', function* (quest, contextId, name) {
   const widgetId = `context@${contextId}`;
-  const ctx = yield quest.create (`button@${uuidV4 ()}`, {
+  const useId = uuidV4 ();
+  const ctx = yield quest.create (`button@${useId}`, {
     id: widgetId,
     text: name,
     kind: 'main-tab',
   });
+
+  quest.create (`tasks@${useId}`, {
+    id: `tasks@${ctx.id}`,
+    desktopId: quest.goblin.getX ('desktopId'),
+    contextId: ctx.id,
+  });
+
   quest.do ({widgetId, contextId, name});
   quest.goblin.defer (ctx.delete);
 

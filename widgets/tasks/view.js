@@ -1,46 +1,21 @@
 import React from 'react';
-import importer from 'laboratory/importer/';
 import Widget from 'laboratory/widget';
-import Container from 'gadgets/container/widget';
-import Button from 'gadgets/button/widget';
+import Tasks from 'desktop/tasks/widget';
 
-const tasksImporter = importer ('tasks');
-class Tasks extends Widget {
+class TasksView extends Widget {
   constructor () {
     super (...arguments);
   }
 
-  doQuest (quest, desktopId) {
-    this.cmd (quest, {desktopId});
-  }
-
   render () {
-    const {isDisplayed, context, desktopId} = this.props;
+    const {isDisplayed, context} = this.props;
 
     if (!isDisplayed) {
       return null;
     }
-
-    const contextTasks = tasksImporter (context);
-    if (!contextTasks) {
-      return null;
-    }
-    return (
-      <Container kind="task-bar">
-        {contextTasks.map ((task, i) => {
-          return (
-            <Button
-              kind="task-bar"
-              key={i}
-              text={task.text}
-              glyph={task.glyph}
-              onClick={() => this.doQuest (task.quest, desktopId)}
-            />
-          );
-        })}
-      </Container>
-    );
+    const WiredTasks = Widget.Wired (Tasks) (`tasks@${context}`);
+    return <WiredTasks />;
   }
 }
 
-export default Tasks;
+export default TasksView;
