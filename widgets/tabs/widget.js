@@ -53,13 +53,41 @@ class Tabs extends Widget {
           {contextTabs.map ((v, k) => {
             const WiredButton = wireButton (k);
             const wid = v.get ('workitemId');
+            const closable = v.get ('closable', false);
+            const show = closable ? 'true' : 'false';
             return (
-              <WiredButton
-                key={k}
-                id={k}
-                onClick={() => this.goToWorkItem (context, v.get ('view'), wid)}
-                active={currentTab === wid ? 'true' : 'false'}
-              />
+              <Container kind="row">
+                <WiredButton
+                  key={k}
+                  id={k}
+                  glyph={v.get ('glyph')}
+                  onClick={() =>
+                    this.goToWorkItem (context, v.get ('view'), wid)}
+                  active={currentTab === wid ? 'true' : 'false'}
+                />
+                <Button
+                  glyph="close"
+                  kind="view-tab"
+                  show={show}
+                  onClick={() => {
+                    this.do ('remove', {
+                      tabId: k,
+                      contextId: context,
+                      workitemId: wid,
+                    });
+                    // Navigate last tab
+                    const newLast = contextTabs.skipLast (1).last ();
+                    if (newLast) {
+                      this.goToWorkItem (
+                        context,
+                        newLast.get ('view'),
+                        newLast.get ('workitemId')
+                      );
+                    }
+                  }}
+                  active={currentTab === wid ? 'true' : 'false'}
+                />
+              </Container>
             );
           })}
         </Container>

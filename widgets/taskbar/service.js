@@ -29,10 +29,12 @@ Goblin.registerQuest (goblinName, 'delete', function (quest) {
   quest.log.info ('deleting tasks...');
 });
 
-Goblin.registerQuest (goblinName, 'run', function (quest, workitem, payload) {
+Goblin.registerQuest (goblinName, 'run', function (quest, workitem, contextId) {
   const desk = quest.useAs ('desktop', quest.goblin.getX ('desktopId'));
-  const workitemId = `${workitem}@${uuidV4 ()}`;
-  desk.addWorkitem ({workitemId, payload});
+  workitem.id = uuidV4 ();
+  workitem.isDone = false;
+  workitem.contextId = contextId;
+  desk.addWorkitem ({workitem});
 });
 
 // Create a Goblin with initial state and handlers

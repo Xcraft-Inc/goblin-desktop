@@ -26,6 +26,8 @@ const logicHandlers = {
       id: tabId,
       view: action.get ('view'),
       workitemId: action.get ('workitemId'),
+      closable: action.get ('closable'),
+      glyph: action.get ('glyph'),
     };
     if (!current) {
       return state
@@ -73,20 +75,32 @@ Goblin.registerQuest (goblinName, 'add', function* (
   contextId,
   name,
   view,
-  workitemId
+  workitemId,
+  closable,
+  glyph
 ) {
   const tab = yield quest.create (`button@${uuidV4 ()}`, {
     id: `${contextId}-tab@${workitemId}`,
     text: name,
     kind: 'view-tab',
   });
-  quest.do ({tabId: tab.id, contextId, view, name, workitemId});
+  quest.do ({
+    tabId: tab.id,
+  });
   quest.goblin.defer (tab.delete);
   return tab.id;
 });
 
-Goblin.registerQuest (goblinName, 'remove', function (quest, ctxId) {
-  quest.do ({ctxId});
+Goblin.registerQuest (goblinName, 'remove', function (
+  quest,
+  tabId,
+  contextId,
+  workitemId
+) {
+  quest.do ();
+  const cmd = Goblin.getGoblinName (workitemId) + '.delete';
+  quest.cmd (cmd, {id: workitemId});
+  quest.evt ('removed', {workitemId});
 });
 
 // Create a Goblin with initial state and handlers

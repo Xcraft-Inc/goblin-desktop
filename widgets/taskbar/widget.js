@@ -38,7 +38,7 @@ class Taskbar extends Widget {
               onClick={() =>
                 this.do ('run', {
                   workitem: task.workitem,
-                  payload: task.payload,
+                  contextId: context,
                 })}
             />
           );

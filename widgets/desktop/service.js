@@ -175,21 +175,43 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
   return hinter.id;
 });
 
-Goblin.registerQuest (goblinName, 'add-workitem', function* (
-  quest,
-  workitemId,
-  payload
-) {
-  return yield quest.create (
-    workitemId,
+Goblin.registerQuest (goblinName, 'add-workitem', function* (quest, workitem) {
+  const desk = quest.me;
+
+  if (workitem.isDone) {
+    return;
+  }
+  const widgetId = `${workitem.name}@${workitem.id}`;
+  const wi = yield quest.create (
+    widgetId,
     Object.assign (
       {
-        id: workitemId,
+        id: widgetId,
         desktopId: quest.goblin.id,
       },
-      payload
+      workitem.payload
     )
   );
+
+  if (workitem.isInWorkspace) {
+    // Add a tab
+    desk.addTab ({
+      workitemId: widgetId,
+      view: workitem.view,
+      contextId: workitem.contextId,
+      name: workitem.description,
+      glyph: workitem.icon,
+      closable: workitem.isClosable,
+      navigate: true,
+    });
+  }
+
+  quest.evt (`workitem.added`, {
+    desktopId: quest.goblin.id,
+    workitemId: wi.id,
+  });
+
+  return wi.id;
 });
 
 Goblin.registerQuest (goblinName, 'add-context', function (
@@ -210,11 +232,13 @@ Goblin.registerQuest (goblinName, 'add-tab', function* (
   contextId,
   view,
   workitemId,
+  closable,
+  glyph,
   navigate
 ) {
   const state = quest.goblin.getState ();
-  const workItem = state.get (`current.workitems.${contextId}`, null);
-  if (!workItem) {
+  const workitem = state.get (`current.workitems.${contextId}`, null);
+  if (!workitem) {
     quest.dispatch ('setCurrentWorkItemByContext', {
       contextId,
       view,
@@ -227,6 +251,8 @@ Goblin.registerQuest (goblinName, 'add-tab', function* (
     contextId,
     view,
     workitemId,
+    glyph,
+    closable: closable || false,
   });
 
   if (navigate) {

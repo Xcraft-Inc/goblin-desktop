@@ -51,16 +51,22 @@ You can write a `tasks.js` file in a folder named like the context id, in the wi
 // goblin-name/widgets/codispatch/tasks.js
 export default [
   {
-    text: 'Search', 
-    glyph: 'search', 
-    woritem: 'mission-search',
-    payload: {} //dedicated payload of parameters for the workitem
+    text: 'Search',
+    glyph: 'search',
+    workitem: {
+      name: 'mission-search',
+      icon: 'search',
+      isInWorkspace: true,
+      isClosable: true,
+      navigate: true,
+    },
   },
   {
     text: 'Mission',
     glyph: 'plus',
-    woritem: 'mission-workflow',
-    payload: {}
+    workitem: {
+      name: 'mission-workflow',
+    },
   },
 ];
 ```
@@ -90,6 +96,9 @@ import a `view.js` from a folder, named with this value
 
 - workitemId: a unique identifier for wiring a workitem (an existing goblin instance widget) in the selected view
 
+- closable: if true, show a close button and notify close request
+
+- navigate: if true, navigate the current view directly the tab workitem view
 
 ## Working withs form and hinters
 
