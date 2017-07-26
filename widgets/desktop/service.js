@@ -313,6 +313,22 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
   yield lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
 });
 
+Goblin.registerQuest (goblinName, 'load-form-model', function (
+  quest,
+  workitemId,
+  model
+) {
+  const labId = quest.goblin.getX ('labId');
+  const lab = quest.useAs ('laboratory', labId);
+  lab.loadFormModel ({modelId: workitemId, model});
+});
+
+Goblin.registerQuest (goblinName, 'dispatch', function (quest, action) {
+  const labId = quest.goblin.getX ('labId');
+  const lab = quest.useAs ('laboratory', labId);
+  lab.dispatch (action);
+});
+
 Goblin.registerQuest (goblinName, 'add-notification', function (
   quest,
   notificationId,
