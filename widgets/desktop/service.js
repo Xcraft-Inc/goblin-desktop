@@ -177,7 +177,16 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
 
 Goblin.registerQuest (goblinName, 'add-workitem', function* (quest, workitem) {
   const desk = quest.me;
-
+  if (!workitem.id) {
+    throw new Error (
+      `Cannot add workitem without an id: ${JSON.stringify (workitem)}`
+    );
+  }
+  if (!workitem.name) {
+    throw new Error (
+      `Cannot add workitem without a name: ${JSON.stringify (workitem)}`
+    );
+  }
   if (workitem.isDone) {
     return;
   }
