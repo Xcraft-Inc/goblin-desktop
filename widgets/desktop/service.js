@@ -197,6 +197,7 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (quest, workitem) {
       {
         id: widgetId,
         desktopId: quest.goblin.id,
+        workflowId: workitem.workflowId,
       },
       workitem.payload
     )
