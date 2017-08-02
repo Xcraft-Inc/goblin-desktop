@@ -36,7 +36,7 @@ class Notifications extends Widget {
           <Button
             glyph={this.props.dnd === 'true' ? 'toggle-on' : 'toggle-off'}
             text="Ne pas me déranger"
-            kind="notification"
+            kind="button-notification"
             onClick={() => this.doAs ('desktop', 'toggle-dnd')}
           />
         </div>
@@ -44,14 +44,14 @@ class Notifications extends Widget {
           <Button
             glyph={this.props.onlyNews === 'true' ? 'toggle-on' : 'toggle-off'}
             text="Seulement les nouvelles"
-            kind="notification"
+            kind="button-notification"
             onClick={() => this.doAs ('desktop', 'toggle-only-news')}
           />
           <Label grow="1" />
           <Button
             disabled={this.hasNotifications ? 'false' : 'true'}
             text="Tout effacer"
-            kind="notification"
+            kind="button-notification"
             onClick={() => this.doAs ('desktop', 'remove-notifications')}
           />
         </div>
