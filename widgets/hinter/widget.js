@@ -25,11 +25,17 @@ class Hinter extends Widget {
   componentWillMount () {
     MouseTrap.bind ('up', ::this.onKeyUp);
     MouseTrap.bind ('down', ::this.onKeyDown);
+    MouseTrap.bind ('return', ::this.onValidate);
   }
 
   componentWillUnmount () {
     MouseTrap.unbind ('up');
     MouseTrap.unbind ('down');
+    MouseTrap.unbind ('return');
+  }
+
+  onValidate () {
+    this.validateRow (parseInt (this.props.selectedIndex));
   }
 
   onKeyUp () {
@@ -44,6 +50,14 @@ class Hinter extends Widget {
     if (index >= 0 && index < this.props.rows.size) {
       const value = this.props.rows.get (index);
       this.do ('select-row', {index, value});
+    }
+  }
+
+  validateRow (index) {
+    if (index >= 0 && index < this.props.rows.size) {
+      const value = this.props.rows.get (index);
+      const model = this.getRouting ().get ('location.hash').substring (1);
+      this.do ('validate-row', {index, text: value, model});
     }
   }
 
@@ -67,7 +81,13 @@ class Hinter extends Widget {
           titleGlyph={glyph}
           rows={rows}
           selectedIndex={selectedIndex}
-          onRowClick={(index, text) => this.do ('select-row', {index, text})}
+          onRowClick={(index, text) => {
+            this.do ('select-row', {index, text});
+            const model = this.getRouting ()
+              .get ('location.hash')
+              .substring (1);
+            this.do ('validate-row', {index, text, model});
+          }}
         />
       );
     }

@@ -8,17 +8,19 @@ class HinterView extends Widget {
   }
 
   render () {
-    const {isDisplayed, hinter, workitemId} = this.props;
+    const {isDisplayed, hinter} = this.props;
     if (!isDisplayed) {
       return null;
     }
 
     const wireHinter = Widget.Wired (Hinter);
+    const hash = this.getHash ();
+    const workitemId = hash.split ('.')[1];
     const WiredHinter = wireHinter (`${hinter}-hinter@${workitemId}`);
     return <WiredHinter />;
   }
 }
 
-export default Widget.WithRoute (HinterView, 'hinter') (
+export default Widget.WithRoute (HinterView, 'hinter', null, true) (
   '/:context/:view/:hinter'
 );

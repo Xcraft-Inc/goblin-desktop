@@ -331,7 +331,7 @@ Goblin.registerQuest (goblinName, 'clear-workitem', function* (
 Goblin.registerQuest (goblinName, 'dispatch', function (quest, action) {
   const labId = quest.goblin.getX ('labId');
   const lab = quest.useAs ('laboratory', labId);
-  lab.dispatch (action);
+  lab.dispatch ({action});
 });
 
 Goblin.registerQuest (goblinName, 'add-notification', function (

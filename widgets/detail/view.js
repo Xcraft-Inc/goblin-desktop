@@ -8,17 +8,19 @@ class DetailView extends Widget {
   }
 
   render () {
-    const {isDisplayed, hinter, workitemId} = this.props;
+    const {isDisplayed, hinter} = this.props;
     if (!isDisplayed) {
       return null;
     }
 
     const wireDetail = Widget.Wired (Detail);
+    const hash = this.getHash ();
+    const workitemId = hash.split ('.')[1];
     const WiredDetail = wireDetail (`${hinter}-detail@${workitemId}`);
     return <WiredDetail />;
   }
 }
 
-export default Widget.WithRoute (DetailView, 'hinter') (
+export default Widget.WithRoute (DetailView, 'hinter', null, true) (
   '/:context/:view/:hinter'
 );

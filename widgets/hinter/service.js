@@ -2,6 +2,7 @@
 
 const Goblin = require ('xcraft-core-goblin');
 const goblinName = 'hinter';
+const actions = require ('react-redux-form/immutable').actions;
 
 // Define initial logic values
 const logicState = {};
@@ -55,6 +56,7 @@ Goblin.registerQuest (goblinName, 'create', function (
     title,
     detailWidget,
   });
+  quest.goblin.setX ('desktopId', desktopId);
   return quest.goblin.id;
 });
 
@@ -82,6 +84,31 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
     });
     const detail = quest.use ('detail');
     detail.setEntity ({entityId: value});
+  }
+});
+
+Goblin.registerQuest (goblinName, 'validate-row', function (
+  quest,
+  index,
+  text,
+  model
+) {
+  quest.log.info (`Validate row: ${index}: ${text}`);
+  /*hinter@workitem@id*/
+  const ids = quest.goblin.getState ().get ('id').split ('@');
+  const workitem = ids[1];
+  const workitemId = `${ids[1]}@${ids[2]}`;
+  const value = quest.goblin.getState ().get (`values.${index}`, null);
+  const type = quest.goblin.getState ().get (`type`, null);
+  if (value && type) {
+    quest.cmd (`${workitem}.hinter-validate-${type}`, {
+      id: workitemId,
+      selection: {index, text, value},
+    });
+
+    const desktopId = quest.goblin.getX ('desktopId');
+    const desk = quest.useAs ('desktop', desktopId);
+    desk.dispatch ({action: actions.change (model, text)});
   }
 });
 
