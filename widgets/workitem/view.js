@@ -14,6 +14,10 @@ class WorkItem extends Widget {
       return null;
     }
 
+    if (!wid) {
+      return null;
+    }
+
     const View = viewImporter (view);
     return <View desktopId={desktopId} workitemId={wid} />;
   }

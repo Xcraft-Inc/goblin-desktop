@@ -314,6 +314,20 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
   yield lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
 });
 
+Goblin.registerQuest (goblinName, 'clear-workitem', function* (
+  quest,
+  contextId
+) {
+  const labId = quest.goblin.getX ('labId');
+  const lab = quest.useAs ('laboratory', labId);
+  quest.dispatch ('setCurrentWorkItemByContext', {
+    contextId,
+    view: null,
+    workitemId: null,
+  });
+  yield lab.nav ({route: `/${contextId}/?wid=null`});
+});
+
 Goblin.registerQuest (goblinName, 'dispatch', function (quest, action) {
   const labId = quest.goblin.getX ('labId');
   const lab = quest.useAs ('laboratory', labId);

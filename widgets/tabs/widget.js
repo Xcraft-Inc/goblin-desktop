@@ -31,9 +31,21 @@ class Tabs extends Widget {
     });
   }
 
+  navToContext (contextId) {
+    this.nav (`/${contextId}/?wid=null`);
+  }
+
   goToWorkItem (contextId, view, workitemId) {
     this.do ('set-current', {contextId, workitemId});
     this.navToWorkItem (contextId, view, workitemId);
+  }
+
+  clearWorkitem (contextId) {
+    this.do ('set-current', {contextId, workitemId: null});
+    this.cmd ('desktop.clear-workitem', {
+      id: this.props.desktopId,
+      contextId,
+    });
   }
 
   render () {
@@ -83,6 +95,8 @@ class Tabs extends Widget {
                         newLast.get ('view'),
                         newLast.get ('workitemId')
                       );
+                    } else {
+                      this.clearWorkitem (context);
                     }
                   }}
                   active={currentTab === wid ? 'true' : 'false'}
