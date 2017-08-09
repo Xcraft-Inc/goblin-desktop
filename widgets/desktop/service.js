@@ -203,7 +203,7 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (quest, workitem) {
     )
   );
 
-  if (workitem.isInWorkspace) {
+  if (workitem.isInWorkspace && workitem.kind !== 'system') {
     // Add a tab
     desk.addTab ({
       workitemId: widgetId,
