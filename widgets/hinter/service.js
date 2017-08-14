@@ -60,12 +60,12 @@ Goblin.registerQuest (goblinName, 'create', function (
   return quest.goblin.id;
 });
 
-Goblin.registerQuest (goblinName, 'set-current-detail-entity', function* (
+Goblin.registerQuest (goblinName, 'set-current-detail-entity', function (
   quest,
   entityId
 ) {
   const detail = quest.use ('detail');
-  yield detail.setEntity ({entityId});
+  detail.setEntity ({entityId});
 });
 
 Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
