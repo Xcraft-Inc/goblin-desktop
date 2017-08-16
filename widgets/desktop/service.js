@@ -37,6 +37,9 @@ const logicHandlers = {
       },
     });
   },
+  'add-context': (state, action) => {
+    return state.set ('current.workcontext', action.get ('contextId'));
+  },
   'toggle-dnd': state => {
     return state.set ('dnd', state.get ('dnd') === 'false' ? 'true' : 'false');
   },
@@ -89,8 +92,12 @@ const logicHandlers = {
   'remove-notifications': state => {
     return state.set (`notifications`, {});
   },
+  'nav-to-context': (state, action) => {
+    return state.set ('current.workcontext', action.get ('contextId'));
+  },
   setCurrentWorkItemByContext: (state, action) => {
     return state
+      .set ('current.workcontext', action.get ('contextId'))
       .set (
         `current.workitems.${action.get ('contextId')}`,
         action.get ('workitemId')
@@ -103,7 +110,9 @@ const logicHandlers = {
 Goblin.registerQuest (goblinName, 'create', function* (
   quest,
   labId,
-  onChangeMandate
+  onChangeMandate,
+  onAddWorkitem,
+  onRemoveWorkitem
 ) {
   if (!labId) {
     throw new Error ('Missing labId');
@@ -112,6 +121,14 @@ Goblin.registerQuest (goblinName, 'create', function* (
   quest.goblin.setX ('labId', labId);
   if (onChangeMandate) {
     quest.goblin.setX ('onChangeMandate', onChangeMandate);
+  }
+
+  if (onAddWorkitem) {
+    quest.goblin.setX ('onAddWorkitem', onAddWorkitem);
+  }
+
+  if (onRemoveWorkitem) {
+    quest.goblin.setX ('onRemoveWorkitem', onRemoveWorkitem);
   }
 
   // CREATE DEFAULT CONTEXT MANAGER
@@ -175,7 +192,11 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
   return hinter.id;
 });
 
-Goblin.registerQuest (goblinName, 'add-workitem', function* (quest, workitem) {
+Goblin.registerQuest (goblinName, 'add-workitem', function* (
+  quest,
+  workitem,
+  navigate
+) {
   const desk = quest.me;
   if (!workitem.id) {
     throw new Error (
@@ -212,7 +233,7 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (quest, workitem) {
       name: workitem.description,
       glyph: workitem.icon,
       closable: workitem.isClosable,
-      navigate: true,
+      navigate: navigate ? true : false,
     });
   }
 
@@ -234,6 +255,7 @@ Goblin.registerQuest (goblinName, 'add-context', function (
     contextId,
     name,
   });
+  quest.do ();
 });
 
 Goblin.registerQuest (goblinName, 'add-tab', function* (
@@ -247,6 +269,13 @@ Goblin.registerQuest (goblinName, 'add-tab', function* (
   navigate
 ) {
   const state = quest.goblin.getState ();
+  if (!contextId) {
+    contextId = state.get (`current.workcontext`, null);
+  }
+  if (!view) {
+    view = contextId;
+  }
+
   const workitem = state.get (`current.workitems.${contextId}`, null);
   if (!workitem) {
     quest.dispatch ('setCurrentWorkItemByContext', {
@@ -294,6 +323,7 @@ Goblin.registerQuest (goblinName, 'nav-to-context', function (
   } else {
     lab.nav ({route: `/${contextId}`});
   }
+  quest.do ();
 });
 
 Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
@@ -305,6 +335,9 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
 ) {
   const labId = quest.goblin.getX ('labId');
   const lab = quest.useAs ('laboratory', labId);
+  if (!contextId) {
+    contextId = quest.goblin.GetState ().get (`current.workcontext`, null);
+  }
   quest.dispatch ('setCurrentWorkItemByContext', {contextId, view, workitemId});
   const tabs = quest.use ('tabs');
   tabs.setCurrent ({contextId, workitemId});

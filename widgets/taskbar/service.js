@@ -34,7 +34,7 @@ Goblin.registerQuest (goblinName, 'run', function (quest, workitem, contextId) {
   workitem.id = uuidV4 ();
   workitem.isDone = false;
   workitem.contextId = contextId;
-  desk.addWorkitem ({workitem});
+  desk.addWorkitem ({workitem, navigate: true});
 });
 
 // Create a Goblin with initial state and handlers
