@@ -26,6 +26,7 @@ const logicHandlers = {
     return state
       .set ('rows', action.get ('rows'))
       .set ('values', action.get ('values'))
+      .set ('payloads', action.get ('payloads'))
       .set ('selectedIndex', '0');
   },
   'select-row': (state, action) => {
@@ -76,6 +77,10 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
   const workitem = ids[1];
   const workitemId = `${ids[1]}@${ids[2]}`;
   const value = quest.goblin.getState ().get (`values.${index}`, null);
+  const payload = quest.goblin
+    .getState ()
+    .get (`payloads.${index}`, null)
+    .toJS ();
   const type = quest.goblin.getState ().get (`type`, null);
   if (value && type) {
     quest.cmd (`${workitem}.hinter-select-${type}`, {
@@ -83,7 +88,7 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
       selection: {index, text, value},
     });
     const detail = quest.use ('detail');
-    detail.setEntity ({entityId: value});
+    detail.setEntity ({entityId: value, entity: payload});
   }
 });
 
@@ -99,11 +104,15 @@ Goblin.registerQuest (goblinName, 'validate-row', function (
   const workitem = ids[1];
   const workitemId = `${ids[1]}@${ids[2]}`;
   const value = quest.goblin.getState ().get (`values.${index}`, null);
+  const payload = quest.goblin
+    .getState ()
+    .get (`payloads.${index}`, null)
+    .toJS ();
   const type = quest.goblin.getState ().get (`type`, null);
   if (value && type) {
     quest.cmd (`${workitem}.hinter-validate-${type}`, {
       id: workitemId,
-      selection: {index, text, value},
+      selection: {index, text, value, payload},
     });
 
     const desktopId = quest.goblin.getX ('desktopId');
@@ -115,14 +124,16 @@ Goblin.registerQuest (goblinName, 'validate-row', function (
 Goblin.registerQuest (goblinName, 'set-selections', function (
   quest,
   rows,
-  values
+  values,
+  payloads
 ) {
-  quest.do ({rows, values});
+  quest.do ({rows, values, payloads});
   if (rows.length > 0) {
     quest.cmd ('hinter.select-row', {
       id: quest.goblin.id,
       index: 0,
       text: rows[0],
+      payload: payloads[0],
     });
   }
 });

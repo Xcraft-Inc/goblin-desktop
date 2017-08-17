@@ -38,7 +38,11 @@ Goblin.registerQuest (goblinName, 'create', function (
   return quest.goblin.id;
 });
 
-Goblin.registerQuest (goblinName, 'set-entity', function* (quest, entityId) {
+Goblin.registerQuest (goblinName, 'set-entity', function* (
+  quest,
+  entityId,
+  entity
+) {
   const detailWidget = quest.goblin.getState ().get ('detailWidget');
 
   if (quest.canUse (`${detailWidget}@${entityId}`)) {
@@ -51,6 +55,7 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (quest, entityId) {
   const newWidget = yield quest.create (`${detailWidget}@${entityId}`, {
     desktopId,
     entityId,
+    entity,
   });
   quest.goblin.defer (newWidget.delete);
   quest.goblin.setX ('widget', {id: newWidget.id, name: detailWidget});
