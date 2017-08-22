@@ -30,13 +30,13 @@ A quest to run when the user click the mandate top-left button ex:
 
 ## Describing the desktop
 
+### addContext (context)
+
 Adding context:
 ```js
 const docContext = {contextId: 'doc', name: 'Doc'};
 desktop.addContext (docContext);
 ```
-
-### addContext (context)
 
 #### context (context object)
 
@@ -108,3 +108,8 @@ desktop.addTab ({
 ## Working withs form and hinters
 
 todo
+
+
+## Navigating
+
+
