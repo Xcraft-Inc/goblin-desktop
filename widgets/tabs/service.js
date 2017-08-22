@@ -91,7 +91,7 @@ Goblin.registerQuest (goblinName, 'add', function* (
   return tab.id;
 });
 
-Goblin.registerQuest (goblinName, 'remove', function (
+Goblin.registerQuest (goblinName, 'remove', function* (
   quest,
   tabId,
   contextId,
@@ -99,7 +99,7 @@ Goblin.registerQuest (goblinName, 'remove', function (
 ) {
   quest.do ();
   const cmd = Goblin.getGoblinName (workitemId) + '.delete';
-  quest.cmd (cmd, {id: workitemId});
+  yield quest.cmd (cmd, {id: workitemId});
   quest.evt ('removed', {workitemId});
 });
 
