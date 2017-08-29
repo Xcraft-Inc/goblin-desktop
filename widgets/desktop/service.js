@@ -95,6 +95,14 @@ const logicHandlers = {
   'nav-to-context': (state, action) => {
     return state.set ('current.workcontext', action.get ('contextId'));
   },
+  'add-workitem': (state, action) => {
+    return state.set (`workitems.${action.get ('widgetId')}`, {
+      tabId: action.get ('tabId'),
+    });
+  },
+  'remove-workitem': (state, action) => {
+    return state.del (`workitems.${action.get ('widgetId')}`);
+  },
   setCurrentWorkItemByContext: (state, action) => {
     return state
       .set ('current.workcontext', action.get ('contextId'))
@@ -196,6 +204,44 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
   return hinter.id;
 });
 
+Goblin.registerQuest (goblinName, 'remove-workitem', function (
+  quest,
+  workitem
+) {
+  const desk = quest.me;
+  if (!workitem.id) {
+    throw new Error (
+      `Cannot remove workitem without an id: ${JSON.stringify (workitem)}`
+    );
+  }
+  if (!workitem.name) {
+    throw new Error (
+      `Cannot remove workitem without a name: ${JSON.stringify (workitem)}`
+    );
+  }
+  const widgetId = `${workitem.name}@${workitem.id}`;
+
+  if (workitem.isInWorkspace && workitem.kind !== 'system') {
+    // Remove the tab
+    const tabId = quest.goblin.getState ().get (`workitems.${widgetId}.tabId`);
+    desk.removeTab ({
+      workitemId: widgetId,
+      contextId: workitem.contextId,
+      tabId,
+    });
+    quest.do ();
+  } else {
+    quest.cmd (`${workitem.name}.delete`, {
+      id: widgetId,
+    });
+  }
+
+  quest.evt (`workitem.removed`, {
+    desktopId: quest.goblin.id,
+    workitemId: widgetId,
+  });
+});
+
 Goblin.registerQuest (goblinName, 'add-workitem', function* (
   quest,
   workitem,
@@ -230,15 +276,16 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
 
   if (workitem.isInWorkspace && workitem.kind !== 'system') {
     // Add a tab
-    desk.addTab ({
+    const tabId = yield desk.addTab ({
       workitemId: widgetId,
       view: workitem.view,
       contextId: workitem.contextId,
       name: workitem.description,
       glyph: workitem.icon,
-      closable: workitem.isClosable,
+      closable: true,
       navigate: navigate ? true : false,
     });
+    quest.do ({widgetId, tabId});
   }
 
   quest.evt (`workitem.added`, {
@@ -289,7 +336,7 @@ Goblin.registerQuest (goblinName, 'add-tab', function* (
     });
   }
   const tabs = quest.use ('tabs');
-  tabs.add ({
+  const tabId = yield tabs.add ({
     name,
     contextId,
     view,
@@ -306,6 +353,21 @@ Goblin.registerQuest (goblinName, 'add-tab', function* (
       workitemId,
     });
   }
+  return tabId;
+});
+
+Goblin.registerQuest (goblinName, 'remove-tab', function (
+  quest,
+  contextId,
+  workitemId,
+  tabId
+) {
+  const tabs = quest.use ('tabs');
+  tabs.remove ({
+    tabId,
+    contextId,
+    workitemId,
+  });
 });
 
 Goblin.registerQuest (goblinName, 'nav-to-context', function (
