@@ -109,7 +109,7 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   const desktopId = quest.goblin.getX ('desktopId');
   const desk = quest.useAs ('desktop', desktopId);
   if (newLast) {
-    desk.navToWorkItem ({
+    desk.navToWorkitem ({
       contextId: contextId,
       view: newLast.get ('view'),
       workitemId: newLast.get ('workitemId'),
