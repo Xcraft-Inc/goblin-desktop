@@ -54,6 +54,7 @@ const logicHandlers = {
 // Register quest's according rc.json
 
 Goblin.registerQuest (goblinName, 'create', function (quest, id, desktopId) {
+  quest.goblin.setX ('desktopId', desktopId);
   quest.do ({id, desktopId});
   return quest.goblin.id;
 });
@@ -97,10 +98,27 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   contextId,
   workitemId
 ) {
-  quest.do ();
   const cmd = Goblin.getGoblinName (workitemId) + '.delete';
   yield quest.cmd (cmd, {id: workitemId});
   quest.evt ('removed', {workitemId});
+
+  // Navigate last tab
+  const contextTabs = quest.goblin.getState ().get (`tabs.${contextId}`);
+  const newLast = contextTabs.state.skipLast (1).last ();
+
+  const desktopId = quest.goblin.getX ('desktopId');
+  const desk = quest.useAs ('desktop', desktopId);
+  if (newLast) {
+    desk.navToWorkItem ({
+      contextId: contextId,
+      view: newLast.get ('view'),
+      workitemId: newLast.get ('workitemId'),
+    });
+  } else {
+    desk.clearWorkitem ({contextId});
+  }
+
+  quest.do ();
 });
 
 // Create a Goblin with initial state and handlers

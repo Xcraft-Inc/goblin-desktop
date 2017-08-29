@@ -87,17 +87,6 @@ class Tabs extends Widget {
                       contextId: context,
                       workitemId: wid,
                     });
-                    // Navigate last tab
-                    const newLast = contextTabs.skipLast (1).last ();
-                    if (newLast) {
-                      this.goToWorkItem (
-                        context,
-                        newLast.get ('view'),
-                        newLast.get ('workitemId')
-                      );
-                    } else {
-                      this.clearWorkitem (context);
-                    }
                   }}
                   active={currentTab === wid ? 'true' : 'false'}
                 />
