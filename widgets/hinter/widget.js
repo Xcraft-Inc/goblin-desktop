@@ -63,7 +63,6 @@ class Hinter extends Widget {
 
   render () {
     const {id, type, kind, title, glyph, rows, selectedIndex} = this.props;
-    console.log (selectedIndex);
     if (!id) {
       return null;
     }
