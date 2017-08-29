@@ -15,13 +15,15 @@ class Detail extends Widget {
       id: 'id',
       type: 'type',
       title: 'title',
+      kind: 'kind',
+      width: 'width',
       detailWidget: 'detailWidget',
       detailWidgetId: 'detailWidgetId',
     };
   }
 
   render () {
-    const {id, title, detailWidget, detailWidgetId} = this.props;
+    const {id, kind, width, detailWidget, detailWidgetId} = this.props;
     if (!id) {
       return null;
     }
@@ -36,7 +38,10 @@ class Detail extends Widget {
     const WiredDetailWidget = wireDetailWidget (detailWidgetId);
 
     return (
-      <Container kind="view-right" width="750px">
+      <Container
+        kind={kind ? kind : 'view-right'}
+        width={width ? width : '750px'}
+      >
         <WiredDetailWidget />
       </Container>
     );

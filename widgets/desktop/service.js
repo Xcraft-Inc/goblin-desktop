@@ -153,6 +153,8 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
   quest,
   workitemId,
   detailWidget,
+  detailKind,
+  detailWidth,
   type,
   title,
   glyph,
@@ -186,6 +188,8 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
       glyph,
       kind,
       detailWidget,
+      detailKind,
+      detailWidth,
     }
   );
 

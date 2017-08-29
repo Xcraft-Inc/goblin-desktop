@@ -16,6 +16,8 @@ const logicHandlers = {
       title: action.get ('title'),
       detailWidget: action.get ('detailWidget'),
       detailWidgetId: null,
+      kind: action.get ('kind'),
+      width: action.get ('width'),
     });
   },
   'set-entity': (state, action) => {
@@ -31,10 +33,12 @@ Goblin.registerQuest (goblinName, 'create', function (
   id,
   type,
   title,
-  detailWidget
+  detailWidget,
+  kind,
+  width
 ) {
   quest.goblin.setX ('desktopId', desktopId);
-  quest.do ({id, type, title, detailWidget});
+  quest.do ({id, type, title, detailWidget, kind, width});
   return quest.goblin.id;
 });
 

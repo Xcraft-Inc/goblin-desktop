@@ -47,7 +47,9 @@ Goblin.registerQuest (goblinName, 'create', function (
   title,
   glyph,
   kind,
-  detailWidget
+  detailWidget,
+  detailKind,
+  detailWidth
 ) {
   quest.do ({id, type, title, glyph, kind});
   quest.create ('detail', {
@@ -56,6 +58,8 @@ Goblin.registerQuest (goblinName, 'create', function (
     type,
     title,
     detailWidget,
+    kind: detailKind,
+    width: detailWidth,
   });
   quest.goblin.setX ('desktopId', desktopId);
   return quest.goblin.id;
