@@ -17,6 +17,7 @@ class Desktop extends Widget {
   static get wiring () {
     return {
       id: 'id',
+      username: 'username',
       routesMap: 'routes',
       show: 'showNotifications',
       data: 'notifications',
@@ -99,6 +100,10 @@ class Desktop extends Widget {
           <Container kind="content">
             <Container kind="top-bar">
               <TopBar desktopId={id} />
+              <Container kind="main-tab-right">
+                <Button glyph="tv" kind="main-tab-right" />
+                <Button text={this.props.username} kind="main-tab-right" />
+              </Container>
             </Container>
             <BeforeContent desktopId={id} />
             <div className={contentClass}>

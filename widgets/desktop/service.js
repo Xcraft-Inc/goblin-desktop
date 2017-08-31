@@ -26,6 +26,7 @@ const logicHandlers = {
     const id = action.get ('id');
     return state.set ('', {
       id: id,
+      username: action.get ('username', 'guest'),
       routes: action.get ('routes'),
       showNotifications: 'false',
       dnd: 'false',
@@ -118,6 +119,8 @@ const logicHandlers = {
 Goblin.registerQuest (goblinName, 'create', function* (
   quest,
   labId,
+  username,
+  configuration,
   onChangeMandate,
   onAddWorkitem,
   onRemoveWorkitem
@@ -127,6 +130,8 @@ Goblin.registerQuest (goblinName, 'create', function* (
   }
 
   quest.goblin.setX ('labId', labId);
+  quest.goblin.setX ('configuration', configuration);
+
   if (onChangeMandate) {
     quest.goblin.setX ('onChangeMandate', onChangeMandate);
   }
@@ -261,6 +266,15 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
   if (workitem.isDone) {
     return;
   }
+
+  //Manage collision with desktopId
+  if (workitem.payload) {
+    if (workitem.payload.desktopId) {
+      workitem.payload.deskId = workitem.payload.desktopId;
+      delete workitem.payload.desktopId;
+    }
+  }
+
   const widgetId = `${workitem.name}@${workitem.id}`;
   const wi = yield quest.create (
     widgetId,
@@ -503,6 +517,11 @@ Goblin.registerQuest (goblinName, 'change-mandate', function (quest) {
   if (onChangeMandate) {
     quest.cmd (onChangeMandate.quest, {id: onChangeMandate.id});
   }
+});
+
+Goblin.registerQuest (goblinName, 'get-configuration', function (quest) {
+  const conf = quest.goblin.getX ('configuration');
+  return conf;
 });
 
 Goblin.registerQuest (goblinName, 'delete', function (quest) {
