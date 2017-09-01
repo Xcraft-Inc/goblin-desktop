@@ -19,6 +19,8 @@ class Hinter extends Widget {
       glyph: 'glyph',
       rows: 'rows',
       selectedIndex: 'selectedIndex',
+      onNew: 'onNew',
+      newButtonTitle: 'newButtonTitle',
     };
   }
 
@@ -62,34 +64,51 @@ class Hinter extends Widget {
   }
 
   render () {
-    const {id, type, kind, title, glyph, rows, selectedIndex} = this.props;
+    const {
+      id,
+      onNew,
+      kind,
+      title,
+      glyph,
+      rows,
+      selectedIndex,
+      newButtonTitle,
+    } = this.props;
     if (!id) {
       return null;
     }
 
+    /* NOT USED
     const DedicatedWidget = widgetImporter (`${type}-hinter`);
     if (DedicatedWidget) {
       const wireDedicatedHinter = Widget.Wired (DedicatedWidget);
       const WiredDedicatedWidget = wireDedicatedHinter (id);
       return <WiredDedicatedWidget />;
-    } else {
-      return (
-        <HinterColumn
-          kind={kind}
-          titleText={title}
-          titleGlyph={glyph}
-          rows={rows}
-          selectedIndex={selectedIndex}
-          onRowClick={(index, text) => {
-            this.do ('select-row', {index, text});
+    } else {*/
+    return (
+      <HinterColumn
+        kind={kind}
+        titleText={title}
+        titleGlyph={glyph}
+        rows={rows}
+        selectedIndex={selectedIndex}
+        newButtonTitle={newButtonTitle}
+        onNew={() => {
+          if (onNew) {
             const model = this.getRouting ()
               .get ('location.hash')
               .substring (1);
-            this.do ('validate-row', {index, text, model});
-          }}
-        />
-      );
-    }
+            const value = this.getModelValue (model, true);
+            this.do ('create-new', {value});
+          }
+        }}
+        onRowClick={(index, text) => {
+          this.do ('select-row', {index, text});
+          const model = this.getRouting ().get ('location.hash').substring (1);
+          this.do ('validate-row', {index, text, model});
+        }}
+      />
+    );
   }
 }
 

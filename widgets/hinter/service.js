@@ -17,6 +17,8 @@ const logicHandlers = {
       kind: action.get ('kind'),
       title: action.get ('title'),
       glyph: action.get ('glyph'),
+      onNew: !!action.get ('newWorkitem'),
+      newButtonTitle: action.get ('newButtonTitle'),
       rows: [],
       selectedIndex: null,
       values: [],
@@ -49,9 +51,11 @@ Goblin.registerQuest (goblinName, 'create', function (
   kind,
   detailWidget,
   detailKind,
-  detailWidth
+  detailWidth,
+  newWorkitem,
+  newButtonTitle
 ) {
-  quest.do ({id, type, title, glyph, kind});
+  quest.do ({id, type, title, glyph, kind, newWorkitem, newButtonTitle});
   quest.create ('detail', {
     id: `${id.replace ('-hinter', '-detail')}`,
     desktopId,
@@ -62,6 +66,7 @@ Goblin.registerQuest (goblinName, 'create', function (
     width: detailWidth,
   });
   quest.goblin.setX ('desktopId', desktopId);
+  quest.goblin.setX ('workitem', newWorkitem);
   return quest.goblin.id;
 });
 
@@ -71,6 +76,16 @@ Goblin.registerQuest (goblinName, 'set-current-detail-entity', function (
 ) {
   const detail = quest.use ('detail');
   detail.setEntity ({entityId});
+});
+
+Goblin.registerQuest (goblinName, 'create-new', function (quest, value) {
+  const desk = quest.useAs ('desktop', quest.goblin.getX ('desktopId'));
+  const workitem = quest.goblin.getX ('workitem');
+  workitem.id = quest.uuidV4 ();
+  workitem.isDone = false;
+  workitem.payload = {};
+  workitem.payload.value = value;
+  desk.addWorkitem ({workitem, navigate: true});
 });
 
 Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
