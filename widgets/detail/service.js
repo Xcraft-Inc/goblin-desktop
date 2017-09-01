@@ -67,7 +67,7 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
 });
 
 Goblin.registerQuest (goblinName, 'delete', function (quest) {
-  quest.info.log ('Deleting detail...');
+  quest.log.info ('Deleting detail...');
 });
 
 // Create a Goblin with initial state and handlers
