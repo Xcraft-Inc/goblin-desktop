@@ -104,6 +104,9 @@ Goblin.registerQuest (goblinName, 'remove', function* (
 
   // Navigate last tab
   const contextTabs = quest.goblin.getState ().get (`tabs.${contextId}`);
+  if (!contextTabs) {
+    return;
+  }
   const newLast = contextTabs.state.skipLast (1).last ();
 
   const desktopId = quest.goblin.getX ('desktopId');
