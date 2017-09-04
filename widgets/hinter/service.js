@@ -88,7 +88,12 @@ Goblin.registerQuest (goblinName, 'create-new', function (quest, value) {
   desk.addWorkitem ({workitem, navigate: true});
 });
 
-Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
+Goblin.registerQuest (goblinName, 'select-row', function (
+  quest,
+  index,
+  text,
+  usePayload
+) {
   quest.log.info (`Select row: ${index}: ${text}`);
   quest.do ({index: `${index}`});
   /*hinter@workitem@id*/
@@ -107,7 +112,7 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
       selection: {index, text, value},
     });
     const detail = quest.use ('detail');
-    detail.setEntity ({entityId: value, entity: payload});
+    detail.setEntity ({entityId: value, entity: usePayload ? payload : null});
   }
 });
 
@@ -144,7 +149,8 @@ Goblin.registerQuest (goblinName, 'set-selections', function (
   quest,
   rows,
   values,
-  payloads
+  payloads,
+  usePayload
 ) {
   quest.do ({rows, values, payloads});
   if (rows.length > 0) {
@@ -153,6 +159,7 @@ Goblin.registerQuest (goblinName, 'set-selections', function (
       index: 0,
       text: rows[0],
       payload: payloads[0],
+      usePayload,
     });
   }
 });
