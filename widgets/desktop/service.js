@@ -528,6 +528,10 @@ Goblin.registerQuest (goblinName, 'get-configuration', function (quest) {
   return conf;
 });
 
+Goblin.registerQuest (goblinName, 'get-user-info', function (quest) {
+  return quest.goblin.getState ().get ('username');
+});
+
 Goblin.registerQuest (goblinName, 'delete', function (quest) {
   quest.log.info ('Deleting desktop...');
 });
