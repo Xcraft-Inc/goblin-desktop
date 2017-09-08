@@ -8,6 +8,9 @@ const widgetImporter = importer ('widget');
 class Hinter extends Widget {
   constructor () {
     super (...arguments);
+    this.onKeyUp = ::this.onKeyUp;
+    this.onKeyDown = ::this.onKeyDown;
+    this.onValidate = ::this.onValidate;
   }
 
   static get wiring () {
@@ -25,9 +28,9 @@ class Hinter extends Widget {
   }
 
   componentWillMount () {
-    MouseTrap.bind ('up', ::this.onKeyUp);
-    MouseTrap.bind ('down', ::this.onKeyDown);
-    MouseTrap.bind ('return', ::this.onValidate);
+    MouseTrap.bind ('up', this.onKeyUp, 'keydown');
+    MouseTrap.bind ('down', this.onKeyDown, 'keydown');
+    MouseTrap.bind ('return', this.onValidate);
   }
 
   componentWillUnmount () {
