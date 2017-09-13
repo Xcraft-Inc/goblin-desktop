@@ -80,8 +80,8 @@ Goblin.registerQuest (goblinName, 'add', function* (
   closable,
   glyph
 ) {
-  const tab = yield quest.create (`button@${uuidV4 ()}`, {
-    id: `${contextId}-tab@${workitemId}`,
+  const tab = yield quest.create (`button@${workitemId}`, {
+    id: `button@${workitemId}`,
     text: name,
     kind: 'view-tab',
   });
@@ -98,16 +98,22 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   contextId,
   workitemId
 ) {
+  const i = quest.openInventory ();
+  const tabButton = i.use (tabId);
+  tabButton.delete ();
+
   const cmd = Goblin.getGoblinName (workitemId) + '.delete';
   yield quest.cmd (cmd, {id: workitemId});
   quest.evt ('removed', {workitemId});
+
+  quest.do ();
 
   // Navigate last tab
   const contextTabs = quest.goblin.getState ().get (`tabs.${contextId}`);
   if (!contextTabs) {
     return;
   }
-  const newLast = contextTabs.state.skipLast (1).last ();
+  const newLast = contextTabs.state.last ();
 
   const desktopId = quest.goblin.getX ('desktopId');
   const desk = quest.useAs ('desktop', desktopId);
@@ -120,8 +126,6 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   } else {
     desk.clearWorkitem ({contextId});
   }
-
-  quest.do ();
 });
 
 // Create a Goblin with initial state and handlers
