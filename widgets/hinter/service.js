@@ -126,7 +126,7 @@ Goblin.registerQuest (goblinName, 'validate-row', function (
   /*hinter@workitem@id*/
   const ids = quest.goblin.getState ().get ('id').split ('@');
   const workitem = ids[1];
-  const workitemId = `${ids[1]}@${ids[2]}`;
+  const workitemId = `${ids[1]}@${ids.slice (2, ids.length).join ('@')}`;
   const value = quest.goblin.getState ().get (`values.${index}`, null);
   const payload = quest.goblin
     .getState ()
