@@ -84,7 +84,9 @@ Goblin.registerQuest (goblinName, 'create-new', function (quest, value) {
   workitem.id = quest.uuidV4 ();
   workitem.isDone = false;
   workitem.payload = {};
-  workitem.payload.value = value;
+  if (workitem.mapNewValueTo) {
+    workitem.payload[workitem.mapNewValueTo] = value;
+  }
   desk.addWorkitem ({workitem, navigate: true});
 });
 
