@@ -288,7 +288,7 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
         desktopId: quest.goblin.id,
         workflowId: workitem.workflowId,
       },
-      workitem.payload
+      {payload: workitem.payload}
     )
   );
 
