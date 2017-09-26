@@ -106,6 +106,7 @@ class Hinter extends Widget {
             this.setModelValue (model, '');
           }
         }}
+        displayNewButton={onNew}
         onRowClick={(index, text) => {
           this.do ('select-row', {index, text});
           const model = this.getRouting ().get ('location.hash').substring (1);

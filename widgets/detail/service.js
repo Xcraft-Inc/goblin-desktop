@@ -48,9 +48,9 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
   entity
 ) {
   const detailWidget = quest.goblin.getState ().get ('detailWidget');
-
-  if (quest.canUse (`${detailWidget}@${entityId}`)) {
-    const detail = quest.use (`${detailWidget}@${entityId}`);
+  const i = quest.openInventory ();
+  if (i.has (`${detailWidget}@${entityId}`)) {
+    const detail = i.use (`${detailWidget}@${entityId}`);
     quest.goblin.setX ('widget', {id: detail.id, name: detailWidget});
     quest.do ({widgetId: detail.id});
     return;

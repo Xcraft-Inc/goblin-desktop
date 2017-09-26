@@ -53,7 +53,8 @@ Goblin.registerQuest (goblinName, 'create', function (
   detailKind,
   detailWidth,
   newWorkitem,
-  newButtonTitle
+  newButtonTitle,
+  usePayload
 ) {
   quest.do ({id, type, title, glyph, kind, newWorkitem, newButtonTitle});
   quest.create ('detail', {
@@ -67,6 +68,7 @@ Goblin.registerQuest (goblinName, 'create', function (
   });
   quest.goblin.setX ('desktopId', desktopId);
   quest.goblin.setX ('workitem', newWorkitem);
+  quest.goblin.setX ('usePayload', usePayload);
   return quest.goblin.id;
 });
 
@@ -90,12 +92,7 @@ Goblin.registerQuest (goblinName, 'create-new', function (quest, value) {
   desk.addWorkitem ({workitem, navigate: true});
 });
 
-Goblin.registerQuest (goblinName, 'select-row', function (
-  quest,
-  index,
-  text,
-  usePayload
-) {
+Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
   quest.log.info (`Select row: ${index}: ${text}`);
   quest.do ({index: `${index}`});
   /*hinter@workitem@id*/
@@ -103,10 +100,13 @@ Goblin.registerQuest (goblinName, 'select-row', function (
   const workitem = ids[1];
   const workitemId = `${ids[1]}@${ids[2]}`;
   const value = quest.goblin.getState ().get (`values.${index}`, null);
-  const payload = quest.goblin
-    .getState ()
-    .get (`payloads.${index}`, null)
-    .toJS ();
+
+  let payload = null;
+  const usePayload = quest.goblin.getX ('usePayload');
+  if (usePayload) {
+    payload = quest.goblin.getState ().get (`payloads.${index}`, null).toJS ();
+  }
+
   const type = quest.goblin.getState ().get (`type`, null);
   if (value && type) {
     quest.cmd (`${workitem}.hinter-select-${type}`, {
@@ -114,7 +114,7 @@ Goblin.registerQuest (goblinName, 'select-row', function (
       selection: {index, text, value},
     });
     const detail = quest.use ('detail');
-    detail.setEntity ({entityId: value, entity: usePayload ? payload : null});
+    detail.setEntity ({entityId: value, entity: payload});
   }
 });
 
