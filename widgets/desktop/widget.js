@@ -110,9 +110,7 @@ class Desktop extends Widget {
               <Content desktopId={id} />
               {this.renderNofications ()}
             </div>
-            <Container kind="footer">
-              <span>{id}</span>
-            </Container>
+            <Container kind="footer" />
           </Container>
         </Container>
       </Container>
