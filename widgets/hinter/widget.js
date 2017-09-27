@@ -31,12 +31,14 @@ class Hinter extends Widget {
     MouseTrap.bind ('up', this.onKeyUp, 'keydown');
     MouseTrap.bind ('down', this.onKeyDown, 'keydown');
     MouseTrap.bind ('return', this.onValidate);
+    MouseTrap.bind ('tab', this.onValidate);
   }
 
   componentWillUnmount () {
     MouseTrap.unbind ('up');
     MouseTrap.unbind ('down');
     MouseTrap.unbind ('return');
+    MouseTrap.unbind ('tab');
   }
 
   onValidate () {
