@@ -79,7 +79,8 @@ class Hinter extends Widget {
       selectedIndex,
       newButtonTitle,
     } = this.props;
-    if (!id) {
+
+    if (!id || rows.size === 0) {
       return null;
     }
 
@@ -90,6 +91,7 @@ class Hinter extends Widget {
       const WiredDedicatedWidget = wireDedicatedHinter (id);
       return <WiredDedicatedWidget />;
     } else {*/
+
     return (
       <HinterColumn
         kind={kind}
