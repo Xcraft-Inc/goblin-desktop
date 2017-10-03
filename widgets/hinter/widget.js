@@ -80,7 +80,7 @@ class Hinter extends Widget {
       newButtonTitle,
     } = this.props;
 
-    if (!id || rows.size === 0) {
+    if (!id) {
       return null;
     }
 
