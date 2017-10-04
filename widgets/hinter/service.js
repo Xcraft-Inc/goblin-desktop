@@ -170,17 +170,23 @@ Goblin.registerQuest (goblinName, 'set-selections', function (
   rows,
   values,
   payloads,
-  usePayload
+  usePayload,
+  validate
 ) {
   quest.do ({rows, values, payloads});
   if (rows.length > 0) {
-    quest.cmd ('hinter.select-row', {
-      id: quest.goblin.id,
+    quest.me.selectRow ({
       index: 0,
       text: rows[0],
       payload: payloads[0],
       usePayload,
     });
+    if (validate) {
+      quest.me.validateRow ({
+        index: 0,
+        text: rows[0],
+      });
+    }
   }
 });
 
