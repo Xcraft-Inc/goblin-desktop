@@ -96,7 +96,8 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   quest,
   tabId,
   contextId,
-  workitemId
+  workitemId,
+  navToLastWorkitem
 ) {
   const i = quest.openInventory ();
   const tabButton = i.use (tabId);
@@ -108,23 +109,28 @@ Goblin.registerQuest (goblinName, 'remove', function* (
 
   quest.do ();
 
-  // Navigate last tab
-  const contextTabs = quest.goblin.getState ().get (`tabs.${contextId}`);
-  if (!contextTabs) {
-    return;
-  }
-  const newLast = contextTabs.state.last ();
-
   const desktopId = quest.goblin.getX ('desktopId');
   const desk = quest.useAs ('desktop', desktopId);
-  if (newLast) {
-    desk.navToWorkitem ({
-      contextId: contextId,
-      view: newLast.get ('view'),
-      workitemId: newLast.get ('workitemId'),
-    });
+
+  if (navToLastWorkitem) {
+    desk.navToLastWorkitem ();
   } else {
-    desk.clearWorkitem ({contextId});
+    // Navigate last tab
+    const contextTabs = quest.goblin.getState ().get (`tabs.${contextId}`);
+    if (!contextTabs) {
+      return;
+    }
+    const newLast = contextTabs.state.last ();
+
+    if (newLast) {
+      desk.navToWorkitem ({
+        contextId: contextId,
+        view: newLast.get ('view'),
+        workitemId: newLast.get ('workitemId'),
+      });
+    } else {
+      desk.clearWorkitem ({contextId});
+    }
   }
 });
 

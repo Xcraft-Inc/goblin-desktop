@@ -90,6 +90,23 @@ Goblin.registerQuest (goblinName, 'create-new', function (quest, value) {
     workitem.payload[workitem.mapNewValueTo] = value;
   }
   desk.addWorkitem ({workitem, navigate: true});
+
+  quest.sub (`${workitem.name}@${workitem.id}.closed`, (err, msg) => {
+    const entity = msg.data;
+    const rows = [];
+    rows.push ('new');
+    const values = [];
+    values.push (entity.id);
+    const payloads = [];
+    payloads.push (entity);
+    quest.me.setSelections ({
+      rows,
+      values,
+      payloads,
+      usePayload: true,
+      validate: true,
+    });
+  });
 });
 
 Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
