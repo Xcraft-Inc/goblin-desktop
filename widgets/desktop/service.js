@@ -104,14 +104,23 @@ const logicHandlers = {
   'remove-workitem': (state, action) => {
     return state.del (`workitems.${action.get ('widgetId')}`);
   },
-  setCurrentWorkItemByContext: (state, action) => {
+  setCurrentWorkitemByContext: (state, action) => {
+    const lastWorkcontext = state.get ('current.workcontext');
+    const lastWorkitem = state.get (`current.workitems.${lastWorkcontext}`);
+    const lastView = state.get (`current.views.${lastWorkcontext}`);
+
     return state
       .set ('current.workcontext', action.get ('contextId'))
       .set (
         `current.workitems.${action.get ('contextId')}`,
         action.get ('workitemId')
       )
-      .set (`current.views.${action.get ('contextId')}`, action.get ('view'));
+      .set (`current.views.${action.get ('contextId')}`, action.get ('view'))
+      .set ('last', {
+        workcontext: lastWorkcontext,
+        workitem: lastWorkitem,
+        view: lastView,
+      });
   },
 };
 
@@ -236,6 +245,7 @@ Goblin.registerQuest (goblinName, 'remove-workitem', function (
     workitemId: widgetId,
     contextId: workitem.contextId,
     tabId,
+    navToLastWorkitem: true,
   });
 
   quest.do ({widgetId});
@@ -353,7 +363,7 @@ Goblin.registerQuest (goblinName, 'add-tab', function* (
 
   const workitem = state.get (`current.workitems.${contextId}`, null);
   if (!workitem) {
-    quest.dispatch ('setCurrentWorkItemByContext', {
+    quest.dispatch ('setCurrentWorkitemByContext', {
       contextId,
       view,
       workitemId,
@@ -384,13 +394,15 @@ Goblin.registerQuest (goblinName, 'remove-tab', function (
   quest,
   contextId,
   workitemId,
-  tabId
+  tabId,
+  navToLastWorkitem
 ) {
   const tabs = quest.use ('tabs');
   tabs.remove ({
     tabId,
     contextId,
     workitemId,
+    navToLastWorkitem,
   });
 });
 
@@ -428,12 +440,26 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
   if (!contextId) {
     contextId = quest.goblin.GetState ().get (`current.workcontext`, null);
   }
-  quest.dispatch ('setCurrentWorkItemByContext', {contextId, view, workitemId});
+  quest.dispatch ('setCurrentWorkitemByContext', {contextId, view, workitemId});
   const tabs = quest.use ('tabs');
   tabs.setCurrent ({contextId, workitemId});
   if (skipNav) {
     return;
   }
+  yield lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
+});
+
+Goblin.registerQuest (goblinName, 'nav-to-last-workitem', function* (quest) {
+  const labId = quest.goblin.getX ('labId');
+  const lab = quest.useAs ('laboratory', labId);
+  const last = quest.goblin.getState ().get ('last');
+  const contextId = last.get ('workcontext');
+  const view = last.get ('view');
+  const workitemId = last.get ('workitem');
+
+  quest.dispatch ('setCurrentWorkitemByContext', {contextId, view, workitemId});
+  const tabs = quest.use ('tabs');
+  tabs.setCurrent ({contextId, workitemId});
   yield lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
 });
 
@@ -443,7 +469,7 @@ Goblin.registerQuest (goblinName, 'clear-workitem', function* (
 ) {
   const labId = quest.goblin.getX ('labId');
   const lab = quest.useAs ('laboratory', labId);
-  quest.dispatch ('setCurrentWorkItemByContext', {
+  quest.dispatch ('setCurrentWorkitemByContext', {
     contextId,
     view: null,
     workitemId: null,
