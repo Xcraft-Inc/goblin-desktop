@@ -230,20 +230,19 @@ Goblin.registerQuest (goblinName, 'remove-workitem', function (
   }
   const widgetId = `${workitem.name}@${workitem.id}`;
 
-  if (workitem.isInWorkspace && workitem.kind !== 'system') {
-    // Remove the tab
-    const tabId = quest.goblin.getState ().get (`workitems.${widgetId}.tabId`);
-    desk.removeTab ({
-      workitemId: widgetId,
-      contextId: workitem.contextId,
-      tabId,
-    });
-    quest.do ();
-  } else {
-    quest.cmd (`${workitem.name}.delete`, {
-      id: widgetId,
-    });
-  }
+  // Remove the tab
+  const tabId = quest.goblin.getState ().get (`workitems.${widgetId}.tabId`);
+  desk.removeTab ({
+    workitemId: widgetId,
+    contextId: workitem.contextId,
+    tabId,
+  });
+
+  quest.do ({widgetId});
+
+  quest.cmd (`${workitem.name}.delete`, {
+    id: widgetId,
+  });
 
   quest.evt (`workitem.removed`, {
     desktopId: quest.goblin.id,
@@ -271,6 +270,11 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
     return;
   }
 
+  if (!workitem.contextId) {
+    const state = quest.goblin.getState ();
+    workitem.contextId = state.get (`current.workcontext`, null);
+  }
+
   //Manage collision with desktopId
   if (workitem.payload) {
     if (workitem.payload.desktopId) {
@@ -286,6 +290,7 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
       {
         id: widgetId,
         desktopId: quest.goblin.id,
+        contextId: workitem.contextId,
         workflowId: workitem.workflowId,
       },
       workitem.payload,
