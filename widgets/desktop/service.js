@@ -224,7 +224,8 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
 
 Goblin.registerQuest (goblinName, 'remove-workitem', function (
   quest,
-  workitem
+  workitem,
+  close
 ) {
   const desk = quest.me;
   if (!workitem.id) {
@@ -250,11 +251,13 @@ Goblin.registerQuest (goblinName, 'remove-workitem', function (
 
   quest.do ({widgetId});
 
-  quest.cmd (`${workitem.name}.delete`, {
-    id: widgetId,
-  });
+  if (close) {
+    quest.cmd (`${workitem.name}.close`, {
+      id: widgetId,
+    });
+  }
 
-  quest.evt (`workitem.removed`, {
+  quest.evt (`workitem.closed`, {
     desktopId: quest.goblin.id,
     workitemId: widgetId,
   });
