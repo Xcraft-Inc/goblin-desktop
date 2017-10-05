@@ -107,7 +107,6 @@ class Hinter extends Widget {
               .substring (1);
             const value = this.getModelValue (model, true);
             this.do ('create-new', {value});
-            this.setModelValue (model, '');
           }
         }}
         displayNewButton={onNew}

@@ -23,7 +23,6 @@ class Desktop extends Widget {
       data: 'notifications',
     };
   }
-
   renderNofications () {
     const WiredNotifications = wiredNotifications (this.props.id);
 
