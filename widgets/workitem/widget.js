@@ -123,6 +123,17 @@ class Workitem extends Form {
     );
   }
 
+  renderItem () {
+    const Form = this.Form;
+    return (
+      <Container kind="panes">
+        <Form validateOn="submit" model={`backend.${this.props.entityId}`}>
+          {this.props.children}
+        </Form>
+      </Container>
+    );
+  }
+
   render () {
     if (!this.props.id) {
       return <div>missing id props on Workitem component</div>;
@@ -137,6 +148,8 @@ class Workitem extends Form {
         return this.renderEditor ();
       case 'detail':
         return this.renderDetail ();
+      case 'item':
+        return this.renderItem ();
       default:
         return null;
     }
