@@ -2,7 +2,6 @@
 
 const Goblin = require ('xcraft-core-goblin');
 const goblinName = 'tabs';
-const uuidV4 = require ('uuid/v4');
 // Define initial logic values
 const logicState = {};
 
