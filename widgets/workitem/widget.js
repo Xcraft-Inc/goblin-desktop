@@ -123,14 +123,12 @@ class Workitem extends Form {
     );
   }
 
-  renderItem () {
+  renderForm () {
     const Form = this.Form;
     return (
-      <Container kind="panes">
-        <Form validateOn="submit" model={`backend.${this.props.entityId}`}>
-          {this.props.children}
-        </Form>
-      </Container>
+      <Form validateOn="submit" model={`backend.${this.props.entityId}`}>
+        {this.props.children}
+      </Form>
     );
   }
 
@@ -148,8 +146,8 @@ class Workitem extends Form {
         return this.renderEditor ();
       case 'detail':
         return this.renderDetail ();
-      case 'item':
-        return this.renderItem ();
+      case 'form':
+        return this.renderForm ();
       default:
         return null;
     }
