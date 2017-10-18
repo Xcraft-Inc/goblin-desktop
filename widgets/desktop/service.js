@@ -125,12 +125,13 @@ const logicHandlers = {
 };
 
 // Register quest's according rc.json
-Goblin.registerQuest (goblinName, 'create', function* (
+Goblin.registerQuest (goblinName, 'create', function (
   quest,
   labId,
   username,
   configuration,
   onChangeMandate,
+  onChangeScreen,
   onAddWorkitem,
   onRemoveWorkitem
 ) {
@@ -143,6 +144,10 @@ Goblin.registerQuest (goblinName, 'create', function* (
 
   if (onChangeMandate) {
     quest.goblin.setX ('onChangeMandate', onChangeMandate);
+  }
+
+  if (onChangeScreen) {
+    quest.goblin.setX ('onChangeScreen', onChangeScreen);
   }
 
   if (onAddWorkitem) {
@@ -555,6 +560,13 @@ Goblin.registerQuest (goblinName, 'change-mandate', function (quest) {
   const onChangeMandate = quest.goblin.getX ('onChangeMandate');
   if (onChangeMandate) {
     quest.cmd (onChangeMandate.quest, {id: onChangeMandate.id});
+  }
+});
+
+Goblin.registerQuest (goblinName, 'change-screen', function (quest) {
+  const onChangeScreen = quest.goblin.getX ('onChangeScreen');
+  if (onChangeScreen) {
+    quest.cmd (onChangeScreen.quest, {id: onChangeScreen.id});
   }
 });
 

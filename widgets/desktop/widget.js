@@ -12,6 +12,8 @@ const viewImporter = importer ('view');
 class Desktop extends Widget {
   constructor () {
     super (...arguments);
+    this.onChangeScreen = ::this.onChangeScreen;
+    this.onChangeMandate = ::this.onChangeMandate;
   }
 
   static get wiring () {
@@ -23,6 +25,15 @@ class Desktop extends Widget {
       data: 'notifications',
     };
   }
+
+  onChangeScreen () {
+    this.do ('change-screen');
+  }
+
+  onChangeMandate () {
+    this.do ('change-mandate');
+  }
+
   renderNofications () {
     const WiredNotifications = wiredNotifications (this.props.id);
 
@@ -90,7 +101,7 @@ class Desktop extends Widget {
               glyph="cube"
               tooltip="Changer de mandat"
               kind="task-logo"
-              onClick={() => this.do ('change-mandate')}
+              onClick={this.onChangeMandate}
             />
             <Tasks desktopId={id} />
           </Container>
@@ -100,7 +111,11 @@ class Desktop extends Widget {
             <Container kind="top-bar">
               <TopBar desktopId={id} />
               <Container kind="main-tab-right">
-                <Button glyph="tv" kind="main-tab-right" />
+                <Button
+                  glyph="tv"
+                  kind="main-tab-right"
+                  onClick={this.onChangeScreen}
+                />
                 <Button text={this.props.username} kind="main-tab-right" />
               </Container>
             </Container>
