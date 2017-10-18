@@ -60,7 +60,8 @@ Goblin.registerQuest (goblinName, 'set-current', function (quest, contextId) {
 });
 
 Goblin.registerQuest (goblinName, 'add', function* (quest, contextId, name) {
-  const widgetId = `context@${contextId}`;
+  const deskId = quest.goblin.getX ('desktopId');
+  const widgetId = `${contextId}-context@${deskId}`;
   const useId = uuidV4 ();
   const ctx = yield quest.create (`button@${useId}`, {
     id: widgetId,
@@ -69,7 +70,7 @@ Goblin.registerQuest (goblinName, 'add', function* (quest, contextId, name) {
   });
 
   quest.create (`taskbar@${useId}`, {
-    id: `taskbar@${contextId}`,
+    id: `${contextId}-taskbar@${deskId}`,
     desktopId: quest.goblin.getX ('desktopId'),
     contextId: contextId,
   });

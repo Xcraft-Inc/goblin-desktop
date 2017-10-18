@@ -8,12 +8,14 @@ class TaskbarView extends Widget {
   }
 
   render () {
-    const {isDisplayed, context} = this.props;
+    const {isDisplayed, context, desktopId} = this.props;
 
     if (!isDisplayed) {
       return null;
     }
-    const WiredTaskbar = Widget.Wired (Taskbar) (`taskbar@${context}`);
+    const WiredTaskbar = Widget.Wired (Taskbar) (
+      `${context}-taskbar@${desktopId}`
+    );
     return <WiredTaskbar />;
   }
 }
