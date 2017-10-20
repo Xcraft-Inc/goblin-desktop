@@ -116,23 +116,21 @@ class Desktop extends Widget {
                   kind="main-tab-right"
                   onClick={this.onChangeScreen}
                 />
-                {window.setZoomFactor
+                {window.zoomable
                   ? <Button
                       glyph="plus"
                       kind="main-tab-right"
                       onClick={() => {
-                        window.zoomFactor += 0.1;
-                        window.setZoom (window.zoomFactor);
+                        window.zoom ();
                       }}
                     />
                   : null}
-                {window.setZoomFactor
+                {window.zoomable
                   ? <Button
                       glyph="minus"
                       kind="main-tab-right"
                       onClick={() => {
-                        window.zoomFactor -= 0.1;
-                        window.setZoomFactor (window.zoomFactor);
+                        window.unZoom ();
                       }}
                     />
                   : null}
