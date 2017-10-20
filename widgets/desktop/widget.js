@@ -121,10 +121,8 @@ class Desktop extends Widget {
                       glyph="plus"
                       kind="main-tab-right"
                       onClick={() => {
-                        window.zoomFactor
-                          ? (window.zoomFactor += 0.1)
-                          : (window.zoomFactor = 1.5);
-                        window.setZoomFactor (window.zoomFactor);
+                        window.zoomFactor += 0.1;
+                        window.setZoom (window.zoomFactor);
                       }}
                     />
                   : null}
@@ -133,9 +131,7 @@ class Desktop extends Widget {
                       glyph="minus"
                       kind="main-tab-right"
                       onClick={() => {
-                        window.zoomFactor
-                          ? (window.zoomFactor -= 0.1)
-                          : (window.zoomFactor = 1.5);
+                        window.zoomFactor -= 0.1;
                         window.setZoomFactor (window.zoomFactor);
                       }}
                     />
