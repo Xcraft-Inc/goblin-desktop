@@ -116,6 +116,30 @@ class Desktop extends Widget {
                   kind="main-tab-right"
                   onClick={this.onChangeScreen}
                 />
+                {window.setZoomFactor
+                  ? <Button
+                      glyph="plus"
+                      kind="main-tab-right"
+                      onClick={() => {
+                        window.zoomFactor
+                          ? (window.zoomFactor += 0.1)
+                          : (window.zoomFactor = 1.5);
+                        window.setZoomFactor (window.zoomFactor);
+                      }}
+                    />
+                  : null}
+                {window.setZoomFactor
+                  ? <Button
+                      glyph="minus"
+                      kind="main-tab-right"
+                      onClick={() => {
+                        window.zoomFactor
+                          ? (window.zoomFactor -= 0.1)
+                          : (window.zoomFactor = 1.5);
+                        window.setZoomFactor (window.zoomFactor);
+                      }}
+                    />
+                  : null}
                 <Button text={this.props.username} kind="main-tab-right" />
               </Container>
             </Container>
