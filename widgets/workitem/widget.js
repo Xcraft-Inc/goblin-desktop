@@ -2,6 +2,7 @@ import React from 'react';
 import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
+import PropTypes from 'prop-types';
 /******************************************************************************/
 
 class Workitem extends Form {
@@ -11,6 +12,18 @@ class Workitem extends Form {
     this.onCancel = this.onCancel.bind (this);
     this.onEdit = this.onEdit.bind (this);
     this.onDelete = this.onDelete.bind (this);
+  }
+
+  getChildContext () {
+    return {
+      readonly: this.props.readonly,
+    };
+  }
+
+  static get childContextTypes () {
+    return {
+      readonly: PropTypes.any,
+    };
   }
 
   onSubmit () {
