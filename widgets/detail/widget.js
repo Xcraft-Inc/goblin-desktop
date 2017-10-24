@@ -20,11 +20,20 @@ class Detail extends Widget {
       width: 'width',
       detailWidget: 'detailWidget',
       detailWidgetId: 'detailWidgetId',
+      entityId: 'entityId',
     };
   }
 
   render () {
-    const {id, kind, width, detailWidget, detailWidgetId} = this.props;
+    const {
+      id,
+      kind,
+      width,
+      entityId,
+      detailWidget,
+      detailWidgetId,
+    } = this.props;
+
     if (!id) {
       return null;
     }
@@ -35,9 +44,15 @@ class Detail extends Widget {
       return null;
     }
 
+    if (!entityId) {
+      return null;
+    }
+
     const workitemUI = uiImporter (detailWidget);
-    const DetailUI = workitemUI.read.full;
-    const workitemId = `${detailWidget}@${detailWidgetId}`;
+    const DetailUI = this.WithState (workitemUI.read.full, 'entityId') (
+      '.entityId'
+    );
+    const workitemId = detailWidgetId;
     return (
       <Container
         kind={kind ? kind : 'view-right'}
@@ -46,13 +61,13 @@ class Detail extends Widget {
         <Workitem
           kind="detail"
           id={workitemId}
-          entityId={detailWidgetId}
+          entityId={entityId}
           title={() => {
             return <div>Détails</div>;
           }}
           readonly="true"
         >
-          <DetailUI id={workitemId} entityId={detailWidgetId} />
+          <DetailUI id={workitemId} entityId={entityId} />
         </Workitem>
       </Container>
     );

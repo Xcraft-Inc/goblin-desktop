@@ -16,12 +16,15 @@ const logicHandlers = {
       title: action.get ('title'),
       detailWidget: action.get ('detailWidget'),
       detailWidgetId: null,
+      entityId: null,
       kind: action.get ('kind'),
       width: action.get ('width'),
     });
   },
   'set-entity': (state, action) => {
-    return state.set ('detailWidgetId', action.get ('widgetId'));
+    return state
+      .set ('detailWidgetId', action.get ('widgetId'))
+      .set ('entityId', action.get ('entityId'));
   },
 };
 
@@ -62,7 +65,7 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
   });
   quest.goblin.defer (newWidget.delete);
   quest.goblin.setX ('widget', {id: newWidget.id, name: detailWidget});
-  quest.do ({widgetId: newWidget.id});
+  quest.do ({widgetId: newWidget.id, entityId});
 });
 
 Goblin.registerQuest (goblinName, 'delete', function (quest) {
