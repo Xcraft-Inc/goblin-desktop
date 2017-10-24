@@ -83,7 +83,7 @@ Minimal tab API:
 desktop.addTab ({
     name: 'New tab',
     contextId: 'some-context',
-    view: 'someview',
+    view: 'default',
     workitemId: 'content@exemple-uuid-v4',
 });
 ```

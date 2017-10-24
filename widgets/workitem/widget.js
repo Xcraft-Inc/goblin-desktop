@@ -123,13 +123,16 @@ class Workitem extends Form {
   }
 
   renderDetail () {
+    const Form = this.Form;
     return (
       <Container kind="column-full">
         <Container kind="pane-header">
           {this.props.title}
         </Container>
         <Container kind="panes">
-          {this.props.children}
+          <Form validateOn="submit" model={`backend.${this.props.entityId}`}>
+            {this.props.children}
+          </Form>
         </Container>
         {this.renderDetailActions ()}
       </Container>

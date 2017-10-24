@@ -2,8 +2,9 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 import importer from 'laboratory/importer/';
 import Container from 'gadgets/container/widget';
+import Workitem from 'desktop/workitem/widget';
 
-const widgetImporter = importer ('widget');
+const uiImporter = importer ('ui');
 
 class Detail extends Widget {
   constructor () {
@@ -33,16 +34,26 @@ class Detail extends Widget {
     if (!detailWidgetId) {
       return null;
     }
-    const DetailWidget = widgetImporter (detailWidget);
-    const wireDetailWidget = Widget.Wired (DetailWidget);
-    const WiredDetailWidget = wireDetailWidget (detailWidgetId);
 
+    const workitemUI = uiImporter (detailWidget);
+    const DetailUI = workitemUI.read.full;
+    const workitemId = `${detailWidget}@${detailWidgetId}`;
     return (
       <Container
         kind={kind ? kind : 'view-right'}
         width={width ? width : '750px'}
       >
-        <WiredDetailWidget />
+        <Workitem
+          kind="detail"
+          id={workitemId}
+          entityId={detailWidgetId}
+          title={() => {
+            return <div>Détails</div>;
+          }}
+          readonly="true"
+        >
+          <DetailUI id={workitemId} entityId={detailWidgetId} />
+        </Workitem>
       </Container>
     );
   }
