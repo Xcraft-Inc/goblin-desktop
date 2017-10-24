@@ -8,6 +8,7 @@ const uiImporter = importer ('ui');
 class Editor extends Widget {
   constructor () {
     super (...arguments);
+    this.do = ::this.do;
   }
 
   static get wiring () {
@@ -32,15 +33,8 @@ class Editor extends Widget {
     const EditorUI = workitemUI.edit.full;
 
     return (
-      <Workitem
-        kind="editor"
-        id={this.props.id}
-        entityId={this.props.entityId}
-        title={() => {
-          return <div>...</div>;
-        }}
-      >
-        <EditorUI {...this.props} />
+      <Workitem kind="editor" id={this.props.id} entityId={this.props.entityId}>
+        <EditorUI {...this.props} do={this.do} />
       </Workitem>
     );
   }
