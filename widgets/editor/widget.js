@@ -30,8 +30,9 @@ class Editor extends Widget {
     const workitem = this.props.id.split ('@')[0];
 
     const workitemUI = uiImporter (workitem);
-    const EditorUI = workitemUI.edit.full;
-
+    const EditorUI = this.WithState (workitemUI.edit.full, 'entityId') (
+      '.entityId'
+    );
     return (
       <Workitem kind="editor" id={this.props.id} entityId={this.props.entityId}>
         <EditorUI {...this.props} do={this.do} />

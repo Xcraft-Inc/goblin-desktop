@@ -113,7 +113,11 @@ class Workitem extends Form {
           {this.props.version}
         </Container>
         <Container kind="panes">
-          <Form validateOn="submit" model={`backend.${this.props.entityId}`}>
+          <Form
+            component="div"
+            validateOn="submit"
+            model={`backend.${this.props.entityId}`}
+          >
             {this.props.children}
           </Form>
         </Container>
@@ -132,7 +136,11 @@ class Workitem extends Form {
         </Container>
 
         <Container kind="panes">
-          <Form validateOn="submit" model={`backend.${this.props.entityId}`}>
+          <Form
+            component="div"
+            validateOn="submit"
+            model={`backend.${this.props.entityId}`}
+          >
             {this.props.children}
           </Form>
         </Container>
@@ -144,7 +152,11 @@ class Workitem extends Form {
   renderForm () {
     const Form = this.Form;
     return (
-      <Form validateOn="submit" model={`backend.${this.props.entityId}`}>
+      <Form
+        component="div"
+        validateOn="submit"
+        model={`backend.${this.props.entityId}`}
+      >
         {this.props.children}
       </Form>
     );
