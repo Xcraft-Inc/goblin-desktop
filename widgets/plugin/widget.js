@@ -18,6 +18,8 @@ class Plugin extends Widget {
 
     this.onCreateEntity = this.onCreateEntity.bind (this);
     this.onSwapExtended = this.onSwapExtended.bind (this);
+    this.onDeleteEntity = this.onDeleteEntity.bind (this);
+    this.onEditEntity = this.onEditEntity.bind (this);
     this.onEntityDragged = this.onEntityDragged.bind (this);
   }
 
@@ -52,6 +54,11 @@ class Plugin extends Widget {
     this.doAs (service, 'remove', {entityId});
   }
 
+  onEditEntity (entityId) {
+    const service = this.props.id.split ('@')[0];
+    this.doAs (service, 'edit', {entityId});
+  }
+
   onEntityDragged (selectedIds, toId) {
     const service = this.props.id.split ('@')[0];
     this.doAs (service, 'drag', {
@@ -81,6 +88,7 @@ class Plugin extends Widget {
             glyph="plus"
             text="Ajouter"
             glyphPosition="right"
+            spacing="overlap"
             onClick={this.onCreateEntity}
           />
         </div>
@@ -88,49 +96,111 @@ class Plugin extends Widget {
     }
   }
 
-  renderRow (entityId, extended, index) {
+  renderItem (entityId, extended, index) {
     const workitemUI = uiImporter (this.props.editorWidget);
-    const ReadLineUI = this.WithState (workitemUI.read.line, 'entityId') (
-      '.entityId'
-    );
-    const EditLineUI = this.WithState (workitemUI.edit.line, 'entityId') (
-      '.entityId'
-    );
-
     const workitemId = `${this.props.editorWidget}@${this.props.entityIds.get (index)}`;
 
     if (extended) {
-      return (
-        <Container kind="pane" key={index}>
-          <Container kind="row-pane">
-            <Button
-              height={this.context.theme.shapes.lineHeight}
-              glyph="trash"
-              tooltip="Supprimer"
-              onClick={() => this.onDeleteEntity (entityId)}
-            />
-            <Button
-              kind="recurrence"
-              glyph="caret-up"
-              tooltip="Replier"
-              active="false"
-              activeColor={
-                this.context.theme.palette.recurrenceExtendedBoxBackground
-              }
-              onClick={() => this.onSwapExtended (entityId)}
-            />
+      const itemClass = this.styles.classNames.extendedItem;
 
-          </Container>
-          <Container kind="row-pane">
-            <Container kind="column">
-              <Workitem id={workitemId} entityId={entityId} kind="form">
-                <EditLineUI id={workitemId} entityId={entityId} />
-              </Workitem>
-            </Container>
-          </Container>
-        </Container>
+      const EditLineUI = this.WithState (workitemUI.edit.line, 'entityId') (
+        '.entityId'
+      );
+
+      return (
+        <div className={itemClass}>
+          <Workitem id={workitemId} entityId={entityId} kind="form">
+            <EditLineUI id={workitemId} entityId={entityId} />
+          </Workitem>
+        </div>
       );
     } else {
+      const itemClass = this.styles.classNames.compactedItem;
+
+      const ReadLineUI = this.WithState (workitemUI.read.line, 'entityId') (
+        '.entityId'
+      );
+
+      return (
+        <div className={itemClass}>
+          <Workitem
+            readonly="true"
+            id={workitemId}
+            entityId={entityId}
+            kind="form"
+          >
+            <ReadLineUI id={workitemId} entityId={entityId} />
+          </Workitem>
+        </div>
+      );
+    }
+  }
+
+  renderButtons (entityId, extended) {
+    if (extended) {
+      const buttonsClass = this.styles.classNames.extendedButtons;
+      const sajexClass = this.styles.classNames.sajex;
+      const spaceClass = this.styles.classNames.space;
+
+      return (
+        <div className={buttonsClass}>
+          <Button
+            kind="recurrence"
+            glyph="caret-up"
+            tooltip="Replier"
+            active="false"
+            activeColor={
+              this.context.theme.palette.recurrenceExtendedBoxBackground
+            }
+            onClick={() => this.onSwapExtended (entityId)}
+          />
+          <div className={sajexClass} />
+          <Button
+            kind="recurrence"
+            glyph="pencil"
+            tooltip="Editer"
+            onClick={() => this.onEditEntity (entityId)}
+          />
+          <div className={spaceClass} />
+          <Button
+            kind="recurrence"
+            glyph="trash"
+            tooltip="Supprimer"
+            onClick={() => this.onDeleteEntity (entityId)}
+          />
+        </div>
+      );
+    } else {
+      const buttonsClass = this.styles.classNames.compactedButtons;
+
+      return (
+        <div className={buttonsClass}>
+          <Button
+            kind="recurrence"
+            glyph="caret-down"
+            tooltip="Etendre"
+            active="false"
+            activeColor={
+              this.context.theme.palette.recurrenceExtendedBoxBackground
+            }
+            onClick={() => this.onSwapExtended (entityId)}
+          />
+        </div>
+      );
+    }
+  }
+
+  renderRow (entityId, extended, index) {
+    if (extended) {
+      const rowClass = this.styles.classNames.extendedRow;
+      return (
+        <div key={index} className={rowClass}>
+          {this.renderItem (entityId, extended, index)}
+          {this.renderButtons (entityId, extended)}
+        </div>
+      );
+    } else {
+      const rowClass = this.styles.classNames.compactedRow;
       return (
         <DragCab
           key={index}
@@ -142,28 +212,10 @@ class Plugin extends Widget {
           doClickAction={() => this.onSwapExtended (entityId)}
           doDragEnding={this.onEntityDragged}
         >
-
-          <Container kind="row-pane">
-            <Workitem
-              readonly="true"
-              id={workitemId}
-              entityId={entityId}
-              kind="form"
-            >
-              <ReadLineUI id={workitemId} entityId={entityId} />
-            </Workitem>
-            <Button
-              kind="recurrence"
-              glyph="caret-down"
-              tooltip="Etendre"
-              active="false"
-              activeColor={
-                this.context.theme.palette.recurrenceExtendedBoxBackground
-              }
-              onClick={() => this.onSwapExtended (entityId)}
-            />
-          </Container>
-
+          <div className={rowClass}>
+            {this.renderItem (entityId, extended, index)}
+            {this.renderButtons (entityId, extended)}
+          </div>
         </DragCab>
       );
     }

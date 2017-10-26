@@ -8,7 +8,7 @@ const uiImporter = importer ('ui');
 class Editor extends Widget {
   constructor () {
     super (...arguments);
-    this.do = ::this.do;
+    this.do = this.do.bind (this);
   }
 
   static get wiring () {
