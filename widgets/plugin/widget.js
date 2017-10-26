@@ -109,7 +109,12 @@ class Plugin extends Widget {
 
       return (
         <div className={itemClass}>
-          <Workitem id={workitemId} entityId={entityId} kind="form">
+          <Workitem
+            id={workitemId}
+            entityId={entityId}
+            kind="form"
+            readonly={this.props.readonly}
+          >
             <EditLineUI id={workitemId} entityId={entityId} />
           </Workitem>
         </div>
@@ -162,12 +167,15 @@ class Plugin extends Widget {
             onClick={() => this.onEditEntity (entityId)}
           />
           <div className={spaceClass} />
-          <Button
-            kind="recurrence"
-            glyph="trash"
-            tooltip="Supprimer"
-            onClick={() => this.onDeleteEntity (entityId)}
-          />
+          {this.props.readonly
+            ? null
+            : <Button
+                kind="recurrence"
+                glyph="trash"
+                tooltip="Supprimer"
+                onClick={() => this.onDeleteEntity (entityId)}
+              />}
+
         </div>
       );
     } else {
