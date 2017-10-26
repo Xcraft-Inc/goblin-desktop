@@ -123,7 +123,7 @@ class Plugin extends Widget {
           </Container>
           <Container kind="row-pane">
             <Container kind="column">
-              <Workitem id={this.props.id} entityId={entityId} kind="form">
+              <Workitem id={workitemId} entityId={entityId} kind="form">
                 <EditLineUI id={workitemId} entityId={entityId} />
               </Workitem>
             </Container>
