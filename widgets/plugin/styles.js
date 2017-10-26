@@ -69,7 +69,7 @@ export default function styles (theme, props) {
     flexDirection: 'column',
     width: '32px',
     padding: halfMargin,
-    backgroundColor: '#ddd',
+    backgroundColor: '#eee',
     borderLeft: '1px solid #bbb',
   };
 
