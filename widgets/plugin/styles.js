@@ -10,6 +10,12 @@ export default function styles (theme, props) {
     flexGrow: '1',
   };
 
+  const embededBoxStyle = {
+    flexGrow: '1',
+    margin: '10px 10px 0px 10px',
+    borderTop: '1px solid #bbb',
+  };
+
   const headerStyle = {
     display: 'flex',
     flexDirection: 'row',
@@ -83,6 +89,7 @@ export default function styles (theme, props) {
 
   return {
     box: boxStyle,
+    embededBox: embededBoxStyle,
     header: headerStyle,
     headerEmpty: headerEmptyStyle,
     compactedRow: compactedRowStyle,

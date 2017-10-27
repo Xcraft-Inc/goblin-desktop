@@ -103,9 +103,18 @@ class Plugin extends Widget {
     if (extended) {
       const itemClass = this.styles.classNames.extendedItem;
 
-      const EditLineUI = this.WithState (workitemUI.edit.line, 'entityId') (
-        '.entityId'
-      );
+      let ExtendedUI = null;
+      if (this.props.readonly) {
+        ExtendedUI = this.WithState (
+          workitemUI.plugin.readonly.extend,
+          'entityId'
+        ) ('.entityId');
+      } else {
+        ExtendedUI = this.WithState (
+          workitemUI.plugin.edit.extend,
+          'entityId'
+        ) ('.entityId');
+      }
 
       return (
         <div className={itemClass}>
@@ -115,16 +124,25 @@ class Plugin extends Widget {
             kind="form"
             readonly={this.props.readonly}
           >
-            <EditLineUI id={workitemId} entityId={entityId} />
+            <ExtendedUI id={workitemId} entityId={entityId} />
           </Workitem>
         </div>
       );
     } else {
       const itemClass = this.styles.classNames.compactedItem;
 
-      const ReadLineUI = this.WithState (workitemUI.read.line, 'entityId') (
-        '.entityId'
-      );
+      let CompactedUI = null;
+      if (this.props.readonly) {
+        CompactedUI = this.WithState (
+          workitemUI.plugin.readonly.compact,
+          'entityId'
+        ) ('.entityId');
+      } else {
+        CompactedUI = this.WithState (
+          workitemUI.plugin.edit.compact,
+          'entityId'
+        ) ('.entityId');
+      }
 
       return (
         <div className={itemClass}>
@@ -133,8 +151,9 @@ class Plugin extends Widget {
             id={workitemId}
             entityId={entityId}
             kind="form"
+            readonly={this.props.readonly}
           >
-            <ReadLineUI id={workitemId} entityId={entityId} />
+            <CompactedUI id={workitemId} entityId={entityId} />
           </Workitem>
         </div>
       );
@@ -247,7 +266,9 @@ class Plugin extends Widget {
       return <div>No editor provided in props!</div>;
     }
 
-    const boxClass = this.styles.classNames.box;
+    const boxClass = this.props.level === '2'
+      ? this.styles.classNames.embededBox
+      : this.styles.classNames.box;
 
     return (
       <div className={boxClass}>

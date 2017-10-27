@@ -1,6 +1,7 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import importer from 'laboratory/importer/';
+
 import Container from 'gadgets/container/widget';
 import Workitem from 'desktop/workitem/widget';
 
@@ -49,7 +50,7 @@ class Detail extends Widget {
     }
 
     const workitemUI = uiImporter (detailWidget);
-    const DetailUI = this.WithState (workitemUI.read.full, 'entityId') (
+    const DetailUI = this.WithState (workitemUI.panel.readonly, 'entityId') (
       '.entityId'
     );
     const workitemId = detailWidgetId;
