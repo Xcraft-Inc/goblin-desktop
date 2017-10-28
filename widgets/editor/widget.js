@@ -8,7 +8,7 @@ const uiImporter = importer ('ui');
 class Editor extends Widget {
   constructor () {
     super (...arguments);
-    this.do = this.do.bind (this);
+    this.doProxy = this.doProxy.bind (this);
   }
 
   static get wiring () {
@@ -16,6 +16,11 @@ class Editor extends Widget {
       id: 'id',
       entityId: 'entityId',
     };
+  }
+
+  doProxy (action) {
+    const workitem = this.props.id.split ('@')[0];
+    this.doAs (workitem, action);
   }
 
   render () {
@@ -35,7 +40,7 @@ class Editor extends Widget {
     );
     return (
       <Workitem kind="editor" id={this.props.id} entityId={this.props.entityId}>
-        <EditorUI {...this.props} do={this.do} />
+        <EditorUI {...this.props} do={this.doProxy} />
       </Workitem>
     );
   }
