@@ -17,12 +17,14 @@ class Workitem extends Form {
   getChildContext () {
     return {
       readonly: this.props.readonly,
+      entityId: this.props.entityId,
     };
   }
 
   static get childContextTypes () {
     return {
       readonly: PropTypes.any,
+      entityId: PropTypes.string,
     };
   }
 
