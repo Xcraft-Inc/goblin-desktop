@@ -40,7 +40,11 @@ class Editor extends Widget {
     );
     return (
       <Workitem kind="editor" id={this.props.id} entityId={this.props.entityId}>
-        <EditorUI {...this.props} do={this.doProxy} />
+        <EditorUI
+          {...this.props}
+          theme={this.context.theme}
+          do={this.doProxy}
+        />
       </Workitem>
     );
   }

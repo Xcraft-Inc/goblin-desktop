@@ -68,7 +68,11 @@ class Detail extends Widget {
           }}
           readonly="true"
         >
-          <DetailUI id={workitemId} entityId={entityId} />
+          <DetailUI
+            id={workitemId}
+            theme={this.context.theme}
+            entityId={entityId}
+          />
         </Workitem>
       </Container>
     );

@@ -124,7 +124,11 @@ class Plugin extends Widget {
             kind="form"
             readonly={this.props.readonly}
           >
-            <ExtendedUI id={workitemId} entityId={entityId} />
+            <ExtendedUI
+              id={workitemId}
+              theme={this.context.theme}
+              entityId={entityId}
+            />
           </Workitem>
         </div>
       );
@@ -153,7 +157,11 @@ class Plugin extends Widget {
             kind="form"
             readonly={this.props.readonly}
           >
-            <CompactedUI id={workitemId} entityId={entityId} />
+            <CompactedUI
+              id={workitemId}
+              theme={this.context.theme}
+              entityId={entityId}
+            />
           </Workitem>
         </div>
       );
