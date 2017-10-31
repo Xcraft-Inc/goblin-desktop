@@ -50,25 +50,19 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
   entityId,
   entity
 ) {
-  const detailWidget = quest.goblin.getState ().get ('detailWidget');
-  if (quest.canUse (`${detailWidget}@${entityId}`)) {
-    quest.goblin.setX ('widget', {
-      id: `${detailWidget}@${entityId}`,
-      name: detailWidget,
-    });
-    quest.do ({widgetId: `${detailWidget}@${entityId}`});
-    return;
-  }
   const desktopId = quest.goblin.getX ('desktopId');
-  const newWidget = yield quest.create (`${detailWidget}@${entityId}`, {
-    id: `${detailWidget}@${entityId}`,
-    desktopId,
-    entityId,
-    entity,
-  });
-  quest.goblin.defer (newWidget.delete);
-  quest.goblin.setX ('widget', {id: newWidget.id, name: detailWidget});
-  quest.do ({widgetId: newWidget.id, entityId});
+  const type = entityId.split ('@')[0];
+  const workitemId = `${type}-workitem@${entityId}@${desktopId}`;
+  const existing = yield quest.warehouse.get ({path: workitemId});
+  if (!existing) {
+    yield quest.create (workitemId, {
+      id: workitemId,
+      desktopId,
+      entityId: entityId,
+      entity,
+    });
+  }
+  quest.do ({widgetId: workitemId, entityId});
 });
 
 Goblin.registerQuest (goblinName, 'delete', function (quest) {
