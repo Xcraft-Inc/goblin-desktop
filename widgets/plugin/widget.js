@@ -274,9 +274,16 @@ class Plugin extends Widget {
       return <div>No editor provided in props!</div>;
     }
 
-    const boxClass = this.props.level === '2'
-      ? this.styles.classNames.embededBox
-      : this.styles.classNames.box;
+    let boxClass = null;
+    if (!this.props.entityIds || this.props.entityIds.size === 0) {
+      boxClass = this.props.level === '2'
+        ? this.styles.classNames.emptyEmbededBox
+        : this.styles.classNames.emptyBox;
+    } else {
+      boxClass = this.props.level === '2'
+        ? this.styles.classNames.embededBox
+        : this.styles.classNames.box;
+    }
 
     return (
       <div className={boxClass}>

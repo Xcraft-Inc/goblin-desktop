@@ -10,9 +10,20 @@ export default function styles (theme, props) {
     flexGrow: '1',
   };
 
+  const emptyBoxStyle = {
+    flexGrow: '1',
+    margin: '0px 0px -10px 0px',
+  };
+
   const embededBoxStyle = {
     flexGrow: '1',
-    margin: '10px 10px 0px 10px',
+    margin: '10px 10px 10px 10px',
+    borderTop: '1px solid #bbb',
+  };
+
+  const emptyEmbededBoxStyle = {
+    flexGrow: '1',
+    margin: '10px 10px -10px 10px',
     borderTop: '1px solid #bbb',
   };
 
@@ -20,7 +31,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    padding: halfMargin + ' ' + m,
+    padding: halfMargin + ' ' + m + ' ' + '2px' + ' ' + m,
     cursor: 'default',
     userSelect: 'none',
   };
@@ -38,14 +49,14 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    padding: '0px ' + m + ' ' + halfMargin + ' ' + m,
+    padding: '0px ' + m + ' ' + '2px' + ' ' + m,
   };
 
   const extendedRowStyle = {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px ' + halfMargin + ' ' + halfMargin + ' ' + halfMargin,
+    margin: '5px ' + halfMargin + ' ' + '7px' + ' ' + halfMargin,
     backgroundColor: '#eee',
     border: '1px solid #bbb',
   };
@@ -90,7 +101,9 @@ export default function styles (theme, props) {
 
   return {
     box: boxStyle,
+    emptyBox: emptyBoxStyle,
     embededBox: embededBoxStyle,
+    emptyEmbededBox: emptyEmbededBoxStyle,
     header: headerStyle,
     headerEmpty: headerEmptyStyle,
     compactedRow: compactedRowStyle,
