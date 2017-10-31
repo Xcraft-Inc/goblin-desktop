@@ -271,7 +271,8 @@ class Plugin extends Widget {
     }
 
     if (!this.props.editorWidget) {
-      return <div>No editor provided in props!</div>;
+      // return <div>No editor provided in props!</div>;
+      return null;
     }
 
     let boxClass = null;
