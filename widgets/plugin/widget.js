@@ -104,7 +104,7 @@ class Plugin extends Widget {
       const itemClass = this.styles.classNames.extendedItem;
 
       let ExtendedUI = null;
-      if (this.props.readonly) {
+      if (Bool.isTrue (this.props.readonly)) {
         ExtendedUI = this.WithState (
           workitemUI.plugin.readonly.extend,
           'entityId'
@@ -136,7 +136,7 @@ class Plugin extends Widget {
       const itemClass = this.styles.classNames.compactedItem;
 
       let CompactedUI = null;
-      if (this.props.readonly) {
+      if (Bool.isTrue (this.props.readonly)) {
         CompactedUI = this.WithState (
           workitemUI.plugin.readonly.compact,
           'entityId'
@@ -194,7 +194,7 @@ class Plugin extends Widget {
             onClick={() => this.onEditEntity (entityId)}
           />
           <div className={spaceClass} />
-          {this.props.readonly
+          {Bool.isTrue (this.props.readonly)
             ? null
             : <Button
                 kind="recurrence"
@@ -225,7 +225,43 @@ class Plugin extends Widget {
     }
   }
 
+  renderRowContent (entityId, extended, index) {
+    const rowClass = extended
+      ? this.styles.classNames.extendedRow
+      : this.styles.classNames.compactedRow;
+
+    return (
+      <div key={index} className={rowClass}>
+        {this.renderItem (entityId, extended, index)}
+        {this.renderButtons (entityId, extended)}
+      </div>
+    );
+  }
+
   renderRow (entityId, extended, index) {
+    if (Bool.isTrue (this.props.readonly)) {
+      return this.renderRowContent (entityId, extended, index);
+    } else {
+      return (
+        <DragCab
+          key={index}
+          dragController="codispo-ticket"
+          dragWidthDetect={this.context.theme.shapes.containerMargin}
+          dragOwnerId={entityId}
+          direction="vertical"
+          mode="corner-top-left"
+          color={this.context.theme.palette.roadbookDragAndDropHover}
+          thickness={this.context.theme.shapes.dragAndDropTicketThickness}
+          overSpacing="0px"
+          verticalSpacing="0px"
+          radius="0px"
+        >
+          {this.renderRowContent (entityId, extended, index)}
+        </DragCab>
+      );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
     if (extended) {
       const rowClass = this.styles.classNames.extendedRow;
       return (
