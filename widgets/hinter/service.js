@@ -136,7 +136,7 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
   }
 });
 
-Goblin.registerQuest (goblinName, 'validate-row', function (
+Goblin.registerQuest (goblinName, 'validate-row', function* (
   quest,
   index,
   text,
@@ -154,7 +154,7 @@ Goblin.registerQuest (goblinName, 'validate-row', function (
     .toJS ();
   const type = quest.goblin.getState ().get (`type`, null);
   if (value && type) {
-    quest.cmd (`${workitem}.hinter-validate-${type}`, {
+    yield quest.cmd (`${workitem}.hinter-validate-${type}`, {
       id: workitemId,
       selection: {index, text, value, payload},
     });
