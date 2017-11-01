@@ -260,36 +260,6 @@ class Plugin extends Widget {
         </DragCab>
       );
     }
-
-    ////////////////////////////////////////////////////////////////////////////
-    if (extended) {
-      const rowClass = this.styles.classNames.extendedRow;
-      return (
-        <div key={index} className={rowClass}>
-          {this.renderItem (entityId, extended, index)}
-          {this.renderButtons (entityId, extended)}
-        </div>
-      );
-    } else {
-      const rowClass = this.styles.classNames.compactedRow;
-      return (
-        <DragCab
-          key={index}
-          dragController={this.props.id}
-          direction="vertical"
-          color={this.context.theme.palette.dragAndDropHover}
-          thickness={this.context.theme.shapes.dragAndDropTicketThickness}
-          dragOwnerId={entityId}
-          doClickAction={() => this.onSwapExtended (entityId)}
-          doDragEnding={this.onEntityDragged}
-        >
-          <div className={rowClass}>
-            {this.renderItem (entityId, extended, index)}
-            {this.renderButtons (entityId, extended)}
-          </div>
-        </DragCab>
-      );
-    }
   }
 
   renderRows () {
