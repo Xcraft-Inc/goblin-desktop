@@ -246,8 +246,9 @@ class Plugin extends Widget {
         <DragCab
           key={index}
           dragController={this.props.id}
-          dragWidthDetect={this.context.theme.shapes.containerMargin}
           dragOwnerId={entityId}
+          dragMode="handle"
+          dragHandleWidth={this.context.theme.shapes.containerMargin}
           direction="vertical"
           mode="corner-top-left"
           color={this.context.theme.palette.roadbookDragAndDropHover}
