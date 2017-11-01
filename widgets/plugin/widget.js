@@ -248,7 +248,6 @@ class Plugin extends Widget {
           dragMode="handle"
           dragHandleWidth={this.context.theme.shapes.containerMargin}
           direction="vertical"
-          mode="corner-top-left"
           color={this.context.theme.palette.roadbookDragAndDropHover}
           thickness={this.context.theme.shapes.dragAndDropTicketThickness}
           overSpacing="0px"
