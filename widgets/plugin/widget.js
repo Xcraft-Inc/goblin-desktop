@@ -238,10 +238,8 @@ class Plugin extends Widget {
     );
   }
 
-  renderRow (entityId, extended, index) {
-    if (Bool.isTrue (this.props.readonly)) {
-      return this.renderRowContent (entityId, extended, index);
-    } else {
+  renderRow (entityId, extended, dragEnabled, index) {
+    if (dragEnabled) {
       return (
         <DragCab
           key={index}
@@ -262,15 +260,19 @@ class Plugin extends Widget {
           {this.renderRowContent (entityId, extended, index)}
         </DragCab>
       );
+    } else {
+      return this.renderRowContent (entityId, extended, index);
     }
   }
 
   renderRows () {
     const entityIds = this.props.entityIds.toArray ();
+    const dragEnabled =
+      !Bool.isTrue (this.props.readonly) && entityIds.length > 1;
     let index = 0;
     return entityIds.map (entityId => {
       const extended = entityId === this.props.extendedId;
-      return this.renderRow (entityId, extended, index++);
+      return this.renderRow (entityId, extended, dragEnabled, index++);
     });
   }
 
