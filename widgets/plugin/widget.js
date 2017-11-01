@@ -245,7 +245,7 @@ class Plugin extends Widget {
       return (
         <DragCab
           key={index}
-          dragController="codispo-ticket"
+          dragController={this.props.id}
           dragWidthDetect={this.context.theme.shapes.containerMargin}
           dragOwnerId={entityId}
           direction="vertical"
@@ -255,6 +255,8 @@ class Plugin extends Widget {
           overSpacing="0px"
           verticalSpacing="0px"
           radius="0px"
+          doClickAction={() => this.onSwapExtended (entityId)}
+          doDragEnding={this.onEntityDragged}
         >
           {this.renderRowContent (entityId, extended, index)}
         </DragCab>

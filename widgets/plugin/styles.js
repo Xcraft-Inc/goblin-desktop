@@ -49,7 +49,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    padding: '0px ' + m + ' ' + '2px' + ' ' + m,
+    padding: '0px ' + Unit.add (m, '1px') + ' ' + '2px' + ' ' + m,
   };
 
   const extendedRowStyle = {
