@@ -13,8 +13,8 @@
     }
   },
   "dependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
     "react-redux-form": "^1.14.0",
     "xcraft-core-goblin": "^2.0.0"
