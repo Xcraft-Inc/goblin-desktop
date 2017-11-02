@@ -20,15 +20,15 @@ const logicHandlers = {
     });
   },
   add: (state, action) => {
-    const widgetId = action.get ('widgetId');
+    const name = action.get ('name');
     const contextId = action.get ('contextId');
     const current = state.get ('current');
     if (!current) {
       return state
         .set ('current', contextId)
-        .set (`contexts.${widgetId}`, contextId);
+        .set (`contexts.${contextId}`, {contextId, name});
     }
-    return state.set (`contexts.${widgetId}`, contextId);
+    return state.set (`contexts.${contextId}`, {contextId, name});
   },
   remove: (state, action) => {
     const widgetId = action.get ('widgetId');
@@ -59,15 +59,9 @@ Goblin.registerQuest (goblinName, 'set-current', function (quest, contextId) {
   quest.do ({contextId});
 });
 
-Goblin.registerQuest (goblinName, 'add', function* (quest, contextId, name) {
+Goblin.registerQuest (goblinName, 'add', function (quest, contextId, name) {
   const deskId = quest.goblin.getX ('desktopId');
-  const widgetId = `${contextId}-context@${deskId}`;
   const useId = uuidV4 ();
-  const ctx = yield quest.create (`button@${useId}`, {
-    id: widgetId,
-    text: name,
-    kind: 'main-tab',
-  });
 
   quest.create (`taskbar@${useId}`, {
     id: `${contextId}-taskbar@${deskId}`,
@@ -75,10 +69,7 @@ Goblin.registerQuest (goblinName, 'add', function* (quest, contextId, name) {
     contextId: contextId,
   });
 
-  quest.do ({widgetId, contextId, name});
-  quest.goblin.defer (ctx.delete);
-
-  return widgetId;
+  quest.do ({contextId, name});
 });
 
 Goblin.registerQuest (goblinName, 'remove', function (quest, widgetId) {

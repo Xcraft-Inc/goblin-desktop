@@ -36,16 +36,21 @@ class Contexts extends Widget {
     if (!this.props.id) {
       return null;
     }
+    let renderedContexts = [];
+    if (contexts) {
+      renderedContexts = contexts.toArray ();
+    }
 
     return (
       <Container kind="main-tab">
-        {contexts.map ((v, k) => {
-          const WiredButton = Wired (k);
+        {renderedContexts.map ((v, k) => {
           return (
-            <WiredButton
+            <Button
               key={k}
-              onClick={() => this.goToContext (v)}
-              active={current === v ? 'true' : 'false'}
+              text={v.get ('name')}
+              kind="main-tab"
+              onClick={() => this.goToContext (v.get ('contextId'))}
+              active={current === v.get ('contextId') ? 'true' : 'false'}
             />
           );
         })}

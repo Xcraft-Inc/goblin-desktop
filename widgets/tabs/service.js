@@ -23,6 +23,7 @@ const logicHandlers = {
     const current = state.get (`current.${contextId}`, null);
     const tab = {
       id: tabId,
+      name: action.get ('name'),
       view: action.get ('view'),
       workitemId: action.get ('workitemId'),
       closable: action.get ('closable'),
@@ -70,7 +71,7 @@ Goblin.registerQuest (goblinName, 'set-current', function (
   quest.do ({contextId, workitemId});
 });
 
-Goblin.registerQuest (goblinName, 'add', function* (
+Goblin.registerQuest (goblinName, 'add', function (
   quest,
   contextId,
   name,
@@ -79,16 +80,10 @@ Goblin.registerQuest (goblinName, 'add', function* (
   closable,
   glyph
 ) {
-  const tab = yield quest.create (`button@${workitemId}`, {
-    id: `button@${workitemId}`,
-    text: name,
-    kind: 'view-tab',
-  });
   quest.do ({
-    tabId: tab.id,
+    tabId: workitemId,
   });
-  quest.goblin.defer (tab.delete);
-  return tab.id;
+  return workitemId;
 });
 
 Goblin.registerQuest (goblinName, 'remove', function* (

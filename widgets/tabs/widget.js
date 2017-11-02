@@ -58,20 +58,24 @@ class Tabs extends Widget {
 
     const WiredNotificationsButton = wireNotifsButton (desktopId);
 
-    const contextTabs = tabs.get (context, []);
+    let contextTabs = tabs.get (context, null);
+    if (contextTabs) {
+      contextTabs = contextTabs.toArray ();
+    } else {
+      contextTabs = [];
+    }
     return (
       <Container kind="second-bar">
         <Container kind="view-tab">
           {contextTabs.map ((v, k) => {
-            const WiredButton = wireButton (k);
             const wid = v.get ('workitemId');
             const closable = v.get ('closable', false);
             const show = closable ? 'true' : 'false';
             return (
-              <Container kind="row">
-                <WiredButton
-                  key={k}
-                  id={k}
+              <Container kind="row" key={k}>
+                <Button
+                  text={v.get ('name')}
+                  kind="view-tab"
                   glyph={v.get ('glyph')}
                   onClick={() =>
                     this.goToWorkItem (context, v.get ('view'), wid)}
@@ -83,7 +87,7 @@ class Tabs extends Widget {
                   show={show}
                   onClick={() => {
                     this.do ('remove', {
-                      tabId: k,
+                      tabId: wid,
                       contextId: context,
                       workitemId: wid,
                     });
