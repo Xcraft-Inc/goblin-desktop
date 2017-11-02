@@ -178,7 +178,7 @@ class Plugin extends Widget {
         <div className={buttonsClass}>
           <Button
             kind="recurrence"
-            glyph="caret-up"
+            glyph="eye-slash"
             tooltip="Replier"
             active="false"
             activeColor={
@@ -212,7 +212,7 @@ class Plugin extends Widget {
         <div className={buttonsClass}>
           <Button
             kind="recurrence"
-            glyph="caret-down"
+            glyph="eye"
             tooltip="Etendre"
             active="false"
             activeColor={
