@@ -111,8 +111,11 @@ class Hinter extends Widget {
           }
         }}
         displayNewButton={onNew}
-        onRowClick={(index, text) => {
-          this.do ('select-row', {index, text});
+        onRowClick={index => {
+          this.selectRow (index);
+        }}
+        onRowDbClick={index => {
+          this.validateRow (index);
         }}
       />
     );
