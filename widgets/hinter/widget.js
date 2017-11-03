@@ -65,6 +65,7 @@ class Hinter extends Widget {
       const value = this.props.rows.get (index);
       const model = this.getRouting ().get ('location.hash').substring (1);
       this.do ('validate-row', {index, text: value, model});
+      this.hideHinter ();
     }
   }
 
@@ -110,10 +111,11 @@ class Hinter extends Widget {
           }
         }}
         displayNewButton={onNew}
-        onRowClick={(index, text) => {
-          this.do ('select-row', {index, text});
-          const model = this.getRouting ().get ('location.hash').substring (1);
-          this.do ('validate-row', {index, text, model});
+        onRowClick={index => {
+          this.selectRow (index);
+        }}
+        onRowDbClick={index => {
+          this.validateRow (index);
         }}
       />
     );

@@ -13,10 +13,15 @@ class DetailView extends Widget {
       return null;
     }
 
+    let hinterName = hinter;
+    if (hinter.endsWith ('-hidden')) {
+      hinterName = hinter.replace ('-hidden', '');
+    }
+
     const wireDetail = Widget.Wired (Detail);
     const hash = this.getHash ();
     const workitemId = hash.split ('.')[1];
-    const WiredDetail = wireDetail (`${hinter}-detail@${workitemId}`);
+    const WiredDetail = wireDetail (`${hinterName}-detail@${workitemId}`);
     return <WiredDetail />;
   }
 }

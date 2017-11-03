@@ -178,9 +178,9 @@ Goblin.registerQuest (goblinName, 'validate-row', function* (
       selection: {index, text, value, payload},
     });
     if (model) {
-      const desktopId = quest.goblin.getX ('desktopId');
-      const desk = quest.useAs ('desktop', desktopId);
-      desk.dispatch ({action: actions.change (model, text)});
+      //const desktopId = quest.goblin.getX ('desktopId');
+      //const desk = quest.useAs ('desktop', desktopId);
+      //desk.dispatch ({action: actions.change (model, text)});
     }
   }
 });

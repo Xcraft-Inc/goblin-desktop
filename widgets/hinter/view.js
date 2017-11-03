@@ -13,6 +13,10 @@ class HinterView extends Widget {
       return null;
     }
 
+    if (hinter.endsWith ('-hidden')) {
+      return null;
+    }
+
     const wireHinter = Widget.Wired (Hinter);
     const hash = this.getHash ();
     const workitemId = hash.split ('.')[1];
