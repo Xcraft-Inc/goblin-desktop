@@ -65,7 +65,6 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: '1',
-    marginTop: '1px',
   };
 
   const extendedItemStyle = {
