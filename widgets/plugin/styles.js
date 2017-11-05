@@ -15,13 +15,13 @@ export default function styles (theme, props) {
     margin: '0px 0px -10px 0px',
   };
 
-  const embededBoxStyle = {
+  const embeddedBoxStyle = {
     flexGrow: '1',
     margin: '10px 10px 10px 10px',
     borderTop: '1px solid #bbb',
   };
 
-  const emptyEmbededBoxStyle = {
+  const emptyembeddedBoxStyle = {
     flexGrow: '1',
     margin: '10px 10px -10px 10px',
     borderTop: '1px solid #bbb',
@@ -101,8 +101,8 @@ export default function styles (theme, props) {
   return {
     box: boxStyle,
     emptyBox: emptyBoxStyle,
-    embededBox: embededBoxStyle,
-    emptyEmbededBox: emptyEmbededBoxStyle,
+    embeddedBox: embeddedBoxStyle,
+    emptyembeddedBox: emptyembeddedBoxStyle,
     header: headerStyle,
     headerEmpty: headerEmptyStyle,
     compactedRow: compactedRowStyle,
