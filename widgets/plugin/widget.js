@@ -231,7 +231,7 @@ class Plugin extends Widget {
       : this.styles.classNames.compactedRow;
 
     return (
-      <Container kind="row" key={index}>
+      <Container kind="row-draggable" key={index}>
         <div className={rowClass}>
           {this.renderItem (entityId, extended, index)}
           {this.renderButtons (entityId, extended)}
