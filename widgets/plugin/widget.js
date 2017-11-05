@@ -178,7 +178,8 @@ class Plugin extends Widget {
         <div className={buttonsClass}>
           <Button
             kind="recurrence"
-            glyph="eye-slash"
+            glyph="reply"
+            glyphRotate="90"
             tooltip="Replier"
             active="false"
             activeColor={
@@ -212,7 +213,8 @@ class Plugin extends Widget {
         <div className={buttonsClass}>
           <Button
             kind="recurrence"
-            glyph="eye"
+            glyph="mail-forward"
+            glyphRotate="90"
             tooltip="Etendre"
             active="false"
             activeColor={
