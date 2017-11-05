@@ -289,11 +289,11 @@ class Plugin extends Widget {
 
     let boxClass = null;
     if (!this.props.entityIds || this.props.entityIds.size === 0) {
-      boxClass = this.props.level === '2'
+      boxClass = Bool.isTrue (this.props.embedded)
         ? this.styles.classNames.emptyembeddedBox
         : this.styles.classNames.emptyBox;
     } else {
-      boxClass = this.props.level === '2'
+      boxClass = Bool.isTrue (this.props.embedded)
         ? this.styles.classNames.embeddedBox
         : this.styles.classNames.box;
     }
