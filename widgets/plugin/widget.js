@@ -177,9 +177,9 @@ class Plugin extends Widget {
       return (
         <div className={buttonsClass}>
           <Button
-            kind="recurrence"
-            glyph="reply"
-            glyphRotate="90"
+            kind="check-button"
+            glyph="angle-double-up"
+            glyphSize="180%"
             tooltip="Replier"
             active="false"
             activeColor={
@@ -212,9 +212,9 @@ class Plugin extends Widget {
       return (
         <div className={buttonsClass}>
           <Button
-            kind="recurrence"
-            glyph="mail-forward"
-            glyphRotate="90"
+            kind="check-button"
+            glyph="angle-down"
+            glyphSize="180%"
             tooltip="Etendre"
             active="false"
             activeColor={
