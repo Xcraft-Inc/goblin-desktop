@@ -78,7 +78,6 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    //? marginLeft: '10px',
   };
 
   const extendedButtonsStyle = {
