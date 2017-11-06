@@ -78,14 +78,14 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    marginLeft: '10px',
+    //? marginLeft: '10px',
   };
 
   const extendedButtonsStyle = {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    padding: halfMargin,
+    padding: Unit.multiply (halfMargin, 0.5),
     backgroundColor: '#eee',
     borderLeft: '1px solid #bbb',
   };
