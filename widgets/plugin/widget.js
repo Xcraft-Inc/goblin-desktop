@@ -178,7 +178,7 @@ class Plugin extends Widget {
         <div className={buttonsClass}>
           <Button
             kind="check-button"
-            glyph="angle-double-up"
+            glyph="angle-up"
             glyphSize="180%"
             tooltip="Replier"
             active="false"
@@ -187,9 +187,9 @@ class Plugin extends Widget {
             }
             onClick={() => this.onSwapExtended (entityId)}
           />
-          <div className={sajexClass} />
+          <div className={spaceClass} />
           <Button
-            kind="recurrence"
+            kind="check-button"
             glyph="pencil"
             tooltip="Editer"
             onClick={() => this.onEditEntity (entityId)}
@@ -198,7 +198,7 @@ class Plugin extends Widget {
           {Bool.isTrue (this.props.readonly)
             ? null
             : <Button
-                kind="recurrence"
+                kind="check-button"
                 glyph="trash"
                 tooltip="Supprimer"
                 onClick={() => this.onDeleteEntity (entityId)}
