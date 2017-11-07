@@ -50,7 +50,7 @@ export default function styles (theme, props) {
     flexDirection: 'row',
     flexGrow: '1',
     padding: '0px ' + Unit.add (m, '1px') + ' ' + '2px' + ' ' + m,
-    transition: 'background-color 0.15s',
+    transition: 'background-color 0.3s',
   };
 
   const extendedRowStyle = {
@@ -58,9 +58,10 @@ export default function styles (theme, props) {
     flexDirection: 'row',
     flexGrow: '1',
     margin: '5px ' + halfMargin + ' ' + '7px' + ' ' + halfMargin,
-    backgroundColor: '#eee',
-    border: '1px solid #bbb',
-    transition: 'background-color 0.15s',
+    //? backgroundColor: '#eee',
+    borderTop: '1px solid #bbb',
+    borderBottom: '1px solid #bbb',
+    transition: 'background-color 0.3s',
   };
 
   const extendedHoverRowStyle = {
@@ -68,9 +69,10 @@ export default function styles (theme, props) {
     flexDirection: 'row',
     flexGrow: '1',
     margin: '5px ' + halfMargin + ' ' + '7px' + ' ' + halfMargin,
-    backgroundColor: '#ddd',
-    border: '1px solid #bbb',
-    transition: 'background-color 0.15s',
+    backgroundColor: '#f4f4f4',
+    borderTop: '1px solid #bbb',
+    borderBottom: '1px solid #bbb',
+    transition: 'background-color 0.3s',
   };
 
   const compactedItemStyle = {
@@ -97,7 +99,7 @@ export default function styles (theme, props) {
     flexDirection: 'column',
     width: '32px',
     padding: Unit.multiply (halfMargin, 0.5),
-    borderLeft: '1px solid #bbb',
+    //? borderLeft: '1px solid #bbb',
   };
 
   const spaceStyle = {

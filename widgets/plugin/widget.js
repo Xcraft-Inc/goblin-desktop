@@ -84,11 +84,11 @@ class Plugin extends Widget {
   }
 
   onMouseOver (entityId) {
-    this.hoverId = entityId;
+    //? this.hoverId = entityId;
   }
 
   onMouseOut (entityId) {
-    this.hoverId = null;
+    //? this.hoverId = null;
   }
 
   /******************************************************************************/
