@@ -36,6 +36,7 @@ class Plugin extends Widget {
       extendedId: 'extendedId',
       entityIds: 'entityIds',
       editorWidget: 'editorWidget',
+      arity: 'arity',
     };
   }
 
@@ -69,13 +70,18 @@ class Plugin extends Widget {
 
   /******************************************************************************/
 
-  renderHeader () {
+  renderHeader (numberOfIds) {
     const headerClass = this.props.entityIds.size === 0
       ? this.styles.classNames.headerEmpty
       : this.styles.classNames.header;
     const title = this.props.pluginTitle
       ? this.props.pluginTitle
       : this.props.title;
+
+    const canAdd =
+      this.props.arity.endsWith ('n') ||
+      (this.props.arity === '0..1' && numberOfIds === 0);
+
     if (Bool.isTrue (this.props.readonly)) {
       return (
         <div className={headerClass}>
@@ -86,13 +92,15 @@ class Plugin extends Widget {
       return (
         <div className={headerClass}>
           <Label text={title} grow="1" kind="title" />
-          <Button
-            glyph="plus"
-            text="Ajouter"
-            glyphPosition="right"
-            spacing="overlap"
-            onClick={this.onCreateEntity}
-          />
+          {canAdd
+            ? <Button
+                glyph="plus"
+                text="Ajouter"
+                glyphPosition="right"
+                spacing="overlap"
+                onClick={this.onCreateEntity}
+              />
+            : null}
         </div>
       );
     }
@@ -170,12 +178,16 @@ class Plugin extends Widget {
     }
   }
 
-  renderButtons (entityId, extended) {
+  renderButtons (entityId, extended, numberOfIds) {
     if (extended) {
       const buttonsClass = this.styles.classNames.extendedButtons;
       const sajexClass = this.styles.classNames.sajex;
       const spaceClass = this.styles.classNames.space;
 
+      const canDelete =
+        !Bool.isTrue (this.props.readonly) &&
+        (this.props.arity.startsWith ('0') || numberOfIds > 1);
+      console.log (this.props.readonly);
       return (
         <div className={buttonsClass}>
           <Button
@@ -197,14 +209,14 @@ class Plugin extends Widget {
             onClick={() => this.onEditEntity (entityId)}
           />
           <div className={spaceClass} />
-          {Bool.isTrue (this.props.readonly)
-            ? null
-            : <Button
+          {canDelete
+            ? <Button
                 kind="plugin"
                 glyph="trash"
                 tooltip="Supprimer"
                 onClick={() => this.onDeleteEntity (entityId)}
-              />}
+              />
+            : null}
 
         </div>
       );
@@ -229,7 +241,7 @@ class Plugin extends Widget {
     }
   }
 
-  renderRowContent (entityId, extended, index) {
+  renderRowContent (entityId, extended, numberOfIds, index) {
     const rowClass = extended
       ? this.styles.classNames.extendedRow
       : this.styles.classNames.compactedRow;
@@ -238,13 +250,13 @@ class Plugin extends Widget {
       <Container kind="row-draggable" key={index}>
         <div className={rowClass}>
           {this.renderItem (entityId, extended, index)}
-          {this.renderButtons (entityId, extended)}
+          {this.renderButtons (entityId, extended, numberOfIds)}
         </div>
       </Container>
     );
   }
 
-  renderRow (entityId, extended, dragEnabled, index) {
+  renderRow (entityId, extended, dragEnabled, numberOfIds, index) {
     if (dragEnabled) {
       return (
         <DragCab
@@ -262,22 +274,27 @@ class Plugin extends Widget {
           doClickAction={() => this.onSwapExtended (entityId)}
           doDragEnding={this.onEntityDragged}
         >
-          {this.renderRowContent (entityId, extended, index)}
+          {this.renderRowContent (entityId, extended, numberOfIds, index)}
         </DragCab>
       );
     } else {
-      return this.renderRowContent (entityId, extended, index);
+      return this.renderRowContent (entityId, extended, numberOfIds, index);
     }
   }
 
-  renderRows () {
-    const entityIds = this.props.entityIds.toArray ();
+  renderRows (entityIds) {
     const dragEnabled =
       !Bool.isTrue (this.props.readonly) && entityIds.length > 1;
     let index = 0;
     return entityIds.map (entityId => {
       const extended = entityId === this.props.extendedId;
-      return this.renderRow (entityId, extended, dragEnabled, index++);
+      return this.renderRow (
+        entityId,
+        extended,
+        dragEnabled,
+        entityIds.length,
+        index++
+      );
     });
   }
 
@@ -302,16 +319,18 @@ class Plugin extends Widget {
         : this.styles.classNames.box;
     }
 
+    const entityIds = this.props.entityIds.toArray ();
+
     return (
       <div className={boxClass}>
-        {this.renderHeader ()}
+        {this.renderHeader (entityIds.length)}
         <Container
           kind="column"
           dragController={this.props.id}
           dragSource={this.props.id}
           dragOwnerId={this.props.id}
         >
-          {this.renderRows ()}
+          {this.renderRows (entityIds)}
         </Container>
       </div>
     );
