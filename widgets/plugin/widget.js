@@ -201,7 +201,7 @@ class Plugin extends Widget {
       return (
         <div className={buttonsClass}>
           <Button
-            kind="check-button"
+            kind="plugin"
             glyph="angle-up"
             glyphSize="180%"
             tooltip="Replier"
@@ -215,7 +215,7 @@ class Plugin extends Widget {
           />
           <div className={spaceClass} />
           <Button
-            kind="check-button"
+            kind="plugin"
             glyph="pencil"
             tooltip="Editer"
             onClick={() => this.onEditEntity (entityId)}
@@ -226,7 +226,7 @@ class Plugin extends Widget {
           {Bool.isTrue (this.props.readonly)
             ? null
             : <Button
-                kind="check-button"
+                kind="plugin"
                 glyph="trash"
                 tooltip="Supprimer"
                 onClick={() => this.onDeleteEntity (entityId)}

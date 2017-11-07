@@ -17,13 +17,15 @@ export default function styles (theme, props) {
 
   const embeddedBoxStyle = {
     flexGrow: '1',
-    margin: '10px 10px 10px 10px',
+    //? margin: '10px 10px 10px 10px',
+    margin: '10px 20px 10px 20px',
     borderTop: '1px solid #bbb',
   };
 
   const emptyembeddedBoxStyle = {
     flexGrow: '1',
-    margin: '10px 10px -10px 10px',
+    //? margin: '10px 10px -10px 10px',
+    margin: '10px 20px -10px 20px',
     borderTop: '1px solid #bbb',
   };
 
@@ -57,7 +59,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '5px ' + halfMargin + ' ' + '7px' + ' ' + halfMargin,
+    //? margin: '5px ' + halfMargin + ' ' + '7px' + ' ' + halfMargin,
+    margin: '5px ' + m + ' ' + '7px' + ' ' + m,
     //? backgroundColor: '#eee',
     borderTop: '1px solid #bbb',
     borderBottom: '1px solid #bbb',
@@ -68,7 +71,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '5px ' + halfMargin + ' ' + '7px' + ' ' + halfMargin,
+    //? margin: '5px ' + halfMargin + ' ' + '7px' + ' ' + halfMargin,
+    margin: '5px ' + m + ' ' + '7px' + ' ' + m,
     backgroundColor: '#f4f4f4',
     borderTop: '1px solid #bbb',
     borderBottom: '1px solid #bbb',
@@ -85,7 +89,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: '1',
-    padding: halfMargin + ' ' + halfMargin + ' 0px ' + halfMargin,
+    //? padding: halfMargin + ' ' + halfMargin + ' 0px ' + halfMargin,
+    padding: halfMargin + ' 0px 0px 0px',
   };
 
   const compactedButtonsStyle = {
@@ -99,6 +104,8 @@ export default function styles (theme, props) {
     flexDirection: 'column',
     width: '32px',
     padding: Unit.multiply (halfMargin, 0.5),
+    backgroundColor: theme.palette.actionButtonBackground,
+    marginLeft: '10px',
     //? borderLeft: '1px solid #bbb',
   };
 
