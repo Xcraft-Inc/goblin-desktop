@@ -16,11 +16,27 @@ class Plugin extends Widget {
   constructor () {
     super (...arguments);
 
+    this.state = {
+      hoverId: null,
+    };
+
     this.onCreateEntity = this.onCreateEntity.bind (this);
     this.onSwapExtended = this.onSwapExtended.bind (this);
     this.onDeleteEntity = this.onDeleteEntity.bind (this);
     this.onEditEntity = this.onEditEntity.bind (this);
     this.onEntityDragged = this.onEntityDragged.bind (this);
+    this.onMouseOver = this.onMouseOver.bind (this);
+    this.onMouseOut = this.onMouseOut.bind (this);
+  }
+
+  get hoverId () {
+    return this.state.hoverId;
+  }
+
+  set hoverId (value) {
+    this.setState ({
+      hoverId: value,
+    });
   }
 
   static createFor (name, instance) {
@@ -65,6 +81,14 @@ class Plugin extends Widget {
       fromId: selectedIds[0],
       toId: toId,
     });
+  }
+
+  onMouseOver (entityId) {
+    this.hoverId = entityId;
+  }
+
+  onMouseOut (entityId) {
+    this.hoverId = null;
   }
 
   /******************************************************************************/
@@ -186,6 +210,8 @@ class Plugin extends Widget {
               this.context.theme.palette.recurrenceExtendedBoxBackground
             }
             onClick={() => this.onSwapExtended (entityId)}
+            mouseOver={() => this.onMouseOver (entityId)}
+            mouseOut={() => this.onMouseOut (entityId)}
           />
           <div className={spaceClass} />
           <Button
@@ -193,6 +219,8 @@ class Plugin extends Widget {
             glyph="pencil"
             tooltip="Editer"
             onClick={() => this.onEditEntity (entityId)}
+            mouseOver={() => this.onMouseOver (entityId)}
+            mouseOut={() => this.onMouseOut (entityId)}
           />
           <div className={spaceClass} />
           {Bool.isTrue (this.props.readonly)
@@ -202,6 +230,8 @@ class Plugin extends Widget {
                 glyph="trash"
                 tooltip="Supprimer"
                 onClick={() => this.onDeleteEntity (entityId)}
+                mouseOver={() => this.onMouseOver (entityId)}
+                mouseOut={() => this.onMouseOut (entityId)}
               />}
 
         </div>
@@ -221,6 +251,8 @@ class Plugin extends Widget {
               this.context.theme.palette.recurrenceExtendedBoxBackground
             }
             onClick={() => this.onSwapExtended (entityId)}
+            mouseOver={() => this.onMouseOver (entityId)}
+            mouseOut={() => this.onMouseOut (entityId)}
           />
         </div>
       );
@@ -229,7 +261,9 @@ class Plugin extends Widget {
 
   renderRowContent (entityId, extended, index) {
     const rowClass = extended
-      ? this.styles.classNames.extendedRow
+      ? this.hoverId === entityId
+          ? this.styles.classNames.extendedHoverRow
+          : this.styles.classNames.extendedRow
       : this.styles.classNames.compactedRow;
 
     return (
