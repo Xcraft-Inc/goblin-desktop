@@ -73,7 +73,7 @@ export default function styles (theme, props) {
     borderTop: '1px solid #bbb',
     borderBottom: '1px solid #bbb',
     padding: '20px',
-    boxShadow: '0px 0px 30px rgba(0,0,0, 0.5)',
+    boxShadow: '0px 0px 20px 5px rgba(0,0,0, 0.3)',
     borderRadius: '5px',
     transition: theme.transitions.easeOut (500),
   };
