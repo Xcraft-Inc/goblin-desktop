@@ -113,7 +113,8 @@ Goblin.registerQuest (goblinName, 'create-new', function (quest, value) {
 Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
   quest.log.info (`Select row: ${index}: ${text}`);
   quest.do ({index: `${index}`});
-
+  const detail = quest.use ('detail');
+  detail.setLoading ();
   //CANCEL PREVIOUS SELECT-ROW TASK
   quest.goblin.getX ('cancel') ();
 
