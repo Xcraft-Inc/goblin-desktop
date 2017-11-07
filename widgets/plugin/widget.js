@@ -73,9 +73,11 @@ class Plugin extends Widget {
     const headerClass = this.props.entityIds.size === 0
       ? this.styles.classNames.headerEmpty
       : this.styles.classNames.header;
+
     const title = this.props.pluginTitle
       ? this.props.pluginTitle
       : this.props.title;
+
     if (Bool.isTrue (this.props.readonly)) {
       return (
         <div className={headerClass}>
@@ -229,10 +231,12 @@ class Plugin extends Widget {
     }
   }
 
-  renderRowContent (entityId, extended, index) {
+  renderRowContent (entityId, extended, many, index) {
     const rowClass = extended
       ? this.styles.classNames.extendedRow
-      : this.styles.classNames.compactedRow;
+      : many && this.props.horizontalSeparator !== 'compact'
+          ? this.styles.classNames.compactedDashedRow
+          : this.styles.classNames.compactedRow;
 
     return (
       <Container kind="row-draggable" key={index}>
@@ -244,7 +248,7 @@ class Plugin extends Widget {
     );
   }
 
-  renderRow (entityId, extended, dragEnabled, index) {
+  renderRow (entityId, extended, many, dragEnabled, index) {
     if (dragEnabled) {
       return (
         <DragCab
@@ -262,22 +266,23 @@ class Plugin extends Widget {
           doClickAction={() => this.onSwapExtended (entityId)}
           doDragEnding={this.onEntityDragged}
         >
-          {this.renderRowContent (entityId, extended, index)}
+          {this.renderRowContent (entityId, extended, many, index)}
         </DragCab>
       );
     } else {
-      return this.renderRowContent (entityId, extended, index);
+      return this.renderRowContent (entityId, extended, many, index);
     }
   }
 
   renderRows () {
     const entityIds = this.props.entityIds.toArray ();
-    const dragEnabled =
-      !Bool.isTrue (this.props.readonly) && entityIds.length > 1;
+    const many = entityIds.length > 1;
+    const dragEnabled = !Bool.isTrue (this.props.readonly) && many;
     let index = 0;
+
     return entityIds.map (entityId => {
       const extended = entityId === this.props.extendedId;
-      return this.renderRow (entityId, extended, dragEnabled, index++);
+      return this.renderRow (entityId, extended, many, dragEnabled, index++);
     });
   }
 

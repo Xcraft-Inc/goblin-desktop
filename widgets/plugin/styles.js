@@ -52,8 +52,15 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    //? padding: '0px ' + Unit.add (m, '1px') + ' ' + '2px' + ' ' + m,
-    padding: '5px ' + Unit.add (m, '1px') + ' ' + '5px' + ' ' + m,
+    padding: '0px ' + Unit.add (m, '1px') + ' 2px ' + m,
+    transition: theme.transitions.easeOut (500),
+  };
+
+  const compactedDashedRowStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: '1',
+    padding: '5px ' + Unit.add (m, '1px') + ' 5px ' + m,
     borderTop: '1px dashed #ccc',
     transition: theme.transitions.easeOut (500),
   };
@@ -62,7 +69,6 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    //? margin: '10px ' + m + ' ' + '12px' + ' ' + m,
     margin: '10px 2px 12px 2px',
     borderTop: '1px solid #bbb',
     borderBottom: '1px solid #bbb',
@@ -118,6 +124,7 @@ export default function styles (theme, props) {
     header: headerStyle,
     headerEmpty: headerEmptyStyle,
     compactedRow: compactedRowStyle,
+    compactedDashedRow: compactedDashedRowStyle,
     extendedRow: extendedRowStyle,
     compactedItem: compactedItemStyle,
     extendedItem: extendedItemStyle,
