@@ -188,7 +188,9 @@ class Plugin extends Widget {
 
       const canDelete =
         !Bool.isTrue (this.props.readonly) &&
-        (this.props.arity.startsWith ('0') || numberOfIds > 1);
+        (!this.props.arity ||
+          this.props.arity.startsWith ('0') ||
+          numberOfIds > 1);
       console.log (this.props.readonly);
       return (
         <div className={buttonsClass}>
