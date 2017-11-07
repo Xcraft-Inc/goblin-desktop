@@ -73,17 +73,19 @@ class Plugin extends Widget {
     const headerClass = this.props.entityIds.size === 0
       ? this.styles.classNames.headerEmpty
       : this.styles.classNames.header;
-
+    const title = this.props.pluginTitle
+      ? this.props.pluginTitle
+      : this.props.title;
     if (Bool.isTrue (this.props.readonly)) {
       return (
         <div className={headerClass}>
-          <Label text={this.props.title} grow="1" kind="title" />
+          <Label text={title} grow="1" kind="title" />
         </div>
       );
     } else {
       return (
         <div className={headerClass}>
-          <Label text={this.props.title} grow="1" kind="title" />
+          <Label text={title} grow="1" kind="title" />
           <Button
             glyph="plus"
             text="Ajouter"
