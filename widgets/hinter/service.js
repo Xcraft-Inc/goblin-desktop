@@ -66,9 +66,18 @@ Goblin.registerQuest (goblinName, 'create', function (
     width: detailWidth,
   });
   quest.goblin.setX ('desktopId', desktopId);
-  quest.goblin.setX ('workitem', newWorkitem);
+  quest.goblin.setX ('newWorkitem', newWorkitem);
   quest.goblin.setX ('usePayload', usePayload);
   quest.goblin.setX ('cancel', () => null);
+
+  /*hinter@workitem@id*/
+  const ids = quest.goblin.getState ().get ('id').split ('@');
+  const workitem = ids[1];
+  const workitemId = `${ids[1]}@${ids.slice (2, ids.length).join ('@')}`;
+  quest.goblin.setX ('workitem', workitem);
+  quest.goblin.setX ('workitemId', workitemId);
+  quest.goblin.setX ('loaded', {});
+
   return quest.goblin.id;
 });
 
@@ -82,7 +91,7 @@ Goblin.registerQuest (goblinName, 'set-current-detail-entity', function (
 
 Goblin.registerQuest (goblinName, 'create-new', function (quest, value) {
   const desk = quest.useAs ('desktop', quest.goblin.getX ('desktopId'));
-  const workitem = quest.goblin.getX ('workitem');
+  const workitem = quest.goblin.getX ('newWorkitem');
   workitem.id = quest.uuidV4 ();
   workitem.isDone = false;
   workitem.payload = {};
@@ -114,17 +123,21 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
   quest.log.info (`Select row: ${index}: ${text}`);
   quest.do ({index: `${index}`});
 
+  const value = quest.goblin.getState ().get (`values.${index}`, null);
+
+  const loaded = quest.goblin.getX ('loaded');
+  const detail = quest.use ('detail');
+  if (loaded[value] !== undefined) {
+    detail.setEntity ({entityId: value, entity: loaded[value]});
+    return;
+  }
   //CANCEL PREVIOUS SELECT-ROW TASK
   quest.goblin.getX ('cancel') ();
 
-  /*hinter@workitem@id*/
+  detail.setLoading ();
+
   const task = () => {
     console.log ('runnin select row task:', index);
-    const ids = quest.goblin.getState ().get ('id').split ('@');
-    const workitem = ids[1];
-    const workitemId = `${ids[1]}@${ids.slice (2, ids.length).join ('@')}`;
-    const value = quest.goblin.getState ().get (`values.${index}`, null);
-
     let payload = null;
     const usePayload = quest.goblin.getX ('usePayload');
     if (usePayload) {
@@ -136,16 +149,22 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
 
     const type = quest.goblin.getState ().get (`type`, null);
     if (value && type) {
+      const workitem = quest.goblin.getX ('workitem');
+      const workitemId = quest.goblin.getX ('workitemId');
+
       quest.cmd (`${workitem}.hinter-select-${type}`, {
         id: workitemId,
         selection: {index, text, value},
       });
-      const detail = quest.use ('detail');
+      loaded[value] = payload;
+      quest.goblin.setX ('loaded', loaded);
       detail.setEntity ({entityId: value, entity: payload});
     }
+
     quest.goblin.setX ('cancel', () => null);
   };
 
+  //Prepare a cancelable load task
   new Promise (resolve => {
     const cancelId = setTimeout (resolve, 500, task);
     quest.goblin.setX ('cancel', () => {

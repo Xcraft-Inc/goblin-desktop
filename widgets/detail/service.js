@@ -24,7 +24,11 @@ const logicHandlers = {
   'set-entity': (state, action) => {
     return state
       .set ('detailWidgetId', action.get ('widgetId'))
-      .set ('entityId', action.get ('entityId'));
+      .set ('entityId', action.get ('entityId'))
+      .set ('loading', false);
+  },
+  'set-loading': state => {
+    return state.set ('loading', true);
   },
 };
 
@@ -55,7 +59,7 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
   const workitemId = `${type}-workitem@${entityId}@${desktopId}`;
   const existing = yield quest.warehouse.get ({path: workitemId});
   if (!existing) {
-    yield quest.create (workitemId, {
+    quest.create (workitemId, {
       id: workitemId,
       desktopId,
       entityId: entityId,
@@ -63,6 +67,10 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
     });
   }
   quest.do ({widgetId: workitemId, entityId});
+});
+
+Goblin.registerQuest (goblinName, 'set-loading', function (quest) {
+  quest.do ();
 });
 
 Goblin.registerQuest (goblinName, 'delete', function (quest) {

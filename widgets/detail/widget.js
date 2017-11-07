@@ -22,6 +22,7 @@ class Detail extends Widget {
       detailWidget: 'detailWidget',
       detailWidgetId: 'detailWidgetId',
       entityId: 'entityId',
+      loading: 'loading',
     };
   }
 
@@ -58,6 +59,7 @@ class Detail extends Widget {
       <Container
         kind={kind ? kind : 'view-right'}
         width={width ? width : '750px'}
+        busy={this.props.loading}
       >
         <Workitem
           kind="detail"
