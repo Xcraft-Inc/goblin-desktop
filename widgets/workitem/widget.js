@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
+import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 import PropTypes from 'prop-types';
 /******************************************************************************/
@@ -106,6 +107,13 @@ class Workitem extends Form {
 
   renderEditor () {
     const Form = this.Form;
+
+    const Title = this.mapWidget (
+      Label,
+      'text',
+      `backend.${this.props.entityId}.meta.info`
+    );
+
     return (
       <Container
         kind="view"
@@ -113,7 +121,7 @@ class Workitem extends Form {
         spacing="large"
       >
         <Container kind="pane-header">
-          {this.props.title}
+          <Title kind="pane-header" />
           {this.props.version}
         </Container>
         <Container kind="panes">
@@ -132,11 +140,18 @@ class Workitem extends Form {
 
   renderDetail () {
     const Form = this.Form;
+
+    const Title = this.mapWidget (
+      Label,
+      'text',
+      `backend.${this.props.entityId}.meta.info`
+    );
+
     return (
       <Container kind="column-full">
 
         <Container kind="pane-header">
-          {this.props.title}
+          <Title kind="pane-header" />
         </Container>
 
         <Container kind="panes">
