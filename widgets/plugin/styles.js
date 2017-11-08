@@ -108,14 +108,6 @@ export default function styles (theme, props) {
     borderRadius: '0px 5px 5px 0px',
   };
 
-  const spaceStyle = {
-    height: '2px',
-  };
-
-  const sajexStyle = {
-    flexGrow: '1',
-  };
-
   return {
     box: boxStyle,
     emptyBox: emptyBoxStyle,
@@ -130,8 +122,6 @@ export default function styles (theme, props) {
     extendedItem: extendedItemStyle,
     compactedButtons: compactedButtonsStyle,
     extendedButtons: extendedButtonsStyle,
-    space: spaceStyle,
-    sajex: sajexStyle,
   };
 }
 

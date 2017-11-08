@@ -183,8 +183,6 @@ class Plugin extends Widget {
   renderButtons (entityId, extended, numberOfIds) {
     if (extended) {
       const buttonsClass = this.styles.classNames.extendedButtons;
-      const sajexClass = this.styles.classNames.sajex;
-      const spaceClass = this.styles.classNames.space;
 
       const canDelete =
         !Bool.isTrue (this.props.readonly) &&
@@ -205,14 +203,12 @@ class Plugin extends Widget {
             }
             onClick={() => this.onSwapExtended (entityId)}
           />
-          <div className={spaceClass} />
           <Button
             kind="plugin"
             glyph="pencil"
             tooltip="Editer"
             onClick={() => this.onEditEntity (entityId)}
           />
-          <div className={spaceClass} />
           {canDelete
             ? <Button
                 kind="plugin"
