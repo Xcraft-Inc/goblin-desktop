@@ -70,11 +70,20 @@ export default function styles (theme, props) {
     flexDirection: 'row',
     flexGrow: '1',
     margin: '10px 2px 12px 2px',
-    borderTop: '1px solid #bbb',
-    borderBottom: '1px solid #bbb',
     padding: '20px',
     boxShadow: '0px 0px 20px 5px rgba(0,0,0, 0.3)',
     borderRadius: '5px',
+    transition: theme.transitions.easeOut (500),
+  };
+
+  const extendedReadonlyRowStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: '1',
+    margin: '10px 20px 12px 20px',
+    padding: '0px 0px 0px 20px',
+    border: '1px solid #bbb',
+    borderRadius: '3px',
     transition: theme.transitions.easeOut (500),
   };
 
@@ -103,9 +112,17 @@ export default function styles (theme, props) {
     width: '32px',
     padding: Unit.multiply (halfMargin, 0.5),
     backgroundColor: theme.palette.actionButtonBackground,
-    marginLeft: '10px',
     margin: '-20px -20px -20px 0px',
     borderRadius: '0px 5px 5px 0px',
+  };
+
+  const extendedReadonlyButtonsStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '32px',
+    padding: Unit.multiply (halfMargin, 0.5),
+    margin: '0px 0px 0px 0px',
+    borderLeft: '1px solid #ccc',
   };
 
   return {
@@ -118,10 +135,12 @@ export default function styles (theme, props) {
     compactedRow: compactedRowStyle,
     compactedDashedRow: compactedDashedRowStyle,
     extendedRow: extendedRowStyle,
+    extendedReadonlyRow: extendedReadonlyRowStyle,
     compactedItem: compactedItemStyle,
     extendedItem: extendedItemStyle,
     compactedButtons: compactedButtonsStyle,
     extendedButtons: extendedButtonsStyle,
+    extendedReadonlyButtons: extendedReadonlyButtonsStyle,
   };
 }
 

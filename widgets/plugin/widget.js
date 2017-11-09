@@ -182,18 +182,24 @@ class Plugin extends Widget {
 
   renderButtons (entityId, extended, numberOfIds) {
     if (extended) {
-      const buttonsClass = this.styles.classNames.extendedButtons;
+      const buttonsClass = Bool.isTrue (this.props.readonly)
+        ? this.styles.classNames.extendedReadonlyButtons
+        : this.styles.classNames.extendedButtons;
 
       const canDelete =
         !Bool.isTrue (this.props.readonly) &&
         (!this.props.arity ||
           this.props.arity.startsWith ('0') ||
           numberOfIds > 1);
-      console.log (this.props.readonly);
+
+      const kind = Bool.isTrue (this.props.readonly)
+        ? 'check-button'
+        : 'plugin';
+
       return (
         <div className={buttonsClass}>
           <Button
-            kind="plugin"
+            kind={kind}
             glyph="angle-up"
             glyphSize="180%"
             tooltip="Replier"
@@ -204,14 +210,14 @@ class Plugin extends Widget {
             onClick={() => this.onSwapExtended (entityId)}
           />
           <Button
-            kind="plugin"
+            kind={kind}
             glyph="pencil"
             tooltip="Editer"
             onClick={() => this.onEditEntity (entityId)}
           />
           {canDelete
             ? <Button
-                kind="plugin"
+                kind={kind}
                 glyph="trash"
                 tooltip="Supprimer"
                 onClick={() => this.onDeleteEntity (entityId)}
@@ -243,7 +249,9 @@ class Plugin extends Widget {
 
   renderRowContent (entityId, extended, numberOfIds, index) {
     const rowClass = extended
-      ? this.styles.classNames.extendedRow
+      ? Bool.isTrue (this.props.readonly)
+          ? this.styles.classNames.extendedReadonlyRow
+          : this.styles.classNames.extendedRow
       : numberOfIds > 1 && this.props.horizontalSeparator !== 'compact'
           ? this.styles.classNames.compactedDashedRow
           : this.styles.classNames.compactedRow;
