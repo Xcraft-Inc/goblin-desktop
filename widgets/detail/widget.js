@@ -58,7 +58,7 @@ class Detail extends Widget {
     return (
       <Container
         kind={kind ? kind : 'view-right'}
-        width={width ? width : '750px'}
+        width={width ? width : '700px'}
         busy={this.props.loading}
       >
         <Workitem
