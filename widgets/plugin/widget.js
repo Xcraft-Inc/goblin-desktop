@@ -227,11 +227,23 @@ class Plugin extends Widget {
         </div>
       );
     } else {
-      const buttonsClass = this.styles.classNames.compactedButtons;
+      const buttonsClass = Bool.isTrue (this.props.readonly)
+        ? this.styles.classNames.compactedReadonlyButtons
+        : this.styles.classNames.compactedButtons;
 
       return (
         <div className={buttonsClass}>
+          {Bool.isTrue (this.props.readonly)
+            ? <Button
+                width="32px"
+                kind="check-button"
+                glyph="pencil"
+                tooltip="Editer"
+                onClick={() => this.onEditEntity (entityId)}
+              />
+            : null}
           <Button
+            width="32px"
             kind="check-button"
             glyph="angle-down"
             glyphSize="180%"

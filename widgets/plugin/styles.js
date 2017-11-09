@@ -106,6 +106,11 @@ export default function styles (theme, props) {
     width: '32px',
   };
 
+  const compactedReadonlyButtonsStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+  };
+
   const extendedButtonsStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -139,6 +144,7 @@ export default function styles (theme, props) {
     compactedItem: compactedItemStyle,
     extendedItem: extendedItemStyle,
     compactedButtons: compactedButtonsStyle,
+    compactedReadonlyButtons: compactedReadonlyButtonsStyle,
     extendedButtons: extendedButtonsStyle,
     extendedReadonlyButtons: extendedReadonlyButtonsStyle,
   };
