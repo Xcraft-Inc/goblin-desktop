@@ -81,7 +81,7 @@ export default function styles (theme, props) {
     flexDirection: 'row',
     flexGrow: '1',
     margin: '10px 20px 12px 20px',
-    padding: '0px 0px 0px 20px',
+    padding: '0px 0px 10px 20px',
     border: '1px solid #bbb',
     borderRadius: '3px',
     transition: theme.transitions.easeOut (500),
@@ -121,7 +121,7 @@ export default function styles (theme, props) {
     flexDirection: 'column',
     width: '32px',
     padding: Unit.multiply (halfMargin, 0.5),
-    margin: '0px 0px 0px 0px',
+    margin: '0px 0px -10px 0px',
     borderLeft: '1px solid #ccc',
   };
 
