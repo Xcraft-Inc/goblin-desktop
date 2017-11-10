@@ -57,9 +57,8 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
   const desktopId = quest.goblin.getX ('desktopId');
   const type = entityId.split ('@')[0];
   const workitemId = `${type}-workitem@${entityId}@${desktopId}`;
-  const existing = yield quest.warehouse.get ({path: workitemId});
-  if (!existing) {
-    quest.create (workitemId, {
+  if (!quest.canUse (workitemId)) {
+    yield quest.create (workitemId, {
       id: workitemId,
       desktopId,
       entityId: entityId,
