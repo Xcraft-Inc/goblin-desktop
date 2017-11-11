@@ -8,9 +8,10 @@ const widgetImporter = importer ('widget');
 class Hinter extends Widget {
   constructor () {
     super (...arguments);
-    this.onKeyUp = ::this.onKeyUp;
-    this.onKeyDown = ::this.onKeyDown;
-    this.onValidate = ::this.onValidate;
+
+    this.onKeyUp = this.onKeyUp.bind (this);
+    this.onKeyDown = this.onKeyDown.bind (this);
+    this.onValidate = this.onValidate.bind (this);
   }
 
   static get wiring () {
