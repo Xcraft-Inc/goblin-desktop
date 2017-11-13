@@ -7,6 +7,8 @@ export default function styles (theme, props) {
   const halfMargin = Unit.multiply (m, 0.5);
   const doubleMargin = Unit.multiply (m, 2);
 
+  const alignRightToolbars = true;
+
   const boxStyle = {
     flexGrow: '1',
   };
@@ -69,7 +71,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '10px 0px 12px 0px',
+    margin: alignRightToolbars ? '10px 0px 12px 0px' : '10px 2px 12px 2px',
     padding: '20px',
     boxShadow: '0px 0px 20px 5px rgba(0,0,0, 0.3)',
     borderRadius: '5px',
@@ -80,7 +82,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '10px -42px 12px 0px',
+    margin: alignRightToolbars ? '10px -42px 12px 0px' : '10px 2px 12px 2px',
     padding: '20px',
     boxShadow: '0px 0px 20px 5px rgba(0,0,0, 0.3)',
     borderRadius: '5px',
