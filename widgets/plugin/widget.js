@@ -60,12 +60,20 @@ class Plugin extends Widget {
     this.doAs (service, 'edit', {entityId});
   }
 
-  onEntityDragged (selectedIds, toId) {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'drag', {
-      fromId: selectedIds[0],
-      toId: toId,
-    });
+  onEntityDragged (selectedIds, toId, ownerId, ownerKind) {
+    if (ownerId === this.props.id) {
+      const service = this.props.id.split ('@')[0];
+      this.doAs (service, 'drag', {
+        fromId: selectedIds[0],
+        toId: toId,
+      });
+    } else {
+      const service = ownerId.split ('@')[0];
+      this.doAs (service, 'drag', {
+        fromId: selectedIds[0],
+        toId: toId,
+      });
+    }
   }
 
   /******************************************************************************/
@@ -163,11 +171,11 @@ class Plugin extends Widget {
       return (
         <div className={itemClass}>
           <Workitem
-            readonly="true"
             id={workitemId}
             entityId={entityId}
             kind="form"
             readonly={this.props.readonly}
+            dragControllerId={this.props.dragControllerId}
           >
             <CompactedUI
               id={workitemId}
@@ -283,7 +291,7 @@ class Plugin extends Widget {
       return (
         <DragCab
           key={index}
-          dragController={this.props.id}
+          dragController={this.props.dragType || this.props.id}
           dragOwnerId={entityId}
           dragMode="handle"
           dragHandleWidth={this.context.theme.shapes.containerMargin}
@@ -306,7 +314,9 @@ class Plugin extends Widget {
 
   renderRows (entityIds) {
     const dragEnabled =
-      !Bool.isTrue (this.props.readonly) && entityIds.length > 1;
+      !Bool.isTrue (this.props.readonly) &&
+      (entityIds.length > 1 || !!this.props.dragType);
+
     let index = 0;
 
     return entityIds.map (entityId => {
@@ -349,7 +359,7 @@ class Plugin extends Widget {
         {this.renderHeader (entityIds.length)}
         <Container
           kind="column"
-          dragController={this.props.id}
+          dragController={this.props.dragType || this.props.id}
           dragSource={this.props.id}
           dragOwnerId={this.props.id}
         >
