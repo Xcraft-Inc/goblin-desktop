@@ -207,6 +207,7 @@ class Plugin extends Widget {
       return (
         <div className={buttonsClass}>
           <Button
+            width="32px"
             kind={kind}
             glyph="angle-up"
             glyphSize="180%"
@@ -218,6 +219,7 @@ class Plugin extends Widget {
             onClick={() => this.onSwapExtended (entityId)}
           />
           <Button
+            width="32px"
             kind={kind}
             glyph="pencil"
             tooltip="Editer"
@@ -225,6 +227,7 @@ class Plugin extends Widget {
           />
           {canDelete
             ? <Button
+                width="32px"
                 kind={kind}
                 glyph="trash"
                 tooltip="Supprimer"
@@ -271,7 +274,9 @@ class Plugin extends Widget {
     const rowClass = extended
       ? Bool.isTrue (this.props.readonly)
           ? this.styles.classNames.extendedReadonlyRow
-          : this.styles.classNames.extendedRow
+          : Bool.isTrue (this.props.embedded)
+              ? this.styles.classNames.extendedEmbeddedRow
+              : this.styles.classNames.extendedRow
       : numberOfIds > 1 && this.props.horizontalSeparator !== 'compact'
           ? this.styles.classNames.compactedDashedRow
           : this.styles.classNames.compactedRow;

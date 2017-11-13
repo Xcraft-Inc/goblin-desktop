@@ -69,7 +69,18 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '10px 2px 12px 2px',
+    margin: '10px 0px 12px 0px',
+    padding: '20px',
+    boxShadow: '0px 0px 20px 5px rgba(0,0,0, 0.3)',
+    borderRadius: '5px',
+    transition: theme.transitions.easeOut (500),
+  };
+
+  const extendedEmbeddedRowStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: '1',
+    margin: '10px -42px 12px 0px',
     padding: '20px',
     boxShadow: '0px 0px 20px 5px rgba(0,0,0, 0.3)',
     borderRadius: '5px',
@@ -140,6 +151,7 @@ export default function styles (theme, props) {
     compactedRow: compactedRowStyle,
     compactedDashedRow: compactedDashedRowStyle,
     extendedRow: extendedRowStyle,
+    extendedEmbeddedRow: extendedEmbeddedRowStyle,
     extendedReadonlyRow: extendedReadonlyRowStyle,
     compactedItem: compactedItemStyle,
     extendedItem: extendedItemStyle,
