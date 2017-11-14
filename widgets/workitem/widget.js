@@ -51,6 +51,7 @@ class Workitem extends Form {
   onDelete () {
     const service = this.props.id.split ('@')[0];
     this.doAs (service, 'delete', {hard: true});
+    this.hideHinter ();
   }
 
   /******************************************************************************/
