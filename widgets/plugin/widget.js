@@ -68,10 +68,14 @@ class Plugin extends Widget {
         toId: toId,
       });
     } else {
-      const service = ownerId.split ('@')[0];
-      this.doAs (service, 'drag', {
-        fromId: selectedIds[0],
-        toId: toId,
+      const sourceService = this.props.id.split ('@')[0];
+      this.doAs (sourceService, 'remove', {
+        entityId: selectedIds[0],
+        remote: true,
+      });
+      const destService = ownerId.split ('@')[0];
+      this.doAs (destService, 'add', {
+        entityId: selectedIds[0],
       });
     }
   }
@@ -88,9 +92,10 @@ class Plugin extends Widget {
       : this.props.title;
 
     const canAdd =
-      !this.props.arity ||
-      this.props.arity.endsWith ('n') ||
-      (this.props.arity === '0..1' && numberOfIds === 0);
+      !Bool.isTrue (this.props.disableAdd) &&
+      (!this.props.arity ||
+        this.props.arity.endsWith ('n') ||
+        (this.props.arity === '0..1' && numberOfIds === 0));
 
     if (Bool.isTrue (this.props.readonly)) {
       return (
@@ -196,6 +201,7 @@ class Plugin extends Widget {
 
       const canDelete =
         !Bool.isTrue (this.props.readonly) &&
+        !Bool.isTrue (this.props.disableDelete) &&
         (!this.props.arity ||
           this.props.arity.startsWith ('0') ||
           numberOfIds > 1);
