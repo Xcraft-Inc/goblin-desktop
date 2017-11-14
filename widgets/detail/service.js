@@ -52,18 +52,21 @@ Goblin.registerQuest (goblinName, 'create', function (
 Goblin.registerQuest (goblinName, 'set-entity', function* (
   quest,
   entityId,
-  entity
+  entity,
+  viewOnly
 ) {
   const desktopId = quest.goblin.getX ('desktopId');
   const type = entityId.split ('@')[0];
   const workitemId = `${type}-workitem@${entityId}@${desktopId}`;
-  if (!quest.canUse (workitemId)) {
-    yield quest.create (workitemId, {
-      id: workitemId,
-      desktopId,
-      entityId: entityId,
-      entity,
-    });
+  if (!viewOnly) {
+    if (!quest.canUse (workitemId)) {
+      yield quest.create (workitemId, {
+        id: workitemId,
+        desktopId,
+        entityId: entityId,
+        entity,
+      });
+    }
   }
   quest.do ({widgetId: workitemId, entityId});
 });
