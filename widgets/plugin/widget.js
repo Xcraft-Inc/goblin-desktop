@@ -61,20 +61,18 @@ class Plugin extends Widget {
   }
 
   onEntityDragged (selectedIds, toId, ownerId, ownerKind) {
+    const service = this.props.id.split ('@')[0];
     if (ownerId === this.props.id) {
-      const service = this.props.id.split ('@')[0];
       this.doAs (service, 'drag', {
         fromId: selectedIds[0],
         toId: toId,
       });
     } else {
-      const sourceService = this.props.id.split ('@')[0];
-      this.doAs (sourceService, 'remove', {
+      this.doAs (service, 'remove', {
         entityId: selectedIds[0],
-        remote: true,
       });
-      const destService = ownerId.split ('@')[0];
-      this.doAs (destService, 'add', {
+      this.cmd (`${service}.add`, {
+        id: ownerId,
         entityId: selectedIds[0],
       });
     }
