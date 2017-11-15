@@ -97,8 +97,6 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   const tabButton = i.use (tabId);
   tabButton.delete ();
 
-  const cmd = Goblin.getGoblinName (workitemId) + '.delete';
-  yield quest.cmd (cmd, {id: workitemId});
   quest.evt ('removed', {workitemId});
 
   quest.do ();
