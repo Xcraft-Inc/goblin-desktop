@@ -57,7 +57,7 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
 ) {
   const desktopId = quest.goblin.getX ('desktopId');
   const type = entityId.split ('@')[0];
-  const workitemId = `${type}-workitem@${entityId}@${desktopId}`;
+  const workitemId = `${type}-workitem@${entityId}`;
 
   if (!viewOnly) {
     if (!quest.canUse (workitemId)) {
