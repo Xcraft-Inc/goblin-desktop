@@ -300,8 +300,8 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
       delete workitem.payload.desktopId;
     }
   }
-
   const widgetId = `${workitem.name}@${workitem.id}`;
+
   const wi = yield quest.create (
     widgetId,
     Object.assign (
