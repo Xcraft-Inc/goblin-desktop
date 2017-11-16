@@ -58,6 +58,7 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
   const desktopId = quest.goblin.getX ('desktopId');
   const type = entityId.split ('@')[0];
   const workitemId = `${type}-workitem@${entityId}@${desktopId}`;
+
   if (!viewOnly) {
     if (!quest.canUse (workitemId)) {
       yield quest.create (workitemId, {
@@ -68,6 +69,7 @@ Goblin.registerQuest (goblinName, 'set-entity', function* (
       });
     }
   }
+
   quest.do ({widgetId: workitemId, entityId});
 });
 
