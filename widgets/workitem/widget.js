@@ -18,6 +18,7 @@ class Workitem extends Form {
   getChildContext () {
     return {
       readonly: this.props.readonly,
+      embeddedLevel: this.props.embeddedLevel,
       id: this.props.id,
       entityId: this.props.entityId,
     };
@@ -26,6 +27,7 @@ class Workitem extends Form {
   static get childContextTypes () {
     return {
       readonly: PropTypes.any,
+      embeddedLevel: PropTypes.any,
       id: PropTypes.string,
       entityId: PropTypes.string,
     };

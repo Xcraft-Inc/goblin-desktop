@@ -9,6 +9,12 @@ export default function styles (theme, props) {
 
   const alignRightToolbars = true;
 
+  const level = (props.embeddedLevel || 0) + 1; // 1..n
+  const yShadow = Unit.multiply ('20px', level * 0.5);
+  const blur = Unit.multiply ('5px', level);
+  const alpha = Math.min (0.3 + level / 10, 0.8);
+  const boxShadow = `0px 0px ${yShadow} ${blur} rgba(0,0,0, ${alpha})`;
+
   const boxStyle = {
     flexGrow: '1',
   };
@@ -73,7 +79,7 @@ export default function styles (theme, props) {
     flexGrow: '1',
     margin: alignRightToolbars ? '10px 0px 12px 0px' : '10px 2px 12px 2px',
     padding: '20px',
-    boxShadow: '0px 0px 20px 5px rgba(0,0,0, 0.3)',
+    boxShadow: boxShadow,
     borderRadius: '5px',
     transition: theme.transitions.easeOut (500),
   };
@@ -84,7 +90,7 @@ export default function styles (theme, props) {
     flexGrow: '1',
     margin: alignRightToolbars ? '10px -42px 12px 0px' : '10px 2px 12px 2px',
     padding: '20px',
-    boxShadow: '0px 0px 20px 5px rgba(0,0,0, 0.3)',
+    boxShadow: boxShadow,
     borderRadius: '5px',
     transition: theme.transitions.easeOut (500),
   };
