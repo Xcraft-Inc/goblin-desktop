@@ -9,10 +9,11 @@ export default function styles (theme, props) {
 
   const alignRightToolbars = true;
 
+  // Simulate a z-coordinate. For big level, the panel comes more forward.
   const level = (props.embeddedLevel || 0) + 1; // 1..n
-  const yShadow = Unit.multiply ('20px', level * 0.5);
-  const blur = Unit.multiply ('5px', level);
-  const alpha = Math.min (0.3 + level / 10, 0.8);
+  const yShadow = Unit.multiply ('20px', level * 0.5); // 20, 30, 40, 50, ...
+  const blur = Unit.multiply ('5px', level); // 5, 10, 15, 20, ...
+  const alpha = Math.min (0.3 + level / 10, 0.8); // 0.3, 0.4, 0.5, 0.6, ...
   const boxShadow = `0px 0px ${yShadow} ${blur} rgba(0,0,0, ${alpha})`;
 
   const boxStyle = {
