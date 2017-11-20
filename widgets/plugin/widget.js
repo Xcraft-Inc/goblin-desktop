@@ -279,7 +279,9 @@ class Plugin extends Widget {
   renderRowContent (entityId, extended, numberOfIds, index) {
     const rowClass = extended
       ? Bool.isTrue (this.props.readonly)
-          ? this.styles.classNames.extendedReadonlyRow
+          ? Bool.isTrue (this.props.embedded)
+              ? this.styles.classNames.extendedEmbeddedReadonlyRow
+              : this.styles.classNames.extendedReadonlyRow
           : Bool.isTrue (this.props.embedded)
               ? this.styles.classNames.extendedEmbeddedRow
               : this.styles.classNames.extendedRow
