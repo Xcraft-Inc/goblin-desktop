@@ -10,10 +10,10 @@ export default function styles (theme, props) {
   const alignRightToolbars = true;
 
   // Simulate a z-coordinate. For big level, the panel comes more forward.
-  const level = (props.embeddedLevel || 0) + 1; // 1..n
-  const yShadow = Unit.multiply ('20px', level * 0.5); // 20, 30, 40, 50, ...
+  const level = props.embeddedLevel || 1; // 1..n
+  const yShadow = Unit.add ('10px', Unit.multiply ('10px', level)); // 20, 30, 40, 50, ...
   const blur = Unit.multiply ('5px', level); // 5, 10, 15, 20, ...
-  const alpha = Math.min (0.3 + level / 10, 0.8); // 0.3, 0.4, 0.5, 0.6, ...
+  const alpha = Math.min (0.25 + level / 20, 0.8); // 0.30, 0.35, 0.40, 0.45, ...
   const boxShadow = `0px 0px ${yShadow} ${blur} rgba(0,0,0, ${alpha})`;
 
   const boxStyle = {
@@ -104,6 +104,21 @@ export default function styles (theme, props) {
     padding: '0px 0px 10px 20px',
     border: '1px solid #bbb',
     borderRadius: '3px',
+    boxShadow: boxShadow,
+    backgroundColor: theme.palette.paneBackground,
+    transition: theme.transitions.easeOut (500),
+  };
+
+  const extendedEmbeddedReadonlyRowStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: '1',
+    margin: alignRightToolbars ? '10px -44px 12px -1px' : '10px 20px 12px 20px',
+    padding: '0px 0px 10px 20px',
+    border: '1px solid #bbb',
+    borderRadius: '3px',
+    boxShadow: boxShadow,
+    backgroundColor: theme.palette.paneBackground,
     transition: theme.transitions.easeOut (500),
   };
 
@@ -162,6 +177,7 @@ export default function styles (theme, props) {
     extendedRow: extendedRowStyle,
     extendedEmbeddedRow: extendedEmbeddedRowStyle,
     extendedReadonlyRow: extendedReadonlyRowStyle,
+    extendedEmbeddedReadonlyRow: extendedEmbeddedReadonlyRowStyle,
     compactedItem: compactedItemStyle,
     extendedItem: extendedItemStyle,
     compactedButtons: compactedButtonsStyle,
