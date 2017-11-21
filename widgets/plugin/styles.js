@@ -128,11 +128,26 @@ export default function styles (theme, props) {
     flexGrow: '1',
   };
 
+  const compactedEmbeddedItemStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+    margin: '0px 20px 0px 0px',
+  };
+
   const extendedItemStyle = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: '1',
     padding: halfMargin + ' ' + m + ' 0px 0px',
+  };
+
+  const extendedEmbeddedItemStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+    padding: halfMargin + ' ' + m + ' 0px 0px',
+    margin: '0px 20px 0px 0px',
   };
 
   const compactedButtonsStyle = {
@@ -141,9 +156,29 @@ export default function styles (theme, props) {
     width: '32px',
   };
 
+  // ->
+  const compactedEmbeddedButtonsStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '32px',
+    padding: Unit.multiply (halfMargin, 0.5),
+    backgroundColor: theme.palette.actionButtonBackground,
+    margin: '0px -63px 0px 0px',
+  };
+
   const compactedReadonlyButtonsStyle = {
     display: 'flex',
     flexDirection: 'row',
+  };
+
+  // ->
+  const compactedEmbeddedReadonlyButtonsStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: Unit.multiply (halfMargin, 0.5),
+    backgroundColor: theme.palette.actionButtonBackground,
+    margin: '-20px -20px -20px 0px',
+    borderRadius: '0px 5px 5px 0px',
   };
 
   const extendedButtonsStyle = {
@@ -179,9 +214,13 @@ export default function styles (theme, props) {
     extendedReadonlyRow: extendedReadonlyRowStyle,
     extendedEmbeddedReadonlyRow: extendedEmbeddedReadonlyRowStyle,
     compactedItem: compactedItemStyle,
+    compactedEmbeddedItem: compactedEmbeddedItemStyle,
     extendedItem: extendedItemStyle,
+    extendedEmbeddedItem: extendedEmbeddedItemStyle,
     compactedButtons: compactedButtonsStyle,
+    compactedEmbeddedButtons: compactedEmbeddedButtonsStyle,
     compactedReadonlyButtons: compactedReadonlyButtonsStyle,
+    compactedEmbeddedReadonlyButtons: compactedEmbeddedReadonlyButtonsStyle,
     extendedButtons: extendedButtonsStyle,
     extendedReadonlyButtons: extendedReadonlyButtonsStyle,
   };
