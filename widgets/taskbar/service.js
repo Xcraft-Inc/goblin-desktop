@@ -30,7 +30,7 @@ Goblin.registerQuest (goblinName, 'delete', function (quest) {
 });
 
 Goblin.registerQuest (goblinName, 'run', function (quest, workitem, contextId) {
-  const desk = quest.useAs ('desktop', quest.goblin.getX ('desktopId'));
+  const desk = quest.getGoblinAPI ('desktop', quest.goblin.getX ('desktopId'));
   workitem.id = uuidV4 ();
   workitem.isDone = false;
   workitem.contextId = contextId;

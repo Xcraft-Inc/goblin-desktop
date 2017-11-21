@@ -301,20 +301,26 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
     }
   }
   const widgetId = `${workitem.name}@${workitem.id}`;
-
-  const wi = yield quest.create (
-    widgetId,
-    Object.assign (
-      {
-        id: widgetId,
-        desktopId: quest.goblin.id,
-        contextId: workitem.contextId,
-        workflowId: workitem.workflowId,
-      },
-      workitem.payload,
-      {payload: workitem.payload}
-    )
-  );
+  const exist = yield quest.warehouse.has ({path: widgetId});
+  let wi = null;
+  if (exist) {
+    const i = quest.openInventory ();
+    wi = i.use (widgetId);
+  } else {
+    wi = yield quest.create (
+      widgetId,
+      Object.assign (
+        {
+          id: widgetId,
+          desktopId: quest.goblin.id,
+          contextId: workitem.contextId,
+          workflowId: workitem.workflowId,
+        },
+        workitem.payload,
+        {payload: workitem.payload}
+      )
+    );
+  }
 
   if (workitem.isInWorkspace && workitem.kind !== 'system') {
     // Add a tab
@@ -343,7 +349,7 @@ Goblin.registerQuest (goblinName, 'add-context', function (
   contextId,
   name
 ) {
-  const contexts = quest.use ('contexts');
+  const contexts = quest.getAPI ('contexts');
   contexts.add ({
     contextId,
     name,
@@ -377,7 +383,7 @@ Goblin.registerQuest (goblinName, 'add-tab', function* (
       workitemId,
     });
   }
-  const tabs = quest.use ('tabs');
+  const tabs = quest.getAPI ('tabs');
   const tabId = yield tabs.add ({
     name,
     contextId,
@@ -405,7 +411,7 @@ Goblin.registerQuest (goblinName, 'remove-tab', function (
   tabId,
   navToLastWorkitem
 ) {
-  const tabs = quest.use ('tabs');
+  const tabs = quest.getAPI ('tabs');
   tabs.remove ({
     tabId,
     contextId,
@@ -419,7 +425,7 @@ Goblin.registerQuest (goblinName, 'nav-to-context', function (
   contextId
 ) {
   const labId = quest.goblin.getX ('labId');
-  const lab = quest.useAs ('laboratory', labId);
+  const lab = quest.getGoblinAPI ('laboratory', labId);
   const state = quest.goblin.getState ();
   const view = state.get (`current.views.${contextId}`, null);
 
@@ -444,12 +450,12 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
   skipNav
 ) {
   const labId = quest.goblin.getX ('labId');
-  const lab = quest.useAs ('laboratory', labId);
+  const lab = quest.getGoblinAPI ('laboratory', labId);
   if (!contextId) {
     contextId = quest.goblin.GetState ().get (`current.workcontext`, null);
   }
   quest.dispatch ('setCurrentWorkitemByContext', {contextId, view, workitemId});
-  const tabs = quest.use ('tabs');
+  const tabs = quest.getAPI ('tabs');
   tabs.setCurrent ({contextId, workitemId});
   if (skipNav) {
     return;
@@ -459,14 +465,14 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
 
 Goblin.registerQuest (goblinName, 'nav-to-last-workitem', function* (quest) {
   const labId = quest.goblin.getX ('labId');
-  const lab = quest.useAs ('laboratory', labId);
+  const lab = quest.getGoblinAPI ('laboratory', labId);
   const last = quest.goblin.getState ().get ('last');
   const contextId = last.get ('workcontext');
   const view = last.get ('view');
   const workitemId = last.get ('workitem');
 
   quest.dispatch ('setCurrentWorkitemByContext', {contextId, view, workitemId});
-  const tabs = quest.use ('tabs');
+  const tabs = quest.getAPI ('tabs');
   tabs.setCurrent ({contextId, workitemId});
   yield lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
 });
@@ -476,7 +482,7 @@ Goblin.registerQuest (goblinName, 'clear-workitem', function* (
   contextId
 ) {
   const labId = quest.goblin.getX ('labId');
-  const lab = quest.useAs ('laboratory', labId);
+  const lab = quest.getGoblinAPI ('laboratory', labId);
   quest.dispatch ('setCurrentWorkitemByContext', {
     contextId,
     view: null,
@@ -487,7 +493,7 @@ Goblin.registerQuest (goblinName, 'clear-workitem', function* (
 
 Goblin.registerQuest (goblinName, 'dispatch', function (quest, action) {
   const labId = quest.goblin.getX ('labId');
-  const lab = quest.useAs ('laboratory', labId);
+  const lab = quest.getGoblinAPI ('laboratory', labId);
   lab.dispatch ({action});
 });
 

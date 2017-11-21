@@ -94,7 +94,7 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   navToLastWorkitem
 ) {
   const i = quest.openInventory ();
-  const tabButton = i.use (tabId);
+  const tabButton = i.getAPI (tabId);
   tabButton.delete ();
 
   quest.evt ('removed', {workitemId});
@@ -102,7 +102,7 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   quest.do ();
 
   const desktopId = quest.goblin.getX ('desktopId');
-  const desk = quest.useAs ('desktop', desktopId);
+  const desk = quest.getGoblinAPI ('desktop', desktopId);
 
   if (navToLastWorkitem) {
     desk.navToLastWorkitem ();
