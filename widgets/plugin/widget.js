@@ -124,9 +124,7 @@ class Plugin extends Widget {
     const workitemId = `${this.props.editorWidget}@${this.props.entityIds.get (index)}`;
 
     if (extended) {
-      const itemClass = Bool.isTrue (this.props.embedded)
-        ? this.styles.classNames.extendedEmbeddedItem
-        : this.styles.classNames.extendedItem;
+      const itemClass = this.styles.classNames.extendedItem;
 
       let ExtendedUI = null;
       if (Bool.isTrue (this.props.readonly)) {
@@ -159,9 +157,7 @@ class Plugin extends Widget {
         </div>
       );
     } else {
-      const itemClass = Bool.isTrue (this.props.embedded)
-        ? this.styles.classNames.compactedEmbeddedItem
-        : this.styles.classNames.compactedItem;
+      const itemClass = this.styles.classNames.compactedItem;
 
       let CompactedUI = null;
       if (Bool.isTrue (this.props.readonly)) {
@@ -249,17 +245,8 @@ class Plugin extends Widget {
       );
     } else {
       const buttonsClass = Bool.isTrue (this.props.readonly)
-        ? Bool.isTrue (this.props.embedded)
-            ? this.styles.classNames.compactedEmbeddedReadonlyButtons
-            : this.styles.classNames.compactedReadonlyButtons
-        : Bool.isTrue (this.props.embedded)
-            ? this.styles.classNames.compactedEmbeddedButtons
-            : this.styles.classNames.compactedButtons;
-
-      const kind = Bool.isTrue (this.props.readonly) ||
-        !Bool.isTrue (this.props.embedded)
-        ? 'check-button'
-        : 'plugin';
+        ? this.styles.classNames.compactedReadonlyButtons
+        : this.styles.classNames.compactedButtons;
 
       return (
         <div className={buttonsClass}>
@@ -274,7 +261,7 @@ class Plugin extends Widget {
             : null}
           <Button
             width="32px"
-            kind={kind}
+            kind="check-button"
             glyph="angle-down"
             glyphSize="180%"
             tooltip="Etendre"
