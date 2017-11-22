@@ -18,27 +18,24 @@ export default function styles (theme, props) {
 
   const boxStyle = {
     flexGrow: '1',
-    margin: '0px -20px 0px -20px',
-    padding: '0px 0px 0px 0px',
   };
 
   const emptyBoxStyle = {
     flexGrow: '1',
-    margin: '0px -20px 0px -20px',
-    padding: '0px 0px 0px 0px',
+    margin: '0px 0px -10px 0px',
   };
 
   const embeddedBoxStyle = {
     flexGrow: '1',
-    margin: '10px -20px 0px -20px',
+    margin: '20px 0px 0px 0px',
     padding: '10px 0px 0px 0px',
     borderTop: '1px solid #bbb',
   };
 
   const emptyembeddedBoxStyle = {
     flexGrow: '1',
-    margin: '0px -20px 0px -20px',
-    padding: '0px 0px 0px 0px',
+    margin: '20px 0px -10px 0px',
+    padding: '10px 0px 0px 0px',
     borderTop: '1px solid #bbb',
   };
 
@@ -46,8 +43,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px 20px 10px 20px',
-    padding: '0px 0px 0px 0px',
+    padding: halfMargin + ' ' + m + ' ' + '5px' + ' ' + m,
     cursor: 'default',
     userSelect: 'none',
   };
@@ -56,8 +52,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px 20px 0px 20px',
-    padding: '0px 0px 0px 0px',
+    padding: halfMargin + ' ' + m + ' ' + m + ' ' + m,
     cursor: 'default',
     userSelect: 'none',
   };
@@ -66,8 +61,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px 0px 0px 0px',
-    padding: '5px 0px 5px 20px',
+    padding: '0px ' + Unit.add (m, '1px') + ' 2px ' + m,
     transition: theme.transitions.easeOut (500),
   };
 
@@ -75,8 +69,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px 0px 0px 0px',
-    padding: '5px 0px 5px 20px',
+    padding: '5px ' + Unit.add (m, '1px') + ' 5px ' + m,
     borderTop: '1px dashed #ccc',
     transition: theme.transitions.easeOut (500),
   };
@@ -85,8 +78,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '10px 0px 10px 0px',
-    padding: '0px 0px 0px 0px',
+    margin: alignRightToolbars ? '10px 0px 12px 0px' : '10px 2px 12px 2px',
+    padding: '20px',
     boxShadow: boxShadow,
     borderRadius: '5px',
     transition: theme.transitions.easeOut (500),
@@ -96,8 +89,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '10px -42px 10px 0px',
-    padding: '0px 0px 0px 0px',
+    margin: alignRightToolbars ? '10px -42px 12px 0px' : '10px 2px 12px 2px',
+    padding: '20px',
     boxShadow: boxShadow,
     borderRadius: '5px',
     transition: theme.transitions.easeOut (500),
@@ -107,8 +100,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px 0px 0px 0px',
-    padding: '0px 0px 0px 0px',
+    margin: '10px 0px 12px 0px',
+    padding: '0px 0px 10px 20px',
     border: alignRightToolbars ? null : '1px solid #bbb',
     borderRadius: '3px',
     boxShadow: boxShadow,
@@ -120,8 +113,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px 0px 0px 0px',
-    padding: '0px 0px 0px 0px',
+    margin: alignRightToolbars ? '10px -43px 12px 0px' : '10px 20px 12px 20px',
+    padding: '0px 0px 10px 20px',
     border: alignRightToolbars ? null : '1px solid #bbb',
     borderRadius: '3px',
     boxShadow: boxShadow,
@@ -133,8 +126,6 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: '1',
-    margin: '0px 0px 0px 0px',
-    padding: '0px 0px 0px 0px',
   };
 
   const compactedEmbeddedItemStyle = {
@@ -142,30 +133,27 @@ export default function styles (theme, props) {
     flexDirection: 'column',
     flexGrow: '1',
     margin: '0px 20px 0px 0px',
-    padding: '0px 0px 0px 0px',
   };
 
   const extendedItemStyle = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: '1',
-    margin: '0px 0px 0px 0px',
-    padding: '20px',
+    padding: halfMargin + ' ' + m + ' 0px 0px',
   };
 
   const extendedEmbeddedItemStyle = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: '1',
-    margin: '0px 0px 0px 0px',
-    padding: '20px',
+    padding: halfMargin + ' ' + m + ' 0px 0px',
+    margin: '0px 20px 0px 0px',
   };
 
   const compactedButtonsStyle = {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    padding: '5px',
   };
 
   // ->
@@ -173,24 +161,23 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    margin: '0px -42px 0px 0px',
-    padding: '5px',
+    padding: Unit.multiply (halfMargin, 0.5),
+    backgroundColor: theme.palette.actionButtonBackground,
+    margin: '0px -63px 0px 0px',
   };
 
   const compactedReadonlyButtonsStyle = {
     display: 'flex',
-    flexDirection: 'column',
-    width: '32px',
-    padding: '5px',
+    flexDirection: 'row',
   };
 
   // ->
   const compactedEmbeddedReadonlyButtonsStyle = {
     display: 'flex',
-    flexDirection: 'column',
-    width: '32px',
-    padding: '5px',
+    flexDirection: 'row',
+    padding: Unit.multiply (halfMargin, 0.5),
     backgroundColor: theme.palette.actionButtonBackground,
+    margin: '-20px -20px -20px 0px',
     borderRadius: '0px 5px 5px 0px',
   };
 
@@ -198,8 +185,9 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    padding: '5px',
+    padding: Unit.multiply (halfMargin, 0.5),
     backgroundColor: theme.palette.actionButtonBackground,
+    margin: '-20px -20px -20px 0px',
     borderRadius: '0px 5px 5px 0px',
   };
 
@@ -207,7 +195,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    padding: '5px',
+    padding: Unit.multiply (halfMargin, 0.5),
+    margin: '0px 0px -10px 0px',
     borderLeft: '1px solid #ccc',
   };
 
