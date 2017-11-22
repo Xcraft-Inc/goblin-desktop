@@ -300,27 +300,21 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
       delete workitem.payload.desktopId;
     }
   }
+
   const widgetId = `${workitem.name}@${workitem.id}`;
-  const exist = yield quest.warehouse.has ({path: widgetId});
-  let wi = null;
-  if (exist) {
-    const i = quest.openInventory ();
-    wi = i.use (widgetId);
-  } else {
-    wi = yield quest.create (
-      widgetId,
-      Object.assign (
-        {
-          id: widgetId,
-          desktopId: quest.goblin.id,
-          contextId: workitem.contextId,
-          workflowId: workitem.workflowId,
-        },
-        workitem.payload,
-        {payload: workitem.payload}
-      )
-    );
-  }
+  const wi = yield quest.create (
+    widgetId,
+    Object.assign (
+      {
+        id: widgetId,
+        desktopId: quest.goblin.id,
+        contextId: workitem.contextId,
+        workflowId: workitem.workflowId,
+      },
+      workitem.payload,
+      {payload: workitem.payload}
+    )
+  );
 
   if (workitem.isInWorkspace && workitem.kind !== 'system') {
     // Add a tab
