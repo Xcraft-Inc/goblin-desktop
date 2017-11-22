@@ -124,7 +124,9 @@ class Plugin extends Widget {
     const workitemId = `${this.props.editorWidget}@${this.props.entityIds.get (index)}`;
 
     if (extended) {
-      const itemClass = this.styles.classNames.extendedItem;
+      const itemClass = Bool.isTrue (this.props.embedded)
+        ? this.styles.classNames.extendedEmbeddedItem
+        : this.styles.classNames.extendedItem;
 
       let ExtendedUI = null;
       if (Bool.isTrue (this.props.readonly)) {
@@ -157,7 +159,9 @@ class Plugin extends Widget {
         </div>
       );
     } else {
-      const itemClass = this.styles.classNames.compactedItem;
+      const itemClass = Bool.isTrue (this.props.embedded)
+        ? this.styles.classNames.compactedEmbeddedItem
+        : this.styles.classNames.compactedItem;
 
       let CompactedUI = null;
       if (Bool.isTrue (this.props.readonly)) {
@@ -196,8 +200,12 @@ class Plugin extends Widget {
   renderButtons (entityId, extended, numberOfIds) {
     if (extended) {
       const buttonsClass = Bool.isTrue (this.props.readonly)
-        ? this.styles.classNames.extendedReadonlyButtons
-        : this.styles.classNames.extendedButtons;
+        ? Bool.isTrue (this.props.embedded)
+            ? this.styles.classNames.extendedEmbeddedReadonlyButtons
+            : this.styles.classNames.extendedReadonlyButtons
+        : Bool.isTrue (this.props.embedded)
+            ? this.styles.classNames.extendedEmbeddedButtons
+            : this.styles.classNames.extendedButtons;
 
       const canDelete =
         !Bool.isTrue (this.props.readonly) &&
@@ -245,12 +253,22 @@ class Plugin extends Widget {
       );
     } else {
       const buttonsClass = Bool.isTrue (this.props.readonly)
-        ? this.styles.classNames.compactedReadonlyButtons
-        : this.styles.classNames.compactedButtons;
+        ? Bool.isTrue (this.props.embedded)
+            ? this.styles.classNames.compactedEmbeddedReadonlyButtons
+            : this.styles.classNames.compactedReadonlyButtons
+        : Bool.isTrue (this.props.embedded)
+            ? this.styles.classNames.compactedEmbeddedButtons
+            : this.styles.classNames.compactedButtons;
+
+      const kind = Bool.isTrue (this.props.readonly) ||
+        !Bool.isTrue (this.props.embedded)
+        ? 'check-button'
+        : 'plugin';
 
       return (
         <div className={buttonsClass}>
-          {Bool.isTrue (this.props.readonly)
+          {Bool.isTrue (this.props.readonly) &&
+            !Bool.isTrue (this.props.embedded)
             ? <Button
                 width="32px"
                 kind="check-button"
@@ -261,7 +279,7 @@ class Plugin extends Widget {
             : null}
           <Button
             width="32px"
-            kind="check-button"
+            kind={kind}
             glyph="angle-down"
             glyphSize="180%"
             tooltip="Etendre"
@@ -278,16 +296,16 @@ class Plugin extends Widget {
 
   renderRowContent (entityId, extended, numberOfIds, index) {
     const rowClass = extended
-      ? Bool.isTrue (this.props.readonly)
-          ? Bool.isTrue (this.props.embedded)
-              ? this.styles.classNames.extendedEmbeddedReadonlyRow
-              : this.styles.classNames.extendedReadonlyRow
-          : Bool.isTrue (this.props.embedded)
-              ? this.styles.classNames.extendedEmbeddedRow
-              : this.styles.classNames.extendedRow
+      ? Bool.isTrue (this.props.embedded)
+          ? this.styles.classNames.extendedEmbeddedRow
+          : this.styles.classNames.extendedRow
       : numberOfIds > 1 && this.props.horizontalSeparator !== 'compact'
-          ? this.styles.classNames.compactedDashedRow
-          : this.styles.classNames.compactedRow;
+          ? Bool.isTrue (this.props.embedded)
+              ? this.styles.classNames.compactedEmbeddedDashedRow
+              : this.styles.classNames.compactedDashedRow
+          : Bool.isTrue (this.props.embedded)
+              ? this.styles.classNames.compactedEmbeddedRow
+              : this.styles.classNames.compactedRow;
 
     return (
       <Container kind="row-draggable" key={index}>
