@@ -1,4 +1,5 @@
 import {Unit} from 'electrum-theme';
+import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
@@ -7,13 +8,6 @@ export default function styles (theme, props) {
   const halfMargin = Unit.multiply (m, 0.5);
   const quartMargin = Unit.multiply (m, 0.25);
   const doubleMargin = Unit.multiply (m, 2);
-
-  // Simulate a z-coordinate. For big level, the panel comes more forward.
-  const level = props.embeddedLevel || 1; // 1..n
-  const yShadow = Unit.add ('10px', Unit.multiply ('10px', level)); // 20, 30, 40, 50, ...
-  const blur = Unit.multiply ('5px', level); // 5, 10, 15, 20, ...
-  const alpha = Math.min (0.25 + level / 20, 0.8); // 0.30, 0.35, 0.40, 0.45, ...
-  const boxShadow = `0px 0px ${yShadow} ${blur} rgba(0,0,0, ${alpha})`;
 
   //--------//
   //  Box  //
@@ -32,18 +26,14 @@ export default function styles (theme, props) {
     flexGrow: '1',
     margin: '20px -42px 0px 0px',
     padding: '10px 42px 0px 0px',
-    borderTop: '1px solid #bbb',
-    //- boxShadow: 'inset 0px 25px 50px 0px rgba(0,0,0,0.05)',
-    boxShadow: '0px -5px 10px 0px rgba(0,0,0, 0.1)',
+    boxShadow: '0px -6px 12px 0px rgba(0,0,0, 0.1)',
   };
 
   const emptyembeddedBoxStyle = {
     flexGrow: '1',
     margin: '20px -42px -10px 0px',
     padding: '10px 42px 0px 0px',
-    borderTop: '1px solid #bbb',
-    //- boxShadow: 'inset 0px 25px 50px 0px rgba(0,0,0,0.05)',
-    boxShadow: '0px -5px 10px 0px rgba(0,0,0, 0.1)',
+    boxShadow: '0px -6px 12px 0px rgba(0,0,0, 0.1)',
   };
 
   //-----------//
@@ -72,6 +62,13 @@ export default function styles (theme, props) {
   //  Row  //
   //------//
 
+  // Simulate a z-coordinate. For big level, the panel comes more forward.
+  const level = props.embeddedLevel || 1; // 1..n
+  const yShadow = Unit.add ('10px', Unit.multiply ('10px', level)); // 20, 30, 40, 50, ...
+  const blur = Unit.multiply ('5px', level); // 5, 10, 15, 20, ...
+  const alpha = Math.min (0.25 + level / 20, 0.8); // 0.30, 0.35, 0.40, 0.45, ...
+  const boxShadow = `0px 0px ${yShadow} ${blur} rgba(0,0,0, ${alpha})`;
+
   const compactedRowStyle = {
     display: 'flex',
     flexDirection: 'row',
@@ -93,8 +90,9 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
+    margin: '0px 0px 0px 0px',
     padding: '5px ' + Unit.add (m, '1px') + ' 5px ' + m,
-    borderTop: '1px dashed #ccc',
+    borderTop: '1px solid rgba(0,0,0,0.1)',
     transition: theme.transitions.easeOut (500),
   };
 
@@ -104,7 +102,7 @@ export default function styles (theme, props) {
     flexGrow: '1',
     margin: '0px -42px 0px 0px',
     padding: '5px 20px',
-    borderTop: '1px dashed #ccc',
+    borderTop: '1px solid rgba(0,0,0,0.1)',
     transition: theme.transitions.easeOut (500),
   };
 
@@ -165,6 +163,16 @@ export default function styles (theme, props) {
   //  Button  //
   //---------//
 
+  // Simulate a z-coordinate. For big level, the color is lighter.
+  const editBackground = ColorManipulator.lighten (
+    theme.palette.pluginToolbarEditBackground,
+    (level - 1) / 5
+  );
+  const readonlyBackground = ColorManipulator.lighten (
+    theme.palette.pluginToolbarReadonlyBackground,
+    (level - 1) / 5
+  );
+
   const compactedButtonsStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -202,7 +210,7 @@ export default function styles (theme, props) {
     width: '32px',
     margin: '-20px -20px -20px 0px',
     padding: quartMargin,
-    backgroundColor: theme.palette.actionButtonBackground,
+    backgroundColor: editBackground,
     borderRadius: '0px 5px 5px 0px',
   };
 
@@ -212,7 +220,7 @@ export default function styles (theme, props) {
     width: '32px',
     margin: '-20px -20px -20px 0px',
     padding: quartMargin,
-    backgroundColor: theme.palette.actionButtonBackground,
+    backgroundColor: editBackground,
     borderRadius: '0px 5px 5px 0px',
     padding: quartMargin,
   };
@@ -223,7 +231,7 @@ export default function styles (theme, props) {
     width: '32px',
     margin: '-20px -20px -20px 0px',
     padding: quartMargin,
-    backgroundColor: '#eee',
+    backgroundColor: readonlyBackground,
     borderRadius: '0px 5px 5px 0px',
   };
 
@@ -233,7 +241,7 @@ export default function styles (theme, props) {
     width: '32px',
     margin: '-20px -20px -20px 0px',
     padding: quartMargin,
-    backgroundColor: '#eee',
+    backgroundColor: readonlyBackground,
     borderRadius: '0px 5px 5px 0px',
     padding: quartMargin,
   };

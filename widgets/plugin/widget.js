@@ -215,8 +215,8 @@ class Plugin extends Widget {
           numberOfIds > 1);
 
       const kind = Bool.isTrue (this.props.readonly)
-        ? 'check-button'
-        : 'plugin';
+        ? 'plugin-light'
+        : 'plugin-dark';
 
       return (
         <div className={buttonsClass}>
@@ -262,8 +262,8 @@ class Plugin extends Widget {
 
       const kind = Bool.isTrue (this.props.readonly) ||
         !Bool.isTrue (this.props.embedded)
-        ? 'check-button'
-        : 'plugin';
+        ? 'plugin-light'
+        : 'plugin-dark';
 
       return (
         <div className={buttonsClass}>
@@ -271,7 +271,7 @@ class Plugin extends Widget {
             !Bool.isTrue (this.props.embedded)
             ? <Button
                 width="32px"
-                kind="check-button"
+                kind={kind}
                 glyph="pencil"
                 tooltip="Editer"
                 onClick={() => this.onEditEntity (entityId)}
