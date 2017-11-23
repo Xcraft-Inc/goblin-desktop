@@ -151,14 +151,14 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: '1',
-    padding: halfMargin + ' ' + m + ' 0px 0px',
+    padding: '0px ' + m + ' 0px 0px',
   };
 
   const extendedEmbeddedItemStyle = {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: '1',
-    padding: halfMargin + ' ' + m + ' 0px 0px',
+    padding: '0px ' + m + ' 0px 0px',
   };
 
   //-----------//
