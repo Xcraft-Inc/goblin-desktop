@@ -374,7 +374,11 @@ class Plugin extends Widget {
 
     const entityIds = this.props.entityIds.toArray ();
 
-    if (entityIds.length === 0 && Bool.isTrue (this.props.readonly)) {
+    if (
+      entityIds.length === 0 &&
+      Bool.isTrue (this.props.readonly) &&
+      Bool.isTrue (this.props.embedded)
+    ) {
       return null;
     }
 
