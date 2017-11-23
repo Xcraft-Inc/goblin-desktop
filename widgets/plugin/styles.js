@@ -166,11 +166,11 @@ export default function styles (theme, props) {
   // Simulate a z-coordinate. For big level, the color is lighter.
   const editBackground = ColorManipulator.lighten (
     theme.palette.pluginToolbarEditBackground,
-    (level - 1) / 5
+    Math.min ((level - 1) / 5, 0.8) // 0, 0.2, 0.4, ...
   );
   const readonlyBackground = ColorManipulator.lighten (
     theme.palette.pluginToolbarReadonlyBackground,
-    (level - 1) / 5
+    Math.min ((level - 1) / 5, 0.8) // 0, 0.2, 0.4, ...
   );
 
   const compactedButtonsStyle = {
