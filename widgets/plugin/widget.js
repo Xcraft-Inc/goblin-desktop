@@ -372,6 +372,12 @@ class Plugin extends Widget {
       return null;
     }
 
+    const entityIds = this.props.entityIds.toArray ();
+
+    if (entityIds.length === 0 && Bool.isTrue (this.props.readonly)) {
+      return null;
+    }
+
     let boxClass = null;
     if (!this.props.entityIds || this.props.entityIds.size === 0) {
       boxClass = Bool.isTrue (this.props.embedded)
@@ -382,8 +388,6 @@ class Plugin extends Widget {
         ? this.styles.classNames.embeddedBox
         : this.styles.classNames.box;
     }
-
-    const entityIds = this.props.entityIds.toArray ();
 
     return (
       <div className={boxClass}>
