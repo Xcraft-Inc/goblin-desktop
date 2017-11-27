@@ -436,7 +436,7 @@ Goblin.registerQuest (goblinName, 'nav-to-context', function (
   quest.do ();
 });
 
-Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
+Goblin.registerQuest (goblinName, 'nav-to-workitem', function (
   quest,
   contextId,
   view,
@@ -454,7 +454,7 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function* (
   if (skipNav) {
     return;
   }
-  yield lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
+  lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
 });
 
 Goblin.registerQuest (goblinName, 'nav-to-last-workitem', function* (quest) {
