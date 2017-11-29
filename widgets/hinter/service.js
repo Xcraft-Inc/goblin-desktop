@@ -186,10 +186,13 @@ Goblin.registerQuest (goblinName, 'validate-row', function* (
   const workitem = ids[1];
   const workitemId = `${ids[1]}@${ids.slice (2, ids.length).join ('@')}`;
   const value = quest.goblin.getState ().get (`values.${index}`, null);
-  const payload = quest.goblin
-    .getState ()
-    .get (`payloads.${index}`, null)
-    .toJS ();
+
+  let payload = {};
+  const usePayload = quest.goblin.getX ('usePayload');
+  if (usePayload) {
+    payload = quest.goblin.getState ().get (`payloads.${index}`, null).toJS ();
+  }
+
   const type = quest.goblin.getState ().get (`type`, null);
   if (value && type) {
     yield quest.cmd (`${workitem}.hinter-validate-${type}`, {
@@ -217,7 +220,7 @@ Goblin.registerQuest (goblinName, 'set-selections', function (
     quest.me.selectRow ({
       index: 0,
       text: rows[0],
-      payload: payloads[0],
+      payload: usePayload ? payloads[0] : {},
       usePayload,
     });
     if (validate) {
