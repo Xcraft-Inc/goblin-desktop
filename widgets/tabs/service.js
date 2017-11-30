@@ -46,9 +46,6 @@ const logicHandlers = {
     const contextId = action.get ('contextId');
     return state.del (`tabs.${contextId}.${tabId}`);
   },
-  delete: state => {
-    return state.set ('', {});
-  },
 };
 
 // Register quest's according rc.json
@@ -59,9 +56,7 @@ Goblin.registerQuest (goblinName, 'create', function (quest, id, desktopId) {
   return quest.goblin.id;
 });
 
-Goblin.registerQuest (goblinName, 'delete', function (quest, id) {
-  quest.do ({id});
-});
+Goblin.registerQuest (goblinName, 'delete', function (quest) {});
 
 Goblin.registerQuest (goblinName, 'set-current', function (
   quest,
