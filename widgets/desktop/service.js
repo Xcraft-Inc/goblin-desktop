@@ -459,7 +459,7 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function (
   lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
 });
 
-Goblin.registerQuest (goblinName, 'nav-to-last-workitem', function* (quest) {
+Goblin.registerQuest (goblinName, 'nav-to-last-workitem', function (quest) {
   const labId = quest.goblin.getX ('labId');
   const lab = quest.getGoblinAPI ('laboratory', labId);
   const last = quest.goblin.getState ().get ('last');
@@ -470,10 +470,10 @@ Goblin.registerQuest (goblinName, 'nav-to-last-workitem', function* (quest) {
   quest.dispatch ('setCurrentWorkitemByContext', {contextId, view, workitemId});
   const tabs = quest.getAPI ('tabs');
   tabs.setCurrent ({contextId, workitemId});
-  yield lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
+  lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
 });
 
-Goblin.registerQuest (goblinName, 'clear-workitem', function* (
+Goblin.registerQuest (goblinName, 'clear-workitem', function (
   quest,
   contextId
 ) {
@@ -484,7 +484,7 @@ Goblin.registerQuest (goblinName, 'clear-workitem', function* (
     view: null,
     workitemId: null,
   });
-  yield lab.nav ({route: `/${contextId}/?wid=null`});
+  lab.nav ({route: `/${contextId}/?wid=null`});
 });
 
 Goblin.registerQuest (goblinName, 'dispatch', function (quest, action) {
