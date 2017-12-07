@@ -7,7 +7,7 @@ import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Label from 'gadgets/label/widget';
 import DragCab from 'gadgets/drag-cab/widget';
-import BacklogList from 'polypheme/backlog-list/widget';
+import BacklogDesk from 'polypheme/backlog-desk/widget';
 
 import importer from 'laboratory/importer/';
 const uiImporter = importer ('ui');
@@ -401,7 +401,7 @@ class Plugin extends Widget {
   }
 
   renderBacklog () {
-    return <BacklogList {...this.props} />;
+    return <BacklogDesk {...this.props} />;
   }
 
   render () {
