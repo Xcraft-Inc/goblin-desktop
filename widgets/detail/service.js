@@ -66,6 +66,8 @@ Goblin.registerQuest (goblinName, 'set-entity', function (
       desktopId,
       entityId: entityId,
       entity,
+      rootAggregateId: entity ? entity.meta.rootAggregateId : null,
+      rootAggregatePath: entity ? entity.meta.rootAggregatePath : null,
     });
     created[workitemId] = true;
     quest.goblin.setX ('created', created);
