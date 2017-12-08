@@ -7,9 +7,11 @@ import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Label from 'gadgets/label/widget';
 import DragCab from 'gadgets/drag-cab/widget';
+import BacklogDesk from 'polypheme/backlog-desk/widget';
 
 import importer from 'laboratory/importer/';
 const uiImporter = importer ('ui');
+
 /******************************************************************************/
 
 class Plugin extends Widget {
@@ -362,18 +364,8 @@ class Plugin extends Widget {
     });
   }
 
-  render () {
-    if (!this.props.id || !this.props.entityIds) {
-      return null;
-    }
-
-    if (!this.props.editorWidget) {
-      // return <div>No editor provided in props!</div>;
-      return null;
-    }
-
+  renderDefault () {
     const entityIds = this.props.entityIds.toArray ();
-
     if (
       entityIds.length === 0 &&
       Bool.isTrue (this.props.readonly) &&
@@ -406,6 +398,27 @@ class Plugin extends Widget {
         </Container>
       </div>
     );
+  }
+
+  renderBacklog () {
+    return <BacklogDesk {...this.props} />;
+  }
+
+  render () {
+    if (!this.props.id || !this.props.entityIds) {
+      return null;
+    }
+
+    if (!this.props.editorWidget) {
+      // return <div>No editor provided in props!</div>;
+      return null;
+    }
+
+    if (this.props.pluginType === 'backlog') {
+      return this.renderBacklog ();
+    } else {
+      return this.renderDefault ();
+    }
   }
 }
 
