@@ -98,7 +98,7 @@ class Workitem extends Form {
           grow="1"
           kind="action"
           place="2/2"
-          glyph="close"
+          glyph="ban"
           text="Annuler"
           onClick={this.onCancel}
         />
