@@ -27,6 +27,8 @@ export default function styles (theme, props) {
     margin: '20px -42px 0px 0px',
     padding: '10px 42px 0px 0px',
     boxShadow: '0px -6px 12px 0px rgba(0,0,0, 0.1)',
+    //- backgroundColor: 'rgba(0,0,0, 0.02)',
+    //- boxShadow: 'inset 0px 6px 12px 0px rgba(0,0,0, 0.05)',
   };
 
   const emptyembeddedBoxStyle = {
@@ -34,6 +36,8 @@ export default function styles (theme, props) {
     margin: '20px -42px -10px 0px',
     padding: '10px 42px 0px 0px',
     boxShadow: '0px -6px 12px 0px rgba(0,0,0, 0.1)',
+    //- backgroundColor: 'rgba(0,0,0, 0.02)',
+    //- boxShadow: 'inset 0px 6px 12px 0px rgba(0,0,0, 0.05)',
   };
 
   //-----------//
