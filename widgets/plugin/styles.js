@@ -7,7 +7,6 @@ export default function styles (theme, props) {
   const m = theme.shapes.containerMargin;
   const halfMargin = Unit.multiply (m, 0.5);
   const quartMargin = Unit.multiply (m, 0.25);
-  const doubleMargin = Unit.multiply (m, 2);
 
   //--------//
   //  Box  //
