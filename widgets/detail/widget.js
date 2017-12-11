@@ -51,9 +51,21 @@ class Detail extends Widget {
     }
 
     const workitemUI = uiImporter (detailWidget);
-    const DetailUI = this.WithState (workitemUI.panel.readonly, 'entityId') (
+    let DetailUI = this.WithState (workitemUI.panel.readonly, 'entityId') (
       '.entityId'
     );
+
+    if (
+      workitemUI.mappers &&
+      workitemUI.mappers.panel &&
+      workitemUI.mappers.panel.readonly
+    ) {
+      DetailUI = this.mapWidget (
+        DetailUI,
+        workitemUI.mappers.panel.readonly,
+        `backend.${entityId}`
+      );
+    }
     const workitemId = detailWidgetId;
     return (
       <Container

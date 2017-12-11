@@ -136,11 +136,35 @@ class Plugin extends Widget {
           workitemUI.plugin.readonly.extend,
           'entityId'
         ) ('.entityId');
+
+        if (
+          workitemUI.mappers &&
+          workitemUI.mappers.plugin &&
+          workitemUI.mappers.plugin.readonly.extend
+        ) {
+          ExtendedUI = this.mapWidget (
+            ExtendedUI,
+            workitemUI.mappers.plugin.readonly.extend,
+            `backend.${entityId}`
+          );
+        }
       } else {
         ExtendedUI = this.WithState (
           workitemUI.plugin.edit.extend,
           'entityId'
         ) ('.entityId');
+
+        if (
+          workitemUI.mappers &&
+          workitemUI.mappers.plugin &&
+          workitemUI.mappers.plugin.edit.extend
+        ) {
+          ExtendedUI = this.mapWidget (
+            ExtendedUI,
+            workitemUI.mappers.plugin.edit.extend,
+            `backend.${entityId}`
+          );
+        }
       }
 
       return (
@@ -171,11 +195,35 @@ class Plugin extends Widget {
           workitemUI.plugin.readonly.compact,
           'entityId'
         ) ('.entityId');
+
+        if (
+          workitemUI.mappers &&
+          workitemUI.mappers.plugin &&
+          workitemUI.mappers.plugin.readonly.compact
+        ) {
+          CompactedUI = this.mapWidget (
+            CompactedUI,
+            workitemUI.mappers.plugin.readonly.compact,
+            `backend.${entityId}`
+          );
+        }
       } else {
         CompactedUI = this.WithState (
           workitemUI.plugin.edit.compact,
           'entityId'
         ) ('.entityId');
+
+        if (
+          workitemUI.mappers &&
+          workitemUI.mappers.plugin &&
+          workitemUI.mappers.plugin.edit.compact
+        ) {
+          CompactedUI = this.mapWidget (
+            CompactedUI,
+            workitemUI.mappers.plugin.edit.compact,
+            `backend.${entityId}`
+          );
+        }
       }
 
       return (
