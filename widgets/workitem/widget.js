@@ -171,13 +171,11 @@ class Workitem extends Form {
 
   renderForm () {
     const Form = this.Form;
-    const formStyle = {
-      height: '100%',
-    };
+    const formClass = this.styles.classNames.form;
     return (
       <Form
         component={props => {
-          return <div style={formStyle}>{this.props.children}</div>;
+          return <div className={formClass}>{this.props.children}</div>;
         }}
         validateOn="submit"
         model={`backend.${this.props.entityId}`}
