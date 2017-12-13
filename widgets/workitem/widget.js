@@ -123,7 +123,7 @@ class Workitem extends Form {
         spacing="large"
       >
         <Container kind="pane-header">
-          <Title kind="pane-header" singleLine="true" />
+          <Title kind="pane-header" singleLine="true" wrap="no" />
           {this.props.version}
         </Container>
         <Container kind="panes">
@@ -153,7 +153,7 @@ class Workitem extends Form {
       <Container kind="column-full">
 
         <Container kind="pane-header">
-          <Title kind="pane-header" singleLine="true" />
+          <Title kind="pane-header" singleLine="true" wrap="no" />
         </Container>
 
         <Container kind="panes">
