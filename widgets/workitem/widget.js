@@ -113,7 +113,7 @@ class Workitem extends Form {
     const Title = this.mapWidget (
       Label,
       'text',
-      `backend.${this.props.entityId}.meta.info`
+      `backend.${this.props.entityId}.meta.summaries.info`
     );
 
     return (
@@ -146,7 +146,7 @@ class Workitem extends Form {
     const Title = this.mapWidget (
       Label,
       'text',
-      `backend.${this.props.entityId}.meta.info`
+      `backend.${this.props.entityId}.meta.summaries.info`
     );
 
     return (
