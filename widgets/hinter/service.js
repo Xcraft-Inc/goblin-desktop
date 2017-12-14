@@ -12,6 +12,7 @@ const logicHandlers = {
     const id = action.get ('id');
     return state.set ('', {
       id: id,
+      name: action.get ('name'),
       type: action.get ('type'),
       kind: action.get ('kind'),
       title: action.get ('title'),
@@ -44,6 +45,7 @@ Goblin.registerQuest (goblinName, 'create', function (
   quest,
   id,
   desktopId,
+  name,
   type,
   title,
   glyph,
@@ -55,16 +57,27 @@ Goblin.registerQuest (goblinName, 'create', function (
   newButtonTitle,
   usePayload
 ) {
-  quest.do ({id, type, title, glyph, kind, newWorkitem, newButtonTitle});
+  if (!name) {
+    name = type;
+  }
+  quest.do ({id, name, type, title, glyph, kind, newWorkitem, newButtonTitle});
+  const detailId = `${id.replace (`-hinter`, `-detail`)}`;
+  quest.goblin.setX ('detailId', detailId);
   quest.create ('detail', {
-    id: `${id.replace ('-hinter', '-detail')}`,
+    id: detailId,
     desktopId,
+    name,
     type,
     title,
     detailWidget,
     kind: detailKind,
     width: detailWidth,
   });
+
+  if (!name) {
+    name = type;
+  }
+  quest.goblin.setX ('name', name);
   quest.goblin.setX ('desktopId', desktopId);
   quest.goblin.setX ('newWorkitem', newWorkitem);
   quest.goblin.setX ('usePayload', usePayload);
@@ -124,7 +137,6 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
   quest.do ({index: `${index}`});
 
   const value = quest.goblin.getState ().get (`values.${index}`, null);
-
   const loaded = quest.goblin.getX ('loaded');
   const detail = quest.getAPI ('detail');
   if (loaded[value] !== undefined) {
@@ -151,8 +163,8 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
     if (value && type) {
       const workitem = quest.goblin.getX ('workitem');
       const workitemId = quest.goblin.getX ('workitemId');
-
-      quest.cmd (`${workitem}.hinter-select-${type}`, {
+      const name = quest.goblin.getX ('name');
+      quest.cmd (`${workitem}.hinter-select-${name}`, {
         id: workitemId,
         selection: {index, text, value},
       });
@@ -195,7 +207,8 @@ Goblin.registerQuest (goblinName, 'validate-row', function* (
 
   const type = quest.goblin.getState ().get (`type`, null);
   if (value && type) {
-    yield quest.cmd (`${workitem}.hinter-validate-${type}`, {
+    const name = quest.goblin.getX ('name');
+    yield quest.cmd (`${workitem}.hinter-validate-${name}`, {
       id: workitemId,
       selection: {index, text, value, payload},
     });

@@ -185,12 +185,14 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
   newButtonTitle,
   newWorkitem,
   usePayload,
+  name,
   type,
   title,
   glyph,
   kind
 ) {
-  const widgetId = workitemId ? `${type}-hinter@${workitemId}` : null;
+  const serviceName = name ? name : type;
+  const widgetId = workitemId ? `${serviceName}-hinter@${workitemId}` : null;
 
   if (!type) {
     throw new Error ('Hinter type required');
@@ -212,6 +214,7 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
     `hinter@${widgetId}`,
     {
       id: widgetId,
+      name,
       type,
       desktopId: quest.goblin.id,
       title,

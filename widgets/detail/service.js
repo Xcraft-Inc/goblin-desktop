@@ -38,13 +38,18 @@ Goblin.registerQuest (goblinName, 'create', function (
   quest,
   desktopId,
   id,
+  name,
   type,
   title,
   detailWidget,
   kind,
   width
 ) {
+  if (!name) {
+    name = type;
+  }
   quest.goblin.setX ('desktopId', desktopId);
+  quest.goblin.setX ('name', desktopId);
   quest.goblin.setX ('created', {});
   quest.do ({id, type, title, detailWidget, kind, width});
   return quest.goblin.id;
