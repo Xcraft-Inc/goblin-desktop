@@ -27,6 +27,7 @@ const logicHandlers = {
   'set-selections': (state, action) => {
     return state
       .set ('rows', action.get ('rows'))
+      .set ('glyphs', action.get ('glyphs'))
       .set ('values', action.get ('values'))
       .set ('payloads', action.get ('payloads'))
       .set ('selectedIndex', '0');
@@ -223,12 +224,13 @@ Goblin.registerQuest (goblinName, 'validate-row', function* (
 Goblin.registerQuest (goblinName, 'set-selections', function (
   quest,
   rows,
+  glyphs,
   values,
   payloads,
   usePayload,
   validate
 ) {
-  quest.do ({rows, values, payloads});
+  quest.do ({rows, glyphs, values, payloads});
   if (rows.length > 0) {
     quest.me.selectRow ({
       index: 0,
