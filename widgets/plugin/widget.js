@@ -448,10 +448,6 @@ class Plugin extends Widget {
     );
   }
 
-  renderBacklog () {
-    return <BacklogDesk {...this.props} />;
-  }
-
   render () {
     if (!this.props.id || !this.props.entityIds) {
       return null;
@@ -462,11 +458,7 @@ class Plugin extends Widget {
       return null;
     }
 
-    if (this.props.pluginType === 'backlog') {
-      return this.renderBacklog ();
-    } else {
-      return this.renderDefault ();
-    }
+    return this.renderDefault ();
   }
 }
 
