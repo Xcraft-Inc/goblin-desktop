@@ -8,7 +8,7 @@ import Board from 'desktop/board/widget';
 const viewImporter = importer ('view');
 const widgetImporter = importer ('widget');
 
-class DefaultView extends View {
+class BoardView extends View {
   render () {
     const {workitemId} = this.props;
     if (!workitemId) {
@@ -28,14 +28,18 @@ class DefaultView extends View {
       return <div>Unable to display {workitemId}</div>;
     }
 
-    //const DetailView = viewImporter ('detail');
-    //const HinterView = viewImporter ('hinter');
+    const DetailView = viewImporter ('detail');
+    const HinterView = viewImporter ('hinter');
     return (
-      <Container kind="tickets-root">
-        <BoardWorkitem />
+      <Container kind="row" grow="1">
+        <Container kind="tickets-root">
+          <BoardWorkitem />
+        </Container>
+        <HinterView />
+        <DetailView />
       </Container>
     );
   }
 }
 
-export default DefaultView;
+export default BoardView;

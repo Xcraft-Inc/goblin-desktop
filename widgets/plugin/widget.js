@@ -7,7 +7,6 @@ import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Label from 'gadgets/label/widget';
 import DragCab from 'gadgets/drag-cab/widget';
-import BacklogDesk from 'polypheme/backlog-desk/widget';
 
 import importer from 'laboratory/importer/';
 const uiImporter = importer ('ui');
