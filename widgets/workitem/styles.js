@@ -9,8 +9,15 @@ export default function styles (theme, props) {
     display: 'flex',
   };
 
+  const boardStyle = {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
   return {
     form: formStyle,
+    board: boardStyle,
   };
 }
 

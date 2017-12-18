@@ -186,6 +186,22 @@ class Workitem extends Form {
     );
   }
 
+  renderBoard () {
+    const Form = this.Form;
+    const boardClass = this.styles.classNames.board;
+    return (
+      <Form
+        component={props => {
+          return <div className={boardClass}>{this.props.children}</div>;
+        }}
+        validateOn="submit"
+        model={`backend.${this.props.entityId}`}
+      >
+        {this.props.children}
+      </Form>
+    );
+  }
+
   render () {
     if (!this.props.id) {
       return <div>missing id props on Workitem component</div>;
@@ -202,6 +218,8 @@ class Workitem extends Form {
         return this.renderDetail ();
       case 'form':
         return this.renderForm ();
+      case 'board':
+        return this.renderBoard ();
       default:
         return null;
     }
