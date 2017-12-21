@@ -225,7 +225,6 @@ export default function styles (theme, props) {
     padding: quartMargin,
     backgroundColor: editBackground,
     borderRadius: '0px 5px 5px 0px',
-    padding: quartMargin,
   };
 
   const extendedReadonlyButtonsStyle = {
@@ -246,7 +245,6 @@ export default function styles (theme, props) {
     padding: quartMargin,
     backgroundColor: readonlyBackground,
     borderRadius: '0px 5px 5px 0px',
-    padding: quartMargin,
   };
 
   //-----------------------

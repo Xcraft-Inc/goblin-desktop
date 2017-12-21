@@ -151,11 +151,9 @@ class Workitem extends Form {
 
     return (
       <Container kind="column-full">
-
         <Container kind="pane-header">
           <Title kind="pane-header" singleLine="true" wrap="no" />
         </Container>
-
         <Container kind="panes">
           <Form
             component="div"
