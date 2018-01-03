@@ -123,6 +123,9 @@ class Plugin extends Widget {
   renderItem (entityId, extended, index) {
     const workitemUI = uiImporter (this.props.editorWidget);
     const workitemId = `${this.props.editorWidget}@${this.props.entityIds.get (index)}`;
+    if (!workitemUI.plugin) {
+      return null;
+    }
 
     if (extended) {
       const itemClass = Bool.isTrue (this.props.embedded)
@@ -139,6 +142,7 @@ class Plugin extends Widget {
         if (
           workitemUI.mappers &&
           workitemUI.mappers.plugin &&
+          workitemUI.mappers.plugin.readonly &&
           workitemUI.mappers.plugin.readonly.extend
         ) {
           ExtendedUI = this.mapWidget (
@@ -198,6 +202,7 @@ class Plugin extends Widget {
         if (
           workitemUI.mappers &&
           workitemUI.mappers.plugin &&
+          workitemUI.mappers.plugin.readonly &&
           workitemUI.mappers.plugin.readonly.compact
         ) {
           CompactedUI = this.mapWidget (
