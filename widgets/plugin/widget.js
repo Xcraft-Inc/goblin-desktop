@@ -183,6 +183,7 @@ class Plugin extends Widget {
               theme={this.context.theme}
               entityId={entityId}
               embeddedLevel={this.props.embeddedLevel}
+              origin={this.props.origin}
             />
           </Workitem>
         </div>
@@ -244,6 +245,7 @@ class Plugin extends Widget {
               theme={this.context.theme}
               entityId={entityId}
               embeddedLevel={this.props.embeddedLevel}
+              origin={this.props.origin}
             />
           </Workitem>
         </div>
