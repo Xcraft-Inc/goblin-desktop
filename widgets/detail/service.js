@@ -55,7 +55,7 @@ Goblin.registerQuest (goblinName, 'create', function (
   return quest.goblin.id;
 });
 
-Goblin.registerQuest (goblinName, 'set-entity', function (
+Goblin.registerQuest (goblinName, 'set-entity', function* (
   quest,
   entityId,
   entity
@@ -66,7 +66,7 @@ Goblin.registerQuest (goblinName, 'set-entity', function (
   const workitemId = `${type}-workitem@${entityId}`;
 
   if (!created[workitemId]) {
-    quest.create (workitemId, {
+    yield quest.create (workitemId, {
       id: workitemId,
       desktopId,
       entityId: entityId,
