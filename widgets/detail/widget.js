@@ -10,6 +10,7 @@ const uiImporter = importer ('ui');
 class Detail extends Widget {
   constructor () {
     super (...arguments);
+    this.doProxy = this.doProxy.bind (this);
   }
 
   static get wiring () {
@@ -24,6 +25,11 @@ class Detail extends Widget {
       entityId: 'entityId',
       loading: 'loading',
     };
+  }
+
+  doProxy (action) {
+    const workitem = this.props.detailWidgetId;
+    this.doFor (workitem, action);
   }
 
   render () {
@@ -85,6 +91,7 @@ class Detail extends Widget {
           <DetailUI
             id={workitemId}
             theme={this.context.theme}
+            do={this.doProxy}
             entityId={entityId}
           />
         </Workitem>
