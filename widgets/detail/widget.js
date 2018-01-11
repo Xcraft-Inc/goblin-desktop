@@ -27,9 +27,9 @@ class Detail extends Widget {
     };
   }
 
-  doProxy (action) {
+  doProxy (action, args) {
     const workitem = this.props.detailWidgetId;
-    this.doFor (workitem, action);
+    this.doFor (workitem, action, args);
   }
 
   render () {

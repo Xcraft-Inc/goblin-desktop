@@ -20,9 +20,9 @@ class Editor extends Widget {
     };
   }
 
-  doProxy (action) {
+  doProxy (action, args) {
     const workitem = this.props.id.split ('@')[0];
-    this.doAs (workitem, action);
+    this.doAs (workitem, action, args);
   }
 
   render () {
