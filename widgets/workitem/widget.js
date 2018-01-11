@@ -200,6 +200,22 @@ class Workitem extends Form {
     );
   }
 
+  renderRoadbook () {
+    const Form = this.Form;
+    const roadbookClass = this.styles.classNames.roadbook;
+    return (
+      <Form
+        component={props => {
+          return <div className={roadbookClass}>{this.props.children}</div>;
+        }}
+        validateOn="submit"
+        model={`backend.${this.props.entityId}`}
+      >
+        {this.props.children}
+      </Form>
+    );
+  }
+
   render () {
     if (!this.props.id) {
       return <div>missing id props on Workitem component</div>;
@@ -218,6 +234,8 @@ class Workitem extends Form {
         return this.renderForm ();
       case 'board':
         return this.renderBoard ();
+      case 'roadbook':
+        return this.renderRoadbook ();
       default:
         return null;
     }

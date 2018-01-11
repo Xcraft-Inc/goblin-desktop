@@ -20,10 +20,17 @@ export default function styles (theme, props) {
     flexDirection: 'column',
   };
 
+  const roadbookStyle = {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
   return {
     form: formStyle,
     detail: detailStyle,
     board: boardStyle,
+    roadbook: roadbookStyle,
   };
 }
 
