@@ -111,7 +111,6 @@ class Plugin extends Widget {
                 glyph="plus"
                 text="Ajouter"
                 glyphPosition="right"
-                spacing="overlap"
                 onClick={this.onCreateEntity}
               />
             : null}
