@@ -154,10 +154,13 @@ Goblin.registerQuest (goblinName, 'select-row', function (quest, index, text) {
     let payload = null;
     const usePayload = quest.goblin.getX ('usePayload');
     if (usePayload) {
-      payload = quest.goblin
-        .getState ()
-        .get (`payloads.${index}`, null)
-        .toJS ();
+      payload = quest.goblin.getState ().get (`payloads.${index}`, null);
+      if (payload) {
+        payload = payload.toJS ();
+      } else {
+        quest.goblin.setX ('cancel', () => null);
+        return;
+      }
     }
 
     const type = quest.goblin.getState ().get (`type`, null);
