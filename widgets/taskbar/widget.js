@@ -19,7 +19,7 @@ class Taskbar extends Widget {
     };
   }
 
-  renderButton (task, i) {
+  renderButton (context, task, i) {
     return (
       <Button
         kind="task-bar"
@@ -54,7 +54,7 @@ class Taskbar extends Widget {
           if (task.separator === 'true') {
             return this.renderSeparator ();
           } else {
-            return this.renderButton (task, i);
+            return this.renderButton (context, task, i);
           }
         })}
       </Container>
