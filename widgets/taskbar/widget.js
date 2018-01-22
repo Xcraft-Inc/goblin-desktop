@@ -19,11 +19,11 @@ class Taskbar extends Widget {
     };
   }
 
-  renderButton (context, task, i) {
+  renderButton (context, task, index) {
     return (
       <Button
+        key={index}
         kind="task-bar"
-        key={i}
         text={task.text}
         glyph={task.glyph}
         onClick={() =>
@@ -35,8 +35,8 @@ class Taskbar extends Widget {
     );
   }
 
-  renderSeparator () {
-    return <Separator kind="task" />;
+  renderSeparator (index) {
+    return <Separator key={index} kind="task" />;
   }
 
   render () {
@@ -52,7 +52,7 @@ class Taskbar extends Widget {
       <Container kind="task-bar">
         {contextTasks.map ((task, i) => {
           if (task.separator === 'true') {
-            return this.renderSeparator ();
+            return this.renderSeparator (i);
           } else {
             return this.renderButton (context, task, i);
           }
