@@ -100,6 +100,7 @@ Goblin.registerQuest (goblinName, 'remove', function (
 
   const desktopId = quest.goblin.getX ('desktopId');
   const desk = quest.getGoblinAPI ('desktop', desktopId);
+  desk.cleanWorkitem ({workitemId});
 
   if (navToLastWorkitem) {
     desk.navToLastWorkitem ();

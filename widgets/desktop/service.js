@@ -232,6 +232,13 @@ Goblin.registerQuest (goblinName, 'create-hinter-for', function* (
   return hinter.id;
 });
 
+Goblin.registerQuest (goblinName, 'clean-workitem', function (
+  quest,
+  workitemId
+) {
+  quest.dispatch ('remove-workitem', {widgetId: workitemId});
+});
+
 Goblin.registerQuest (goblinName, 'remove-workitem', function (
   quest,
   workitem,
