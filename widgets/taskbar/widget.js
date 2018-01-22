@@ -1,8 +1,10 @@
 import React from 'react';
 import importer from 'laboratory/importer/';
 import Widget from 'laboratory/widget';
+
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
+import Separator from 'gadgets/separator/widget';
 
 const tasksImporter = importer ('tasks');
 class Taskbar extends Widget {
@@ -17,6 +19,26 @@ class Taskbar extends Widget {
     };
   }
 
+  renderButton (task, i) {
+    return (
+      <Button
+        kind="task-bar"
+        key={i}
+        text={task.text}
+        glyph={task.glyph}
+        onClick={() =>
+          this.do ('run', {
+            workitem: task.workitem,
+            contextId: context,
+          })}
+      />
+    );
+  }
+
+  renderSeparator () {
+    return <Separator kind="task" />;
+  }
+
   render () {
     const {id, context} = this.props;
     if (!id) {
@@ -29,19 +51,11 @@ class Taskbar extends Widget {
     return (
       <Container kind="task-bar">
         {contextTasks.map ((task, i) => {
-          return (
-            <Button
-              kind="task-bar"
-              key={i}
-              text={task.text}
-              glyph={task.glyph}
-              onClick={() =>
-                this.do ('run', {
-                  workitem: task.workitem,
-                  contextId: context,
-                })}
-            />
-          );
+          if (task.separator === 'true') {
+            return this.renderSeparator ();
+          } else {
+            return this.renderButton (task, i);
+          }
         })}
       </Container>
     );
