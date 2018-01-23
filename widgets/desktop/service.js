@@ -361,7 +361,7 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
       name: workitem.description,
       glyph: workitem.icon,
       closable: true,
-      navigate: navigate ? true : false,
+      navigate: !!navigate,
     });
     quest.do ({widgetId, tabId});
   }
