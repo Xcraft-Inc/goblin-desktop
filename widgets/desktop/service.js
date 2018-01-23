@@ -313,6 +313,30 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
     }
   }
 
+  /* Manage `maxInstances` property which is useful to limit the quantity
+   * of instances. If the `navigate` property is passed to true, then
+   * a navigate is performed with the first entry.
+   */
+  if (Number.isInteger (workitem.maxInstances)) {
+    const workitems = quest.goblin.getState ().get (`workitems`);
+    if (workitems) {
+      const items = workitems.filter ((v, k) =>
+        k.startsWith (`${workitem.name}@`)
+      );
+
+      if (items.count () >= workitem.maxInstances) {
+        if (workitem.navigate) {
+          desk.navToWorkitem ({
+            contextId: workitem.contextId,
+            view: workitem.view,
+            workitemId: items.keySeq ().first (),
+          });
+        }
+        return;
+      }
+    }
+  }
+
   const widgetId = `${workitem.name}@${workitem.id}`;
   yield quest.create (
     widgetId,
