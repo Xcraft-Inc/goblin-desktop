@@ -55,7 +55,7 @@ class Desktop extends Widget {
       '/content/': {},
     };
 
-    this.shred (routesMap).select ((k, v) => {
+    Widget.shred (routesMap).select ((k, v) => {
       const ex = /^(\/.[:\-a-z]+\/).*/;
       const res = ex.exec (v);
       let mount = '/';

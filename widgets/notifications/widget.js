@@ -78,7 +78,7 @@ class Notifications extends Widget {
       return null;
     }
     // The most recent notification first (on top).
-    const nn = this.shred (notifications);
+    const nn = Widget.shred (notifications);
     let index = 0;
     return nn.linq
       .where (
