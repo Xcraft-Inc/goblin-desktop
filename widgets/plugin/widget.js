@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'laboratory/widget';
 import * as Bool from 'gadgets/boolean-helpers';
 
@@ -16,6 +18,9 @@ const uiImporter = importer ('ui');
 class Plugin extends Widget {
   constructor () {
     super (...arguments);
+
+    this._refs = {};
+    this._scrollEntityId = null;
 
     this.onCreateEntity = this.onCreateEntity.bind (this);
     this.onSwapExtended = this.onSwapExtended.bind (this);
@@ -41,6 +46,27 @@ class Plugin extends Widget {
     };
   }
 
+  _scrollIntoView (duration) {
+    if (
+      !this._scrollEntityId ||
+      !this._refs[this._scrollEntityId] ||
+      this._scrollEntityId !== this.props.extendedId
+    ) {
+      return;
+    }
+
+    scrollIntoViewIfNeeded (this._refs[this._scrollEntityId], {
+      duration,
+      offset: {
+        top: 3,
+      },
+    });
+  }
+
+  componentDidUpdate () {
+    this._scrollIntoView (150);
+  }
+
   onCreateEntity () {
     const service = this.props.id.split ('@')[0];
     this.doAs (service, 'add');
@@ -49,6 +75,7 @@ class Plugin extends Widget {
   onSwapExtended (entityId) {
     const service = this.props.id.split ('@')[0];
     this.doAs (service, 'extend', {entityId});
+    this._scrollEntityId = entityId;
   }
 
   onDeleteEntity (entityId) {
@@ -363,7 +390,15 @@ class Plugin extends Widget {
               : this.styles.classNames.compactedRow;
 
     return (
-      <Container kind="row-draggable" key={index}>
+      <Container
+        kind="row-draggable"
+        key={index}
+        ref={n => {
+          if (n) {
+            this._refs[entityId] = ReactDOM.findDOMNode (n);
+          }
+        }}
+      >
         <div className={rowClass}>
           {this.renderItem (entityId, extended, index)}
           {this.renderButtons (entityId, extended, numberOfIds)}
@@ -454,6 +489,8 @@ class Plugin extends Widget {
   }
 
   render () {
+    this._refs = {};
+
     if (!this.props.id || !this.props.entityIds) {
       return null;
     }
