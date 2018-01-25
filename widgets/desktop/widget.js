@@ -14,6 +14,7 @@ class Desktop extends Widget {
     super (...arguments);
     this.onChangeScreen = ::this.onChangeScreen;
     this.onChangeMandate = ::this.onChangeMandate;
+    this.onNextTheme = ::this.onNextTheme;
   }
 
   static get wiring () {
@@ -32,6 +33,10 @@ class Desktop extends Widget {
 
   onChangeMandate () {
     this.do ('change-mandate');
+  }
+
+  onNextTheme () {
+    this.do ('next-theme');
   }
 
   renderNofications () {
@@ -111,6 +116,11 @@ class Desktop extends Widget {
             <Container kind="top-bar">
               <TopBar desktopId={id} />
               <Container kind="main-tab-right">
+                <Button
+                  glyph="tint"
+                  kind="main-tab-right"
+                  onClick={this.onNextTheme}
+                />
                 <Button
                   glyph="tv"
                   kind="main-tab-right"

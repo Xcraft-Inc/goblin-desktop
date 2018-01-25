@@ -450,6 +450,12 @@ Goblin.registerQuest (goblinName, 'remove-tab', function (
   });
 });
 
+Goblin.registerQuest (goblinName, 'next-theme', function (quest) {
+  const labId = quest.goblin.getX ('labId');
+  const lab = quest.getGoblinAPI ('laboratory', labId);
+  lab.nextTheme ();
+});
+
 Goblin.registerQuest (goblinName, 'nav-to-context', function (
   quest,
   contextId
