@@ -57,6 +57,7 @@ class Plugin extends Widget {
 
     scrollIntoViewIfNeeded (this._refs[this._scrollEntityId], {
       duration,
+      // HACK: we need to fix the transitions in order to remove this offset
       offset: {
         top: 3,
       },
