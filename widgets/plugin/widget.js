@@ -154,130 +154,52 @@ class Plugin extends Widget {
       return null;
     }
 
-    if (extended) {
-      const itemClass = Bool.isTrue (this.props.embedded)
-        ? this.styles.classNames.extendedEmbeddedItem
-        : this.styles.classNames.extendedItem;
+    const itemClass = extended
+      ? Bool.isTrue (this.props.embedded)
+          ? this.styles.classNames.extendedEmbeddedItem
+          : this.styles.classNames.extendedItem
+      : Bool.isTrue (this.props.embedded)
+          ? this.styles.classNames.compactedEmbeddedItem
+          : this.styles.classNames.compactedItem;
 
-      let ExtendedUI = null;
-      if (Bool.isTrue (this.props.readonly)) {
-        ExtendedUI = this.WithState (
-          workitemUI.plugin.readonly.extend,
-          'entityId'
-        ) ('.entityId');
+    const key1 = Bool.isTrue (this.props.readonly) ? 'readonly' : 'edit';
+    const key2 = extended ? 'extend' : 'compact';
 
-        if (
-          workitemUI.mappers &&
-          workitemUI.mappers.plugin &&
-          workitemUI.mappers.plugin.readonly &&
-          workitemUI.mappers.plugin.readonly.extend
-        ) {
-          ExtendedUI = this.mapWidget (
-            ExtendedUI,
-            workitemUI.mappers.plugin.readonly.extend,
-            `backend.${entityId}`
-          );
-        }
-      } else {
-        ExtendedUI = this.WithState (
-          workitemUI.plugin.edit.extend,
-          'entityId'
-        ) ('.entityId');
+    let UI = this.WithState (workitemUI.plugin[key1][key2], 'entityId') (
+      '.entityId'
+    );
 
-        if (
-          workitemUI.mappers &&
-          workitemUI.mappers.plugin &&
-          workitemUI.mappers.plugin.edit.extend
-        ) {
-          ExtendedUI = this.mapWidget (
-            ExtendedUI,
-            workitemUI.mappers.plugin.edit.extend,
-            `backend.${entityId}`
-          );
-        }
-      }
-
-      return (
-        <div className={itemClass}>
-          <Workitem
-            id={workitemId}
-            entityId={entityId}
-            kind="form"
-            readonly={this.props.readonly}
-          >
-            <ExtendedUI
-              id={workitemId}
-              theme={this.context.theme}
-              entityId={entityId}
-              embeddedLevel={this.props.embeddedLevel}
-              origin={this.props.origin}
-            />
-          </Workitem>
-        </div>
-      );
-    } else {
-      const itemClass = Bool.isTrue (this.props.embedded)
-        ? this.styles.classNames.compactedEmbeddedItem
-        : this.styles.classNames.compactedItem;
-
-      let CompactedUI = null;
-      if (Bool.isTrue (this.props.readonly)) {
-        CompactedUI = this.WithState (
-          workitemUI.plugin.readonly.compact,
-          'entityId'
-        ) ('.entityId');
-
-        if (
-          workitemUI.mappers &&
-          workitemUI.mappers.plugin &&
-          workitemUI.mappers.plugin.readonly &&
-          workitemUI.mappers.plugin.readonly.compact
-        ) {
-          CompactedUI = this.mapWidget (
-            CompactedUI,
-            workitemUI.mappers.plugin.readonly.compact,
-            `backend.${entityId}`
-          );
-        }
-      } else {
-        CompactedUI = this.WithState (
-          workitemUI.plugin.edit.compact,
-          'entityId'
-        ) ('.entityId');
-
-        if (
-          workitemUI.mappers &&
-          workitemUI.mappers.plugin &&
-          workitemUI.mappers.plugin.edit.compact
-        ) {
-          CompactedUI = this.mapWidget (
-            CompactedUI,
-            workitemUI.mappers.plugin.edit.compact,
-            `backend.${entityId}`
-          );
-        }
-      }
-
-      return (
-        <div className={itemClass}>
-          <Workitem
-            id={workitemId}
-            entityId={entityId}
-            kind="form"
-            readonly={this.props.readonly}
-            dragControllerId={this.props.dragControllerId}
-          >
-            <CompactedUI
-              id={workitemId}
-              theme={this.context.theme}
-              entityId={entityId}
-              embeddedLevel={this.props.embeddedLevel}
-              origin={this.props.origin}
-            />
-          </Workitem>
-        </div>
+    if (
+      workitemUI.mappers &&
+      workitemUI.mappers.plugin &&
+      workitemUI.mappers.plugin[key1] &&
+      workitemUI.mappers.plugin[key1][key2]
+    ) {
+      UI = this.mapWidget (
+        UI,
+        workitemUI.mappers.plugin[key1][key2],
+        `backend.${entityId}`
       );
     }
+
+    return (
+      <div className={itemClass}>
+        <Workitem
+          id={workitemId}
+          entityId={entityId}
+          kind="form"
+          readonly={this.props.readonly}
+        >
+          <UI
+            id={workitemId}
+            theme={this.context.theme}
+            entityId={entityId}
+            embeddedLevel={this.props.embeddedLevel}
+            origin={this.props.origin}
+          />
+        </Workitem>
+      </div>
+    );
   }
 
   renderButtons (entityId, extended, numberOfIds) {
