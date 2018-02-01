@@ -456,6 +456,12 @@ Goblin.registerQuest (goblinName, 'next-theme', function (quest) {
   lab.nextTheme ();
 });
 
+Goblin.registerQuest (goblinName, 'change-theme', function (quest, name) {
+  const labId = quest.goblin.getX ('labId');
+  const lab = quest.getGoblinAPI ('laboratory', labId);
+  lab.changeTheme ({name});
+});
+
 Goblin.registerQuest (goblinName, 'nav-to-context', function (
   quest,
   contextId

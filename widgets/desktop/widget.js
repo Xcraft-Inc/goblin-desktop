@@ -1,20 +1,62 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Widget from 'laboratory/widget';
 import importer from 'laboratory/importer/';
+import {Unit} from 'electrum-theme';
 
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
+import Combo from 'gadgets/combo/widget';
+
 import Notifications from 'desktop/notifications/widget';
 
 const wiredNotifications = Widget.Wired (Notifications);
 const viewImporter = importer ('view');
 
+/******************************************************************************/
+
+let currentThemeName = 'default';
+
+const themes = [
+  {text: 'Standard', name: 'default'},
+  {text: 'Vert', name: 'default-green'},
+  {text: 'Vert spécial', name: 'special-green'},
+  {text: 'Vert arrondi', name: 'smooth-green'},
+  {text: 'Rose', name: 'default-pink'},
+  {text: 'Rose compact', name: 'compact-pink'},
+  {text: 'Monochrome compact', name: 'compact-mono'},
+  {text: 'Foncé', name: 'default-dark'},
+  {text: 'Dragula', name: 'default-dragula'},
+];
+
+/******************************************************************************/
+
 class Desktop extends Widget {
   constructor () {
     super (...arguments);
-    this.onChangeScreen = ::this.onChangeScreen;
-    this.onChangeMandate = ::this.onChangeMandate;
-    this.onNextTheme = ::this.onNextTheme;
+
+    this.comboButton = null;
+
+    this.state = {
+      showMenuTheme: false,
+    };
+
+    this.onChangeScreen = this.onChangeScreen.bind (this);
+    this.onChangeMandate = this.onChangeMandate.bind (this);
+    this.onNextTheme = this.onNextTheme.bind (this);
+    this.onChangeTheme = this.onChangeTheme.bind (this);
+    this.onShowMenuTheme = this.onShowMenuTheme.bind (this);
+    this.onHideMenuTheme = this.onHideMenuTheme.bind (this);
+  }
+
+  get showMenuTheme () {
+    return this.state.showMenuTheme;
+  }
+
+  set showMenuTheme (value) {
+    this.setState ({
+      showMenuTheme: value,
+    });
   }
 
   static get wiring () {
@@ -39,10 +81,58 @@ class Desktop extends Widget {
     this.do ('next-theme');
   }
 
+  onChangeTheme (name) {
+    currentThemeName = name;
+    this.do ('change-theme', {name});
+  }
+
+  onShowMenuTheme () {
+    this.showMenuTheme = true;
+  }
+
+  onHideMenuTheme () {
+    this.showMenuTheme = false;
+  }
+
+  /******************************************************************************/
+
   renderNofications () {
     const WiredNotifications = wiredNotifications (this.props.id);
 
     return <WiredNotifications />;
+  }
+
+  renderMenuTheme () {
+    if (this.showMenuTheme) {
+      const node = ReactDOM.findDOMNode (this.comboButton);
+      const rect = node.getBoundingClientRect ();
+      const top = Unit.add (
+        rect.bottom + 'px',
+        this.context.theme.shapes.flyingBalloonTriangleSize
+      );
+
+      const list = [];
+      for (const theme of themes) {
+        list.push ({
+          text: theme.text,
+          active: theme.name === currentThemeName,
+          action: () => this.onChangeTheme (theme.name),
+        });
+      }
+
+      return (
+        <Combo
+          menuType="wrap"
+          width="200px"
+          left={(rect.left + rect.right) / 2}
+          top={top}
+          list={list}
+          close={this.onHideMenuTheme}
+        />
+      );
+    } else {
+      return null;
+    }
   }
 
   render () {
@@ -117,9 +207,12 @@ class Desktop extends Widget {
               <TopBar desktopId={id} />
               <Container kind="main-tab-right">
                 <Button
+                  ref={x => (this.comboButton = x)}
                   glyph="tint"
                   kind="main-tab-right"
-                  onClick={this.onNextTheme}
+                  active={this.showMenuTheme}
+                  tooltip="Choix du thème"
+                  onClick={this.onShowMenuTheme}
                 />
                 <Button
                   glyph="tv"
@@ -151,6 +244,7 @@ class Desktop extends Widget {
             <div className={contentClass}>
               <Content desktopId={id} />
               {this.renderNofications ()}
+              {this.renderMenuTheme ()}
             </div>
             <Container kind="footer" />
           </Container>
@@ -160,4 +254,5 @@ class Desktop extends Widget {
   }
 }
 
+/******************************************************************************/
 export default Desktop;
