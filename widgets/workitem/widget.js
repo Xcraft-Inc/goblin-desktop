@@ -44,9 +44,12 @@ class Workitem extends Form {
   }
 
   onEdit () {
-    const entity = this.getEntityById (this.props.entityId).toJS ();
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'edit', {entity});
+    const e = this.getEntityById (this.props.entityId);
+    if (e) {
+      const entity = e.toJS ();
+      const service = this.props.id.split ('@')[0];
+      this.doAs (service, 'edit', {entity});
+    }
   }
 
   onDelete () {
