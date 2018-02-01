@@ -44,8 +44,6 @@ class Desktop extends Widget {
     this.onChangeScreen = this.onChangeScreen.bind (this);
     this.onChangeMandate = this.onChangeMandate.bind (this);
     this.onChangeTheme = this.onChangeTheme.bind (this);
-    this.onShowMenuTheme = this.onShowMenuTheme.bind (this);
-    this.onHideMenuTheme = this.onHideMenuTheme.bind (this);
   }
 
   get showMenuTheme () {
@@ -81,14 +79,6 @@ class Desktop extends Widget {
     this.do ('change-theme', {name});
   }
 
-  onShowMenuTheme () {
-    this.showMenuTheme = true;
-  }
-
-  onHideMenuTheme () {
-    this.showMenuTheme = false;
-  }
-
   /******************************************************************************/
 
   renderNofications () {
@@ -122,7 +112,7 @@ class Desktop extends Widget {
           left={(rect.left + rect.right) / 2}
           top={top}
           list={list}
-          close={this.onHideMenuTheme}
+          close={() => (this.showMenuTheme = false)}
         />
       );
     } else {
@@ -207,7 +197,7 @@ class Desktop extends Widget {
                   kind="main-tab-right"
                   active={this.showMenuTheme}
                   tooltip="Choix du thème"
-                  onClick={this.onShowMenuTheme}
+                  onClick={() => (this.showMenuTheme = true)}
                 />
                 <Button
                   glyph="tv"
