@@ -43,7 +43,6 @@ class Desktop extends Widget {
 
     this.onChangeScreen = this.onChangeScreen.bind (this);
     this.onChangeMandate = this.onChangeMandate.bind (this);
-    this.onNextTheme = this.onNextTheme.bind (this);
     this.onChangeTheme = this.onChangeTheme.bind (this);
     this.onShowMenuTheme = this.onShowMenuTheme.bind (this);
     this.onHideMenuTheme = this.onHideMenuTheme.bind (this);
@@ -75,10 +74,6 @@ class Desktop extends Widget {
 
   onChangeMandate () {
     this.do ('change-mandate');
-  }
-
-  onNextTheme () {
-    this.do ('next-theme');
   }
 
   onChangeTheme (name) {
