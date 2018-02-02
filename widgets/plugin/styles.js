@@ -5,8 +5,12 @@ import {ColorManipulator} from 'electrum-theme';
 
 export default function styles (theme, props) {
   const m = theme.shapes.containerMargin;
+  const mm = Unit.multiply (m, -1);
   const halfMargin = Unit.multiply (m, 0.5);
   const quartMargin = Unit.multiply (m, 0.25);
+
+  const rm = Unit.add (halfMargin, '32px');
+  const mrm = Unit.multiply (rm, -1);
 
   //--------//
   //  Box  //
@@ -23,8 +27,8 @@ export default function styles (theme, props) {
 
   const embeddedBoxStyle = {
     flexGrow: '1',
-    margin: '20px -42px 0px 0px',
-    padding: '10px 42px 0px 0px',
+    margin: m + ' ' + mrm + ' 0px 0px',
+    padding: '10px ' + rm + ' 0px 0px',
     boxShadow: '0px -6px 12px 0px rgba(0,0,0, 0.1)',
     //- backgroundColor: 'rgba(0,0,0, 0.02)',
     //- boxShadow: 'inset 0px 6px 12px 0px rgba(0,0,0, 0.05)',
@@ -32,8 +36,8 @@ export default function styles (theme, props) {
 
   const emptyembeddedBoxStyle = {
     flexGrow: '1',
-    margin: '20px -42px -10px 0px',
-    padding: '10px 42px 0px 0px',
+    margin: m + ' ' + mrm + ' -10px 0px',
+    padding: '10px ' + rm + ' 0px 0px',
     boxShadow: '0px -6px 12px 0px rgba(0,0,0, 0.1)',
     //- backgroundColor: 'rgba(0,0,0, 0.02)',
     //- boxShadow: 'inset 0px 6px 12px 0px rgba(0,0,0, 0.05)',
@@ -84,8 +88,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px -42px 2px 0px',
-    padding: '0px 20px',
+    margin: '0px ' + mrm + ' 2px 0px',
+    padding: '0px ' + m,
     transition: theme.transitions.easeOut (500),
   };
 
@@ -103,8 +107,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '0px -42px 0px 0px',
-    padding: '5px 20px',
+    margin: '0px ' + mrm + ' 0px 0px',
+    padding: '5px ' + m,
     borderTop: '1px solid rgba(0,0,0,0.1)',
     transition: theme.transitions.easeOut (500),
   };
@@ -114,7 +118,7 @@ export default function styles (theme, props) {
     flexDirection: 'row',
     flexGrow: '1',
     margin: '10px 0px 12px 0px',
-    padding: '20px',
+    padding: m,
     boxShadow: boxShadow,
     borderRadius: '5px',
     transition: theme.transitions.easeOut (500),
@@ -124,8 +128,8 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    margin: '10px -42px 12px 0px',
-    padding: '20px',
+    margin: '10px ' + mrm + ' 12px 0px',
+    padding: m,
     boxShadow: boxShadow,
     borderRadius: '5px',
     transition: theme.transitions.easeOut (500),
@@ -180,7 +184,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    margin: '0px -20px 0px 0px',
+    margin: '0px ' + mm + ' 0px 0px',
     padding: '0px ' + quartMargin,
   };
 
@@ -188,14 +192,14 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    margin: '0px -20px 0px 0px',
+    margin: '0px ' + mm + ' 0px 0px',
     padding: '0px ' + quartMargin,
   };
 
   const compactedReadonlyButtonsStyle = {
     display: 'flex',
     flexDirection: 'row',
-    margin: '0px -20px 0px 0px',
+    margin: '0px ' + mm + ' 0px 0px',
     padding: '0px ' + quartMargin,
   };
 
@@ -203,7 +207,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    margin: '0px -20px 0px 0px',
+    margin: '0px ' + mm + ' 0px 0px',
     padding: '0px ' + quartMargin,
   };
 
@@ -211,7 +215,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    margin: '-20px -20px -20px 0px',
+    margin: mm + ' ' + mm + ' ' + mm + ' 0px',
     padding: quartMargin,
     backgroundColor: editBackground,
     borderRadius: '0px 5px 5px 0px',
@@ -221,7 +225,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    margin: '-20px -20px -20px 0px',
+    margin: mm + ' ' + mm + ' ' + mm + ' 0px',
     padding: quartMargin,
     backgroundColor: editBackground,
     borderRadius: '0px 5px 5px 0px',
@@ -231,7 +235,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    margin: '-20px -20px -20px 0px',
+    margin: mm + ' ' + mm + ' ' + mm + ' 0px',
     padding: quartMargin,
     backgroundColor: readonlyBackground,
     borderRadius: '0px 5px 5px 0px',
@@ -241,7 +245,7 @@ export default function styles (theme, props) {
     display: 'flex',
     flexDirection: 'column',
     width: '32px',
-    margin: '-20px -20px -20px 0px',
+    margin: mm + ' ' + mm + ' ' + mm + ' 0px',
     padding: quartMargin,
     backgroundColor: readonlyBackground,
     borderRadius: '0px 5px 5px 0px',

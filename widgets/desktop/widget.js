@@ -15,7 +15,7 @@ const viewImporter = importer ('view');
 
 /******************************************************************************/
 
-let currentThemeName = 'default';
+let currentThemeName = 'default'; // FIXME: Move to state !?
 
 const themes = [
   {text: 'Standard', name: 'default'},
