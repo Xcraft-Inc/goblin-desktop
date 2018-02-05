@@ -14,6 +14,8 @@ class Workitem extends Form {
     this.onCancel = this.onCancel.bind (this);
     this.onEdit = this.onEdit.bind (this);
     this.onDelete = this.onDelete.bind (this);
+    this.onArchive = this.onArchive.bind (this);
+    this.onPublish = this.onPublish.bind (this);
   }
 
   getChildContext () {
@@ -34,7 +36,6 @@ class Workitem extends Form {
 
   onSubmit () {
     const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'version');
     this.doAs (service, 'close', {kind: 'validate'});
   }
 
@@ -55,6 +56,18 @@ class Workitem extends Form {
   onDelete () {
     const service = this.props.id.split ('@')[0];
     this.doAs (service, 'delete-entity');
+    this.hideHinter ();
+  }
+
+  onPublish () {
+    const service = this.props.id.split ('@')[0];
+    this.doAs (service, 'publish-entity');
+    this.hideHinter ();
+  }
+
+  onArchive () {
+    const service = this.props.id.split ('@')[0];
+    this.doAs (service, 'archive-entity');
     this.hideHinter ();
   }
 
@@ -79,7 +92,7 @@ class Workitem extends Form {
           glyph="trash"
           text="Supprimer"
           place="2/2"
-          onClick={this.onDelete}
+          onClick={this.onArchive}
         />
       </Container>
     );
