@@ -36,17 +36,11 @@ class Board extends Widget {
     const workitem = this.props.id.split ('@')[0];
 
     const workitemUI = uiImporter (workitem);
-    let EditorUI = this.WithState (workitemUI.board.edit, 'entityId') (
-      '.entityId'
-    );
-    if (
-      workitemUI.mappers &&
-      workitemUI.mappers.board &&
-      workitemUI.mappers.board.edit
-    ) {
+    let EditorUI = this.WithState (workitemUI.board, 'entityId') ('.entityId');
+    if (workitemUI.mappers && workitemUI.mappers.board) {
       EditorUI = this.mapWidget (
         EditorUI,
-        workitemUI.mappers.board.edit,
+        workitemUI.mappers.board,
         `backend.${entityId}`
       );
     }
