@@ -219,6 +219,22 @@ class Workitem extends Form {
     );
   }
 
+  renderDesk () {
+    const Form = this.Form;
+    const deskClass = this.styles.classNames.desk;
+    return (
+      <Form
+        component={props => {
+          return <div className={deskClass}>{this.props.children}</div>;
+        }}
+        validateOn="submit"
+        model={`backend.${this.props.entityId}`}
+      >
+        {this.props.children}
+      </Form>
+    );
+  }
+
   render () {
     if (!this.props.id) {
       return <div>missing id props on Workitem component</div>;
@@ -239,7 +255,10 @@ class Workitem extends Form {
         return this.renderBoard ();
       case 'roadbook':
         return this.renderRoadbook ();
+      case 'desk':
+        return this.renderDesk ();
       default:
+        console.error (`Workitem not support kind=${kind}`);
         return null;
     }
   }
