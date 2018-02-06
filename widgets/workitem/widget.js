@@ -271,7 +271,7 @@ class Workitem extends Form {
       case 'desk':
         return this.renderDesk ();
       default:
-        console.error (`Workitem not support kind=${kind}`);
+        console.error (`Workitem does not support kind='${kind}'`);
         return null;
     }
   }
