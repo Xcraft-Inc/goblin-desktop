@@ -239,7 +239,7 @@ Goblin.registerQuest (goblinName, 'clean-workitem', function (
   quest.dispatch ('remove-workitem', {widgetId: workitemId});
 });
 
-Goblin.registerQuest (goblinName, 'remove-workitem', function (
+Goblin.registerQuest (goblinName, 'remove-workitem', function* (
   quest,
   workitem,
   close
@@ -259,11 +259,12 @@ Goblin.registerQuest (goblinName, 'remove-workitem', function (
 
   // Remove the tab
   const tabId = quest.goblin.getState ().get (`workitems.${widgetId}.tabId`);
-  desk.removeTab ({
+  yield desk.removeTab ({
     workitemId: widgetId,
     contextId: workitem.contextId,
     tabId,
     navToLastWorkitem: true,
+    close,
   });
 
   quest.do ({widgetId});
@@ -274,10 +275,7 @@ Goblin.registerQuest (goblinName, 'remove-workitem', function (
     });
   }
 
-  quest.evt (`workitem.closed`, {
-    desktopId: quest.goblin.id,
-    workitemId: widgetId,
-  });
+  quest.evt (`${widgetId}.workitem.closed`);
 });
 
 Goblin.registerQuest (goblinName, 'add-workitem', function* (
@@ -434,19 +432,21 @@ Goblin.registerQuest (goblinName, 'add-tab', function* (
   return tabId;
 });
 
-Goblin.registerQuest (goblinName, 'remove-tab', function (
+Goblin.registerQuest (goblinName, 'remove-tab', function* (
   quest,
   contextId,
   workitemId,
   tabId,
-  navToLastWorkitem
+  navToLastWorkitem,
+  close
 ) {
   const tabs = quest.getAPI ('tabs');
-  tabs.remove ({
+  yield tabs.remove ({
     tabId,
     contextId,
     workitemId,
     navToLastWorkitem,
+    close,
   });
 });
 

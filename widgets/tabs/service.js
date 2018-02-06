@@ -81,17 +81,24 @@ Goblin.registerQuest (goblinName, 'add', function (
   return workitemId;
 });
 
-Goblin.registerQuest (goblinName, 'remove', function (
+Goblin.registerQuest (goblinName, 'remove', function* (
   quest,
   tabId,
   contextId,
   workitemId,
-  navToLastWorkitem
+  navToLastWorkitem,
+  close
 ) {
   const i = quest.openInventory ();
-  const tabButton = i.getAPI (tabId);
-  if (tabButton) {
-    tabButton.delete ();
+
+  const wi = i.getAPI (workitemId);
+  if (close && wi && wi.close) {
+    yield wi.close ({kind: 'terminate'});
+  } else {
+    const tabButton = i.getAPI (tabId);
+    if (tabButton) {
+      tabButton.delete ();
+    }
   }
 
   quest.evt ('removed', {workitemId});
