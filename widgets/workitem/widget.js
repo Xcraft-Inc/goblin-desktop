@@ -90,7 +90,7 @@ class Workitem extends Form {
           grow="0.5"
           kind="action"
           glyph="trash"
-          text="Supprimer"
+          text="Archiver"
           place="2/2"
           onClick={this.onArchive}
         />
@@ -99,28 +99,55 @@ class Workitem extends Form {
   }
 
   renderEditorActions () {
-    return (
-      <Container kind="actions">
-        <Button
-          width="0px"
-          grow="1"
-          kind="action"
-          glyph="check"
-          text="Terminer"
-          place="1/2"
-          onClick={this.onSubmit}
-        />
-        <Button
-          width="0px"
-          grow="1"
-          kind="action"
-          place="2/2"
-          glyph="ban"
-          text="Annuler"
-          onClick={this.onCancel}
-        />
-      </Container>
-    );
+    switch (this.props.status) {
+      case 'archived':
+      case 'draft':
+        return (
+          <Container kind="actions">
+            <Button
+              width="0px"
+              grow="1"
+              kind="action"
+              glyph="check"
+              text="Publier"
+              place="1/2"
+              onClick={this.onPublish}
+            />
+            <Button
+              width="0px"
+              grow="1"
+              kind="action"
+              place="2/2"
+              glyph="ban"
+              text="Annuler"
+              onClick={this.onCancel}
+            />
+          </Container>
+        );
+      case 'published':
+        return (
+          <Container kind="actions">
+            <Button
+              width="0px"
+              grow="1"
+              kind="action"
+              glyph="check"
+              text="Terminer"
+              place="1/2"
+              onClick={this.onSubmit}
+            />
+            <Button
+              width="0px"
+              grow="1"
+              kind="action"
+              place="2/2"
+              glyph="ban"
+              text="Annuler"
+              onClick={this.onCancel}
+            />
+          </Container>
+        );
+    }
   }
 
   renderEditor () {

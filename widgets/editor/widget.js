@@ -2,7 +2,6 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 import importer from 'laboratory/importer/';
 import Workitem from 'desktop/workitem/widget';
-import {actions} from 'react-redux-form/immutable';
 
 const uiImporter = importer ('ui');
 
@@ -51,14 +50,20 @@ class Editor extends Widget {
         `backend.${entityId}`
       );
     }
+
+    const Editor = this.mapWidget (
+      Workitem,
+      'status',
+      `backend.${entityId}.meta.status`
+    );
     return (
-      <Workitem kind="editor" id={this.props.id} entityId={this.props.entityId}>
+      <Editor kind="editor" id={this.props.id} entityId={this.props.entityId}>
         <EditorUI
           {...this.props}
           theme={this.context.theme}
           do={this.doProxy}
         />
-      </Workitem>
+      </Editor>
     );
   }
 }
