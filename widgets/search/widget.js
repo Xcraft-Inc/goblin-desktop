@@ -84,9 +84,9 @@ class Search extends Form {
                   </Container>
                 );
               }}
-              mapItem={customer => {
-                const text = customer.get ('meta.summaries.description');
-                return {text, id: customer.get ('id')};
+              mapItem={entity => {
+                const text = entity.get ('meta.summaries.description');
+                return {text, id: entity.get ('id')};
               }}
             />
           </Container>
