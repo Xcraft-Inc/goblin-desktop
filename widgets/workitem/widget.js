@@ -74,28 +74,55 @@ class Workitem extends Form {
   /******************************************************************************/
 
   renderDetailActions () {
-    return (
-      <Container kind="actions">
-        <Button
-          width="0px"
-          grow="1"
-          kind="action"
-          glyph="pencil"
-          text="Editer"
-          place="1/2"
-          onClick={this.onEdit}
-        />
-        <Button
-          width="0px"
-          grow="0.5"
-          kind="action"
-          glyph="trash"
-          text="Archiver"
-          place="2/2"
-          onClick={this.onArchive}
-        />
-      </Container>
-    );
+    switch (this.props.status) {
+      case 'draft':
+      case 'archived':
+        return (
+          <Container kind="actions">
+            <Button
+              width="0px"
+              grow="1"
+              kind="action"
+              glyph="pencil"
+              text="Editer"
+              place="1/2"
+              onClick={this.onEdit}
+            />
+            <Button
+              width="0px"
+              grow="0.5"
+              kind="action"
+              glyph="check"
+              text="Publier"
+              place="2/2"
+              onClick={this.onPublish}
+            />
+          </Container>
+        );
+      case 'published':
+        return (
+          <Container kind="actions">
+            <Button
+              width="0px"
+              grow="1"
+              kind="action"
+              glyph="pencil"
+              text="Editer"
+              place="1/2"
+              onClick={this.onEdit}
+            />
+            <Button
+              width="0px"
+              grow="0.5"
+              kind="action"
+              glyph="archive"
+              text="Archiver"
+              place="2/2"
+              onClick={this.onArchive}
+            />
+          </Container>
+        );
+    }
   }
 
   renderEditorActions () {

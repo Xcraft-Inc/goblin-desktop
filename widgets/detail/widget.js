@@ -73,13 +73,19 @@ class Detail extends Widget {
       );
     }
     const workitemId = detailWidgetId;
+
+    const Detail = this.mapWidget (
+      Workitem,
+      'status',
+      `backend.${entityId}.meta.status`
+    );
     return (
       <Container
         kind={kind ? kind : 'view-right'}
         width={width ? width : '700px'}
         busy={this.props.loading}
       >
-        <Workitem
+        <Detail
           kind="detail"
           id={workitemId}
           entityId={entityId}
@@ -94,7 +100,7 @@ class Detail extends Widget {
             do={this.doProxy}
             entityId={entityId}
           />
-        </Workitem>
+        </Detail>
       </Container>
     );
   }
