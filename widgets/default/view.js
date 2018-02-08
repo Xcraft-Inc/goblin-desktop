@@ -5,6 +5,7 @@ import View from 'laboratory/view';
 import Container from 'gadgets/container/widget';
 import Editor from 'desktop/editor/widget';
 import Search from 'desktop/search/widget';
+import Wizard from 'desktop/wizard/widget';
 
 const viewImporter = importer ('view');
 const widgetImporter = importer ('widget');
@@ -27,6 +28,11 @@ class DefaultView extends View {
 
     if (workitem.endsWith ('-search')) {
       wireWidget = Widget.Wired (Search);
+      LeftPanel = wireWidget (workitemId);
+    }
+
+    if (workitem.endsWith ('-wizard')) {
+      wireWidget = Widget.Wired (Wizard);
       LeftPanel = wireWidget (workitemId);
     }
 
