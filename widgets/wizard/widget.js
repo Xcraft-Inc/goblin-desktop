@@ -24,6 +24,7 @@ class Wizard extends Form {
 
   onNext () {
     const service = this.props.id.split ('@')[0];
+    this.submitAs (service);
     this.doAs (service, 'next');
   }
 
@@ -43,7 +44,7 @@ class Wizard extends Form {
 
     if (!wizardUI[this.props.step]) {
       Step = props => {
-        return <div>missing step {this.props.step}</div>;
+        return null;
       };
     } else {
       Step = wizardUI[this.props.step];

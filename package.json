@@ -2,6 +2,7 @@
   "name": "goblin-desktop",
   "version": "0.0.1",
   "description": "Goblin Desktop",
+  "main": "./builders.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
