@@ -178,7 +178,7 @@ class Desktop extends Widget {
             <Button
               textTransform="none"
               text="Poly"
-              glyph="cube"
+              glyph="solid/cube"
               tooltip="Changer de mandat"
               kind="task-logo"
               onClick={this.onChangeMandate}
@@ -193,20 +193,20 @@ class Desktop extends Widget {
               <Container kind="main-tab-right">
                 <Button
                   ref={x => (this.comboButton = x)}
-                  glyph="tint"
+                  glyph="solid/tint"
                   kind="main-tab-right"
                   active={this.showMenuTheme}
                   tooltip="Choix du thème"
                   onClick={() => (this.showMenuTheme = true)}
                 />
                 <Button
-                  glyph="tv"
+                  glyph="solid/tv"
                   kind="main-tab-right"
                   onClick={this.onChangeScreen}
                 />
                 {window.zoomable
                   ? <Button
-                      glyph="plus"
+                      glyph="solid/plus"
                       kind="main-tab-right"
                       onClick={() => {
                         window.zoom ();
@@ -215,7 +215,7 @@ class Desktop extends Widget {
                   : null}
                 {window.zoomable
                   ? <Button
-                      glyph="minus"
+                      glyph="solid/minus"
                       kind="main-tab-right"
                       onClick={() => {
                         window.unZoom ();

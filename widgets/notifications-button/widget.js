@@ -18,7 +18,7 @@ class NotificationsButton extends Widget {
     return (
       <Button
         text="Notifications"
-        glyph="bell"
+        glyph="solid/bell"
         glyphPosition="right"
         kind="view-tab-right"
         badgeValue={this.props.notReadCount}

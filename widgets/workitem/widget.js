@@ -83,7 +83,7 @@ class Workitem extends Form {
               width="0px"
               grow="1"
               kind="action"
-              glyph="pencil"
+              glyph="solid/pencil-alt"
               text="Editer"
               place="1/2"
               onClick={this.onEdit}
@@ -92,7 +92,7 @@ class Workitem extends Form {
               width="0px"
               grow="0.5"
               kind="action"
-              glyph="check"
+              glyph="solid/check"
               text="Publier"
               place="2/2"
               onClick={this.onPublish}
@@ -106,7 +106,7 @@ class Workitem extends Form {
               width="0px"
               grow="1"
               kind="action"
-              glyph="pencil"
+              glyph="solid/pencil-alt"
               text="Editer"
               place="1/2"
               onClick={this.onEdit}
@@ -115,7 +115,7 @@ class Workitem extends Form {
               width="0px"
               grow="0.5"
               kind="action"
-              glyph="archive"
+              glyph="solid/archive"
               text="Archiver"
               place="2/2"
               onClick={this.onArchive}
@@ -135,7 +135,7 @@ class Workitem extends Form {
               width="0px"
               grow="1"
               kind="action"
-              glyph="check"
+              glyph="solid/check"
               text="Publier"
               place="1/2"
               onClick={this.onPublish}
@@ -145,7 +145,7 @@ class Workitem extends Form {
               grow="1"
               kind="action"
               place="2/2"
-              glyph="ban"
+              glyph="solid/ban"
               text="Annuler"
               onClick={this.onCancel}
             />
@@ -158,7 +158,7 @@ class Workitem extends Form {
               width="0px"
               grow="1"
               kind="action"
-              glyph="check"
+              glyph="solid/check"
               text="Terminer"
               place="1/2"
               onClick={this.onSubmit}
@@ -168,7 +168,7 @@ class Workitem extends Form {
               grow="1"
               kind="action"
               place="2/2"
-              glyph="ban"
+              glyph="solid/ban"
               text="Annuler"
               onClick={this.onCancel}
             />

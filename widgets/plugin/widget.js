@@ -136,7 +136,7 @@ class Plugin extends Widget {
           <Label text={title} grow="1" kind="title" />
           {canAdd
             ? <Button
-                glyph="plus"
+                glyph="solid/plus"
                 text="Ajouter"
                 glyphPosition="right"
                 onClick={this.onCreateEntity}
@@ -228,7 +228,7 @@ class Plugin extends Widget {
           <Button
             width="32px"
             kind={kind}
-            glyph="angle-up"
+            glyph="solid/angle-up"
             glyphSize="180%"
             tooltip="Replier"
             active="false"
@@ -240,7 +240,7 @@ class Plugin extends Widget {
           <Button
             width="32px"
             kind={kind}
-            glyph="pencil"
+            glyph="solid/pencil-alt"
             tooltip="Editer"
             onClick={() => this.onEditEntity (entityId)}
           />
@@ -248,7 +248,7 @@ class Plugin extends Widget {
             ? <Button
                 width="32px"
                 kind={kind}
-                glyph="trash"
+                glyph="solid/trash"
                 tooltip="Supprimer"
                 onClick={() => this.onDeleteEntity (entityId)}
               />
@@ -277,7 +277,7 @@ class Plugin extends Widget {
             ? <Button
                 width="32px"
                 kind={kind}
-                glyph="pencil"
+                glyph="solid/pencil-alt"
                 tooltip="Editer"
                 onClick={() => this.onEditEntity (entityId)}
               />
@@ -285,7 +285,7 @@ class Plugin extends Widget {
           <Button
             width="32px"
             kind={kind}
-            glyph="angle-down"
+            glyph="solid/angle-down"
             glyphSize="180%"
             tooltip="Etendre"
             active="false"

@@ -74,7 +74,7 @@ class Wizard extends Form {
             grow="1"
             kind="action"
             place="1/1"
-            glyph="step-forward"
+            glyph="solid/step-forward"
             text="Suivant"
             onClick={this.onNext}
           />

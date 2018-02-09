@@ -54,7 +54,7 @@ class Search extends Form {
                 <LabelTextField
                   defaultFocus="true"
                   hinter={type}
-                  labelGlyph="search"
+                  labelGlyph="solid/search"
                   hintText={hintText}
                   grow="1"
                 />

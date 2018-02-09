@@ -81,7 +81,7 @@ class Tabs extends Widget {
                   active={currentTab === wid ? 'true' : 'false'}
                 />
                 <Button
-                  glyph="close"
+                  glyph="solid/times"
                   kind="view-tab"
                   show={show}
                   onClick={() => {

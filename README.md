@@ -56,7 +56,7 @@ widgets directory:
 export default [
   {
     text: 'Search',
-    glyph: 'search',
+    glyph: 'solid/search',
     workitem: {
       name: 'mission-search',
       icon: 'search',
@@ -67,7 +67,7 @@ export default [
   },
   {
     text: 'Mission',
-    glyph: 'plus',
+    glyph: 'solid/plus',
     workitem: {
       name: 'mission-workflow',
     },
