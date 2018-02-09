@@ -34,7 +34,9 @@ class Notifications extends Widget {
       <div className={headerClass}>
         <div className={headerRowClass}>
           <Button
-            glyph={this.props.dnd === 'true' ? 'toggle-on' : 'toggle-off'}
+            glyph={
+              this.props.dnd === 'true' ? 'solid/toggle-on' : 'solid/toggle-off'
+            }
             text="Ne pas me déranger"
             kind="button-notification"
             onClick={() => this.doAs ('desktop', 'toggle-dnd')}
@@ -42,7 +44,11 @@ class Notifications extends Widget {
         </div>
         <div className={headerRowClass}>
           <Button
-            glyph={this.props.onlyNews === 'true' ? 'toggle-on' : 'toggle-off'}
+            glyph={
+              this.props.onlyNews === 'true'
+                ? 'solid/toggle-on'
+                : 'solid/toggle-off'
+            }
             text="Seulement les nouvelles"
             kind="button-notification"
             onClick={() => this.doAs ('desktop', 'toggle-only-news')}

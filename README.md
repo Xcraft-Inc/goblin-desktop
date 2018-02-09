@@ -59,7 +59,7 @@ export default [
     glyph: 'solid/search',
     workitem: {
       name: 'mission-search',
-      icon: 'search',
+      icon: 'solid/search',
       isInWorkspace: true,
       isClosable: true,
       navigate: true,
