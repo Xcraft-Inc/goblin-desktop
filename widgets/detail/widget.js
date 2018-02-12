@@ -93,6 +93,7 @@ class Detail extends Widget {
             return <div>Détails</div>;
           }}
           readonly="true"
+          dragServiceId={this.props.dragServiceId}
         >
           <DetailUI
             id={workitemId}

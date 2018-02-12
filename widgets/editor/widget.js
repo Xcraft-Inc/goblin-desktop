@@ -57,7 +57,12 @@ class Editor extends Widget {
       `backend.${entityId}.meta.status`
     );
     return (
-      <Editor kind="editor" id={this.props.id} entityId={this.props.entityId}>
+      <Editor
+        kind="editor"
+        id={this.props.id}
+        entityId={this.props.entityId}
+        dragServiceId={this.props.dragServiceId}
+      >
         <EditorUI
           {...this.props}
           theme={this.context.theme}

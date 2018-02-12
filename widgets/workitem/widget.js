@@ -23,6 +23,7 @@ class Workitem extends Form {
       readonly: this.props.readonly,
       id: this.props.id,
       entityId: this.props.entityId,
+      dragServiceId: this.props.dragServiceId,
     };
   }
 
@@ -31,6 +32,7 @@ class Workitem extends Form {
       readonly: PropTypes.any,
       id: PropTypes.string,
       entityId: PropTypes.string,
+      dragServiceId: PropTypes.string,
     };
   }
 

@@ -189,6 +189,7 @@ class Plugin extends Widget {
           entityId={entityId}
           kind="form"
           readonly={this.props.readonly}
+          dragServiceId={this.props.dragServiceId}
         >
           <UI
             id={workitemId}

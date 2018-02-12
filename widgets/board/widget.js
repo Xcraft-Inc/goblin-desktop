@@ -44,7 +44,12 @@ class Board extends Widget {
       );
     }
     return (
-      <Workitem kind="board" id={this.props.id} entityId={this.props.entityId}>
+      <Workitem
+        kind="board"
+        id={this.props.id}
+        entityId={this.props.entityId}
+        dragServiceId={this.props.dragServiceId}
+      >
         <EditorUI
           {...this.props}
           theme={this.context.theme}
