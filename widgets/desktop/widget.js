@@ -178,7 +178,7 @@ class Desktop extends Widget {
             <Button
               textTransform="none"
               text="Poly"
-              glyph="solid/cube"
+              glyph="light/cube"
               tooltip="Changer de mandat"
               kind="task-logo"
               onClick={this.onChangeMandate}

@@ -241,7 +241,7 @@ class Plugin extends Widget {
           <Button
             width="32px"
             kind={kind}
-            glyph="solid/pencil-alt"
+            glyph="solid/pencil"
             tooltip="Editer"
             onClick={() => this.onEditEntity (entityId)}
           />
@@ -278,7 +278,7 @@ class Plugin extends Widget {
             ? <Button
                 width="32px"
                 kind={kind}
-                glyph="solid/pencil-alt"
+                glyph="solid/pencil"
                 tooltip="Editer"
                 onClick={() => this.onEditEntity (entityId)}
               />
