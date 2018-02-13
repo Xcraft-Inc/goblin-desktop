@@ -60,7 +60,7 @@ export default [
     workitem: {
       name: 'mission-search',
       icon: 'solid/search',
-      isInWorkspace: true,
+      kind: 'tab',
       isClosable: true,
       navigate: true,
     },

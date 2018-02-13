@@ -350,18 +350,23 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
     )
   );
 
-  if (workitem.isInWorkspace && workitem.kind !== 'system') {
-    // Add a tab
-    const tabId = yield desk.addTab ({
-      workitemId: widgetId,
-      view: workitem.view,
-      contextId: workitem.contextId,
-      name: workitem.description,
-      glyph: workitem.icon,
-      closable: true,
-      navigate: !!navigate,
-    });
-    quest.do ({widgetId, tabId});
+  switch (workitem.kind) {
+    case 'modal':
+      break;
+    case 'tab':
+    default: {
+      const tabId = yield desk.addTab ({
+        workitemId: widgetId,
+        view: workitem.view,
+        contextId: workitem.contextId,
+        name: workitem.description,
+        glyph: workitem.icon,
+        closable: true,
+        navigate: !!navigate,
+      });
+      quest.do ({widgetId, tabId});
+      break;
+    }
   }
 
   quest.evt (`workitem.added`, {
