@@ -85,6 +85,14 @@ module.exports = config => {
       return state.merge ('form', action.get ('form'));
     };
     Goblin.registerQuest (goblinName, stepName, step.quest);
+
+    for (const action in step.actions) {
+      const actionQuest = `${stepName}-${action}`;
+      logicHandlers[actionQuest] = step.actions[action];
+      Goblin.registerQuest (goblinName, actionQuest, function (quest) {
+        quest.do ();
+      });
+    }
   }
 
   Goblin.registerQuest (goblinName, 'delete', function (quest) {});
