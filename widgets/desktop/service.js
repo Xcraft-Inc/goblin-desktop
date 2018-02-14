@@ -351,8 +351,9 @@ Goblin.registerQuest (goblinName, 'add-workitem', function* (
   );
 
   switch (workitem.kind) {
-    case 'tab':
-    default: {
+    default:
+      break;
+    case 'tab': {
       const tabId = yield desk.addTab ({
         workitemId: widgetId,
         view: workitem.view,
