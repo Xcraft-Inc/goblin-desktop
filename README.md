@@ -17,16 +17,11 @@ const desktop = yield quest.createFor ('laboratory', labId, 'desktop', {
 });
 ```
 
-### create (labId, onChangeMandate)
+### create (labId)
 
 #### labId (string)
 
 The famouse laboratory identifier looks like: `laboratory@some-long-uuid-v4`
-
-#### onChangeMandate (optional string)
-
-A quest to run when the user click the mandate top-left button ex:
-`mandate.open`
 
 ## Describing the desktop
 
