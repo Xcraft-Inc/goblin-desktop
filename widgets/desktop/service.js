@@ -129,11 +129,7 @@ Goblin.registerQuest (goblinName, 'create', function (
   quest,
   labId,
   username,
-  configuration,
-  onChangeMandate,
-  onChangeScreen,
-  onAddWorkitem,
-  onRemoveWorkitem
+  configuration
 ) {
   if (!labId) {
     throw new Error ('Missing labId');
@@ -141,22 +137,6 @@ Goblin.registerQuest (goblinName, 'create', function (
 
   quest.goblin.setX ('labId', labId);
   quest.goblin.setX ('configuration', configuration);
-
-  if (onChangeMandate) {
-    quest.goblin.setX ('onChangeMandate', onChangeMandate);
-  }
-
-  if (onChangeScreen) {
-    quest.goblin.setX ('onChangeScreen', onChangeScreen);
-  }
-
-  if (onAddWorkitem) {
-    quest.goblin.setX ('onAddWorkitem', onAddWorkitem);
-  }
-
-  if (onRemoveWorkitem) {
-    quest.goblin.setX ('onRemoveWorkitem', onRemoveWorkitem);
-  }
 
   // CREATE DEFAULT CONTEXT MANAGER
   quest.create ('contexts', {
@@ -455,30 +435,33 @@ Goblin.registerQuest (goblinName, 'remove-tab', function* (
 });
 
 Goblin.registerQuest (goblinName, 'change-theme', function (quest, name) {
-  const labId = quest.goblin.getX ('labId');
-  const lab = quest.getGoblinAPI ('laboratory', labId);
-  lab.changeTheme ({name});
+  quest.evt (`change-theme.requested`, {
+    name,
+  });
 });
 
 Goblin.registerQuest (goblinName, 'nav-to-context', function (
   quest,
   contextId
 ) {
-  const labId = quest.goblin.getX ('labId');
-  const lab = quest.getGoblinAPI ('laboratory', labId);
   const state = quest.goblin.getState ();
   const view = state.get (`current.views.${contextId}`, null);
+  let route;
 
   if (view) {
     const workItem = state.get (`current.workitems.${contextId}`, null);
     if (workItem) {
-      lab.nav ({route: `/${contextId}/${view}?wid=${workItem}`});
+      route = `/${contextId}/${view}?wid=${workItem}`;
     } else {
-      lab.nav ({route: `/${contextId}/${view}`});
+      route = `/${contextId}/${view}`;
     }
   } else {
-    lab.nav ({route: `/${contextId}`});
+    route = `/${contextId}`;
   }
+  quest.evt (`nav.requested`, {
+    route,
+  });
+
   quest.do ();
 });
 
@@ -489,8 +472,6 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function (
   workitemId,
   skipNav
 ) {
-  const labId = quest.goblin.getX ('labId');
-  const lab = quest.getGoblinAPI ('laboratory', labId);
   if (!contextId) {
     contextId = quest.goblin.GetState ().get (`current.workcontext`, null);
   }
@@ -500,12 +481,12 @@ Goblin.registerQuest (goblinName, 'nav-to-workitem', function (
   if (skipNav) {
     return;
   }
-  lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
+  quest.evt (`nav.requested`, {
+    route: `/${contextId}/${view}?wid=${workitemId}`,
+  });
 });
 
 Goblin.registerQuest (goblinName, 'nav-to-last-workitem', function (quest) {
-  const labId = quest.goblin.getX ('labId');
-  const lab = quest.getGoblinAPI ('laboratory', labId);
   const last = quest.goblin.getState ().get ('last');
   const contextId = last.get ('workcontext');
   const view = last.get ('view');
@@ -514,27 +495,29 @@ Goblin.registerQuest (goblinName, 'nav-to-last-workitem', function (quest) {
   quest.dispatch ('setCurrentWorkitemByContext', {contextId, view, workitemId});
   const tabs = quest.getAPI ('tabs');
   tabs.setCurrent ({contextId, workitemId});
-  lab.nav ({route: `/${contextId}/${view}?wid=${workitemId}`});
+  quest.evt (`nav.requested`, {
+    route: `/${contextId}/${view}?wid=${workitemId}`,
+  });
 });
 
 Goblin.registerQuest (goblinName, 'clear-workitem', function (
   quest,
   contextId
 ) {
-  const labId = quest.goblin.getX ('labId');
-  const lab = quest.getGoblinAPI ('laboratory', labId);
   quest.dispatch ('setCurrentWorkitemByContext', {
     contextId,
     view: null,
     workitemId: null,
   });
-  lab.nav ({route: `/${contextId}/?wid=null`});
+  quest.evt (`nav.requested`, {
+    route: `/${contextId}/?wid=null`,
+  });
 });
 
 Goblin.registerQuest (goblinName, 'dispatch', function (quest, action) {
-  const labId = quest.goblin.getX ('labId');
-  const lab = quest.getGoblinAPI ('laboratory', labId);
-  lab.dispatch ({action});
+  quest.evt (`dispatch.requested`, {
+    action,
+  });
 });
 
 Goblin.registerQuest (goblinName, 'add-notification', function (
@@ -603,17 +586,11 @@ Goblin.registerQuest (goblinName, 'toggle-notifications', function (quest) {
 });
 
 Goblin.registerQuest (goblinName, 'change-mandate', function (quest) {
-  const onChangeMandate = quest.goblin.getX ('onChangeMandate');
-  if (onChangeMandate) {
-    quest.cmd (onChangeMandate.quest, {id: onChangeMandate.id});
-  }
+  quest.evt (`mandate.changed`);
 });
 
 Goblin.registerQuest (goblinName, 'change-screen', function (quest) {
-  const onChangeScreen = quest.goblin.getX ('onChangeScreen');
-  if (onChangeScreen) {
-    quest.cmd (onChangeScreen.quest, {id: onChangeScreen.id});
-  }
+  quest.evt (`screen.changed`);
 });
 
 Goblin.registerQuest (goblinName, 'get-configuration', function (quest) {
