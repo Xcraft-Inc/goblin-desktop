@@ -36,40 +36,48 @@ class Workitem extends Form {
     };
   }
 
+  get service () {
+    return this.props.id.split ('@')[0];
+  }
+
+  get desktopId () {
+    return this.context.desktopId;
+  }
+
   onSubmit () {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'close', {kind: 'validate'});
+    this.doAs (this.service, 'close', {
+      kind: 'validate',
+      desktopId: this.desktopId,
+    });
   }
 
   onCancel () {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'close', {kind: 'cancel'});
+    this.doAs (this.service, 'close', {
+      kind: 'cancel',
+      desktopId: this.desktopId,
+    });
   }
 
   onEdit () {
     const e = this.getEntityById (this.props.entityId);
     if (e) {
       const entity = e.toJS ();
-      const service = this.props.id.split ('@')[0];
-      this.doAs (service, 'edit', {entity});
+      this.doAs (this.service, 'edit', {entity, desktopId: this.desktopId});
     }
   }
 
   onDelete () {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'delete-entity');
+    this.doAs (this.service, 'delete-entity');
     this.hideHinter ();
   }
 
   onPublish () {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'publish-entity');
+    this.doAs (this.service, 'publish-entity');
     this.hideHinter ();
   }
 
   onArchive () {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'archive-entity');
+    this.doAs (this.service, 'archive-entity');
     this.hideHinter ();
   }
 
