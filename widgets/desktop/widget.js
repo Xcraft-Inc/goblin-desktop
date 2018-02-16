@@ -155,7 +155,7 @@ class Desktop extends Widget {
     );
 
     const contentView = viewImporter (routes['/content/'].component);
-    const Content = Widget.WithRoute (contentView, 'view', 'wid') (
+    const Content = Widget.WithRoute (contentView, ['context', 'view'], 'wid') (
       routes['/content/'].path
     );
 

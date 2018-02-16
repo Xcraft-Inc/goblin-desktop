@@ -1,8 +1,9 @@
 import React from 'react';
+import View from 'laboratory/view';
 import Widget from 'laboratory/widget';
 import Detail from 'desktop/detail/widget';
 
-class DetailView extends Widget {
+class DetailView extends View {
   constructor () {
     super (...arguments);
   }
@@ -26,6 +27,9 @@ class DetailView extends Widget {
   }
 }
 
-export default Widget.WithRoute (DetailView, 'hinter', null, true) (
-  '/:context/:view/:hinter'
-);
+export default Widget.WithRoute (
+  DetailView,
+  ['context', 'hinter'],
+  null,
+  true
+) ('/:context/:view/:hinter');

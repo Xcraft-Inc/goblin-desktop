@@ -44,10 +44,15 @@ class Workitem extends Form {
     return this.context.desktopId;
   }
 
+  get contextId () {
+    return this.context.contextId;
+  }
+
   onSubmit () {
     this.doAs (this.service, 'close', {
       kind: 'validate',
       desktopId: this.desktopId,
+      contextId: this.contextId,
     });
   }
 
@@ -55,6 +60,7 @@ class Workitem extends Form {
     this.doAs (this.service, 'close', {
       kind: 'cancel',
       desktopId: this.desktopId,
+      contextId: this.contextId,
     });
   }
 

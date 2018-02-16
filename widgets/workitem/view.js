@@ -1,14 +1,14 @@
 import React from 'react';
-import Widget from 'laboratory/widget';
+import View from 'laboratory/view';
 import importer from 'laboratory/importer/';
 const viewImporter = importer ('view');
-class WorkItem extends Widget {
+class WorkItem extends View {
   constructor () {
     super (...arguments);
   }
 
   render () {
-    const {view, desktopId, wid} = this.props;
+    const {view, desktopId, wid, context} = this.props;
 
     if (!view) {
       return null;
@@ -19,7 +19,7 @@ class WorkItem extends Widget {
     }
 
     const View = viewImporter (view);
-    return <View desktopId={desktopId} workitemId={wid} />;
+    return <View desktopId={desktopId} context={context} workitemId={wid} />;
   }
 }
 

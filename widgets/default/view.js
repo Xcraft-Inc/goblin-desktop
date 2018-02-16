@@ -12,7 +12,7 @@ const widgetImporter = importer ('widget');
 
 class DefaultView extends View {
   render () {
-    const {workitemId} = this.props;
+    const {workitemId, desktopId, context} = this.props;
     if (!workitemId) {
       return null;
     }
@@ -46,9 +46,9 @@ class DefaultView extends View {
       <Container kind="views">
         <LeftPanel />
         <Container kind="row" grow="1">
-          <HinterView />
+          <HinterView desktopId={desktopId} context={context} />
         </Container>
-        <DetailView />
+        <DetailView desktopId={desktopId} context={context} />
       </Container>
     );
   }
