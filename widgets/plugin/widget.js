@@ -149,7 +149,7 @@ class Plugin extends Widget {
 
   renderItem (entityId, extended, index) {
     const workitemUI = uiImporter (this.props.editorWidget);
-    const workitemId = `${this.props.editorWidget}@${this.props.entityIds.get (index)}`;
+    const workitemId = `${this.props.editorWidget}@${this.context.desktopId}@${this.props.entityIds.get (index)}`;
     if (!workitemUI.plugin) {
       return null;
     }
