@@ -5,15 +5,15 @@ import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 import importer from 'laboratory/importer/';
 
-const uiImporter = importer ('ui');
+const uiImporter = importer('ui');
 class Wizard extends Form {
-  constructor () {
-    super (...arguments);
-    this.onNext = this.onNext.bind (this);
-    this.doProxy = this.doProxy.bind (this);
+  constructor() {
+    super(...arguments);
+    this.onNext = this.onNext.bind(this);
+    this.doProxy = this.doProxy.bind(this);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       title: 'title',
@@ -22,25 +22,25 @@ class Wizard extends Form {
     };
   }
 
-  onNext () {
-    const service = this.props.id.split ('@')[0];
-    this.submitAs (service);
-    this.doAs (service, 'next');
+  onNext() {
+    const service = this.props.id.split('@')[0];
+    this.submitAs(service);
+    this.doAs(service, 'next');
   }
 
-  doProxy (action, args) {
-    const workitem = this.props.id.split ('@')[0];
-    this.doAs (workitem, action, args);
+  doProxy(action, args) {
+    const workitem = this.props.id.split('@')[0];
+    this.doAs(workitem, action, args);
   }
 
-  render () {
+  render() {
     const {id, title} = this.props;
     if (!id) {
       return null;
     }
     let Step = null;
-    const wizard = this.props.id.split ('@')[0];
-    const wizardUI = uiImporter (wizard);
+    const wizard = this.props.id.split('@')[0];
+    const wizardUI = uiImporter(wizard);
 
     if (!wizardUI[this.props.step]) {
       Step = props => {

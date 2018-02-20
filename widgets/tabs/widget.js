@@ -4,13 +4,13 @@ import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
 import NotificationsButton from 'desktop/notifications-button/widget';
 
-const wireNotifsButton = Widget.Wired (NotificationsButton);
+const wireNotifsButton = Widget.Wired(NotificationsButton);
 class Tabs extends Widget {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       tabs: 'tabs',
@@ -19,9 +19,9 @@ class Tabs extends Widget {
     };
   }
 
-  navToWorkItem (contextId, view, workitemId) {
-    this.nav (`/${contextId}/${view}?wid=${workitemId}`);
-    this.cmd ('desktop.nav-to-workitem', {
+  navToWorkItem(contextId, view, workitemId) {
+    this.nav(`/${contextId}/${view}?wid=${workitemId}`);
+    this.cmd('desktop.nav-to-workitem', {
       id: this.props.desktopId,
       contextId,
       view,
@@ -30,54 +30,53 @@ class Tabs extends Widget {
     });
   }
 
-  navToContext (contextId) {
-    this.nav (`/${contextId}/?wid=null`);
+  navToContext(contextId) {
+    this.nav(`/${contextId}/?wid=null`);
   }
 
-  goToWorkItem (contextId, view, workitemId) {
-    this.do ('set-current', {contextId, workitemId});
-    this.navToWorkItem (contextId, view, workitemId);
+  goToWorkItem(contextId, view, workitemId) {
+    this.do('set-current', {contextId, workitemId});
+    this.navToWorkItem(contextId, view, workitemId);
   }
 
-  clearWorkitem (contextId) {
-    this.do ('set-current', {contextId, workitemId: null});
-    this.cmd ('desktop.clear-workitem', {
+  clearWorkitem(contextId) {
+    this.do('set-current', {contextId, workitemId: null});
+    this.cmd('desktop.clear-workitem', {
       id: this.props.desktopId,
       contextId,
     });
   }
 
-  render () {
+  render() {
     const {context, current, tabs, desktopId} = this.props;
 
     let currentTab = null;
     if (current) {
-      currentTab = current.get (context, null);
+      currentTab = current.get(context, null);
     }
 
-    const WiredNotificationsButton = wireNotifsButton (desktopId);
+    const WiredNotificationsButton = wireNotifsButton(desktopId);
 
-    let contextTabs = tabs.get (context, null);
+    let contextTabs = tabs.get(context, null);
     if (contextTabs) {
-      contextTabs = contextTabs.toArray ();
+      contextTabs = contextTabs.toArray();
     } else {
       contextTabs = [];
     }
     return (
       <Container kind="second-bar">
         <Container kind="view-tab">
-          {contextTabs.map ((v, k) => {
-            const wid = v.get ('workitemId');
-            const closable = v.get ('closable', false);
+          {contextTabs.map((v, k) => {
+            const wid = v.get('workitemId');
+            const closable = v.get('closable', false);
             const show = closable ? 'true' : 'false';
             return (
               <Container kind="row" key={k}>
                 <Button
-                  text={v.get ('name')}
+                  text={v.get('name')}
                   kind="view-tab"
-                  glyph={v.get ('glyph')}
-                  onClick={() =>
-                    this.goToWorkItem (context, v.get ('view'), wid)}
+                  glyph={v.get('glyph')}
+                  onClick={() => this.goToWorkItem(context, v.get('view'), wid)}
                   active={currentTab === wid ? 'true' : 'false'}
                 />
                 <Button
@@ -85,7 +84,7 @@ class Tabs extends Widget {
                   kind="view-tab"
                   show={show}
                   onClick={() => {
-                    this.do ('remove', {
+                    this.do('remove', {
                       tabId: wid,
                       contextId: context,
                       workitemId: wid,

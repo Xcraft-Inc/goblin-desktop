@@ -8,11 +8,11 @@ import Notification from 'gadgets/notification/widget';
 /******************************************************************************/
 
 class Notifications extends Widget {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       show: 'showNotifications',
@@ -22,11 +22,11 @@ class Notifications extends Widget {
     };
   }
 
-  get hasNotifications () {
+  get hasNotifications() {
     return this.props.data && this.props.data.size > 0;
   }
 
-  renderHeader () {
+  renderHeader() {
     const headerClass = this.styles.classNames.header;
     const headerRowClass = this.styles.classNames.headerRow;
 
@@ -39,7 +39,7 @@ class Notifications extends Widget {
             }
             text="Ne pas me déranger"
             kind="button-notification"
-            onClick={() => this.doAs ('desktop', 'toggle-dnd')}
+            onClick={() => this.doAs('desktop', 'toggle-dnd')}
           />
         </div>
         <div className={headerRowClass}>
@@ -51,53 +51,55 @@ class Notifications extends Widget {
             }
             text="Seulement les nouvelles"
             kind="button-notification"
-            onClick={() => this.doAs ('desktop', 'toggle-only-news')}
+            onClick={() => this.doAs('desktop', 'toggle-only-news')}
           />
           <Label grow="1" />
           <Button
             disabled={this.hasNotifications ? 'false' : 'true'}
             text="Tout effacer"
             kind="button-notification"
-            onClick={() => this.doAs ('desktop', 'remove-notifications')}
+            onClick={() => this.doAs('desktop', 'remove-notifications')}
           />
         </div>
       </div>
     );
   }
 
-  renderNotification (notification, index) {
+  renderNotification(notification, index) {
     return (
       <Notification
         key={index}
         data={notification}
         status={notification.status}
         onClickNotification={() =>
-          this.doAs ('desktop', 'click-notification', {notification})}
+          this.doAs('desktop', 'click-notification', {notification})
+        }
         onDeleteNotification={() =>
-          this.doAs ('desktop', 'remove-notification', {notification})}
+          this.doAs('desktop', 'remove-notification', {notification})
+        }
       />
     );
   }
 
-  renderNotifications (notifications) {
+  renderNotifications(notifications) {
     if (!notifications || notifications.size === 0) {
       return null;
     }
     // The most recent notification first (on top).
-    const nn = Widget.shred (notifications);
+    const nn = Widget.shred(notifications);
     let index = 0;
     return nn.linq
-      .where (
-        n => this.props.onlyNews === 'false' || n.get ('status') === 'not-read'
+      .where(
+        n => this.props.onlyNews === 'false' || n.get('status') === 'not-read'
       )
-      .orderByDescending (n => n.get ('order'))
-      .select (n => {
-        return this.renderNotification (n.toJS (), index++);
+      .orderByDescending(n => n.get('order'))
+      .select(n => {
+        return this.renderNotification(n.toJS(), index++);
       })
-      .toList ();
+      .toList();
   }
 
-  render () {
+  render() {
     if (!this.props.id) {
       return null;
     }
@@ -105,16 +107,17 @@ class Notifications extends Widget {
     const data = this.props.data;
     const show = this.props.show;
 
-    const panelClass = show === 'true'
-      ? this.styles.classNames.panel
-      : this.styles.classNames.panelHidden;
+    const panelClass =
+      show === 'true'
+        ? this.styles.classNames.panel
+        : this.styles.classNames.panelHidden;
     const notificationsClass = this.styles.classNames.notifications;
 
     return (
       <div className={panelClass}>
-        {this.renderHeader ()}
+        {this.renderHeader()}
         <div className={notificationsClass}>
-          {this.renderNotifications (data)}
+          {this.renderNotifications(data)}
         </div>
       </div>
     );

@@ -10,8 +10,8 @@ import Combo from 'gadgets/combo/widget';
 
 import Notifications from 'desktop/notifications/widget';
 
-const wiredNotifications = Widget.Wired (Notifications);
-const viewImporter = importer ('view');
+const wiredNotifications = Widget.Wired(Notifications);
+const viewImporter = importer('view');
 
 /******************************************************************************/
 
@@ -32,8 +32,8 @@ const themes = [
 /******************************************************************************/
 
 class Desktop extends Widget {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
 
     this.comboButton = null;
 
@@ -41,22 +41,22 @@ class Desktop extends Widget {
       showMenuTheme: false,
     };
 
-    this.onChangeScreen = this.onChangeScreen.bind (this);
-    this.onChangeMandate = this.onChangeMandate.bind (this);
-    this.onChangeTheme = this.onChangeTheme.bind (this);
+    this.onChangeScreen = this.onChangeScreen.bind(this);
+    this.onChangeMandate = this.onChangeMandate.bind(this);
+    this.onChangeTheme = this.onChangeTheme.bind(this);
   }
 
-  get showMenuTheme () {
+  get showMenuTheme() {
     return this.state.showMenuTheme;
   }
 
-  set showMenuTheme (value) {
-    this.setState ({
+  set showMenuTheme(value) {
+    this.setState({
       showMenuTheme: value,
     });
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       username: 'username',
@@ -66,42 +66,42 @@ class Desktop extends Widget {
     };
   }
 
-  onChangeScreen () {
-    this.do ('change-screen');
+  onChangeScreen() {
+    this.do('change-screen');
   }
 
-  onChangeMandate () {
-    this.do ('change-mandate');
+  onChangeMandate() {
+    this.do('change-mandate');
   }
 
-  onChangeTheme (name) {
+  onChangeTheme(name) {
     currentThemeName = name;
-    this.do ('change-theme', {name});
+    this.do('change-theme', {name});
   }
 
   /******************************************************************************/
 
-  renderNofications () {
-    const WiredNotifications = wiredNotifications (this.props.id);
+  renderNofications() {
+    const WiredNotifications = wiredNotifications(this.props.id);
 
     return <WiredNotifications />;
   }
 
-  renderMenuTheme () {
+  renderMenuTheme() {
     if (this.showMenuTheme) {
-      const node = ReactDOM.findDOMNode (this.comboButton);
-      const rect = node.getBoundingClientRect ();
-      const top = Unit.add (
+      const node = ReactDOM.findDOMNode(this.comboButton);
+      const rect = node.getBoundingClientRect();
+      const top = Unit.add(
         rect.bottom + 'px',
         this.context.theme.shapes.flyingBalloonTriangleSize
       );
 
       const list = [];
       for (const theme of themes) {
-        list.push ({
+        list.push({
           text: theme.text,
           active: theme.name === currentThemeName,
-          action: () => this.onChangeTheme (theme.name),
+          action: () => this.onChangeTheme(theme.name),
         });
       }
 
@@ -120,7 +120,7 @@ class Desktop extends Widget {
     }
   }
 
-  render () {
+  render() {
     const {id, routesMap} = this.props;
 
     if (!id) {
@@ -135,37 +135,37 @@ class Desktop extends Widget {
       '/content/': {},
     };
 
-    Widget.shred (routesMap).select ((k, v) => {
+    Widget.shred(routesMap).select((k, v) => {
       const ex = /^(\/.[:\-a-z]+\/).*/;
-      const res = ex.exec (v);
+      const res = ex.exec(v);
       let mount = '/';
       if (res) {
         mount = res[1];
       }
       if (routes[mount]) {
-        routes[mount] = {path: v.replace (mount, '/'), component: k};
+        routes[mount] = {path: v.replace(mount, '/'), component: k};
       } else {
-        console.warn (`Invalid mount point ${mount} for ${k}`);
+        console.warn(`Invalid mount point ${mount} for ${k}`);
       }
     });
 
-    const taskView = viewImporter (routes['/task-bar/'].component);
-    const Tasks = Widget.WithRoute (taskView, 'context') (
+    const taskView = viewImporter(routes['/task-bar/'].component);
+    const Tasks = Widget.WithRoute(taskView, 'context')(
       routes['/task-bar/'].path
     );
 
-    const contentView = viewImporter (routes['/content/'].component);
-    const Content = Widget.WithRoute (contentView, ['context', 'view'], 'wid') (
+    const contentView = viewImporter(routes['/content/'].component);
+    const Content = Widget.WithRoute(contentView, ['context', 'view'], 'wid')(
       routes['/content/'].path
     );
 
-    const topbarView = viewImporter (routes['/top-bar/'].component);
-    const TopBar = Widget.WithRoute (topbarView, 'context') (
+    const topbarView = viewImporter(routes['/top-bar/'].component);
+    const TopBar = Widget.WithRoute(topbarView, 'context')(
       routes['/top-bar/'].path
     );
 
-    const beforeView = viewImporter (routes['/before-content/'].component);
-    const BeforeContent = Widget.WithRoute (beforeView, 'context') (
+    const beforeView = viewImporter(routes['/before-content/'].component);
+    const BeforeContent = Widget.WithRoute(beforeView, 'context')(
       routes['/before-content/'].path
     );
 
@@ -204,32 +204,32 @@ class Desktop extends Widget {
                   kind="main-tab-right"
                   onClick={this.onChangeScreen}
                 />
-                {window.zoomable
-                  ? <Button
-                      glyph="solid/plus"
-                      kind="main-tab-right"
-                      onClick={() => {
-                        window.zoom ();
-                      }}
-                    />
-                  : null}
-                {window.zoomable
-                  ? <Button
-                      glyph="solid/minus"
-                      kind="main-tab-right"
-                      onClick={() => {
-                        window.unZoom ();
-                      }}
-                    />
-                  : null}
+                {window.zoomable ? (
+                  <Button
+                    glyph="solid/plus"
+                    kind="main-tab-right"
+                    onClick={() => {
+                      window.zoom();
+                    }}
+                  />
+                ) : null}
+                {window.zoomable ? (
+                  <Button
+                    glyph="solid/minus"
+                    kind="main-tab-right"
+                    onClick={() => {
+                      window.unZoom();
+                    }}
+                  />
+                ) : null}
                 <Button text={this.props.username} kind="main-tab-right" />
               </Container>
             </Container>
             <BeforeContent desktopId={id} />
             <div className={contentClass}>
               <Content desktopId={id} />
-              {this.renderNofications ()}
-              {this.renderMenuTheme ()}
+              {this.renderNofications()}
+              {this.renderMenuTheme()}
             </div>
             <Container kind="footer" />
           </Container>

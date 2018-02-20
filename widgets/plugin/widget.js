@@ -11,31 +11,31 @@ import Label from 'gadgets/label/widget';
 import DragCab from 'gadgets/drag-cab/widget';
 
 import importer from 'laboratory/importer/';
-const uiImporter = importer ('ui');
+const uiImporter = importer('ui');
 
 /******************************************************************************/
 
 class Plugin extends Widget {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
 
     this._refs = {};
     this._scrollEntityId = null;
 
-    this.onCreateEntity = this.onCreateEntity.bind (this);
-    this.onSwapExtended = this.onSwapExtended.bind (this);
-    this.onDeleteEntity = this.onDeleteEntity.bind (this);
-    this.onEditEntity = this.onEditEntity.bind (this);
-    this.onEntityDragged = this.onEntityDragged.bind (this);
+    this.onCreateEntity = this.onCreateEntity.bind(this);
+    this.onSwapExtended = this.onSwapExtended.bind(this);
+    this.onDeleteEntity = this.onDeleteEntity.bind(this);
+    this.onEditEntity = this.onEditEntity.bind(this);
+    this.onEntityDragged = this.onEntityDragged.bind(this);
   }
 
-  static createFor (name, instance) {
-    return instance.getPluginToEntityMapper (Plugin, name, 'entityIds') (
+  static createFor(name, instance) {
+    return instance.getPluginToEntityMapper(Plugin, name, 'entityIds')(
       '.entityIds'
     );
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       title: 'title',
@@ -46,7 +46,7 @@ class Plugin extends Widget {
     };
   }
 
-  _scrollIntoView (duration) {
+  _scrollIntoView(duration) {
     if (
       !this._scrollEntityId ||
       !this._refs[this._scrollEntityId] ||
@@ -55,7 +55,7 @@ class Plugin extends Widget {
       return;
     }
 
-    scrollIntoViewIfNeeded (this._refs[this._scrollEntityId], {
+    scrollIntoViewIfNeeded(this._refs[this._scrollEntityId], {
       duration,
       // HACK: we need to fix the transitions in order to remove this offset
       offset: {
@@ -64,43 +64,43 @@ class Plugin extends Widget {
     });
   }
 
-  componentDidUpdate () {
-    this._scrollIntoView (150);
+  componentDidUpdate() {
+    this._scrollIntoView(150);
   }
 
-  onCreateEntity () {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'add');
+  onCreateEntity() {
+    const service = this.props.id.split('@')[0];
+    this.doAs(service, 'add');
   }
 
-  onSwapExtended (entityId) {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'extend', {entityId});
+  onSwapExtended(entityId) {
+    const service = this.props.id.split('@')[0];
+    this.doAs(service, 'extend', {entityId});
     this._scrollEntityId = entityId;
   }
 
-  onDeleteEntity (entityId) {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'remove', {entityId});
+  onDeleteEntity(entityId) {
+    const service = this.props.id.split('@')[0];
+    this.doAs(service, 'remove', {entityId});
   }
 
-  onEditEntity (entityId) {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'edit', {entityId});
+  onEditEntity(entityId) {
+    const service = this.props.id.split('@')[0];
+    this.doAs(service, 'edit', {entityId});
   }
 
-  onEntityDragged (selectedIds, toId, ownerId, ownerKind) {
-    const service = this.props.id.split ('@')[0];
+  onEntityDragged(selectedIds, toId, ownerId, ownerKind) {
+    const service = this.props.id.split('@')[0];
     if (ownerId === this.props.id) {
-      this.doAs (service, 'drag', {
+      this.doAs(service, 'drag', {
         fromId: selectedIds[0],
         toId: toId,
       });
     } else {
-      this.doAs (service, 'remove', {
+      this.doAs(service, 'remove', {
         entityId: selectedIds[0],
       });
-      this.cmd (`${service}.add`, {
+      this.cmd(`${service}.add`, {
         id: ownerId,
         entityId: selectedIds[0],
       });
@@ -109,22 +109,23 @@ class Plugin extends Widget {
 
   /******************************************************************************/
 
-  renderHeader (numberOfIds) {
-    const headerClass = this.props.entityIds.size === 0
-      ? this.styles.classNames.headerEmpty
-      : this.styles.classNames.header;
+  renderHeader(numberOfIds) {
+    const headerClass =
+      this.props.entityIds.size === 0
+        ? this.styles.classNames.headerEmpty
+        : this.styles.classNames.header;
 
     const title = this.props.pluginTitle
       ? this.props.pluginTitle
       : this.props.title;
 
     const canAdd =
-      !Bool.isTrue (this.props.disableAdd) &&
+      !Bool.isTrue(this.props.disableAdd) &&
       (!this.props.arity ||
-        this.props.arity.endsWith ('n') ||
+        this.props.arity.endsWith('n') ||
         (this.props.arity === '0..1' && numberOfIds === 0));
 
-    if (Bool.isTrue (this.props.readonly)) {
+    if (Bool.isTrue(this.props.readonly)) {
       return (
         <div className={headerClass}>
           <Label text={title} grow="1" kind="title" />
@@ -134,38 +135,40 @@ class Plugin extends Widget {
       return (
         <div className={headerClass}>
           <Label text={title} grow="1" kind="title" />
-          {canAdd
-            ? <Button
-                glyph="solid/plus"
-                text="Ajouter"
-                glyphPosition="right"
-                onClick={this.onCreateEntity}
-              />
-            : null}
+          {canAdd ? (
+            <Button
+              glyph="solid/plus"
+              text="Ajouter"
+              glyphPosition="right"
+              onClick={this.onCreateEntity}
+            />
+          ) : null}
         </div>
       );
     }
   }
 
-  renderItem (entityId, extended, index) {
-    const workitemUI = uiImporter (this.props.editorWidget);
-    const workitemId = `${this.props.editorWidget}@${this.context.desktopId}@${this.props.entityIds.get (index)}`;
+  renderItem(entityId, extended, index) {
+    const workitemUI = uiImporter(this.props.editorWidget);
+    const workitemId = `${this.props.editorWidget}@${
+      this.context.desktopId
+    }@${this.props.entityIds.get(index)}`;
     if (!workitemUI.plugin) {
       return null;
     }
 
     const itemClass = extended
-      ? Bool.isTrue (this.props.embedded)
-          ? this.styles.classNames.extendedEmbeddedItem
-          : this.styles.classNames.extendedItem
-      : Bool.isTrue (this.props.embedded)
-          ? this.styles.classNames.compactedEmbeddedItem
-          : this.styles.classNames.compactedItem;
+      ? Bool.isTrue(this.props.embedded)
+        ? this.styles.classNames.extendedEmbeddedItem
+        : this.styles.classNames.extendedItem
+      : Bool.isTrue(this.props.embedded)
+        ? this.styles.classNames.compactedEmbeddedItem
+        : this.styles.classNames.compactedItem;
 
-    const key1 = Bool.isTrue (this.props.readonly) ? 'readonly' : 'edit';
+    const key1 = Bool.isTrue(this.props.readonly) ? 'readonly' : 'edit';
     const key2 = extended ? 'extend' : 'compact';
 
-    let UI = this.WithState (workitemUI.plugin[key1][key2], 'entityId') (
+    let UI = this.WithState(workitemUI.plugin[key1][key2], 'entityId')(
       '.entityId'
     );
 
@@ -175,7 +178,7 @@ class Plugin extends Widget {
       workitemUI.mappers.plugin[key1] &&
       workitemUI.mappers.plugin[key1][key2]
     ) {
-      UI = this.mapWidget (
+      UI = this.mapWidget(
         UI,
         workitemUI.mappers.plugin[key1][key2],
         `backend.${entityId}`
@@ -203,24 +206,24 @@ class Plugin extends Widget {
     );
   }
 
-  renderButtons (entityId, extended, numberOfIds) {
+  renderButtons(entityId, extended, numberOfIds) {
     if (extended) {
-      const buttonsClass = Bool.isTrue (this.props.readonly)
-        ? Bool.isTrue (this.props.embedded)
-            ? this.styles.classNames.extendedEmbeddedReadonlyButtons
-            : this.styles.classNames.extendedReadonlyButtons
-        : Bool.isTrue (this.props.embedded)
-            ? this.styles.classNames.extendedEmbeddedButtons
-            : this.styles.classNames.extendedButtons;
+      const buttonsClass = Bool.isTrue(this.props.readonly)
+        ? Bool.isTrue(this.props.embedded)
+          ? this.styles.classNames.extendedEmbeddedReadonlyButtons
+          : this.styles.classNames.extendedReadonlyButtons
+        : Bool.isTrue(this.props.embedded)
+          ? this.styles.classNames.extendedEmbeddedButtons
+          : this.styles.classNames.extendedButtons;
 
       const canDelete =
-        !Bool.isTrue (this.props.readonly) &&
-        !Bool.isTrue (this.props.disableDelete) &&
+        !Bool.isTrue(this.props.readonly) &&
+        !Bool.isTrue(this.props.disableDelete) &&
         (!this.props.arity ||
-          this.props.arity.startsWith ('0') ||
+          this.props.arity.startsWith('0') ||
           numberOfIds > 1);
 
-      const kind = Bool.isTrue (this.props.readonly)
+      const kind = Bool.isTrue(this.props.readonly)
         ? 'plugin-light'
         : 'plugin-dark';
 
@@ -236,53 +239,52 @@ class Plugin extends Widget {
             activeColor={
               this.context.theme.palette.recurrenceExtendedBoxBackground
             }
-            onClick={() => this.onSwapExtended (entityId)}
+            onClick={() => this.onSwapExtended(entityId)}
           />
           <Button
             width="32px"
             kind={kind}
             glyph="solid/pencil"
             tooltip="Editer"
-            onClick={() => this.onEditEntity (entityId)}
+            onClick={() => this.onEditEntity(entityId)}
           />
-          {canDelete
-            ? <Button
-                width="32px"
-                kind={kind}
-                glyph="solid/trash"
-                tooltip="Supprimer"
-                onClick={() => this.onDeleteEntity (entityId)}
-              />
-            : null}
-
+          {canDelete ? (
+            <Button
+              width="32px"
+              kind={kind}
+              glyph="solid/trash"
+              tooltip="Supprimer"
+              onClick={() => this.onDeleteEntity(entityId)}
+            />
+          ) : null}
         </div>
       );
     } else {
-      const buttonsClass = Bool.isTrue (this.props.readonly)
-        ? Bool.isTrue (this.props.embedded)
-            ? this.styles.classNames.compactedEmbeddedReadonlyButtons
-            : this.styles.classNames.compactedReadonlyButtons
-        : Bool.isTrue (this.props.embedded)
-            ? this.styles.classNames.compactedEmbeddedButtons
-            : this.styles.classNames.compactedButtons;
+      const buttonsClass = Bool.isTrue(this.props.readonly)
+        ? Bool.isTrue(this.props.embedded)
+          ? this.styles.classNames.compactedEmbeddedReadonlyButtons
+          : this.styles.classNames.compactedReadonlyButtons
+        : Bool.isTrue(this.props.embedded)
+          ? this.styles.classNames.compactedEmbeddedButtons
+          : this.styles.classNames.compactedButtons;
 
-      const kind = Bool.isTrue (this.props.readonly) ||
-        !Bool.isTrue (this.props.embedded)
-        ? 'plugin-light'
-        : 'plugin-dark';
+      const kind =
+        Bool.isTrue(this.props.readonly) || !Bool.isTrue(this.props.embedded)
+          ? 'plugin-light'
+          : 'plugin-dark';
 
       return (
         <div className={buttonsClass}>
-          {Bool.isTrue (this.props.readonly) &&
-            !Bool.isTrue (this.props.embedded)
-            ? <Button
-                width="32px"
-                kind={kind}
-                glyph="solid/pencil"
-                tooltip="Editer"
-                onClick={() => this.onEditEntity (entityId)}
-              />
-            : null}
+          {Bool.isTrue(this.props.readonly) &&
+          !Bool.isTrue(this.props.embedded) ? (
+            <Button
+              width="32px"
+              kind={kind}
+              glyph="solid/pencil"
+              tooltip="Editer"
+              onClick={() => this.onEditEntity(entityId)}
+            />
+          ) : null}
           <Button
             width="32px"
             kind={kind}
@@ -293,25 +295,25 @@ class Plugin extends Widget {
             activeColor={
               this.context.theme.palette.recurrenceExtendedBoxBackground
             }
-            onClick={() => this.onSwapExtended (entityId)}
+            onClick={() => this.onSwapExtended(entityId)}
           />
         </div>
       );
     }
   }
 
-  renderRowContent (entityId, extended, numberOfIds, index) {
+  renderRowContent(entityId, extended, numberOfIds, index) {
     const rowClass = extended
-      ? Bool.isTrue (this.props.embedded)
-          ? this.styles.classNames.extendedEmbeddedRow
-          : this.styles.classNames.extendedRow
+      ? Bool.isTrue(this.props.embedded)
+        ? this.styles.classNames.extendedEmbeddedRow
+        : this.styles.classNames.extendedRow
       : numberOfIds > 1 && this.props.horizontalSeparator !== 'compact'
-          ? Bool.isTrue (this.props.embedded)
-              ? this.styles.classNames.compactedEmbeddedDashedRow
-              : this.styles.classNames.compactedDashedRow
-          : Bool.isTrue (this.props.embedded)
-              ? this.styles.classNames.compactedEmbeddedRow
-              : this.styles.classNames.compactedRow;
+        ? Bool.isTrue(this.props.embedded)
+          ? this.styles.classNames.compactedEmbeddedDashedRow
+          : this.styles.classNames.compactedDashedRow
+        : Bool.isTrue(this.props.embedded)
+          ? this.styles.classNames.compactedEmbeddedRow
+          : this.styles.classNames.compactedRow;
 
     return (
       <Container
@@ -319,19 +321,19 @@ class Plugin extends Widget {
         key={index}
         ref={n => {
           if (n) {
-            this._refs[entityId] = ReactDOM.findDOMNode (n);
+            this._refs[entityId] = ReactDOM.findDOMNode(n);
           }
         }}
       >
         <div className={rowClass}>
-          {this.renderItem (entityId, extended, index)}
-          {this.renderButtons (entityId, extended, numberOfIds)}
+          {this.renderItem(entityId, extended, index)}
+          {this.renderButtons(entityId, extended, numberOfIds)}
         </div>
       </Container>
     );
   }
 
-  renderRow (entityId, extended, dragEnabled, numberOfIds, index) {
+  renderRow(entityId, extended, dragEnabled, numberOfIds, index) {
     if (dragEnabled) {
       return (
         <DragCab
@@ -346,27 +348,27 @@ class Plugin extends Widget {
           overSpacing="0px"
           verticalSpacing="0px"
           radius="0px"
-          doClickAction={() => this.onSwapExtended (entityId)}
+          doClickAction={() => this.onSwapExtended(entityId)}
           doDragEnding={this.onEntityDragged}
         >
-          {this.renderRowContent (entityId, extended, numberOfIds, index)}
+          {this.renderRowContent(entityId, extended, numberOfIds, index)}
         </DragCab>
       );
     } else {
-      return this.renderRowContent (entityId, extended, numberOfIds, index);
+      return this.renderRowContent(entityId, extended, numberOfIds, index);
     }
   }
 
-  renderRows (entityIds) {
+  renderRows(entityIds) {
     const dragEnabled =
-      !Bool.isTrue (this.props.readonly) &&
+      !Bool.isTrue(this.props.readonly) &&
       (entityIds.length > 1 || !!this.props.dragType);
 
     let index = 0;
 
-    return entityIds.map (entityId => {
+    return entityIds.map(entityId => {
       const extended = entityId === this.props.extendedId;
-      return this.renderRow (
+      return this.renderRow(
         entityId,
         extended,
         dragEnabled,
@@ -376,43 +378,43 @@ class Plugin extends Widget {
     });
   }
 
-  renderDefault () {
-    const entityIds = this.props.entityIds.toArray ();
+  renderDefault() {
+    const entityIds = this.props.entityIds.toArray();
     if (
       entityIds.length === 0 &&
-      Bool.isTrue (this.props.readonly) &&
-      Bool.isTrue (this.props.embedded)
+      Bool.isTrue(this.props.readonly) &&
+      Bool.isTrue(this.props.embedded)
     ) {
       return null;
     }
 
     let boxClass = null;
     if (!this.props.entityIds || this.props.entityIds.size === 0) {
-      boxClass = Bool.isTrue (this.props.embedded)
+      boxClass = Bool.isTrue(this.props.embedded)
         ? this.styles.classNames.emptyembeddedBox
         : this.styles.classNames.emptyBox;
     } else {
-      boxClass = Bool.isTrue (this.props.embedded)
+      boxClass = Bool.isTrue(this.props.embedded)
         ? this.styles.classNames.embeddedBox
         : this.styles.classNames.box;
     }
 
     return (
       <div className={boxClass}>
-        {this.renderHeader (entityIds.length)}
+        {this.renderHeader(entityIds.length)}
         <Container
           kind="column"
           dragController={this.props.dragType || this.props.id}
           dragSource={this.props.id}
           dragOwnerId={this.props.id}
         >
-          {this.renderRows (entityIds)}
+          {this.renderRows(entityIds)}
         </Container>
       </div>
     );
   }
 
-  render () {
+  render() {
     this._refs = {};
 
     if (!this.props.id || !this.props.entityIds) {
@@ -423,7 +425,7 @@ class Plugin extends Widget {
       return null;
     }
 
-    return this.renderDefault ();
+    return this.renderDefault();
   }
 }
 

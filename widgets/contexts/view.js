@@ -1,19 +1,19 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Contexts from 'desktop/contexts/widget';
-const wireContexts = Widget.Wired (Contexts);
+const wireContexts = Widget.Wired(Contexts);
 
 class ContextsView extends Widget {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
   }
 
-  render () {
+  render() {
     const {isDisplayed, desktopId} = this.props;
     if (!isDisplayed) {
       return null;
     }
-    const WiredContexts = wireContexts (`contexts@${desktopId}`);
+    const WiredContexts = wireContexts(`contexts@${desktopId}`);
     return <WiredContexts />;
   }
 }

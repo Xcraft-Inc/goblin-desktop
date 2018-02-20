@@ -5,15 +5,15 @@ import importer from 'laboratory/importer/';
 import Container from 'gadgets/container/widget';
 import Workitem from 'desktop/workitem/widget';
 
-const uiImporter = importer ('ui');
+const uiImporter = importer('ui');
 
 class Detail extends Widget {
-  constructor () {
-    super (...arguments);
-    this.doProxy = this.doProxy.bind (this);
+  constructor() {
+    super(...arguments);
+    this.doProxy = this.doProxy.bind(this);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       type: 'type',
@@ -27,12 +27,12 @@ class Detail extends Widget {
     };
   }
 
-  doProxy (action, args) {
+  doProxy(action, args) {
     const workitem = this.props.detailWidgetId;
-    this.doFor (workitem, action, args);
+    this.doFor(workitem, action, args);
   }
 
-  render () {
+  render() {
     const {
       id,
       kind,
@@ -56,8 +56,8 @@ class Detail extends Widget {
       return null;
     }
 
-    const workitemUI = uiImporter (detailWidget);
-    let DetailUI = this.WithState (workitemUI.panel.readonly, 'entityId') (
+    const workitemUI = uiImporter(detailWidget);
+    let DetailUI = this.WithState(workitemUI.panel.readonly, 'entityId')(
       '.entityId'
     );
 
@@ -66,7 +66,7 @@ class Detail extends Widget {
       workitemUI.mappers.panel &&
       workitemUI.mappers.panel.readonly
     ) {
-      DetailUI = this.mapWidget (
+      DetailUI = this.mapWidget(
         DetailUI,
         workitemUI.mappers.panel.readonly,
         `backend.${entityId}`
@@ -74,7 +74,7 @@ class Detail extends Widget {
     }
     const workitemId = detailWidgetId;
 
-    const Detail = this.mapWidget (
+    const Detail = this.mapWidget(
       Workitem,
       'status',
       `backend.${entityId}.meta.status`

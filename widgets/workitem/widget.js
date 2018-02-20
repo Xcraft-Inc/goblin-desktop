@@ -8,17 +8,17 @@ import PropTypes from 'prop-types';
 /******************************************************************************/
 
 class Workitem extends Form {
-  constructor () {
-    super (...arguments);
-    this.onSubmit = this.onSubmit.bind (this);
-    this.onCancel = this.onCancel.bind (this);
-    this.onEdit = this.onEdit.bind (this);
-    this.onDelete = this.onDelete.bind (this);
-    this.onArchive = this.onArchive.bind (this);
-    this.onPublish = this.onPublish.bind (this);
+  constructor() {
+    super(...arguments);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.onEdit = this.onEdit.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.onArchive = this.onArchive.bind(this);
+    this.onPublish = this.onPublish.bind(this);
   }
 
-  getChildContext () {
+  getChildContext() {
     return {
       readonly: this.props.readonly,
       id: this.props.id,
@@ -27,7 +27,7 @@ class Workitem extends Form {
     };
   }
 
-  static get childContextTypes () {
+  static get childContextTypes() {
     return {
       readonly: PropTypes.any,
       id: PropTypes.string,
@@ -36,60 +36,60 @@ class Workitem extends Form {
     };
   }
 
-  get service () {
-    return this.props.id.split ('@')[0];
+  get service() {
+    return this.props.id.split('@')[0];
   }
 
-  get desktopId () {
+  get desktopId() {
     return this.context.desktopId;
   }
 
-  get contextId () {
+  get contextId() {
     return this.context.contextId;
   }
 
-  onSubmit () {
-    this.doAs (this.service, 'close', {
+  onSubmit() {
+    this.doAs(this.service, 'close', {
       kind: 'validate',
       desktopId: this.desktopId,
       contextId: this.contextId,
     });
   }
 
-  onCancel () {
-    this.doAs (this.service, 'close', {
+  onCancel() {
+    this.doAs(this.service, 'close', {
       kind: 'cancel',
       desktopId: this.desktopId,
       contextId: this.contextId,
     });
   }
 
-  onEdit () {
-    const e = this.getEntityById (this.props.entityId);
+  onEdit() {
+    const e = this.getEntityById(this.props.entityId);
     if (e) {
-      const entity = e.toJS ();
-      this.doAs (this.service, 'edit', {entity, desktopId: this.desktopId});
+      const entity = e.toJS();
+      this.doAs(this.service, 'edit', {entity, desktopId: this.desktopId});
     }
   }
 
-  onDelete () {
-    this.doAs (this.service, 'delete-entity');
-    this.hideHinter ();
+  onDelete() {
+    this.doAs(this.service, 'delete-entity');
+    this.hideHinter();
   }
 
-  onPublish () {
-    this.doAs (this.service, 'publish-entity');
-    this.hideHinter ();
+  onPublish() {
+    this.doAs(this.service, 'publish-entity');
+    this.hideHinter();
   }
 
-  onArchive () {
-    this.doAs (this.service, 'archive-entity');
-    this.hideHinter ();
+  onArchive() {
+    this.doAs(this.service, 'archive-entity');
+    this.hideHinter();
   }
 
   /******************************************************************************/
 
-  renderDetailActions () {
+  renderDetailActions() {
     switch (this.props.status) {
       case 'draft':
       case 'archived':
@@ -141,7 +141,7 @@ class Workitem extends Form {
     }
   }
 
-  renderEditorActions () {
+  renderEditorActions() {
     switch (this.props.status) {
       case 'archived':
       case 'draft':
@@ -193,10 +193,10 @@ class Workitem extends Form {
     }
   }
 
-  renderEditor () {
+  renderEditor() {
     const Form = this.Form;
 
-    const Title = this.mapWidget (
+    const Title = this.mapWidget(
       Label,
       'text',
       `backend.${this.props.entityId}.meta.summaries.info`
@@ -221,15 +221,15 @@ class Workitem extends Form {
             {this.props.children}
           </Form>
         </Container>
-        {this.renderEditorActions ()}
+        {this.renderEditorActions()}
       </Container>
     );
   }
 
-  renderDetail () {
+  renderDetail() {
     const Form = this.Form;
 
-    const Title = this.mapWidget (
+    const Title = this.mapWidget(
       Label,
       'text',
       `backend.${this.props.entityId}.meta.summaries.info`
@@ -249,12 +249,12 @@ class Workitem extends Form {
             {this.props.children}
           </Form>
         </Container>
-        {this.renderDetailActions ()}
+        {this.renderDetailActions()}
       </Container>
     );
   }
 
-  renderForm () {
+  renderForm() {
     const Form = this.Form;
     const formClass = this.styles.classNames.form;
     return (
@@ -270,7 +270,7 @@ class Workitem extends Form {
     );
   }
 
-  renderBoard () {
+  renderBoard() {
     const Form = this.Form;
     const boardClass = this.styles.classNames.board;
     return (
@@ -286,7 +286,7 @@ class Workitem extends Form {
     );
   }
 
-  renderRoadbook () {
+  renderRoadbook() {
     const Form = this.Form;
     const roadbookClass = this.styles.classNames.roadbook;
     return (
@@ -302,7 +302,7 @@ class Workitem extends Form {
     );
   }
 
-  renderDesk () {
+  renderDesk() {
     const Form = this.Form;
     const deskClass = this.styles.classNames.desk;
     return (
@@ -318,7 +318,7 @@ class Workitem extends Form {
     );
   }
 
-  render () {
+  render() {
     if (!this.props.id) {
       return <div>missing id props on Workitem component</div>;
     }
@@ -329,19 +329,19 @@ class Workitem extends Form {
     const kind = this.props.kind || 'editor';
     switch (kind) {
       case 'editor':
-        return this.renderEditor ();
+        return this.renderEditor();
       case 'detail':
-        return this.renderDetail ();
+        return this.renderDetail();
       case 'form':
-        return this.renderForm ();
+        return this.renderForm();
       case 'board':
-        return this.renderBoard ();
+        return this.renderBoard();
       case 'roadbook':
-        return this.renderRoadbook ();
+        return this.renderRoadbook();
       case 'desk':
-        return this.renderDesk ();
+        return this.renderDesk();
       default:
-        console.error (`Workitem does not support kind='${kind}'`);
+        console.error(`Workitem does not support kind='${kind}'`);
         return null;
     }
   }

@@ -2,14 +2,14 @@ import React from 'react';
 import Button from 'gadgets/button/widget';
 import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
-const Wired = Widget.Wired (Button);
+const Wired = Widget.Wired(Button);
 
 class Contexts extends Widget {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       desktopId: 'desktopId',
@@ -18,19 +18,19 @@ class Contexts extends Widget {
     };
   }
 
-  navToContext (contextId) {
-    this.cmd ('desktop.nav-to-context', {
+  navToContext(contextId) {
+    this.cmd('desktop.nav-to-context', {
       id: this.props.desktopId,
       contextId,
     });
   }
 
-  goToContext (contextId) {
-    this.do ('set-current', {contextId});
-    this.navToContext (contextId);
+  goToContext(contextId) {
+    this.do('set-current', {contextId});
+    this.navToContext(contextId);
   }
 
-  render () {
+  render() {
     const {contexts, current} = this.props;
 
     if (!this.props.id) {
@@ -38,19 +38,19 @@ class Contexts extends Widget {
     }
     let renderedContexts = [];
     if (contexts) {
-      renderedContexts = contexts.toArray ();
+      renderedContexts = contexts.toArray();
     }
 
     return (
       <Container kind="main-tab">
-        {renderedContexts.map ((v, k) => {
+        {renderedContexts.map((v, k) => {
           return (
             <Button
               key={k}
-              text={v.get ('name')}
+              text={v.get('name')}
               kind="main-tab"
-              onClick={() => this.goToContext (v.get ('contextId'))}
-              active={current === v.get ('contextId') ? 'true' : 'false'}
+              onClick={() => this.goToContext(v.get('contextId'))}
+              active={current === v.get('contextId') ? 'true' : 'false'}
             />
           );
         })}

@@ -5,31 +5,31 @@ import View from 'laboratory/view';
 import Container from 'gadgets/container/widget';
 import Board from 'desktop/board/widget';
 
-const viewImporter = importer ('view');
-const widgetImporter = importer ('widget');
+const viewImporter = importer('view');
+const widgetImporter = importer('widget');
 
 class BoardView extends View {
-  render () {
+  render() {
     const {workitemId} = this.props;
     if (!workitemId) {
       return null;
     }
 
-    const workitem = workitemId.split ('@')[0];
+    const workitem = workitemId.split('@')[0];
     let wireWidget = null;
     let BoardWorkitem = null;
 
-    if (workitem.endsWith ('-workitem')) {
-      wireWidget = Widget.Wired (Board);
-      BoardWorkitem = wireWidget (workitemId);
+    if (workitem.endsWith('-workitem')) {
+      wireWidget = Widget.Wired(Board);
+      BoardWorkitem = wireWidget(workitemId);
     }
 
     if (wireWidget === null || BoardWorkitem === null) {
       return <div>Unable to display {workitemId}</div>;
     }
 
-    const DetailView = viewImporter ('detail');
-    const HinterView = viewImporter ('hinter');
+    const DetailView = viewImporter('detail');
+    const HinterView = viewImporter('hinter');
     return (
       <Container kind="row" grow="1" width="100%">
         <Container kind="tickets-root">

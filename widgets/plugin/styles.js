@@ -3,14 +3,14 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-export default function styles (theme, props) {
+export default function styles(theme, props) {
   const m = theme.shapes.containerMargin;
-  const mm = Unit.multiply (m, -1);
-  const halfMargin = Unit.multiply (m, 0.5);
-  const quartMargin = Unit.multiply (m, 0.25);
+  const mm = Unit.multiply(m, -1);
+  const halfMargin = Unit.multiply(m, 0.5);
+  const quartMargin = Unit.multiply(m, 0.25);
 
-  const rm = Unit.add (halfMargin, '32px');
-  const mrm = Unit.multiply (rm, -1);
+  const rm = Unit.add(halfMargin, '32px');
+  const mrm = Unit.multiply(rm, -1);
 
   //--------//
   //  Box  //
@@ -71,17 +71,17 @@ export default function styles (theme, props) {
 
   // Simulate a z-coordinate. For big level, the panel comes more forward.
   const level = props.embeddedLevel || 1; // 1..n
-  const yShadow = Unit.add ('10px', Unit.multiply ('10px', level)); // 20, 30, 40, 50, ...
-  const blur = Unit.multiply ('5px', level); // 5, 10, 15, 20, ...
-  const alpha = Math.min (0.25 + level / 20, 0.8); // 0.30, 0.35, 0.40, 0.45, ...
+  const yShadow = Unit.add('10px', Unit.multiply('10px', level)); // 20, 30, 40, 50, ...
+  const blur = Unit.multiply('5px', level); // 5, 10, 15, 20, ...
+  const alpha = Math.min(0.25 + level / 20, 0.8); // 0.30, 0.35, 0.40, 0.45, ...
   const boxShadow = `0px 0px ${yShadow} ${blur} rgba(0,0,0, ${alpha})`;
 
   const compactedRowStyle = {
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
-    padding: '0px ' + Unit.add (m, '1px') + ' 2px ' + m,
-    transition: theme.transitions.easeOut (500),
+    padding: '0px ' + Unit.add(m, '1px') + ' 2px ' + m,
+    transition: theme.transitions.easeOut(500),
   };
 
   const compactedEmbeddedRowStyle = {
@@ -90,7 +90,7 @@ export default function styles (theme, props) {
     flexGrow: '1',
     margin: '0px ' + mrm + ' 2px 0px',
     padding: '0px ' + m,
-    transition: theme.transitions.easeOut (500),
+    transition: theme.transitions.easeOut(500),
   };
 
   const compactedDashedRowStyle = {
@@ -98,9 +98,9 @@ export default function styles (theme, props) {
     flexDirection: 'row',
     flexGrow: '1',
     margin: '0px 0px 0px 0px',
-    padding: '5px ' + Unit.add (m, '1px') + ' 5px ' + m,
+    padding: '5px ' + Unit.add(m, '1px') + ' 5px ' + m,
     borderTop: '1px solid rgba(0,0,0,0.1)',
-    transition: theme.transitions.easeOut (500),
+    transition: theme.transitions.easeOut(500),
   };
 
   const compactedEmbeddedDashedRowStyle = {
@@ -110,7 +110,7 @@ export default function styles (theme, props) {
     margin: '0px ' + mrm + ' 0px 0px',
     padding: '5px ' + m,
     borderTop: '1px solid rgba(0,0,0,0.1)',
-    transition: theme.transitions.easeOut (500),
+    transition: theme.transitions.easeOut(500),
   };
 
   const extendedRowStyle = {
@@ -121,7 +121,7 @@ export default function styles (theme, props) {
     padding: m,
     boxShadow: boxShadow,
     borderRadius: '5px',
-    transition: theme.transitions.easeOut (500),
+    transition: theme.transitions.easeOut(500),
   };
 
   const extendedEmbeddedRowStyle = {
@@ -132,7 +132,7 @@ export default function styles (theme, props) {
     padding: m,
     boxShadow: boxShadow,
     borderRadius: '5px',
-    transition: theme.transitions.easeOut (500),
+    transition: theme.transitions.easeOut(500),
   };
 
   //---------//
@@ -171,13 +171,13 @@ export default function styles (theme, props) {
   //---------//
 
   // Simulate a z-coordinate. For big level, the color is lighter.
-  const editBackground = ColorManipulator.lighten (
+  const editBackground = ColorManipulator.lighten(
     theme.palette.pluginToolbarEditBackground,
-    Math.min ((level - 1) / 5, 0.8) // 0, 0.2, 0.4, ...
+    Math.min((level - 1) / 5, 0.8) // 0, 0.2, 0.4, ...
   );
-  const readonlyBackground = ColorManipulator.lighten (
+  const readonlyBackground = ColorManipulator.lighten(
     theme.palette.pluginToolbarReadonlyBackground,
-    Math.min ((level - 1) / 5, 0.8) // 0, 0.2, 0.4, ...
+    Math.min((level - 1) / 5, 0.8) // 0, 0.2, 0.4, ...
   );
 
   const compactedButtonsStyle = {

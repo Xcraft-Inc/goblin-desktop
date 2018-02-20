@@ -1,3 +1,3 @@
 module.exports = {
-  buildWizard: require ('./wizard.js'),
+  buildWizard: require('./wizard.js'),
 };

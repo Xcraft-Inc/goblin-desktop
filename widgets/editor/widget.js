@@ -3,15 +3,15 @@ import Widget from 'laboratory/widget';
 import importer from 'laboratory/importer/';
 import Workitem from 'desktop/workitem/widget';
 
-const uiImporter = importer ('ui');
+const uiImporter = importer('ui');
 
 class Editor extends Widget {
-  constructor () {
-    super (...arguments);
-    this.doProxy = this.doProxy.bind (this);
+  constructor() {
+    super(...arguments);
+    this.doProxy = this.doProxy.bind(this);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       entityId: 'entityId',
@@ -19,12 +19,12 @@ class Editor extends Widget {
     };
   }
 
-  doProxy (action, args) {
-    const workitem = this.props.id.split ('@')[0];
-    this.doAs (workitem, action, args);
+  doProxy(action, args) {
+    const workitem = this.props.id.split('@')[0];
+    this.doAs(workitem, action, args);
   }
 
-  render () {
+  render() {
     const {id, entityId} = this.props;
     if (!id) {
       return null;
@@ -33,10 +33,10 @@ class Editor extends Widget {
       return null;
     }
 
-    const workitem = this.props.id.split ('@')[0];
+    const workitem = this.props.id.split('@')[0];
 
-    const workitemUI = uiImporter (workitem);
-    let EditorUI = this.WithState (workitemUI.panel.edit, 'entityId') (
+    const workitemUI = uiImporter(workitem);
+    let EditorUI = this.WithState(workitemUI.panel.edit, 'entityId')(
       '.entityId'
     );
     if (
@@ -44,14 +44,14 @@ class Editor extends Widget {
       workitemUI.mappers.panel &&
       workitemUI.mappers.panel.edit
     ) {
-      EditorUI = this.mapWidget (
+      EditorUI = this.mapWidget(
         EditorUI,
         workitemUI.mappers.panel.edit,
         `backend.${entityId}`
       );
     }
 
-    const Editor = this.mapWidget (
+    const Editor = this.mapWidget(
       Workitem,
       'status',
       `backend.${entityId}.meta.status`

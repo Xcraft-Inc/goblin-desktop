@@ -4,11 +4,11 @@ import Container from 'gadgets/container/widget';
 import Readme from '../../README.md';
 
 class DesktopDoc extends Widget {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
   }
 
-  renderPanel () {
+  renderPanel() {
     return (
       <Container kind="panes">
         <Container kind="pane">
@@ -18,12 +18,10 @@ class DesktopDoc extends Widget {
     );
   }
 
-  render () {
+  render() {
     return (
       <Container kind="views">
-        <Container kind="view">
-          {this.renderPanel ()}
-        </Container>
+        <Container kind="view">{this.renderPanel()}</Container>
       </Container>
     );
   }

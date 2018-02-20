@@ -7,11 +7,11 @@ import Button from 'gadgets/button/widget';
 import List from 'gadgets/list/widget';
 
 class Search extends Form {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       title: 'title',
@@ -20,16 +20,16 @@ class Search extends Form {
     };
   }
 
-  render () {
+  render() {
     const {id, title, hintText, type} = this.props;
     if (!id) {
       return null;
     }
 
     const Form = this.Form;
-    const DocumentsList = List.connectTo (this);
+    const DocumentsList = List.connectTo(this);
 
-    const Count = this.mapWidgetToFormPlugin (
+    const Count = this.mapWidgetToFormPlugin(
       p => (
         <Container busy={p.count === undefined}>{p.count} documents</Container>
       ),
@@ -70,7 +70,7 @@ class Search extends Form {
                     <Button
                       kind="container"
                       width="100%"
-                      onClick={() => this.navToDetail (this.props.id, props.id)}
+                      onClick={() => this.navToDetail(this.props.id, props.id)}
                       onDoubleClick={() => {}}
                     >
                       <Label
@@ -85,12 +85,11 @@ class Search extends Form {
                 );
               }}
               mapItem={entity => {
-                const text = entity.get ('meta.summaries.description');
-                return {text, id: entity.get ('id')};
+                const text = entity.get('meta.summaries.description');
+                return {text, id: entity.get('id')};
               }}
             />
           </Container>
-
         </Container>
       </Container>
     );

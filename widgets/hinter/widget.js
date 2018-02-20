@@ -3,18 +3,18 @@ import Widget from 'laboratory/widget';
 import importer from 'laboratory/importer/';
 import HinterColumn from 'gadgets/hinter-column/widget';
 import MouseTrap from 'mousetrap';
-const widgetImporter = importer ('widget');
+const widgetImporter = importer('widget');
 
 class Hinter extends Widget {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
 
-    this.onKeyUp = this.onKeyUp.bind (this);
-    this.onKeyDown = this.onKeyDown.bind (this);
-    this.onValidate = this.onValidate.bind (this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onValidate = this.onValidate.bind(this);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       type: 'type',
@@ -29,49 +29,51 @@ class Hinter extends Widget {
     };
   }
 
-  componentWillMount () {
-    MouseTrap.bind ('up', this.onKeyUp, 'keydown');
-    MouseTrap.bind ('down', this.onKeyDown, 'keydown');
-    MouseTrap.bind ('return', this.onValidate);
-    MouseTrap.bind ('tab', this.onValidate);
+  componentWillMount() {
+    MouseTrap.bind('up', this.onKeyUp, 'keydown');
+    MouseTrap.bind('down', this.onKeyDown, 'keydown');
+    MouseTrap.bind('return', this.onValidate);
+    MouseTrap.bind('tab', this.onValidate);
   }
 
-  componentWillUnmount () {
-    MouseTrap.unbind ('up');
-    MouseTrap.unbind ('down');
-    MouseTrap.unbind ('return');
-    MouseTrap.unbind ('tab');
+  componentWillUnmount() {
+    MouseTrap.unbind('up');
+    MouseTrap.unbind('down');
+    MouseTrap.unbind('return');
+    MouseTrap.unbind('tab');
   }
 
-  onValidate () {
-    this.validateRow (parseInt (this.props.selectedIndex));
+  onValidate() {
+    this.validateRow(parseInt(this.props.selectedIndex));
   }
 
-  onKeyUp () {
-    this.selectRow (parseInt (this.props.selectedIndex) - 1);
+  onKeyUp() {
+    this.selectRow(parseInt(this.props.selectedIndex) - 1);
   }
 
-  onKeyDown () {
-    this.selectRow (parseInt (this.props.selectedIndex) + 1);
+  onKeyDown() {
+    this.selectRow(parseInt(this.props.selectedIndex) + 1);
   }
 
-  selectRow (index) {
+  selectRow(index) {
     if (index >= 0 && index < this.props.rows.size) {
-      const value = this.props.rows.get (index);
-      this.do ('select-row', {index, value});
+      const value = this.props.rows.get(index);
+      this.do('select-row', {index, value});
     }
   }
 
-  validateRow (index) {
+  validateRow(index) {
     if (index >= 0 && index < this.props.rows.size) {
-      const value = this.props.rows.get (index);
-      const model = this.getRouting ().get ('location.hash').substring (1);
-      this.do ('validate-row', {index, text: value, model});
-      this.hideHinter ();
+      const value = this.props.rows.get(index);
+      const model = this.getRouting()
+        .get('location.hash')
+        .substring(1);
+      this.do('validate-row', {index, text: value, model});
+      this.hideHinter();
     }
   }
 
-  render () {
+  render() {
     const {
       id,
       onNew,
@@ -107,19 +109,19 @@ class Hinter extends Widget {
         newButtonTitle={newButtonTitle}
         onNew={() => {
           if (onNew) {
-            const model = this.getRouting ()
-              .get ('location.hash')
-              .substring (1);
-            const value = this.getModelValue (model, true);
-            this.do ('create-new', {value});
+            const model = this.getRouting()
+              .get('location.hash')
+              .substring(1);
+            const value = this.getModelValue(model, true);
+            this.do('create-new', {value});
           }
         }}
         displayNewButton={onNew}
         onRowClick={index => {
-          this.selectRow (index);
+          this.selectRow(index);
         }}
         onRowDbClick={index => {
-          this.validateRow (index);
+          this.validateRow(index);
         }}
       />
     );

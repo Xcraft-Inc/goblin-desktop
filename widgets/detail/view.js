@@ -4,32 +4,29 @@ import Widget from 'laboratory/widget';
 import Detail from 'desktop/detail/widget';
 
 class DetailView extends View {
-  constructor () {
-    super (...arguments);
+  constructor() {
+    super(...arguments);
   }
 
-  render () {
+  render() {
     const {isDisplayed, hinter} = this.props;
     if (!isDisplayed) {
       return null;
     }
 
     let hinterName = hinter;
-    if (hinter.endsWith ('-hidden')) {
-      hinterName = hinter.replace ('-hidden', '');
+    if (hinter.endsWith('-hidden')) {
+      hinterName = hinter.replace('-hidden', '');
     }
 
-    const wireDetail = Widget.Wired (Detail);
-    const hash = this.getHash ();
-    const workitemId = hash.split ('.')[1];
-    const WiredDetail = wireDetail (`${hinterName}-detail@${workitemId}`);
+    const wireDetail = Widget.Wired(Detail);
+    const hash = this.getHash();
+    const workitemId = hash.split('.')[1];
+    const WiredDetail = wireDetail(`${hinterName}-detail@${workitemId}`);
     return <WiredDetail />;
   }
 }
 
-export default Widget.WithRoute (
-  DetailView,
-  ['context', 'hinter'],
-  null,
-  true
-) ('/:context/:view/:hinter');
+export default Widget.WithRoute(DetailView, ['context', 'hinter'], null, true)(
+  '/:context/:view/:hinter'
+);

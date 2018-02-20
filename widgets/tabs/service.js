@@ -1,6 +1,6 @@
 'use strict';
 
-const Goblin = require ('xcraft-core-goblin');
+const Goblin = require('xcraft-core-goblin');
 const goblinName = 'tabs';
 // Define initial logic values
 const logicState = {};
@@ -8,9 +8,9 @@ const logicState = {};
 // Define logic handlers according rc.json
 const logicHandlers = {
   create: (state, action) => {
-    const id = action.get ('id');
-    const desktopId = action.get ('desktopId');
-    return state.set ('', {
+    const id = action.get('id');
+    const desktopId = action.get('desktopId');
+    return state.set('', {
       id: id,
       tabs: {},
       desktopId,
@@ -18,55 +18,55 @@ const logicHandlers = {
     });
   },
   add: (state, action) => {
-    const tabId = action.get ('tabId');
-    const contextId = action.get ('contextId');
-    const current = state.get (`current.${contextId}`, null);
+    const tabId = action.get('tabId');
+    const contextId = action.get('contextId');
+    const current = state.get(`current.${contextId}`, null);
     const tab = {
       id: tabId,
-      name: action.get ('name'),
-      view: action.get ('view'),
-      workitemId: action.get ('workitemId'),
-      closable: action.get ('closable'),
-      glyph: action.get ('glyph'),
+      name: action.get('name'),
+      view: action.get('view'),
+      workitemId: action.get('workitemId'),
+      closable: action.get('closable'),
+      glyph: action.get('glyph'),
     };
     if (!current) {
       return state
-        .set (`current.${contextId}`, action.get ('workitemId'))
-        .set (`tabs.${contextId}.${tabId}`, tab);
+        .set(`current.${contextId}`, action.get('workitemId'))
+        .set(`tabs.${contextId}.${tabId}`, tab);
     }
-    return state.set (`tabs.${contextId}.${tabId}`, tab);
+    return state.set(`tabs.${contextId}.${tabId}`, tab);
   },
   'set-current': (state, action) => {
-    const wid = action.get ('workitemId');
-    const contextId = action.get ('contextId');
-    return state.set (`current.${contextId}`, wid);
+    const wid = action.get('workitemId');
+    const contextId = action.get('contextId');
+    return state.set(`current.${contextId}`, wid);
   },
   remove: (state, action) => {
-    const tabId = action.get ('tabId');
-    const contextId = action.get ('contextId');
-    return state.del (`tabs.${contextId}.${tabId}`);
+    const tabId = action.get('tabId');
+    const contextId = action.get('contextId');
+    return state.del(`tabs.${contextId}.${tabId}`);
   },
 };
 
 // Register quest's according rc.json
 
-Goblin.registerQuest (goblinName, 'create', function (quest, id, desktopId) {
-  quest.goblin.setX ('desktopId', desktopId);
-  quest.do ({id, desktopId});
+Goblin.registerQuest(goblinName, 'create', function(quest, id, desktopId) {
+  quest.goblin.setX('desktopId', desktopId);
+  quest.do({id, desktopId});
   return quest.goblin.id;
 });
 
-Goblin.registerQuest (goblinName, 'delete', function (quest) {});
+Goblin.registerQuest(goblinName, 'delete', function(quest) {});
 
-Goblin.registerQuest (goblinName, 'set-current', function (
+Goblin.registerQuest(goblinName, 'set-current', function(
   quest,
   contextId,
   workitemId
 ) {
-  quest.do ({contextId, workitemId});
+  quest.do({contextId, workitemId});
 });
 
-Goblin.registerQuest (goblinName, 'add', function (
+Goblin.registerQuest(goblinName, 'add', function(
   quest,
   contextId,
   name,
@@ -75,13 +75,13 @@ Goblin.registerQuest (goblinName, 'add', function (
   closable,
   glyph
 ) {
-  quest.do ({
+  quest.do({
     tabId: workitemId,
   });
   return workitemId;
 });
 
-Goblin.registerQuest (goblinName, 'remove', function* (
+Goblin.registerQuest(goblinName, 'remove', function*(
   quest,
   tabId,
   contextId,
@@ -89,47 +89,47 @@ Goblin.registerQuest (goblinName, 'remove', function* (
   navToLastWorkitem,
   close
 ) {
-  const i = quest.openInventory ();
+  const i = quest.openInventory();
 
-  const wi = i.getAPI (workitemId);
+  const wi = i.getAPI(workitemId);
   if (close && wi && wi.close) {
-    yield wi.close ({kind: 'terminate'});
+    yield wi.close({kind: 'terminate'});
   } else {
-    const tabButton = i.getAPI (tabId);
+    const tabButton = i.getAPI(tabId);
     if (tabButton) {
-      tabButton.delete ();
+      tabButton.delete();
     }
   }
 
-  quest.evt ('removed', {workitemId});
+  quest.evt('removed', {workitemId});
 
-  quest.do ();
+  quest.do();
 
-  const desktopId = quest.goblin.getX ('desktopId');
-  const desk = quest.getGoblinAPI ('desktop', desktopId);
-  desk.cleanWorkitem ({workitemId});
+  const desktopId = quest.goblin.getX('desktopId');
+  const desk = quest.getGoblinAPI('desktop', desktopId);
+  desk.cleanWorkitem({workitemId});
 
   if (navToLastWorkitem) {
-    desk.navToLastWorkitem ();
+    desk.navToLastWorkitem();
   } else {
     // Navigate last tab
-    const contextTabs = quest.goblin.getState ().get (`tabs.${contextId}`);
+    const contextTabs = quest.goblin.getState().get(`tabs.${contextId}`);
     if (!contextTabs) {
       return;
     }
-    const newLast = contextTabs.state.last ();
+    const newLast = contextTabs.state.last();
 
     if (newLast) {
-      desk.navToWorkitem ({
+      desk.navToWorkitem({
         contextId: contextId,
-        view: newLast.get ('view'),
-        workitemId: newLast.get ('workitemId'),
+        view: newLast.get('view'),
+        workitemId: newLast.get('workitemId'),
       });
     } else {
-      desk.clearWorkitem ({contextId});
+      desk.clearWorkitem({contextId});
     }
   }
 });
 
 // Create a Goblin with initial state and handlers
-module.exports = Goblin.configure (goblinName, logicState, logicHandlers);
+module.exports = Goblin.configure(goblinName, logicState, logicHandlers);
