@@ -63,7 +63,7 @@ Goblin.registerQuest(goblinName, 'set-entity', function*(
   const desktopId = quest.goblin.getX('desktopId');
   const created = quest.goblin.getX('created');
   const type = entityId.split('@')[0];
-  const workitemId = `${type}-workitem@${entityId}`;
+  const workitemId = `${type}-workitem@${desktopId}@${entityId}`;
 
   if (!created[workitemId]) {
     try {

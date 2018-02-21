@@ -310,13 +310,14 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
     }
   }
 
-  const widgetId = `${workitem.name}@${workitem.id}`;
+  const desktopId = quest.goblin.id;
+  const widgetId = `${workitem.name}@${desktopId}@${workitem.id}`;
   yield quest.create(
     widgetId,
     Object.assign(
       {
         id: widgetId,
-        desktopId: quest.goblin.id,
+        desktopId,
         contextId: workitem.contextId,
         workflowId: workitem.workflowId,
       },
@@ -344,7 +345,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
   }
 
   quest.evt(`workitem.added`, {
-    desktopId: quest.goblin.id,
+    desktopId,
     workitemId: widgetId,
   });
 
