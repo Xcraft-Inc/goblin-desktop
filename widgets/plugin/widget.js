@@ -185,6 +185,9 @@ class Plugin extends Widget {
       );
     }
 
+    if (!this.backendHasBranch(workitemId)) {
+      return <div>MISSING {workitemId}</div>;
+    }
     return (
       <div className={itemClass}>
         <Workitem
