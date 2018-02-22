@@ -260,9 +260,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
 ) {
   const desk = quest.me;
   if (!workitem.id) {
-    throw new Error(
-      `Cannot add workitem without an id: ${JSON.stringify(workitem)}`
-    );
+    workitem.id = quest.uuidV4();
   }
   if (!workitem.name) {
     throw new Error(
