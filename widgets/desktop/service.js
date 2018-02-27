@@ -355,7 +355,7 @@ Goblin.registerQuest(goblinName, 'add-context', function(
   contextId,
   name
 ) {
-  const contexts = quest.getAPI('contexts');
+  const contexts = quest.getAPI(`contexts@${quest.goblin.id}`);
   contexts.add({
     contextId,
     name,
@@ -389,7 +389,7 @@ Goblin.registerQuest(goblinName, 'add-tab', function*(
       workitemId,
     });
   }
-  const tabs = quest.getAPI('tabs');
+  const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
   const tabId = yield tabs.add({
     name,
     contextId,
@@ -418,7 +418,7 @@ Goblin.registerQuest(goblinName, 'remove-tab', function*(
   navToLastWorkitem,
   close
 ) {
-  const tabs = quest.getAPI('tabs');
+  const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
   yield tabs.remove({
     tabId,
     contextId,
@@ -467,7 +467,7 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function(
     contextId = quest.goblin.GetState().get(`current.workcontext`, null);
   }
   quest.dispatch('setCurrentWorkitemByContext', {contextId, view, workitemId});
-  const tabs = quest.getAPI('tabs');
+  const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
   tabs.setCurrent({contextId, workitemId});
   if (skipNav) {
     return;
@@ -484,7 +484,7 @@ Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function(quest) {
   const workitemId = last.get('workitem');
 
   quest.dispatch('setCurrentWorkitemByContext', {contextId, view, workitemId});
-  const tabs = quest.getAPI('tabs');
+  const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
   tabs.setCurrent({contextId, workitemId});
   quest.evt(`nav.requested`, {
     route: `/${contextId}/${view}?wid=${workitemId}`,
