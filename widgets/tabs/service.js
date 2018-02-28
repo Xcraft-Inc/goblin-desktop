@@ -95,7 +95,7 @@ Goblin.registerQuest(goblinName, 'remove', function*(
   } else {
     const tabButton = quest.getAPI(tabId);
     if (tabButton) {
-      tabButton.delete();
+      quest.release(tabId);
     }
   }
 
