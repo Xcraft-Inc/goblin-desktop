@@ -185,26 +185,45 @@ class Plugin extends Widget {
       );
     }
 
-    if (!this.backendHasBranch(workitemId)) {
-      return <div>MISSING {workitemId}</div>;
-    }
+    const Loader = props => {
+      if (props.loaded) {
+        return (
+          <Workitem
+            id={workitemId}
+            entityId={entityId}
+            kind="form"
+            readonly={this.props.readonly}
+            dragServiceId={this.props.dragServiceId}
+          >
+            <UI
+              id={workitemId}
+              theme={this.context.theme}
+              entityId={entityId}
+              embeddedLevel={this.props.embeddedLevel}
+              origin={this.props.origin}
+            />
+          </Workitem>
+        );
+      } else {
+        return <Container busy="true">chargement...</Container>;
+      }
+    };
+
+    const LoadedWorkitem = this.mapWidget(
+      Loader,
+      wid => {
+        if (!wid) {
+          return {loaded: false};
+        } else {
+          return {loaded: true};
+        }
+      },
+      `backend.${workitemId}.id`
+    );
+
     return (
       <div className={itemClass}>
-        <Workitem
-          id={workitemId}
-          entityId={entityId}
-          kind="form"
-          readonly={this.props.readonly}
-          dragServiceId={this.props.dragServiceId}
-        >
-          <UI
-            id={workitemId}
-            theme={this.context.theme}
-            entityId={entityId}
-            embeddedLevel={this.props.embeddedLevel}
-            origin={this.props.origin}
-          />
-        </Workitem>
+        <LoadedWorkitem />
       </div>
     );
   }
