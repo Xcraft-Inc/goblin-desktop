@@ -67,6 +67,7 @@ class Editor extends Widget {
           {...this.props}
           theme={this.context.theme}
           do={this.doProxy}
+          contextId={this.context.contextId}
         />
       </Editor>
     );

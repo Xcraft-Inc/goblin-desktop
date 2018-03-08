@@ -201,6 +201,7 @@ class Plugin extends Widget {
               entityId={entityId}
               embeddedLevel={this.props.embeddedLevel}
               origin={this.props.origin}
+              contextId={this.context.contextId}
             />
           </Workitem>
         );

@@ -100,6 +100,7 @@ class Detail extends Widget {
             theme={this.context.theme}
             do={this.doProxy}
             entityId={entityId}
+            contextId={this.context.contextId}
           />
         </Detail>
       </Container>
