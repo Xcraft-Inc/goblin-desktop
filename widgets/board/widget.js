@@ -24,7 +24,7 @@ class Board extends Widget {
   }
 
   render() {
-    const {id, entityId} = this.props;
+    const {id, entityId, layout} = this.props;
     if (!id) {
       return null;
     }
@@ -35,7 +35,10 @@ class Board extends Widget {
     const workitem = this.props.id.split('@')[0];
 
     const workitemUI = uiImporter(workitem);
-    let EditorUI = this.WithState(workitemUI.board, 'entityId')('.entityId');
+    let EditorUI = this.WithState(
+      layout ? workitemUI[layout] : workitemUI.board,
+      'entityId'
+    )('.entityId');
     if (workitemUI.mappers && workitemUI.mappers.board) {
       EditorUI = this.mapWidget(
         EditorUI,
