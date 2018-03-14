@@ -19,6 +19,7 @@ let currentThemeName = 'default'; // FIXME: Move to state !?
 
 const themes = [
   {text: 'Standard', name: 'default'},
+  {text: 'Standard compact', name: 'default-compact'},
   {text: 'Vert', name: 'default-green'},
   {text: 'Vert spécial', name: 'special-green'},
   {text: 'Vert arrondi', name: 'smooth-green'},
