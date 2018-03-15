@@ -57,11 +57,8 @@ class Workitem extends Form {
   }
 
   onCancel() {
-    this.doAs(this.service, 'close', {
-      kind: 'cancel',
-      desktopId: this.desktopId,
-      contextId: this.contextId,
-    });
+    this.doAs(this.service, 'restore-entity');
+    this.hideHinter();
   }
 
   onEdit() {
