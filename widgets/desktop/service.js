@@ -260,7 +260,9 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
 ) {
   const desk = quest.me;
   if (!workitem.id) {
-    workitem.id = quest.uuidV4();
+    workitem.id = workitem.payload.entityId
+      ? workitem.payload.entityId
+      : quest.uuidV4();
   }
   if (!workitem.name) {
     throw new Error(
