@@ -27,16 +27,11 @@ class BoardView extends View {
     if (wireWidget === null || BoardWorkitem === null) {
       return <div>Unable to display {workitemId}</div>;
     }
-
-    const DetailView = viewImporter('detail');
-    const HinterView = viewImporter('hinter');
     return (
       <Container kind="row" grow="1" width="100%">
         <Container kind="tickets-root">
           <BoardWorkitem />
         </Container>
-        <HinterView />
-        <DetailView />
       </Container>
     );
   }

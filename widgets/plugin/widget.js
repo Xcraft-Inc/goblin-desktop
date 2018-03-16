@@ -43,6 +43,7 @@ class Plugin extends Widget {
       entityIds: 'entityIds',
       editorWidget: 'editorWidget',
       arity: 'arity',
+      mode: 'mode',
     };
   }
 
@@ -150,9 +151,10 @@ class Plugin extends Widget {
 
   renderItem(entityId, extended, index) {
     const workitemUI = uiImporter(this.props.editorWidget);
-    const workitemId = `${this.props.editorWidget}@${
-      this.context.desktopId
-    }@${this.props.entityIds.get(index)}`;
+    const workitemId = `${this.props.editorWidget}${
+      this.props.mode ? `@${this.props.mode}` : ''
+    }@${this.context.desktopId}@${this.props.entityIds.get(index)}`;
+
     if (!workitemUI.plugin) {
       return null;
     }

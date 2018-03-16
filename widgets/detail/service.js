@@ -58,13 +58,14 @@ Goblin.registerQuest(goblinName, 'create', function(
 Goblin.registerQuest(goblinName, 'set-entity', function(quest, entityId) {
   const desktopId = quest.goblin.getX('desktopId');
   const type = entityId.split('@')[0];
-  const workitemId = `${type}-workitem@${desktopId}@${entityId}`;
+  const workitemId = `${type}-workitem@readonly@${desktopId}@${entityId}`;
   quest.do({widgetId: workitemId, entityId});
 
   quest.create(workitemId, {
     id: workitemId,
     desktopId,
     entityId: entityId,
+    mode: 'readonly',
   });
 });
 

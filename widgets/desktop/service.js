@@ -311,7 +311,9 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
   }
 
   const desktopId = quest.goblin.id;
-  const widgetId = `${workitem.name}@${desktopId}@${workitem.id}`;
+  const widgetId = `${workitem.name}${
+    workitem.mode ? `@${workitem.mode}` : ''
+  }@${desktopId}@${workitem.id}`;
   yield quest.createFor(
     workitem.name,
     widgetId,
@@ -322,6 +324,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
         desktopId,
         contextId: workitem.contextId,
         workflowId: workitem.workflowId,
+        mode: workitem.mode ? workitem.mode : false,
       },
       workitem.payload,
       {payload: workitem.payload}
