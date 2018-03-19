@@ -158,8 +158,8 @@ class Workitem extends Form {
               grow="1"
               kind="action"
               place="2/2"
-              glyph="solid/ban"
-              text="Annuler"
+              glyph="solid/undo"
+              text="Réinitialiser"
               onClick={this.onCancel}
             />
           </Container>
@@ -181,8 +181,8 @@ class Workitem extends Form {
               grow="1"
               kind="action"
               place="2/2"
-              glyph="solid/ban"
-              text="Annuler"
+              glyph="solid/undo"
+              text="Réinitialiser"
               onClick={this.onCancel}
             />
           </Container>
