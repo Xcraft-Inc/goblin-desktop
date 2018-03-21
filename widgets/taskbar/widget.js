@@ -6,6 +6,8 @@ import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Separator from 'gadgets/separator/widget';
 
+import CreateBoardButton from 'polypheme/create-board-button/widget';
+
 const tasksImporter = importer('tasks');
 class Taskbar extends Widget {
   constructor() {
@@ -20,20 +22,38 @@ class Taskbar extends Widget {
   }
 
   renderButton(context, task, index) {
-    return (
-      <Button
-        key={index}
-        kind="task-bar"
-        text={task.text}
-        glyph={task.glyph}
-        onClick={() =>
-          this.do('run', {
-            workitem: task.workitem,
-            contextId: context,
-          })
-        }
-      />
-    );
+    if (task.dialog === 'create-board') {
+      return (
+        <CreateBoardButton
+          key={index}
+          kind="task-bar"
+          text={task.text}
+          glyph={task.glyph}
+          onClick={date =>
+            this.do('run', {
+              workitem: task.workitem,
+              contextId: context,
+              date: date, // FIXME: manage date...
+            })
+          }
+        />
+      );
+    } else {
+      return (
+        <Button
+          key={index}
+          kind="task-bar"
+          text={task.text}
+          glyph={task.glyph}
+          onClick={() =>
+            this.do('run', {
+              workitem: task.workitem,
+              contextId: context,
+            })
+          }
+        />
+      );
+    }
   }
 
   renderSeparator(index) {
