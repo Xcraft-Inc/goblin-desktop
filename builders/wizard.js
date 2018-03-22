@@ -81,8 +81,10 @@ module.exports = config => {
     quest.me.busy();
   });
 
-  Goblin.registerQuest(goblinName, 'submit', function(quest) {
-    quest.do();
+  Goblin.registerQuest(goblinName, 'cancel', function(quest) {
+    const desktopId = quest.goblin.getX('desktopId');
+    const desk = quest.getAPI(desktopId);
+    desk.removeDialog({dialogId: quest.goblin.id});
   });
 
   Goblin.registerQuest(goblinName, 'change', function(quest) {
