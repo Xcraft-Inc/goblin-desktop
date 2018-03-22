@@ -10,16 +10,20 @@ module.exports = config => {
   // Define logic handlers according rc.json
   const logicHandlers = {
     create: (state, action) => {
+      const form = action.get('form');
       return state.set('', {
         id: action.get('id'),
         step: 'init',
         title: title,
         busy: true,
-        form: {},
+        form: form ? form : {},
       });
     },
     submit: (state, action) => {
       return state.applyForm(action.get('value'));
+    },
+    change: (state, action) => {
+      return state.set(action.get('path'), action.get('newValue'));
     },
     next: (state, action) => {
       return state.set('step', action.get('step'));
@@ -29,9 +33,9 @@ module.exports = config => {
     },
   };
 
-  Goblin.registerQuest(goblinName, 'create', function*(quest, desktopId) {
+  Goblin.registerQuest(goblinName, 'create', function*(quest, desktopId, form) {
     quest.goblin.setX('desktopId', desktopId);
-    quest.do({id: quest.goblin.id});
+    quest.do({id: quest.goblin.id, form});
     yield quest.me.init();
     quest.me.busy();
     return quest.goblin.id;
@@ -45,7 +49,13 @@ module.exports = config => {
     const nextStep = wizardFlow[1];
     quest.me.busy();
     quest.dispatch(`init-${nextStep}`);
-    yield quest.me[nextStep]();
+
+    const form = quest.goblin
+      .getState()
+      .get('form')
+      .toJS();
+
+    yield quest.me[nextStep]({form});
     quest.dispatch('next', {step: nextStep});
     quest.me.busy();
   });
@@ -60,7 +70,13 @@ module.exports = config => {
     const nextStep = wizardFlow[nIndex];
     quest.me.busy();
     quest.dispatch(`init-${nextStep}`);
-    yield quest.me[nextStep]();
+
+    const form = quest.goblin
+      .getState()
+      .get('form')
+      .toJS();
+
+    yield quest.me[nextStep]({form});
     quest.do({step: wizardFlow[nIndex]});
     quest.me.busy();
   });
@@ -70,7 +86,7 @@ module.exports = config => {
   });
 
   Goblin.registerQuest(goblinName, 'change', function(quest) {
-    //...
+    quest.do();
   });
 
   // configure steps

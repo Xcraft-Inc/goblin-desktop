@@ -10,6 +10,7 @@ class Wizard extends Form {
   constructor() {
     super(...arguments);
     this.onNext = this.onNext.bind(this);
+    this.setForm = this.setForm.bind(this);
     this.doProxy = this.doProxy.bind(this);
   }
 
@@ -31,6 +32,14 @@ class Wizard extends Form {
   doProxy(action, args) {
     const workitem = this.props.id.split('@')[0];
     this.doAs(workitem, action, args);
+  }
+
+  setForm(path, newValue) {
+    const workitem = this.props.id.split('@')[0];
+    if (path.startsWith('.')) {
+      path = path.substring(1);
+    }
+    this.doAs(workitem, 'change', {path, newValue});
   }
 
   render() {
@@ -63,6 +72,7 @@ class Wizard extends Form {
                 {...this.props}
                 theme={this.context.theme}
                 do={this.doProxy}
+                setForm={this.setForm}
               />
             </Form>
           </Container>
