@@ -1,16 +1,16 @@
 import React from 'react';
-import importer from 'laboratory/importer';
 import Widget from 'laboratory/widget';
 import View from 'laboratory/view';
 import Container from 'gadgets/container/widget';
 import Board from 'desktop/board/widget';
-
-const viewImporter = importer('view');
-const widgetImporter = importer('widget');
+import DialogModal from 'gadgets/dialog-modal/widget';
+import Editor from 'desktop/editor/widget';
+import Search from 'desktop/search/widget';
+import Wizard from 'desktop/wizard/widget';
 
 class BoardView extends View {
   render() {
-    const {workitemId} = this.props;
+    const {workitemId, dialogId} = this.props;
     if (!workitemId) {
       return null;
     }
@@ -18,6 +18,7 @@ class BoardView extends View {
     const workitem = workitemId.split('@')[0];
     let wireWidget = null;
     let BoardWorkitem = null;
+    let WiredDialog = null;
 
     if (workitem.endsWith('-workitem')) {
       wireWidget = Widget.Wired(Board);
@@ -27,10 +28,21 @@ class BoardView extends View {
     if (wireWidget === null || BoardWorkitem === null) {
       return <div>Unable to display {workitemId}</div>;
     }
+
+    if (dialogId) {
+      const dialog = dialogId.split('@')[0];
+      let wireDialog = null;
+      if (dialog.endsWith('-wizard')) {
+        wireDialog = Widget.Wired(Wizard);
+        WiredDialog = wireDialog(dialogId);
+      }
+    }
+
     return (
       <Container kind="row" grow="1" width="100%">
         <Container kind="tickets-root">
           <BoardWorkitem />
+          {WiredDialog ? <WiredDialog kind="dialog" /> : null}
         </Container>
       </Container>
     );
