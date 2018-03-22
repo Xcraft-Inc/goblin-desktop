@@ -8,7 +8,7 @@ class WorkItem extends View {
   }
 
   render() {
-    const {view, desktopId, wid, context} = this.props;
+    const {view, desktopId, wid, did, context} = this.props;
 
     if (!view) {
       return null;
@@ -19,7 +19,14 @@ class WorkItem extends View {
     }
 
     const View = viewImporter(view);
-    return <View desktopId={desktopId} context={context} workitemId={wid} />;
+    return (
+      <View
+        desktopId={desktopId}
+        context={context}
+        workitemId={wid}
+        dialogId={did}
+      />
+    );
   }
 }
 

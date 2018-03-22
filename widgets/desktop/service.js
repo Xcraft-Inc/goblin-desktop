@@ -347,6 +347,11 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
       quest.do({widgetId, tabId});
       break;
     }
+    case 'dialog': {
+      yield desk.addDialog({dialogId: widgetId});
+      quest.do({widgetId, tabId: null});
+      break;
+    }
   }
 
   quest.evt(`workitem.added`, {
@@ -433,6 +438,28 @@ Goblin.registerQuest(goblinName, 'remove-tab', function*(
     navToLastWorkitem,
     close,
   });
+});
+
+Goblin.registerQuest(goblinName, 'add-dialog', function(quest, dialogId) {
+  const state = quest.goblin.getState();
+  const contextId = state.get(`current.workcontext`, null);
+  const view = state.get(`current.views.${contextId}`);
+  const currentWorkitemId = state.get(`current.workitems.${contextId}`);
+  quest.evt(`nav.requested`, {
+    route: `/${contextId}/${view}?wid=${currentWorkitemId}&did=${dialogId}`,
+  });
+});
+
+Goblin.registerQuest(goblinName, 'remove-dialog', function(quest, dialogId) {
+  const state = quest.goblin.getState();
+  const contextId = state.get(`current.workcontext`, null);
+  const view = state.get(`current.views.${contextId}`);
+  const currentWorkitemId = state.get(`current.workitems.${contextId}`);
+  quest.evt(`nav.requested`, {
+    route: `/${contextId}/${view}?wid=${currentWorkitemId}`,
+  });
+  quest.me.cleanWorkitem({workitemId: dialogId});
+  quest.release(dialogId);
 });
 
 Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {
