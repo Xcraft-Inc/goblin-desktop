@@ -14,40 +14,47 @@ const widgetImporter = importer('widget');
 class DefaultView extends View {
   render() {
     const {workitemId, dialogId, desktopId, context} = this.props;
-    if (!workitemId) {
+    if (!workitemId && !dialogId) {
       return null;
     }
 
-    const workitem = workitemId.split('@')[0];
     let wireWidget = null;
     let LeftPanel = null;
+    let wireDialog = null;
     let WiredDialog = null;
 
-    if (workitem.endsWith('-workitem')) {
-      wireWidget = Widget.Wired(Editor);
-      LeftPanel = wireWidget(workitemId);
-    }
+    if (workitemId) {
+      const workitem = workitemId.split('@')[0];
 
-    if (workitem.endsWith('-search')) {
-      wireWidget = Widget.Wired(Search);
-      LeftPanel = wireWidget(workitemId);
-    }
+      if (workitem.endsWith('-workitem')) {
+        wireWidget = Widget.Wired(Editor);
+        LeftPanel = wireWidget(workitemId);
+      }
 
-    if (workitem.endsWith('-wizard')) {
-      wireWidget = Widget.Wired(Wizard);
-      LeftPanel = wireWidget(workitemId);
-    }
+      if (workitem.endsWith('-search')) {
+        wireWidget = Widget.Wired(Search);
+        LeftPanel = wireWidget(workitemId);
+      }
 
-    if (wireWidget === null || LeftPanel === null) {
-      return <div>Unable to display {workitemId}</div>;
+      if (workitem.endsWith('-wizard')) {
+        wireWidget = Widget.Wired(Wizard);
+        LeftPanel = wireWidget(workitemId);
+      }
+
+      if (wireWidget === null || LeftPanel === null) {
+        return <div>Unable to display workitem{workitemId}</div>;
+      }
     }
 
     if (dialogId) {
       const dialog = dialogId.split('@')[0];
-      let wireDialog = null;
       if (dialog.endsWith('-wizard')) {
         wireDialog = Widget.Wired(Wizard);
         WiredDialog = wireDialog(dialogId);
+      }
+
+      if (wireDialog === null || WiredDialog === null) {
+        return <div>Unable to display dialog {workitemId}</div>;
       }
     }
 
@@ -56,7 +63,7 @@ class DefaultView extends View {
     return (
       <Container kind="views">
         {WiredDialog ? <WiredDialog kind="dialog" /> : null}
-        <LeftPanel />
+        {LeftPanel ? <LeftPanel /> : null}
         <Container kind="row" grow="1">
           <HinterView desktopId={desktopId} context={context} />
         </Container>

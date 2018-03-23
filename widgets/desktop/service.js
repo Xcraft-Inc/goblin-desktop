@@ -440,23 +440,45 @@ Goblin.registerQuest(goblinName, 'remove-tab', function*(
   });
 });
 
+const buildDialogNavRequest = (state, newArg) => {
+  if (!newArg) {
+    newArg = '';
+  } else {
+    newArg = `?${newArg}`;
+  }
+
+  const contextId = state.get(`current.workcontext`, null);
+  if (!contextId) {
+    return `${newArg}`;
+  }
+
+  const view = state.get(`current.views.${contextId}`, null);
+  if (!view) {
+    return `/${contextId}${newArg}`;
+  }
+
+  const currentWorkitemId = state.get(`current.workitems.${contextId}`, null);
+  if (!currentWorkitemId) {
+    return `/${contextId}/${view}${newArg}`;
+  }
+
+  if (newArg.startsWith('?')) {
+    newArg = `&${newArg.substring(1)}`;
+  }
+  return `/${contextId}/${view}?wid=${currentWorkitemId}${newArg}`;
+};
+
 Goblin.registerQuest(goblinName, 'add-dialog', function(quest, dialogId) {
   const state = quest.goblin.getState();
-  const contextId = state.get(`current.workcontext`, null);
-  const view = state.get(`current.views.${contextId}`);
-  const currentWorkitemId = state.get(`current.workitems.${contextId}`);
   quest.evt(`nav.requested`, {
-    route: `/${contextId}/${view}?wid=${currentWorkitemId}&did=${dialogId}`,
+    route: buildDialogNavRequest(state, `did=${dialogId}`),
   });
 });
 
 Goblin.registerQuest(goblinName, 'remove-dialog', function(quest, dialogId) {
   const state = quest.goblin.getState();
-  const contextId = state.get(`current.workcontext`, null);
-  const view = state.get(`current.views.${contextId}`);
-  const currentWorkitemId = state.get(`current.workitems.${contextId}`);
   quest.evt(`nav.requested`, {
-    route: `/${contextId}/${view}?wid=${currentWorkitemId}`,
+    route: buildDialogNavRequest(state),
   });
   quest.me.cleanWorkitem({workitemId: dialogId});
   quest.release(dialogId);
