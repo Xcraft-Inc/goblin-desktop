@@ -20,7 +20,6 @@ module.exports = config => {
           height: '400px',
         },
         busy: true,
-        canAdvance: true,
         mainButton: {
           glyph: 'solid/step-forward',
           text: 'Suivant',
@@ -29,9 +28,6 @@ module.exports = config => {
         },
         form: form ? form : {},
       });
-    },
-    'can-advance': (state, action) => {
-      return state.set('canAdvance', action.get('canAdvance'));
     },
     'main-button': (state, action) => {
       return state.set('mainButton', action.get('mainButton'));
@@ -72,12 +68,6 @@ module.exports = config => {
       .get('form')
       .toJS();
 
-    const ca = `${nextStep}CanAdvance`;
-    if (quest.me[ca]) {
-      const canAdvance = yield quest.me[ca]({form});
-      quest.dispatch('can-advance', {canAdvance});
-    }
-
     const mb = `${nextStep}MainButton`;
     if (quest.me[mb]) {
       const mainButton = yield quest.me[mb]({form});
@@ -105,12 +95,6 @@ module.exports = config => {
       .get('form')
       .toJS();
 
-    const ca = `${nextStep}CanAdvance`;
-    if (quest.me[ca]) {
-      const canAdvance = yield quest.me[ca]({form});
-      quest.dispatch('can-advance', {canAdvance});
-    }
-
     const mb = `${nextStep}MainButton`;
     if (quest.me[mb]) {
       const mainButton = yield quest.me[mb]({form});
@@ -137,11 +121,6 @@ module.exports = config => {
       .get('form')
       .toJS();
 
-    if (steps[c].canAdvance) {
-      const canAdvance = yield quest.me[`${c}CanAdvance`]({form});
-      quest.dispatch('can-advance', {canAdvance});
-    }
-
     if (steps[c].mainButton) {
       const mainButton = yield quest.me[`${c}MainButton`]({form});
       quest.dispatch('main-button', {mainButton});
@@ -160,14 +139,6 @@ module.exports = config => {
       return state.merge('form', action.get('form'));
     };
     Goblin.registerQuest(goblinName, stepName, step.quest);
-
-    if (step.canAdvance) {
-      Goblin.registerQuest(
-        goblinName,
-        `${stepName}-can-advance`,
-        step.canAdvance
-      );
-    }
 
     if (step.mainButton) {
       Goblin.registerQuest(

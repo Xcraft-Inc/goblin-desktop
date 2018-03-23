@@ -25,7 +25,6 @@ class Wizard extends Form {
       dialog: 'dialog',
       step: 'step',
       busy: 'busy',
-      canAdvance: 'canAdvance',
       mainButton: 'mainButton',
     };
   }
