@@ -21,11 +21,20 @@ module.exports = config => {
         },
         busy: true,
         canAdvance: true,
+        mainButton: {
+          glyph: 'solid/step-forward',
+          text: 'Suivant',
+          grow: '1',
+          disabled: 'false',
+        },
         form: form ? form : {},
       });
     },
     'can-advance': (state, action) => {
       return state.set('canAdvance', action.get('canAdvance'));
+    },
+    'main-button': (state, action) => {
+      return state.set('mainButton', action.get('mainButton'));
     },
     submit: (state, action) => {
       return state.applyForm(action.get('value'));
@@ -63,10 +72,16 @@ module.exports = config => {
       .get('form')
       .toJS();
 
-    const n = `${nextStep}CanAdvance`;
-    if (quest.me[n]) {
-      const canAdvance = yield quest.me[n]({form});
+    const ca = `${nextStep}CanAdvance`;
+    if (quest.me[ca]) {
+      const canAdvance = yield quest.me[ca]({form});
       quest.dispatch('can-advance', {canAdvance});
+    }
+
+    const mb = `${nextStep}MainButton`;
+    if (quest.me[mb]) {
+      const mainButton = yield quest.me[mb]({form});
+      quest.dispatch('main-button', {mainButton});
     }
 
     yield quest.me[nextStep]({form});
@@ -90,10 +105,16 @@ module.exports = config => {
       .get('form')
       .toJS();
 
-    const n = `${nextStep}CanAdvance`;
-    if (quest.me[n]) {
-      const canAdvance = yield quest.me[n]({form});
+    const ca = `${nextStep}CanAdvance`;
+    if (quest.me[ca]) {
+      const canAdvance = yield quest.me[ca]({form});
       quest.dispatch('can-advance', {canAdvance});
+    }
+
+    const mb = `${nextStep}MainButton`;
+    if (quest.me[mb]) {
+      const mainButton = yield quest.me[mb]({form});
+      quest.dispatch('main-button', {mainButton});
     }
 
     yield quest.me[nextStep]({form});
@@ -110,13 +131,20 @@ module.exports = config => {
   Goblin.registerQuest(goblinName, 'change', function*(quest) {
     const c = quest.goblin.getState().get('step');
     quest.do();
+
+    const form = quest.goblin
+      .getState()
+      .get('form')
+      .toJS();
+
     if (steps[c].canAdvance) {
-      const form = quest.goblin
-        .getState()
-        .get('form')
-        .toJS();
       const canAdvance = yield quest.me[`${c}CanAdvance`]({form});
       quest.dispatch('can-advance', {canAdvance});
+    }
+
+    if (steps[c].mainButton) {
+      const mainButton = yield quest.me[`${c}MainButton`]({form});
+      quest.dispatch('main-button', {mainButton});
     }
   });
 
@@ -138,6 +166,14 @@ module.exports = config => {
         goblinName,
         `${stepName}-can-advance`,
         step.canAdvance
+      );
+    }
+
+    if (step.mainButton) {
+      Goblin.registerQuest(
+        goblinName,
+        `${stepName}-main-button`,
+        step.mainButton
       );
     }
 

@@ -26,6 +26,7 @@ class Wizard extends Form {
       step: 'step',
       busy: 'busy',
       canAdvance: 'canAdvance',
+      mainButton: 'mainButton',
     };
   }
 
@@ -73,6 +74,17 @@ class Wizard extends Form {
     const Form = this.Form;
 
     if (kind === 'dialog') {
+      let glyph = 'solid/step-forward';
+      let text = 'Suivant';
+      let grow = '1';
+      let disabled = false;
+      if (this.props.mainButton) {
+        glyph = this.props.mainButton.get('glyph');
+        text = this.props.mainButton.get('text');
+        grow = this.props.mainButton.get('grow');
+        disabled = this.props.mainButton.get('disabled');
+      }
+
       return (
         <DialogModal
           width={this.props.dialog.get('width')}
@@ -92,13 +104,13 @@ class Wizard extends Form {
             <Button
               busy={this.props.busy}
               width="0px"
-              grow="1"
+              grow={grow}
               kind="action"
               place="1/2"
-              glyph="solid/step-forward"
-              text="Suivant"
+              glyph={glyph}
+              text={text}
               onClick={this.onNext}
-              disabled={!this.props.canAdvance}
+              disabled={disabled}
             />
             <Button
               glyph="solid/times"
