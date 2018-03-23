@@ -2,7 +2,7 @@
 const Goblin = require('xcraft-core-goblin');
 
 module.exports = config => {
-  const {name, title, steps} = config;
+  const {name, title, dialog, steps} = config;
   const goblinName = `${name}-wizard`;
   const wizardSteps = Object.keys(steps);
   const wizardFlow = ['init'].concat(wizardSteps);
@@ -15,9 +15,17 @@ module.exports = config => {
         id: action.get('id'),
         step: 'init',
         title: title,
+        dialog: dialog || {
+          width: '500px',
+          height: '400px',
+        },
         busy: true,
+        canAdvance: true,
         form: form ? form : {},
       });
+    },
+    'can-advance': (state, action) => {
+      return state.set('canAdvance', action.get('canAdvance'));
     },
     submit: (state, action) => {
       return state.applyForm(action.get('value'));
@@ -55,6 +63,12 @@ module.exports = config => {
       .get('form')
       .toJS();
 
+    const n = `${nextStep}CanAdvance`;
+    if (quest.me[n]) {
+      const canAdvance = yield quest.me[n]({form});
+      quest.dispatch('can-advance', {canAdvance});
+    }
+
     yield quest.me[nextStep]({form});
     quest.dispatch('next', {step: nextStep});
     quest.me.busy();
@@ -76,6 +90,12 @@ module.exports = config => {
       .get('form')
       .toJS();
 
+    const n = `${nextStep}CanAdvance`;
+    if (quest.me[n]) {
+      const canAdvance = yield quest.me[n]({form});
+      quest.dispatch('can-advance', {canAdvance});
+    }
+
     yield quest.me[nextStep]({form});
     quest.do({step: wizardFlow[nIndex]});
     quest.me.busy();
@@ -87,8 +107,17 @@ module.exports = config => {
     desk.removeDialog({dialogId: quest.goblin.id});
   });
 
-  Goblin.registerQuest(goblinName, 'change', function(quest) {
+  Goblin.registerQuest(goblinName, 'change', function*(quest) {
+    const c = quest.goblin.getState().get('step');
     quest.do();
+    if (steps[c].canAdvance) {
+      const form = quest.goblin
+        .getState()
+        .get('form')
+        .toJS();
+      const canAdvance = yield quest.me[`${c}CanAdvance`]({form});
+      quest.dispatch('can-advance', {canAdvance});
+    }
   });
 
   // configure steps
@@ -103,6 +132,14 @@ module.exports = config => {
       return state.merge('form', action.get('form'));
     };
     Goblin.registerQuest(goblinName, stepName, step.quest);
+
+    if (step.canAdvance) {
+      Goblin.registerQuest(
+        goblinName,
+        `${stepName}-can-advance`,
+        step.canAdvance
+      );
+    }
 
     for (const action in step.actions) {
       const actionQuest = `${stepName}-${action}`;

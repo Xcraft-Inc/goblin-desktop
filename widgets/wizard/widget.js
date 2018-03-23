@@ -22,8 +22,10 @@ class Wizard extends Form {
     return {
       id: 'id',
       title: 'title',
+      dialog: 'dialog',
       step: 'step',
       busy: 'busy',
+      canAdvance: 'canAdvance',
     };
   }
 
@@ -70,12 +72,13 @@ class Wizard extends Form {
 
     const Form = this.Form;
 
-    //???? width={this.props.dialog.width}
-    //???? height={this.props.dialog.height}
-    //???? zIndex={this.props.dialog.zIndex}
     if (kind === 'dialog') {
       return (
-        <DialogModal width="500px" zIndex="12">
+        <DialogModal
+          width={this.props.dialog.get('width')}
+          height={this.props.dialog.get('height')}
+          zIndex={this.props.dialog.get('zIndex')}
+        >
           <Form {...this.formConfig}>
             <Step
               {...this.props}
@@ -95,6 +98,7 @@ class Wizard extends Form {
               glyph="solid/step-forward"
               text="Suivant"
               onClick={this.onNext}
+              disabled={!this.props.canAdvance}
             />
             <Button
               glyph="solid/times"
