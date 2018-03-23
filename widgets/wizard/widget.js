@@ -70,23 +70,20 @@ class Wizard extends Form {
 
     const Form = this.Form;
 
+    //???? width={this.props.dialog.width}
+    //???? height={this.props.dialog.height}
+    //???? zIndex={this.props.dialog.zIndex}
     if (kind === 'dialog') {
       return (
-        <DialogModal width="1500px" zIndex="12">
-          <Label text={title} />
-          <Separator kind="space" height="10px" />
-          <Container kind="panes">
-            <Container kind="pane">
-              <Form {...this.formConfig}>
-                <Step
-                  {...this.props}
-                  theme={this.context.theme}
-                  do={this.doProxy}
-                  setForm={this.setForm}
-                />
-              </Form>
-            </Container>
-          </Container>
+        <DialogModal width="500px" zIndex="12">
+          <Form {...this.formConfig}>
+            <Step
+              {...this.props}
+              theme={this.context.theme}
+              do={this.doProxy}
+              setForm={this.setForm}
+            />
+          </Form>
           <Separator kind="space" height="20px" />
           <Container kind="row">
             <Button
