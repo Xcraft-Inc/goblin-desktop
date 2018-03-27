@@ -1,6 +1,10 @@
 'use strict';
 const Goblin = require('xcraft-core-goblin');
 
+function jsifyQuestName(quest) {
+  return quest.replace(/-([a-z])/g, (m, g1) => g1.toUpperCase());
+}
+
 module.exports = config => {
   const {name, title, dialog, steps, gadgets} = config;
   const goblinName = `${name}-wizard`;
@@ -58,6 +62,16 @@ module.exports = config => {
           gadget
         );
         wizardGadgets[key] = {id: newGadget.id, type: gadget.type};
+
+        if (gadgets[key].onActions) {
+          for (const handler of Object.keys(gadgets[key].onActions)) {
+            quest.goblin.defer(
+              quest.sub(`${newGadget.id}.${handler}`, (err, msg) =>
+                quest.me[jsifyQuestName(`${key}-${handler}`)](msg.data)
+              )
+            );
+          }
+        }
       }
     }
 
@@ -83,6 +97,21 @@ module.exports = config => {
         const api = quest.getAPI(gadgetId);
         yield api[action](payload);
       });
+
+      //Register gagdet quest handlers
+
+      if (gadgets[key].onActions) {
+        for (const handler of Object.keys(gadgets[key].onActions)) {
+          logicHandlers[`${key}-${handler}`] = gadgets[key].onActions[handler];
+
+          Goblin.registerQuest(goblinName, `${key}-${handler}`, function(
+            quest
+          ) {
+            quest.do();
+            quest.me.update();
+          });
+        }
+      }
     }
   }
 
@@ -141,9 +170,12 @@ module.exports = config => {
   });
 
   Goblin.registerQuest(goblinName, 'change', function*(quest) {
-    const c = quest.goblin.getState().get('step');
     quest.do();
+    yield quest.me.update();
+  });
 
+  Goblin.registerQuest(goblinName, 'update', function*(quest) {
+    const c = quest.goblin.getState().get('step');
     const form = quest.goblin
       .getState()
       .get('form')
