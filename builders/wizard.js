@@ -2,7 +2,7 @@
 const Goblin = require('xcraft-core-goblin');
 
 module.exports = config => {
-  const {name, title, dialog, steps} = config;
+  const {name, title, dialog, steps, gadgets} = config;
   const goblinName = `${name}-wizard`;
   const wizardSteps = Object.keys(steps);
   const wizardFlow = ['init'].concat(wizardSteps);
@@ -19,6 +19,7 @@ module.exports = config => {
           width: '500px',
           height: '400px',
         },
+        gadgets: action.get('wizardGadgets'),
         busy: true,
         mainButton: {
           glyph: 'solid/step-forward',
@@ -48,7 +49,19 @@ module.exports = config => {
 
   Goblin.registerQuest(goblinName, 'create', function*(quest, desktopId, form) {
     quest.goblin.setX('desktopId', desktopId);
-    quest.do({id: quest.goblin.id, form});
+    const wizardGadgets = {};
+    if (gadgets) {
+      for (const key of Object.keys(gadgets)) {
+        const gadget = gadgets[key];
+        const newGadget = yield quest.createNew(
+          `${gadget.type}-gadget`,
+          gadget
+        );
+        wizardGadgets[key] = {id: newGadget.id, type: gadget.type};
+      }
+    }
+
+    quest.do({id: quest.goblin.id, form, wizardGadgets});
     yield quest.me.init();
     quest.me.busy();
     return quest.goblin.id;
@@ -57,6 +70,21 @@ module.exports = config => {
   Goblin.registerQuest(goblinName, 'busy', function(quest) {
     quest.do();
   });
+
+  if (gadgets) {
+    for (const key of Object.keys(gadgets)) {
+      //Gogo gadgeto stylo!
+      Goblin.registerQuest(goblinName, `use-${key}`, function*(
+        quest,
+        action,
+        payload
+      ) {
+        const gadgetId = quest.goblin.getState().get(`gadgets.${key}.id`);
+        const api = quest.getAPI(gadgetId);
+        yield api[action](payload);
+      });
+    }
+  }
 
   Goblin.registerQuest(goblinName, 'init', function*(quest) {
     const nextStep = wizardFlow[1];
