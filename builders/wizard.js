@@ -6,7 +6,7 @@ function jsifyQuestName(quest) {
 }
 
 module.exports = config => {
-  const {name, title, dialog, steps, gadgets} = config;
+  const {name, title, dialog, steps, gadgets, initialFormState} = config;
   const goblinName = `${name}-wizard`;
   const wizardSteps = Object.keys(steps);
   const wizardFlow = ['init'].concat(wizardSteps);
@@ -15,6 +15,8 @@ module.exports = config => {
   const logicHandlers = {
     create: (state, action) => {
       const form = action.get('form');
+      const initForm = action.get('initialFormState');
+      const mergedInitialForm = Object.assign(initForm || {}, form || {});
       return state.set('', {
         id: action.get('id'),
         step: 'init',
@@ -31,7 +33,7 @@ module.exports = config => {
           grow: '1',
           disabled: 'false',
         },
-        form: form ? form : {},
+        form: mergedInitialForm,
       });
     },
     'main-button': (state, action) => {
@@ -57,25 +59,25 @@ module.exports = config => {
     if (gadgets) {
       for (const key of Object.keys(gadgets)) {
         const gadget = gadgets[key];
-        const newGadget = yield quest.createNew(
-          `${gadget.type}-gadget`,
-          gadget
-        );
-        wizardGadgets[key] = {id: newGadget.id, type: gadget.type};
-
+        const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
+        wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
         if (gadgets[key].onActions) {
           for (const handler of Object.keys(gadgets[key].onActions)) {
             quest.goblin.defer(
-              quest.sub(`${newGadget.id}.${handler}`, (err, msg) =>
+              quest.sub(`${newGadgetId}.${handler}`, (err, msg) =>
                 quest.me[jsifyQuestName(`${key}-${handler}`)](msg.data)
               )
             );
           }
         }
+        quest.create(`${gadget.type}-gadget`, {
+          id: newGadgetId,
+          options: gadget.options || null,
+        });
       }
     }
 
-    quest.do({id: quest.goblin.id, form, wizardGadgets});
+    quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
     yield quest.me.init();
     quest.me.busy();
     return quest.goblin.id;
@@ -181,7 +183,7 @@ module.exports = config => {
       .get('form')
       .toJS();
 
-    if (steps[c].mainButton) {
+    if (steps[c] && steps[c].mainButton) {
       const mainButton = yield quest.me[`${c}MainButton`]({form});
       quest.dispatch('main-button', {mainButton});
     }
