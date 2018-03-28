@@ -77,7 +77,7 @@ class Tabs extends Widget {
                 if (props.loaded) {
                   return (
                     <Button
-                      text={props.info}
+                      text={props.info || 'Nouveau'}
                       kind="view-tab"
                       glyph={v.get('glyph')}
                       onClick={() =>
@@ -104,10 +104,12 @@ class Tabs extends Widget {
               const EntityTab = this.mapWidget(
                 Loader,
                 info => {
-                  if (!info) {
-                    return {loaded: false, info};
-                  } else {
-                    return {loaded: true, info};
+                  switch (info) {
+                    case undefined:
+                    case null:
+                      return {loaded: false, info};
+                    default:
+                      return {loaded: true, info};
                   }
                 },
                 `backend.${entityId}.meta.summaries.info`

@@ -259,6 +259,15 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
   navigate
 ) {
   const desk = quest.me;
+
+  if (!workitem.payload) {
+    workitem.payload = {};
+  }
+
+  if (workitem.newEntityType) {
+    workitem.payload.entityId = `${workitem.newEntityType}@${quest.uuidV4()}`;
+  }
+
   if (!workitem.id) {
     workitem.id = workitem.payload.entityId
       ? workitem.payload.entityId
@@ -270,17 +279,10 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
       `Cannot add workitem without a name: ${JSON.stringify(workitem)}`
     );
   }
-  if (workitem.isDone) {
-    return;
-  }
 
   if (!workitem.contextId) {
     const state = quest.goblin.getState();
     workitem.contextId = state.get(`current.workcontext`, null);
-  }
-
-  if (!workitem.payload) {
-    workitem.payload = {};
   }
 
   //Manage collision with desktopId
