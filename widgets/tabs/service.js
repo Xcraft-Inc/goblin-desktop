@@ -26,6 +26,7 @@ const logicHandlers = {
       name: action.get('name'),
       view: action.get('view'),
       workitemId: action.get('workitemId'),
+      entityId: action.get('entityId'),
       closable: action.get('closable'),
       glyph: action.get('glyph'),
     };
@@ -72,6 +73,7 @@ Goblin.registerQuest(goblinName, 'add', function(
   name,
   view,
   workitemId,
+  entityId,
   closable,
   glyph
 ) {

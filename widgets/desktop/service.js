@@ -264,6 +264,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
       ? workitem.payload.entityId
       : quest.uuidV4();
   }
+
   if (!workitem.name) {
     throw new Error(
       `Cannot add workitem without a name: ${JSON.stringify(workitem)}`
@@ -276,6 +277,10 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
   if (!workitem.contextId) {
     const state = quest.goblin.getState();
     workitem.contextId = state.get(`current.workcontext`, null);
+  }
+
+  if (!workitem.payload) {
+    workitem.payload = {};
   }
 
   //Manage collision with desktopId
@@ -337,6 +342,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
     case 'tab': {
       const tabId = yield desk.addTab({
         workitemId: widgetId,
+        entityId: workitem.payload.entityId,
         view: workitem.view,
         contextId: workitem.contextId,
         name: workitem.description,
@@ -381,6 +387,7 @@ Goblin.registerQuest(goblinName, 'add-tab', function*(
   contextId,
   view,
   workitemId,
+  entityId,
   closable,
   glyph,
   navigate
@@ -407,6 +414,7 @@ Goblin.registerQuest(goblinName, 'add-tab', function*(
     contextId,
     view,
     workitemId,
+    entityId,
     glyph,
     closable: closable || false,
   });

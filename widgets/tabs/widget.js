@@ -70,30 +70,94 @@ class Tabs extends Widget {
             const wid = v.get('workitemId');
             const closable = v.get('closable', false);
             const show = closable ? 'true' : 'false';
-            return (
-              <Container kind="row" key={k}>
-                <Button
-                  text={v.get('name')}
-                  kind="view-tab"
-                  glyph={v.get('glyph')}
-                  onClick={() => this.goToWorkItem(context, v.get('view'), wid)}
-                  active={currentTab === wid ? 'true' : 'false'}
-                />
-                <Button
-                  glyph="solid/times"
-                  kind="view-tab"
-                  show={show}
-                  onClick={() => {
-                    this.do('remove', {
-                      tabId: wid,
-                      contextId: context,
-                      workitemId: wid,
-                    });
-                  }}
-                  active={currentTab === wid ? 'true' : 'false'}
-                />
-              </Container>
-            );
+            const name = v.get('name');
+            const entityId = v.get('entityId');
+            if (entityId) {
+              const Loader = props => {
+                if (props.loaded) {
+                  return (
+                    <Button
+                      text={props.info}
+                      kind="view-tab"
+                      glyph={v.get('glyph')}
+                      onClick={() =>
+                        this.goToWorkItem(context, v.get('view'), wid)
+                      }
+                      active={currentTab === wid ? 'true' : 'false'}
+                    />
+                  );
+                } else {
+                  return (
+                    <Button
+                      text="Chargement..."
+                      kind="view-tab"
+                      glyph={v.get('glyph')}
+                      onClick={() =>
+                        this.goToWorkItem(context, v.get('view'), wid)
+                      }
+                      active={currentTab === wid ? 'true' : 'false'}
+                    />
+                  );
+                }
+              };
+
+              const EntityTab = this.mapWidget(
+                Loader,
+                info => {
+                  if (!info) {
+                    return {loaded: false, info};
+                  } else {
+                    return {loaded: true, info};
+                  }
+                },
+                `backend.${entityId}.meta.summaries.info`
+              );
+              return (
+                <Container kind="row" key={k}>
+                  <EntityTab />
+                  <Button
+                    glyph="solid/times"
+                    kind="view-tab"
+                    show={show}
+                    onClick={() => {
+                      this.do('remove', {
+                        tabId: wid,
+                        contextId: context,
+                        workitemId: wid,
+                      });
+                    }}
+                    active={currentTab === wid ? 'true' : 'false'}
+                  />
+                </Container>
+              );
+            } else {
+              return (
+                <Container kind="row" key={k}>
+                  <Button
+                    text={name}
+                    kind="view-tab"
+                    glyph={v.get('glyph')}
+                    onClick={() =>
+                      this.goToWorkItem(context, v.get('view'), wid)
+                    }
+                    active={currentTab === wid ? 'true' : 'false'}
+                  />
+                  <Button
+                    glyph="solid/times"
+                    kind="view-tab"
+                    show={show}
+                    onClick={() => {
+                      this.do('remove', {
+                        tabId: wid,
+                        contextId: context,
+                        workitemId: wid,
+                      });
+                    }}
+                    active={currentTab === wid ? 'true' : 'false'}
+                  />
+                </Container>
+              );
+            }
           })}
         </Container>
         <Container kind="view-tab-right">
