@@ -26,6 +26,7 @@ class Taskbar extends Widget {
         kind="task-bar"
         text={task.text}
         glyph={task.glyph}
+        tooltip={task.workitem.description}
         onClick={() =>
           this.do('run', {
             workitem: task.workitem,
