@@ -117,9 +117,8 @@ Goblin.registerQuest(goblinName, 'create-new', function(quest, value) {
   }
   desk.addWorkitem({workitem, navigate: true});
 
-  const sub = quest.sub(
-    `${workitem.name}@${workitem.id}.validated`,
-    (err, msg) => {
+  quest.goblin.defer(
+    quest.sub(`${workitem.name}@${workitem.id}.validated`, (err, msg) => {
       const entity = msg.data;
       const rows = [''];
       const values = [entity.id];
@@ -131,9 +130,8 @@ Goblin.registerQuest(goblinName, 'create-new', function(quest, value) {
         usePayload: true,
         validate: true,
       });
-    }
+    })
   );
-  quest.goblin.defer(sub);
 });
 
 Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
