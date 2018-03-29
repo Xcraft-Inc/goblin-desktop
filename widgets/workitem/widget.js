@@ -105,7 +105,7 @@ class Workitem extends Form {
               width="0px"
               grow="0.5"
               kind="action"
-              glyph="solid/plus"
+              glyph="solid/check"
               text="Publier"
               place="2/2"
               onClick={this.onPublish}
@@ -149,9 +149,9 @@ class Workitem extends Form {
               grow="1"
               kind="action"
               glyph="solid/check"
-              text="Terminer"
+              text="Publier"
               place="1/2"
-              onClick={this.onSubmit}
+              onClick={this.onPublish}
             />
             <Button
               width="0px"
