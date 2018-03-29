@@ -94,16 +94,17 @@ Goblin.registerQuest(goblinName, 'remove', function*(
   const wi = quest.getAPI(workitemId);
   if (close && wi && wi.close) {
     yield wi.close({kind: 'terminate'});
-  } else {
-    const tabButton = quest.getAPI(tabId);
-    if (tabButton) {
-      quest.release(tabId);
-    }
   }
 
   quest.evt('removed', {workitemId});
 
-  quest.do();
+  if (tabId) {
+    const tabButton = quest.getAPI(tabId);
+    if (tabButton) {
+      quest.release(tabId);
+    }
+    quest.do();
+  }
 
   const desktopId = quest.goblin.getX('desktopId');
   const desk = quest.getAPI(desktopId);
