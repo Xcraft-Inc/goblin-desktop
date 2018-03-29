@@ -199,6 +199,24 @@ class Workitem extends Form {
     }
   }
 
+  renderStatus() {
+    if (this.props.status === 'draft') {
+      return (
+        <Container kind="pane-warning" subkind="draft">
+          <Label kind="pane-warning" text="Brouillon" />
+        </Container>
+      );
+    } else if (this.props.status === 'archived') {
+      return (
+        <Container kind="pane-warning" subkind="archived">
+          <Label kind="pane-warning" text="Archivé" />
+        </Container>
+      );
+    } else {
+      return null;
+    }
+  }
+
   renderEditor() {
     const Form = this.Form;
 
@@ -218,6 +236,7 @@ class Workitem extends Form {
           <Title kind="pane-header" singleLine="true" wrap="no" />
           {this.props.version}
         </Container>
+        {this.renderStatus()}
         <Container kind="panes">
           <Form
             component="div"
@@ -246,6 +265,7 @@ class Workitem extends Form {
         <Container kind="pane-header">
           <Title kind="pane-header" singleLine="true" wrap="no" />
         </Container>
+        {this.renderStatus()}
         <Container kind="panes">
           <Form
             component="div"
