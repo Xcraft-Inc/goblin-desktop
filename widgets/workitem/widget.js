@@ -56,6 +56,14 @@ class Workitem extends Form {
     });
   }
 
+  onPublish() {
+    this.doAs(this.service, 'close', {
+      kind: 'publish',
+      desktopId: this.desktopId,
+      contextId: this.contextId,
+    });
+  }
+
   onCancel() {
     this.doAs(this.service, 'restore-entity');
     this.hideHinter();
@@ -71,11 +79,6 @@ class Workitem extends Form {
 
   onDelete() {
     this.doAs(this.service, 'delete-entity');
-    this.hideHinter();
-  }
-
-  onPublish() {
-    this.doAs(this.service, 'publish-entity');
     this.hideHinter();
   }
 
