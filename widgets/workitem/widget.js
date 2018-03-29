@@ -150,23 +150,14 @@ class Workitem extends Form {
               kind="action"
               glyph="solid/check"
               text="Terminer"
-              place="1/3"
+              place="1/2"
               onClick={this.onSubmit}
             />
             <Button
               width="0px"
               grow="1"
               kind="action"
-              glyph="solid/plus"
-              text="Publier"
-              place="2/3"
-              onClick={this.onPublish}
-            />
-            <Button
-              width="0px"
-              grow="1"
-              kind="action"
-              place="3/3"
+              place="2/2"
               glyph="solid/undo"
               text="Réinitialiser"
               onClick={this.onCancel}
