@@ -155,6 +155,7 @@ class Workitem extends Form {
               text="Publier"
               place="1/2"
               onClick={this.onPublish}
+              {...this.props.mainButton}
             />
             <Button
               width="0px"
@@ -178,6 +179,7 @@ class Workitem extends Form {
               text="Terminer"
               place="1/2"
               onClick={this.onSubmit}
+              {...this.props.mainButton}
             />
             <Button
               width="0px"
