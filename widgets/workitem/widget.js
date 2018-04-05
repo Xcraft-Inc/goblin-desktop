@@ -177,7 +177,7 @@ class Workitem extends Form {
               kind="action"
               glyph="solid/check"
               text="Terminer"
-              place="1/2"
+              place="1/3"
               onClick={this.onSubmit}
               {...this.props.mainButton}
             />
@@ -185,10 +185,19 @@ class Workitem extends Form {
               width="0px"
               grow="1"
               kind="action"
-              place="2/2"
+              place="2/3"
               glyph="solid/undo"
               text="Réinitialiser"
               onClick={this.onCancel}
+            />
+            <Button
+              width="0px"
+              grow="1"
+              kind="action"
+              glyph="solid/archive"
+              text="Archiver"
+              place="3/3"
+              onClick={this.onArchive}
             />
           </Container>
         );
