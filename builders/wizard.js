@@ -142,6 +142,7 @@ module.exports = config => {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === wizardFlow.length - 1) {
+      quest.evt('done');
       return;
     }
     const nIndex = cIndex + 1;
@@ -169,6 +170,7 @@ module.exports = config => {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
     desk.removeDialog({dialogId: quest.goblin.id});
+    quest.evt('done');
   });
 
   Goblin.registerQuest(goblinName, 'change', function*(quest) {
@@ -219,7 +221,9 @@ module.exports = config => {
     }
   }
 
-  Goblin.registerQuest(goblinName, 'delete', function(quest) {});
+  Goblin.registerQuest(goblinName, 'delete', function(quest) {
+    quest.evt('done');
+  });
 
   return Goblin.configure(goblinName, {}, logicHandlers);
 };
