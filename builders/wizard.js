@@ -120,9 +120,8 @@ module.exports = config => {
   Goblin.registerQuest(goblinName, 'init', function*(quest) {
     const nextStep = wizardFlow[1];
     quest.me.busy();
-    quest.dispatch(`init-${nextStep}`);
 
-    const form = quest.goblin
+    let form = quest.goblin
       .getState()
       .get('form')
       .toJS();
@@ -133,7 +132,19 @@ module.exports = config => {
       quest.dispatch('main-button', {mainButton});
     }
 
+    quest.dispatch(`init-${nextStep}`);
+
     yield quest.me[nextStep]({form});
+
+    if (quest.me[mb]) {
+      form = quest.goblin
+        .getState()
+        .get('form')
+        .toJS();
+      const mainButton = yield quest.me[mb]({form});
+      quest.dispatch('main-button', {mainButton});
+    }
+
     quest.dispatch('next', {step: nextStep});
     quest.me.busy();
   });
@@ -142,15 +153,14 @@ module.exports = config => {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === wizardFlow.length - 1) {
-      quest.evt('done');
+      quest.evt('done', {finished: true});
       return;
     }
     const nIndex = cIndex + 1;
     const nextStep = wizardFlow[nIndex];
     quest.me.busy();
-    quest.dispatch(`init-${nextStep}`);
 
-    const form = quest.goblin
+    let form = quest.goblin
       .getState()
       .get('form')
       .toJS();
@@ -161,7 +171,19 @@ module.exports = config => {
       quest.dispatch('main-button', {mainButton});
     }
 
+    quest.dispatch(`init-${nextStep}`);
+
     yield quest.me[nextStep]({form});
+
+    if (quest.me[mb]) {
+      form = quest.goblin
+        .getState()
+        .get('form')
+        .toJS();
+      const mainButton = yield quest.me[mb]({form});
+      quest.dispatch('main-button', {mainButton});
+    }
+
     quest.do({step: wizardFlow[nIndex]});
     quest.me.busy();
   });
