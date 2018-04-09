@@ -192,7 +192,7 @@ module.exports = config => {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
     desk.removeDialog({dialogId: quest.goblin.id});
-    quest.evt('done');
+    quest.evt('done', {canceled: true});
   });
 
   Goblin.registerQuest(goblinName, 'change', function*(quest) {
@@ -244,7 +244,7 @@ module.exports = config => {
   }
 
   Goblin.registerQuest(goblinName, 'delete', function(quest) {
-    quest.evt('done');
+    quest.evt('done', {finished: true});
   });
 
   return Goblin.configure(goblinName, {}, logicHandlers);
