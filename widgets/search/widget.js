@@ -93,6 +93,24 @@ class Search extends Form {
                       checked="false"
                     />
                   </Container>
+                  <Separator kind="exact" height="50px" />
+                  <Label bottomSpacing="large" text="Note" weight="bold" />
+                  <Label
+                    bottomSpacing="large"
+                    text="La liste ci-dessous devrait disparaître et s'afficher dans le panneau central."
+                  />
+                  <Label
+                    bottomSpacing="large"
+                    text="Si le champ de recherche est vide, elle montre tous les éléments."
+                  />
+                  <Label
+                    bottomSpacing="large"
+                    text="Sinon, elle ne montre que les éléments qui contiennent le texte dans le champ de recherche (comme actuellement)."
+                  />
+                  <Label
+                    bottomSpacing="large"
+                    text="Dans les 2 cas, elle tient compte des 3 boutons à cocher."
+                  />
                 </Container>
               </Container>
             </Form>
