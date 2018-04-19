@@ -1,10 +1,13 @@
 import React from 'react';
 import Form from 'laboratory/form';
+
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import LabelTextField from 'gadgets/label-text-field/widget';
 import Button from 'gadgets/button/widget';
 import List from 'gadgets/list/widget';
+import CheckButton from 'gadgets/check-button/widget';
+import Separator from 'gadgets/separator/widget';
 
 class Search extends Form {
   constructor() {
@@ -51,13 +54,46 @@ class Search extends Form {
             </Container>
             <Form {...this.formConfig}>
               <Container kind="row-pane">
-                <LabelTextField
-                  defaultFocus="true"
-                  hinter={type}
-                  labelGlyph="solid/search"
-                  hintText={hintText}
-                  grow="1"
-                />
+                <Container kind="column" grow="1">
+                  <LabelTextField
+                    defaultFocus="true"
+                    hinter={type}
+                    labelGlyph="solid/search"
+                    hintText={hintText}
+                    grow="1"
+                  />
+                  <Separator kind="exact" height="20px" />
+                  <Container kind="row">
+                    <Label width="30px" />
+                    <CheckButton
+                      justify="left"
+                      heightStrategy="compact"
+                      text="Brouillons"
+                      tooltip="Montre les brouillons"
+                      checked="false"
+                    />
+                  </Container>
+                  <Container kind="row">
+                    <Label width="30px" />
+                    <CheckButton
+                      justify="left"
+                      heightStrategy="compact"
+                      text="Publiés"
+                      tooltip="Montre les éléments publiés"
+                      checked="true"
+                    />
+                  </Container>
+                  <Container kind="row">
+                    <Label width="30px" />
+                    <CheckButton
+                      justify="left"
+                      heightStrategy="compact"
+                      text="Archivés"
+                      tooltip="Montre les éléments archivés"
+                      checked="false"
+                    />
+                  </Container>
+                </Container>
               </Container>
             </Form>
           </Container>
