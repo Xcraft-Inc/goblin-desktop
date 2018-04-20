@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Widget from 'laboratory/widget';
+import MouseTrap from 'mousetrap';
 import importer from 'laboratory/importer/';
 import {Unit} from 'electrum-theme';
 
@@ -45,6 +46,19 @@ class Desktop extends Widget {
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
+    this.onTab = this.onTab.bind(this);
+    this.onShiftTab = this.onShiftTab.bind(this);
+  }
+
+  componentDidMount() {
+    super.componentDidMount();
+    //- MouseTrap.bind('tab', this.onTab);
+    //- MouseTrap.bind('shift+tab', this.onShiftTab);
+  }
+
+  componentWillUnmount() {
+    //- MouseTrap.unbind('tab');
+    //- MouseTrap.unbind('shift+tab');
   }
 
   get showMenuTheme() {
@@ -78,6 +92,16 @@ class Desktop extends Widget {
   onChangeTheme(name) {
     currentThemeName = name;
     this.do('change-theme', {name});
+  }
+
+  onTab(e) {
+    console.log('desktop.onTab');
+    e.preventDefault();
+  }
+
+  onShiftTab(e) {
+    console.log('desktop.onShiftTab');
+    e.preventDefault();
   }
 
   /******************************************************************************/
