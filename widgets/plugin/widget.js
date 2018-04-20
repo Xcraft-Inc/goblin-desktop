@@ -2,13 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'laboratory/widget';
+import {Unit} from 'electrum-theme';
 import * as Bool from 'gadgets/boolean-helpers';
 
 import Workitem from 'desktop/workitem/widget';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Label from 'gadgets/label/widget';
+import Field from 'gadgets/field/widget';
 import DragCab from 'gadgets/drag-cab/widget';
+import Combo from 'gadgets/combo/widget';
 
 import importer from 'laboratory/importer/';
 const uiImporter = importer('ui');
@@ -21,12 +24,27 @@ class Plugin extends Widget {
 
     this._refs = {};
     this._scrollEntityId = null;
+    this.comboButton = null;
 
-    this.onCreateEntity = this.onCreateEntity.bind(this);
+    this.state = {
+      showActionMenu: null,
+    };
+
+    this.onAction = this.onAction.bind(this);
     this.onSwapExtended = this.onSwapExtended.bind(this);
     this.onDeleteEntity = this.onDeleteEntity.bind(this);
     this.onEditEntity = this.onEditEntity.bind(this);
     this.onEntityDragged = this.onEntityDragged.bind(this);
+  }
+
+  get showActionMenu() {
+    return this.state.showActionMenu;
+  }
+
+  set showActionMenu(value) {
+    this.setState({
+      showActionMenu: value,
+    });
   }
 
   static createFor(name, instance) {
@@ -69,9 +87,9 @@ class Plugin extends Widget {
     this._scrollIntoView(150);
   }
 
-  onCreateEntity() {
+  onAction(actionName) {
     const service = this.props.id.split('@')[0];
-    this.doAs(service, 'add');
+    this.doAs(service, actionName);
   }
 
   onSwapExtended(entityId) {
@@ -108,7 +126,120 @@ class Plugin extends Widget {
     }
   }
 
+  getActionMenuList(numberOfIds) {
+    const list = [];
+
+    if (this.props.actionMenu) {
+      for (const item of this.props.actionMenu) {
+        list.push({
+          glyph: item.glyph,
+          text: item.text,
+          action: () => this.onAction(item.actionName),
+        });
+      }
+    }
+
+    if (
+      numberOfIds > 0 &&
+      (!this.props.arity || !this.props.arity.startsWith('1'))
+    ) {
+      if (list.length > 0) {
+        list.push({
+          separator: true,
+        });
+      }
+      list.push({
+        glyph: 'solid/trash',
+        text: 'Tout supprimer',
+        action: () => this.onAction('deleteAll'),
+      });
+    }
+
+    return list;
+  }
+
   /******************************************************************************/
+
+  renderHeaderSearch() {
+    if (this.props.searchHinter) {
+      return (
+        <Field
+          shape="rounded"
+          labelGlyph="solid/search"
+          labelWidth="24px"
+          fieldWidth="180px"
+          hintText="Ajouter depuis favoris"
+          kind="hinter"
+          requiredHinter="no"
+          hinter={this.props.searchHinter}
+          spacing="large"
+        />
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderHeaderActionMenuButton(numberOfIds) {
+    const list = this.getActionMenuList(numberOfIds);
+    if (list.length > 0) {
+      return (
+        <Button
+          ref={x => (this.comboButton = x)}
+          glyph="solid/ellipsis-h"
+          spacing="large"
+          active={Bool.toString(this.showActionMenu)}
+          onClick={() => (this.showActionMenu = true)}
+        />
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderHeaderActionMenu(numberOfIds) {
+    if (this.showActionMenu) {
+      const node = ReactDOM.findDOMNode(this.comboButton);
+      const rect = node.getBoundingClientRect();
+      const top = Unit.add(
+        rect.bottom + 'px',
+        this.context.theme.shapes.flyingBalloonTriangleSize
+      );
+
+      return (
+        <Combo
+          menuType="menu"
+          left={(rect.left + rect.right) / 2}
+          top={top}
+          list={this.getActionMenuList(numberOfIds)}
+          close={() => (this.showActionMenu = false)}
+        />
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderHeaderAdd(numberOfIds) {
+    const canAdd =
+      !Bool.isTrue(this.props.disableAdd) &&
+      (!this.props.arity ||
+        this.props.arity.endsWith('n') ||
+        (this.props.arity === '0..1' && numberOfIds === 0));
+
+    if (canAdd) {
+      return (
+        <Button
+          glyph="solid/plus"
+          text="Ajouter"
+          glyphPosition="right"
+          onClick={() => this.onAction('add')}
+        />
+      );
+    } else {
+      return null;
+    }
+  }
 
   renderHeader(numberOfIds) {
     const headerClass =
@@ -120,12 +251,6 @@ class Plugin extends Widget {
       ? this.props.pluginTitle
       : this.props.title;
 
-    const canAdd =
-      !Bool.isTrue(this.props.disableAdd) &&
-      (!this.props.arity ||
-        this.props.arity.endsWith('n') ||
-        (this.props.arity === '0..1' && numberOfIds === 0));
-
     if (Bool.isTrue(this.props.readonly)) {
       return (
         <div className={headerClass}>
@@ -136,14 +261,10 @@ class Plugin extends Widget {
       return (
         <div className={headerClass}>
           <Label text={title} grow="1" kind="title" />
-          {canAdd ? (
-            <Button
-              glyph="solid/plus"
-              text="Ajouter"
-              glyphPosition="right"
-              onClick={this.onCreateEntity}
-            />
-          ) : null}
+          {this.renderHeaderSearch()}
+          {this.renderHeaderActionMenuButton(numberOfIds)}
+          {this.renderHeaderAdd(numberOfIds)}
+          {this.renderHeaderActionMenu(numberOfIds)}
         </div>
       );
     }
