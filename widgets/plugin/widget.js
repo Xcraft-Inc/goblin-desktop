@@ -89,7 +89,7 @@ class Plugin extends Widget {
 
   onAction(actionName) {
     const service = this.props.id.split('@')[0];
-    this.doAs(service, actionName);
+    this.doAs(service, 'do-action', {action: actionName});
   }
 
   onSwapExtended(entityId) {
