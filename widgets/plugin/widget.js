@@ -27,7 +27,7 @@ class Plugin extends Widget {
     this.comboButton = null;
 
     this.state = {
-      showActionMenu: null,
+      showActionMenu: false,
     };
 
     this.onAction = this.onAction.bind(this);
