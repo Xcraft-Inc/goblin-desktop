@@ -157,7 +157,7 @@ class Plugin extends Widget {
       list.push({
         glyph: 'solid/trash',
         text: 'Tout supprimer',
-        action: () => this.onAction('deleteAll'),
+        action: () => this.onAction('clear'),
       });
     }
 
