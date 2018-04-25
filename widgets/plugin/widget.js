@@ -91,6 +91,7 @@ class Plugin extends Widget {
     const service = this.props.id.split('@')[0];
     switch (actionName) {
       case 'add':
+      case 'clear':
         this.doAs(service, actionName);
         break;
       default:
