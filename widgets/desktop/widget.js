@@ -8,7 +8,7 @@ import {Unit} from 'electrum-theme';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Combo from 'gadgets/combo/widget';
-
+import NabuToolBar from 'nabu/toolbar/widget';
 import Notifications from 'desktop/notifications/widget';
 
 const wiredNotifications = Widget.Wired(Notifications);
@@ -258,7 +258,9 @@ class Desktop extends Widget {
               {this.renderNofications()}
               {this.renderMenuTheme()}
             </div>
-            <Container kind="footer" />
+            <Container kind="footer">
+              <NabuToolBar />
+            </Container>
           </Container>
         </Container>
       </Container>
