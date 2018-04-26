@@ -138,11 +138,13 @@ class Plugin extends Widget {
 
     if (this.props.actionMenu) {
       for (const item of this.props.actionMenu) {
-        list.push({
-          glyph: item.glyph,
-          text: item.text,
-          action: () => this.onAction(item.actionName),
-        });
+        if (!item.min || item.min <= numberOfIds) {
+          list.push({
+            glyph: item.glyph,
+            text: item.text,
+            action: () => this.onAction(item.actionName),
+          });
+        }
       }
     }
 
