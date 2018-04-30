@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'laboratory/widget';
 import {Unit} from 'electrum-theme';
-import * as Bool from 'gadgets/boolean-helpers';
+const Bool = require('gadgets/helpers/bool-helpers');
 
 import Workitem from 'desktop/workitem/widget';
 import Container from 'gadgets/container/widget';

@@ -1,6 +1,3 @@
-import {Unit} from 'electrum-theme';
-import * as Bool from 'gadgets/boolean-helpers';
-
 /******************************************************************************/
 
 export default function styles(theme, props) {
