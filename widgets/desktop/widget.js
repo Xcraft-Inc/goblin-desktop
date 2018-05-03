@@ -199,20 +199,24 @@ class Desktop extends Widget {
 
     const contentClass = this.styles.classNames.content;
 
-    const offset = {
+    const tooltipOffset = {
       top: 0,
       bottom: 0,
       left: 0,
       right: 0,
     };
 
+    //???? const tooltipClass = "{ background-color: 'red' }";
+
     return (
       <Container kind="root">
         <ReactTooltip
+          type={this.context.theme.palette.isDarkTheme ? 'dark' : 'light'}
           multiline={true}
           delayShow={400}
           effect="solid"
-          offset={offset}
+          border={true}
+          offset={tooltipOffset}
         />
         <Container kind="left-bar">
           <Container kind="task-bar">
