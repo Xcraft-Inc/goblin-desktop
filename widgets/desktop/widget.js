@@ -206,7 +206,7 @@ class Desktop extends Widget {
       right: 0,
     };
 
-    //???? const tooltipClass = "{ background-color: 'red' }";
+    const tooltipClass = '{background-color:#f00}';
 
     return (
       <Container kind="root">
@@ -217,6 +217,7 @@ class Desktop extends Widget {
           effect="solid"
           border={true}
           offset={tooltipOffset}
+          class={tooltipClass}
         />
         <Container kind="left-bar">
           <Container kind="task-bar">
