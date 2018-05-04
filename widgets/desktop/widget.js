@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactTooltip from 'react-tooltip';
 import Widget from 'laboratory/widget';
 import MouseTrap from 'mousetrap';
 import importer from 'laboratory/importer/';
@@ -199,26 +198,8 @@ class Desktop extends Widget {
 
     const contentClass = this.styles.classNames.content;
 
-    const tooltipOffset = {
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-    };
-
-    const tooltipClass = '{background-color:#f00}';
-
     return (
       <Container kind="root">
-        <ReactTooltip
-          type={this.context.theme.palette.isDarkTheme ? 'dark' : 'light'}
-          multiline={true}
-          delayShow={400}
-          effect="solid"
-          border={true}
-          offset={tooltipOffset}
-          class={tooltipClass}
-        />
         <Container kind="left-bar">
           <Container kind="task-bar">
             <Button
