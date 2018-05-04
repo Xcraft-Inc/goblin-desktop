@@ -127,7 +127,8 @@ Goblin.registerQuest(goblinName, 'create', function(
   quest,
   labId,
   username,
-  configuration
+  configuration,
+  routes
 ) {
   if (!labId) {
     throw new Error('Missing labId');
@@ -148,7 +149,11 @@ Goblin.registerQuest(goblinName, 'create', function(
     desktopId: quest.goblin.id,
   });
 
-  quest.do({id: quest.goblin.id, routes: defaultRoutes});
+  if (!routes) {
+    routes = defaultRoutes;
+  }
+
+  quest.do({id: quest.goblin.id, routes});
 
   quest.log.info(`Desktop ${quest.goblin.id} created!`);
   return quest.goblin.id;

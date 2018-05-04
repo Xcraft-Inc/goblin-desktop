@@ -79,64 +79,23 @@ class Wizard extends Form {
 
     const Form = this.Form;
 
-    if (kind === 'dialog') {
-      let glyph = 'solid/step-forward';
-      let text = 'Suivant';
-      let grow = '1';
-      let disabled = false;
-      if (this.props.mainButton) {
-        glyph = this.props.mainButton.get('glyph');
-        text = this.props.mainButton.get('text');
-        grow = this.props.mainButton.get('grow');
-        disabled = this.props.mainButton.get('disabled');
-      }
+    switch (kind) {
+      case 'dialog': {
+        let glyph = 'solid/step-forward';
+        let text = 'Suivant';
+        let grow = '1';
+        let disabled = false;
+        if (this.props.mainButton) {
+          glyph = this.props.mainButton.get('glyph');
+          text = this.props.mainButton.get('text');
+          grow = this.props.mainButton.get('grow');
+          disabled = this.props.mainButton.get('disabled');
+        }
 
-      return (
-        <DialogModal
-          width={this.props.dialog.get('width')}
-          height={this.props.dialog.get('height')}
-          zIndex={this.props.dialog.get('zIndex')}
-        >
-          <Form {...this.formConfig}>
-            <Step
-              {...this.props}
-              theme={this.context.theme}
-              do={this.doProxy}
-              setForm={this.setForm}
-            />
-          </Form>
-          <Separator kind="space" height="20px" />
-          <Container kind="row">
-            <Button
-              busy={this.props.busy}
-              width="0px"
-              grow={grow}
-              kind="action"
-              place="1/2"
-              glyph={glyph}
-              text={text}
-              onClick={this.onNext}
-              disabled={disabled}
-            />
-            <Button
-              glyph="solid/times"
-              text="Annuler"
-              grow="1"
-              kind="action"
-              place="2/2"
-              onClick={this.onCancel}
-            />
-          </Container>
-        </DialogModal>
-      );
-    } else {
-      return (
-        <Container kind="view" width="800px" spacing="large">
-          <Container kind="pane-header">
-            <Label text={title} kind="pane-header" />
-          </Container>
-          <Container kind="panes">
-            <Container kind="pane">
+        const mode = this.props.dialog.get('mode');
+        switch (mode) {
+          case 'custom':
+            return (
               <Form {...this.formConfig}>
                 <Step
                   {...this.props}
@@ -145,22 +104,82 @@ class Wizard extends Form {
                   setForm={this.setForm}
                 />
               </Form>
+            );
+          default:
+            return (
+              <DialogModal
+                width={this.props.dialog.get('width')}
+                height={this.props.dialog.get('height')}
+                zIndex={this.props.dialog.get('zIndex')}
+              >
+                <Form {...this.formConfig}>
+                  <Step
+                    {...this.props}
+                    theme={this.context.theme}
+                    do={this.doProxy}
+                    setForm={this.setForm}
+                  />
+                </Form>
+                <Separator kind="space" height="20px" />
+                <Container kind="row">
+                  <Button
+                    busy={this.props.busy}
+                    width="0px"
+                    grow={grow}
+                    kind="action"
+                    place="1/2"
+                    glyph={glyph}
+                    text={text}
+                    onClick={this.onNext}
+                    disabled={disabled}
+                  />
+                  <Button
+                    glyph="solid/times"
+                    text="Annuler"
+                    grow="1"
+                    kind="action"
+                    place="2/2"
+                    onClick={this.onCancel}
+                  />
+                </Container>
+              </DialogModal>
+            );
+        }
+      }
+
+      default: {
+        return (
+          <Container kind="view" width="800px" spacing="large">
+            <Container kind="pane-header">
+              <Label text={title} kind="pane-header" />
+            </Container>
+            <Container kind="panes">
+              <Container kind="pane">
+                <Form {...this.formConfig}>
+                  <Step
+                    {...this.props}
+                    theme={this.context.theme}
+                    do={this.doProxy}
+                    setForm={this.setForm}
+                  />
+                </Form>
+              </Container>
+            </Container>
+            <Container kind="actions">
+              <Button
+                busy={this.props.busy}
+                width="0px"
+                grow="1"
+                kind="action"
+                place="1/1"
+                glyph="solid/step-forward"
+                text="Suivant"
+                onClick={this.onNext}
+              />
             </Container>
           </Container>
-          <Container kind="actions">
-            <Button
-              busy={this.props.busy}
-              width="0px"
-              grow="1"
-              kind="action"
-              place="1/1"
-              glyph="solid/step-forward"
-              text="Suivant"
-              onClick={this.onNext}
-            />
-          </Container>
-        </Container>
-      );
+        );
+      }
     }
   }
 }
