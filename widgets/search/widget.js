@@ -62,88 +62,37 @@ class Search extends Form {
                     hintText={hintText}
                     grow="1"
                   />
-                  <Separator kind="exact" height="20px" />
-                  <Container kind="row">
-                    <Label width="30px" />
-                    <CheckButton
-                      justify="left"
-                      heightStrategy="compact"
-                      text="Brouillons"
-                      tooltip="Montre les brouillons"
-                      checked="false"
-                    />
-                  </Container>
-                  <Container kind="row">
-                    <Label width="30px" />
-                    <CheckButton
-                      justify="left"
-                      heightStrategy="compact"
-                      text="Publiés"
-                      tooltip="Montre les éléments publiés"
-                      checked="true"
-                    />
-                  </Container>
-                  <Container kind="row">
-                    <Label width="30px" />
-                    <CheckButton
-                      justify="left"
-                      heightStrategy="compact"
-                      text="Archivés"
-                      tooltip="Montre les éléments archivés"
-                      checked="false"
-                    />
-                  </Container>
-                  <Separator kind="exact" height="50px" />
-                  <Label bottomSpacing="large" text="Note" weight="bold" />
-                  <Label
-                    bottomSpacing="large"
-                    text="La liste ci-dessous devrait disparaître et s'afficher dans le panneau central."
-                  />
-                  <Label
-                    bottomSpacing="large"
-                    text="Si le champ de recherche est vide, elle montre tous les éléments."
-                  />
-                  <Label
-                    bottomSpacing="large"
-                    text="Sinon, elle ne montre que les éléments qui contiennent le texte dans le champ de recherche (comme actuellement)."
-                  />
-                  <Label
-                    bottomSpacing="large"
-                    text="Dans les 2 cas, elle tient compte des 3 boutons à cocher."
-                  />
                 </Container>
               </Container>
             </Form>
           </Container>
 
-          <Container kind="pane">
-            <DocumentsList
-              renderItem={props => {
-                return (
-                  <Container kind="row-pane" subkind="large-box">
-                    <Button
-                      kind="container"
-                      width="100%"
-                      onClick={() => this.navToDetail(this.props.id, props.id)}
-                      onDoubleClick={() => {}}
-                    >
-                      <Label
-                        text={props.text}
-                        kind="large-single"
-                        justify="left"
-                        grow="1"
-                        wrap="no"
-                      />
-                    </Button>
-                  </Container>
-                );
-              }}
-              mapItem={entity => {
-                const text = entity.get('meta.summaries.description');
-                return {text, id: entity.get('id')};
-              }}
-            />
-          </Container>
+          <DocumentsList
+            renderItem={props => {
+              return (
+                <Container kind="row-pane" subkind="large-box">
+                  <Button
+                    kind="container"
+                    width="100%"
+                    onClick={() => this.navToDetail(this.props.id, props.id)}
+                    onDoubleClick={() => {}}
+                  >
+                    <Label
+                      text={props.text}
+                      kind="large-single"
+                      justify="left"
+                      grow="1"
+                      wrap="no"
+                    />
+                  </Button>
+                </Container>
+              );
+            }}
+            mapItem={entity => {
+              const text = entity.get('meta.summaries.description');
+              return {text, id: entity.get('id')};
+            }}
+          />
         </Container>
       </Container>
     );
