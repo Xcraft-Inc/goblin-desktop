@@ -80,51 +80,32 @@ class Detail extends Widget {
       `backend.${entityId}.meta.status`
     );
 
-    const Loader = props => {
-      if (props.loaded) {
-        return (
-          <Container
-            kind={kind ? kind : 'view-right'}
-            width={width ? width : '700px'}
-            busy={this.props.loading}
-          >
-            <Detail
-              kind="detail"
-              id={workitemId}
-              entityId={entityId}
-              title={() => {
-                return <div>Détails</div>;
-              }}
-              readonly="true"
-              dragServiceId={this.props.dragServiceId}
-            >
-              <DetailUI
-                id={workitemId}
-                theme={this.context.theme}
-                do={this.doProxy}
-                entityId={entityId}
-                contextId={this.context.contextId}
-              />
-            </Detail>
-          </Container>
-        );
-      } else {
-        return null;
-      }
-    };
-
-    const DetailLoader = this.mapWidget(
-      Loader,
-      entityId => {
-        if (!entityId) {
-          return {loaded: false};
-        } else {
-          return {loaded: true};
-        }
-      },
-      `backend.${entityId}.id`
-    );
-    return <DetailLoader />;
+    return this.buildLoader(entityId, () => (
+      <Container
+        kind={kind ? kind : 'view-right'}
+        width={width ? width : '700px'}
+        busy={this.props.loading}
+      >
+        <Detail
+          kind="detail"
+          id={workitemId}
+          entityId={entityId}
+          title={() => {
+            return <div>Détails</div>;
+          }}
+          readonly="true"
+          dragServiceId={this.props.dragServiceId}
+        >
+          <DetailUI
+            id={workitemId}
+            theme={this.context.theme}
+            do={this.doProxy}
+            entityId={entityId}
+            contextId={this.context.contextId}
+          />
+        </Detail>
+      </Container>
+    ));
   }
 }
 

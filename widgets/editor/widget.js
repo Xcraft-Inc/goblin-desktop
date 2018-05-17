@@ -58,43 +58,22 @@ class Editor extends Widget {
       `backend.${entityId}.meta.status`
     );
 
-    const Loader = props => {
-      if (props.loaded) {
-        return (
-          <Editor
-            kind="editor"
-            id={this.props.id}
-            entityId={this.props.entityId}
-            dragServiceId={this.props.dragServiceId}
-            mainButton={
-              this.props.mainButton ? this.props.mainButton.toJS() : {}
-            }
-          >
-            <EditorUI
-              {...this.props}
-              theme={this.context.theme}
-              do={this.doProxy}
-              contextId={this.context.contextId}
-            />
-          </Editor>
-        );
-      } else {
-        return null;
-      }
-    };
-
-    const EditorLoader = this.mapWidget(
-      Loader,
-      entityId => {
-        if (!entityId) {
-          return {loaded: false};
-        } else {
-          return {loaded: true};
-        }
-      },
-      `backend.${entityId}.id`
-    );
-    return <EditorLoader />;
+    return this.buildLoader(entityId, () => (
+      <Editor
+        kind="editor"
+        id={this.props.id}
+        entityId={this.props.entityId}
+        dragServiceId={this.props.dragServiceId}
+        mainButton={this.props.mainButton ? this.props.mainButton.toJS() : {}}
+      >
+        <EditorUI
+          {...this.props}
+          theme={this.context.theme}
+          do={this.doProxy}
+          contextId={this.context.contextId}
+        />
+      </Editor>
+    ));
   }
 }
 
