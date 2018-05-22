@@ -6,7 +6,15 @@ function jsifyQuestName(quest) {
 }
 
 module.exports = config => {
-  const {name, title, dialog, steps, gadgets, initialFormState} = config;
+  const {
+    name,
+    title,
+    dialog,
+    steps,
+    gadgets,
+    quests,
+    initialFormState,
+  } = config;
   const goblinName = `${name}-wizard`;
   const wizardSteps = Object.keys(steps);
   const wizardFlow = ['init'].concat(wizardSteps);
@@ -61,15 +69,18 @@ module.exports = config => {
         const gadget = gadgets[key];
         const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
         wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
+
         if (gadgets[key].onActions) {
           for (const handler of Object.keys(gadgets[key].onActions)) {
             quest.goblin.defer(
-              quest.sub(`${newGadgetId}.${handler}`, (err, msg) =>
-                quest.me[jsifyQuestName(`${key}-${handler}`)](msg.data)
-              )
+              quest.sub(`${newGadgetId}.${handler}`, (err, msg) => {
+                const questName = jsifyQuestName(`${key}-${handler}`);
+                quest.me[questName](msg.data);
+              })
             );
           }
         }
+
         quest.create(`${gadget.type}-gadget`, {
           id: newGadgetId,
           options: gadget.options || null,
@@ -115,6 +126,12 @@ module.exports = config => {
         }
       }
     }
+  }
+
+  if (quests) {
+    Object.keys(quests).forEach(q => {
+      Goblin.registerQuest(goblinName, q, quests[q]);
+    });
   }
 
   Goblin.registerQuest(goblinName, 'init', function*(quest) {
