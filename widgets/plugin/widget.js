@@ -35,6 +35,7 @@ class Plugin extends Widget {
     this.onDeleteEntity = this.onDeleteEntity.bind(this);
     this.onEditEntity = this.onEditEntity.bind(this);
     this.onEntityDragged = this.onEntityDragged.bind(this);
+    this.doProxy = this.doProxy.bind(this);
   }
 
   get showActionMenu() {
@@ -165,6 +166,15 @@ class Plugin extends Widget {
     }
 
     return list;
+  }
+
+  doProxy(index) {
+    return (action, args) => {
+      const workitemId = `${this.props.editorWidget}${
+        this.props.mode ? `@${this.props.mode}` : ''
+      }@${this.context.desktopId}@${this.props.entityIds.get(index)}`;
+      this.doFor(workitemId, action, args);
+    };
   }
 
   /******************************************************************************/
@@ -334,6 +344,7 @@ class Plugin extends Widget {
               embeddedLevel={this.props.embeddedLevel}
               origin={this.props.origin}
               contextId={this.context.contextId}
+              do={this.doProxy(index)}
             />
           </Workitem>
         );

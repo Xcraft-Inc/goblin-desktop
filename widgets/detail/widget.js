@@ -79,7 +79,8 @@ class Detail extends Widget {
       'status',
       `backend.${entityId}.meta.status`
     );
-    return (
+
+    return this.buildLoader(entityId, () => (
       <Container
         kind={kind ? kind : 'view-right'}
         width={width ? width : '700px'}
@@ -104,7 +105,7 @@ class Detail extends Widget {
           />
         </Detail>
       </Container>
-    );
+    ));
   }
 }
 

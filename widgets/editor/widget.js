@@ -57,7 +57,8 @@ class Editor extends Widget {
       'status',
       `backend.${entityId}.meta.status`
     );
-    return (
+
+    return this.buildLoader(entityId, () => (
       <Editor
         kind="editor"
         id={this.props.id}
@@ -72,7 +73,7 @@ class Editor extends Widget {
           contextId={this.context.contextId}
         />
       </Editor>
-    );
+    ));
   }
 }
 
