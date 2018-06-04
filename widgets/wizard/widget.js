@@ -16,6 +16,7 @@ class Wizard extends Form {
     this.onCancel = this.onCancel.bind(this);
     this.setForm = this.setForm.bind(this);
     this.doProxy = this.doProxy.bind(this);
+    this.onBackgroundClick = this.onBackgroundClick.bind(this);
   }
 
   static get wiring() {
@@ -38,6 +39,12 @@ class Wizard extends Form {
   onCancel() {
     const service = this.props.id.split('@')[0];
     this.doAs(service, 'cancel');
+  }
+
+  onBackgroundClick() {
+    if (this.props.dialog.get('cancelOnBackgroundClick')) {
+      this.onCancel();
+    }
   }
 
   doProxy(action, args) {
@@ -111,6 +118,7 @@ class Wizard extends Form {
                 width={this.props.dialog.get('width')}
                 height={this.props.dialog.get('height')}
                 zIndex={this.props.dialog.get('zIndex')}
+                onBackgroundClick={this.onBackgroundClick}
               >
                 <Form {...this.formConfig}>
                   <Step
