@@ -205,6 +205,38 @@ module.exports = config => {
     quest.me.busy();
   });
 
+  Goblin.registerQuest(goblinName, 'goto', function*(quest, step) {
+    const nextStep = step;
+    quest.me.busy();
+
+    let form = quest.goblin
+      .getState()
+      .get('form')
+      .toJS();
+
+    const mb = `${nextStep}MainButton`;
+    if (quest.me[mb]) {
+      const mainButton = yield quest.me[mb]({form});
+      quest.dispatch('main-button', {mainButton});
+    }
+
+    quest.dispatch(`init-${nextStep}`);
+
+    yield quest.me[nextStep]({form});
+
+    if (quest.me[mb]) {
+      form = quest.goblin
+        .getState()
+        .get('form')
+        .toJS();
+      const mainButton = yield quest.me[mb]({form});
+      quest.dispatch('main-button', {mainButton});
+    }
+
+    quest.dispatch('next', {step});
+    quest.me.busy();
+  });
+
   Goblin.registerQuest(goblinName, 'cancel', function(quest) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
