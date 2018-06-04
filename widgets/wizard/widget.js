@@ -68,10 +68,10 @@ class Wizard extends Form {
       };
     } else {
       Step = wizardUI[this.props.step];
-      if (wizardUI.mapper && wizardUI.mapper[this.props.step]) {
+      if (wizardUI.mappers && wizardUI.mappers[this.props.step]) {
         Step = this.mapWidget(
           Step,
-          wizardUI.mapper[this.props.step],
+          wizardUI.mappers[this.props.step],
           `backend.${this.props.id}`
         );
       }
