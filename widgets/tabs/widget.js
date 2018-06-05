@@ -126,6 +126,7 @@ class Tabs extends Widget {
                         tabId: wid,
                         contextId: context,
                         workitemId: wid,
+                        close: true,
                       });
                     }}
                     active={currentTab === wid ? 'true' : 'false'}
@@ -153,6 +154,7 @@ class Tabs extends Widget {
                         tabId: wid,
                         contextId: context,
                         workitemId: wid,
+                        close: true,
                       });
                     }}
                     active={currentTab === wid ? 'true' : 'false'}

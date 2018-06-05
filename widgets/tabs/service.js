@@ -91,22 +91,24 @@ Goblin.registerQuest(goblinName, 'remove', function*(
   navToLastWorkitem,
   close
 ) {
+  const desktopId = quest.getDesktop();
   const wi = quest.getAPI(workitemId);
+  let released = false;
   if (close && wi && wi.close) {
-    yield wi.close({kind: 'terminate'});
+    yield wi.close({kind: 'terminate', desktopId});
+    released = true;
   }
-
-  quest.evt('removed', {workitemId});
 
   if (tabId) {
     const tabButton = quest.getAPI(tabId);
-    if (tabButton) {
+    if (close && tabButton && !released) {
       quest.release(tabId);
     }
     quest.do();
   }
 
-  const desktopId = quest.goblin.getX('desktopId');
+  quest.evt('removed', {workitemId});
+
   const desk = quest.getAPI(desktopId);
   desk.cleanWorkitem({workitemId});
 
