@@ -162,13 +162,13 @@ Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
 
     const type = quest.goblin.getState().get(`type`, null);
     if (value && type) {
-      const workitem = quest.goblin.getX('workitem');
+      /*const workitem = quest.goblin.getX('workitem');
       const workitemId = quest.goblin.getX('workitemId');
       const name = quest.goblin.getX('name');
       quest.cmd(`${workitem}.hinter-select-${name}`, {
         id: workitemId,
         selection: {index, text, value},
-      });
+      });*/
       detail.setEntity({entityId: value});
     }
 
