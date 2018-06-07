@@ -553,13 +553,18 @@ Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function(quest) {
   const contextId = last.get('workcontext');
   const view = last.get('view');
   const workitemId = last.get('workitem');
-
-  quest.dispatch('setCurrentWorkitemByContext', {contextId, view, workitemId});
-  const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
-  tabs.setCurrent({contextId, workitemId});
-  quest.evt(`nav.requested`, {
-    route: `/${contextId}/${view}?wid=${workitemId}`,
-  });
+  if (workitemId && view && contextId) {
+    quest.dispatch('setCurrentWorkitemByContext', {
+      contextId,
+      view,
+      workitemId,
+    });
+    const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
+    tabs.setCurrent({contextId, workitemId});
+    quest.evt(`nav.requested`, {
+      route: `/${contextId}/${view}?wid=${workitemId}`,
+    });
+  }
 });
 
 Goblin.registerQuest(goblinName, 'clear-workitem', function(quest, contextId) {
