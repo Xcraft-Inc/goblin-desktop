@@ -1,6 +1,6 @@
 'use strict';
 const Goblin = require('xcraft-core-goblin');
-
+const common = require('goblin-workshop').common;
 function jsifyQuestName(quest) {
   return quest.replace(/-([a-z])/g, (m, g1) => g1.toUpperCase());
 }
@@ -291,6 +291,9 @@ module.exports = config => {
       });
     }
   }
+
+  Goblin.registerQuest(goblinName, 'get-entity', common.getEntityQuest);
+  Goblin.registerQuest(goblinName, 'load-entity', common.loadEntityQuest);
 
   Goblin.registerQuest(goblinName, 'delete', function(quest) {
     quest.evt('done', {finished: true});
