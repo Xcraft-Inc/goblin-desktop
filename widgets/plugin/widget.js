@@ -373,8 +373,6 @@ class Plugin extends Widget {
   }
 
   renderButtons(entityId, extended, numberOfIds) {
-    const canExtend = !Bool.isTrue(this.props.disableExtend);
-
     if (extended) {
       const buttonsClass = Bool.isTrue(this.props.readonly)
         ? Bool.isTrue(this.props.embedded)
@@ -397,20 +395,18 @@ class Plugin extends Widget {
 
       return (
         <div className={buttonsClass}>
-          {canExtend ? (
-            <Button
-              width="32px"
-              kind={kind}
-              glyph="solid/angle-up"
-              glyphSize="180%"
-              tooltip="Replier"
-              active="false"
-              activeColor={
-                this.context.theme.palette.recurrenceExtendedBoxBackground
-              }
-              onClick={() => this.onSwapExtended(entityId)}
-            />
-          ) : null}
+          <Button
+            width="32px"
+            kind={kind}
+            glyph="solid/angle-up"
+            glyphSize="180%"
+            tooltip="Replier"
+            active="false"
+            activeColor={
+              this.context.theme.palette.recurrenceExtendedBoxBackground
+            }
+            onClick={() => this.onSwapExtended(entityId)}
+          />
           <Button
             width="32px"
             kind={kind}
@@ -455,20 +451,18 @@ class Plugin extends Widget {
               onClick={() => this.onEditEntity(entityId)}
             />
           ) : null}
-          {canExtend ? (
-            <Button
-              width="32px"
-              kind={kind}
-              glyph="solid/angle-down"
-              glyphSize="180%"
-              tooltip="Etendre"
-              active="false"
-              activeColor={
-                this.context.theme.palette.recurrenceExtendedBoxBackground
-              }
-              onClick={() => this.onSwapExtended(entityId)}
-            />
-          ) : null}
+          <Button
+            width="32px"
+            kind={kind}
+            glyph="solid/angle-down"
+            glyphSize="180%"
+            tooltip="Etendre"
+            active="false"
+            activeColor={
+              this.context.theme.palette.recurrenceExtendedBoxBackground
+            }
+            onClick={() => this.onSwapExtended(entityId)}
+          />
         </div>
       );
     }
