@@ -86,19 +86,19 @@ class Wizard extends Form {
 
     const Form = this.Form;
 
+    let glyph = 'solid/step-forward';
+    let text = 'Suivant';
+    let grow = '1';
+    let disabled = false;
+    if (this.props.mainButton) {
+      glyph = this.props.mainButton.get('glyph');
+      text = this.props.mainButton.get('text');
+      grow = this.props.mainButton.get('grow');
+      disabled = this.props.mainButton.get('disabled');
+    }
+
     switch (kind) {
       case 'dialog': {
-        let glyph = 'solid/step-forward';
-        let text = 'Suivant';
-        let grow = '1';
-        let disabled = false;
-        if (this.props.mainButton) {
-          glyph = this.props.mainButton.get('glyph');
-          text = this.props.mainButton.get('text');
-          grow = this.props.mainButton.get('grow');
-          disabled = this.props.mainButton.get('disabled');
-        }
-
         const mode = this.props.dialog.get('mode');
         switch (mode) {
           case 'custom':
@@ -177,12 +177,21 @@ class Wizard extends Form {
               <Button
                 busy={this.props.busy}
                 width="0px"
+                grow={grow}
+                kind="action"
+                place="1/2"
+                glyph={glyph}
+                text={text}
+                onClick={this.onNext}
+                disabled={disabled}
+              />
+              <Button
+                glyph="solid/times"
+                text="Annuler"
                 grow="1"
                 kind="action"
-                place="1/1"
-                glyph="solid/step-forward"
-                text="Suivant"
-                onClick={this.onNext}
+                place="2/2"
+                onClick={this.onCancel}
               />
             </Container>
           </Container>
