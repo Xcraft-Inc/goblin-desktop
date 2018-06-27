@@ -114,22 +114,14 @@ class Wizard extends Form {
             );
           case 'simple':
             return (
-              <DialogModal
-                subkind="full"
-                width={this.props.dialog.get('width')}
-                height={this.props.dialog.get('height')}
-                zIndex={this.props.dialog.get('zIndex')}
-                onBackgroundClick={this.onBackgroundClick}
-              >
-                <Form {...this.formConfig}>
-                  <Step
-                    {...this.props}
-                    theme={this.context.theme}
-                    do={this.doProxy}
-                    setForm={this.setForm}
-                  />
-                </Form>
-              </DialogModal>
+              <Form {...this.formConfig}>
+                <Step
+                  {...this.props}
+                  theme={this.context.theme}
+                  do={this.doProxy}
+                  setForm={this.setForm}
+                />
+              </Form>
             );
           default:
             return (
