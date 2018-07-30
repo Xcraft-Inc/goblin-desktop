@@ -145,6 +145,42 @@ class Desktop extends Widget {
     }
   }
 
+  connectLocalStateMonitor() {
+    return this.mapWidget(
+      props => {
+        const size = props.state.size;
+        const offset = props.offset || 25;
+        const overloadLimit = props.overloadLimit || 300;
+        const load = (size - offset) / overloadLimit;
+        return (
+          <div style={{fontWeight: 900}}>
+            LocalState: {(load * 100).toFixed(0)}%
+          </div>
+        );
+      },
+      'state',
+      'backend'
+    );
+  }
+
+  connectWarehouseInfosMonitor() {
+    return this.mapWidget(
+      props => {
+        const size = props.infos.size;
+        const offset = props.offset || 25;
+        const overloadLimit = props.overloadLimit || 300;
+        const load = (size - offset) / overloadLimit;
+        return (
+          <div style={{fontWeight: 900}}>
+            WarehouseState: {(load * 100).toFixed(0)}% Feeds:{props.infos.feeds}
+          </div>
+        );
+      },
+      'infos',
+      'infos.warehouse'
+    );
+  }
+
   render() {
     const {id, routesMap} = this.props;
 
@@ -152,6 +188,8 @@ class Desktop extends Widget {
       return null;
     }
 
+    const LocalStateMonitor = this.connectLocalStateMonitor();
+    const WarehouseMonitor = this.connectWarehouseInfosMonitor();
     const routes = {
       '/hinter/': {},
       '/task-bar/': {},
@@ -260,6 +298,9 @@ class Desktop extends Widget {
             </div>
             <Container kind="footer">
               <NabuToolBar />
+              <LocalStateMonitor />
+              <br />
+              <WarehouseMonitor />
             </Container>
           </Container>
         </Container>
