@@ -50,7 +50,6 @@ Goblin.registerQuest(goblinName, 'create', function(
   }
   quest.goblin.setX('desktopId', desktopId);
   quest.goblin.setX('name', desktopId);
-  quest.goblin.setX('created', {});
   quest.do({id, type, title, detailWidget, kind, width});
   return quest.goblin.id;
 });
@@ -58,15 +57,20 @@ Goblin.registerQuest(goblinName, 'create', function(
 Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
   const desktopId = quest.goblin.getX('desktopId');
   const type = entityId.split('@')[0];
-  const workitemId = `${type}-workitem@readonly@${desktopId}@${entityId}`;
+  const workitemId = `${type}-workitem@readonly@${desktopId}`;
+  const existing = quest.goblin.getState().get('detailWidgetId');
+  if (existing) {
+    const wiAPI = quest.getAPI(workitemId);
+    yield wiAPI.changeEntity({entityId});
+  } else {
+    yield quest.create(workitemId, {
+      id: workitemId,
+      desktopId,
+      entityId: entityId,
+      mode: 'readonly',
+    });
+  }
   quest.do({widgetId: workitemId, entityId});
-
-  yield quest.create(workitemId, {
-    id: workitemId,
-    desktopId,
-    entityId: entityId,
-    mode: 'readonly',
-  });
 });
 
 Goblin.registerQuest(goblinName, 'set-loading', function(quest) {
