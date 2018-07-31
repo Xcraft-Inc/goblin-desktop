@@ -1,6 +1,7 @@
 'use strict';
 
 const Goblin = require('xcraft-core-goblin');
+const {locks} = require('xcraft-core-utils');
 const goblinName = 'detail';
 
 // Define initial logic values
@@ -54,7 +55,10 @@ Goblin.registerQuest(goblinName, 'create', function(
   return quest.goblin.id;
 });
 
+const setMutex = new locks.RecursiveMutex();
 Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
+  yield setMutex.lock(entityId);
+  quest.defer(() => setMutex.unlock(entityId));
   const desktopId = quest.goblin.getX('desktopId');
   const type = entityId.split('@')[0];
   const workitemId = `${type}-workitem@readonly@${desktopId}`;
