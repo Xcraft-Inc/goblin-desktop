@@ -245,7 +245,7 @@ class Desktop extends Widget {
           <Container kind="task-bar">
             <Button
               textTransform="none"
-              text="Poly"
+              text={this.props.id.split('@')[1]}
               glyph="light/cube"
               tooltip="Changer de mandat"
               kind="task-logo"
