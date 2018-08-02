@@ -166,6 +166,9 @@ class Desktop extends Widget {
   connectWarehouseInfosMonitor() {
     return this.mapWidget(
       props => {
+        if (!props.infos) {
+          return <div style={{fontWeight: 900}}>WarehouseInfos: N/A</div>;
+        }
         const size = props.infos.size;
         const offset = props.offset || 25;
         const overloadLimit = props.overloadLimit || 300;
