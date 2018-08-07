@@ -168,7 +168,11 @@ class Wizard extends Form {
 
       default: {
         return (
-          <Container kind="view" width="800px" spacing="large">
+          <Container
+            kind="view"
+            width={this.props.dialog.get('containerWidth') || '800px'}
+            spacing="large"
+          >
             <Container kind="pane-header">
               <Label text={title} kind="pane-header" />
             </Container>
