@@ -10,7 +10,7 @@ import Button from 'gadgets/button/widget';
 import Combo from 'gadgets/combo/widget';
 import NabuToolBar from 'nabu/toolbar/widget';
 import Notifications from 'desktop/notifications/widget';
-
+import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
 
@@ -159,6 +159,7 @@ class Desktop extends Widget {
               backgroundColor: 'black',
             }}
           >
+            <img src={IMG_GOBLIN} />
             {props.show ? (
               <input
                 style={{
