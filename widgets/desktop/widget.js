@@ -4,7 +4,7 @@ import Widget from 'laboratory/widget';
 import MouseTrap from 'mousetrap';
 import importer from 'laboratory/importer/';
 import {Unit} from 'electrum-theme';
-
+import _ from 'lodash';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Combo from 'gadgets/combo/widget';
@@ -42,7 +42,7 @@ class Desktop extends Widget {
     this.state = {
       showMenuTheme: false,
     };
-
+    this.dispatch({type: 'init'});
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
@@ -145,6 +145,54 @@ class Desktop extends Widget {
     }
   }
 
+  connectCommandsPrompt() {
+    MouseTrap.bind('ctrl+p', () => this.dispatch({type: 'TOGGLEPROMPT'}));
+    return this.mapWidget(
+      props => {
+        return (
+          <div
+            style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              visibility: props.show ? 'visible' : 'hidden',
+              backgroundColor: 'black',
+            }}
+          >
+            {props.show ? (
+              <input
+                style={{
+                  color: 'white',
+                  fontWeight: 900,
+                  fontSize: '1em',
+                  background: 'transparent',
+                  border: 'none',
+                }}
+                type="text"
+                list="commands"
+                autoFocus="true"
+                onKeyPress={e => {
+                  if (e.key === 'Enter') {
+                    this.dispatch({type: 'TOGGLEPROMPT'});
+                  }
+                }}
+              />
+            ) : null}
+            <datalist id="commands" style={{zIndex: 100}}>
+              {Object.keys(this.registry).map((cmd, index) => (
+                <option key={index} value={cmd}>
+                  {cmd}
+                </option>
+              ))}
+            </datalist>
+          </div>
+        );
+      },
+      'show',
+      `widgets.${this.props.id}.showPrompt`
+    );
+  }
+
   connectLocalStateMonitor() {
     return this.mapWidget(
       props => {
@@ -193,6 +241,7 @@ class Desktop extends Widget {
 
     const LocalStateMonitor = this.connectLocalStateMonitor();
     const WarehouseMonitor = this.connectWarehouseInfosMonitor();
+    const CommandsPrompt = this.connectCommandsPrompt();
     const routes = {
       '/hinter/': {},
       '/task-bar/': {},
@@ -302,8 +351,8 @@ class Desktop extends Widget {
             <Container kind="footer">
               <NabuToolBar />
               <LocalStateMonitor />
-              <br />
               <WarehouseMonitor />
+              <CommandsPrompt />
             </Container>
           </Container>
         </Container>
