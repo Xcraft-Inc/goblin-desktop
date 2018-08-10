@@ -3,9 +3,6 @@ import Widget from 'laboratory/widget';
 import View from 'laboratory/view';
 import Container from 'gadgets/container/widget';
 import Board from 'desktop/board/widget';
-import DialogModal from 'gadgets/dialog-modal/widget';
-import Editor from 'desktop/editor/widget';
-import Search from 'desktop/search/widget';
 import Wizard from 'desktop/wizard/widget';
 
 class BoardView extends View {

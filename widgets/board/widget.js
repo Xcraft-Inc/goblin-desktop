@@ -25,7 +25,7 @@ class Board extends Widget {
   }
 
   render() {
-    const {id, entityId, layout} = this.props;
+    const {id, entityId} = this.props;
     if (!id) {
       return null;
     }
