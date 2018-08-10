@@ -364,6 +364,7 @@ class Workitem extends Form {
         return this.renderDetail();
       case 'form':
         return this.renderForm();
+      case 'map':
       case 'board':
         return this.renderBoard();
       case 'roadbook':
