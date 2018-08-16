@@ -294,6 +294,7 @@ module.exports = config => {
 
   Goblin.registerQuest(goblinName, 'get-entity', common.getEntityQuest);
   Goblin.registerQuest(goblinName, 'load-entity', common.loadEntityQuest);
+  Goblin.registerQuest(goblinName, 'open-wizard', common.openWizard);
 
   Goblin.registerQuest(goblinName, 'delete', function(quest) {
     quest.evt('done', {finished: true});
