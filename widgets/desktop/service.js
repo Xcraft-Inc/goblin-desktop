@@ -490,6 +490,13 @@ Goblin.registerQuest(goblinName, 'add-dialog', function(quest, dialogId) {
   });
 });
 
+Goblin.registerQuest(goblinName, 'hide-dialogs', function(quest) {
+  const state = quest.goblin.getState();
+  quest.evt(`nav.requested`, {
+    route: buildDialogNavRequest(state),
+  });
+});
+
 Goblin.registerQuest(goblinName, 'remove-dialog', function(quest, dialogId) {
   const state = quest.goblin.getState();
   quest.evt(`nav.requested`, {
