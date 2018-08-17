@@ -250,7 +250,8 @@ class Plugin extends Widget {
       return (
         <Button
           glyph="solid/plus"
-          text="Ajouter"
+          text={this.props.addText || 'Ajouter'}
+          tooltip={this.props.addTooltip}
           glyphPosition="right"
           onClick={() => this.onAction('add')}
         />
