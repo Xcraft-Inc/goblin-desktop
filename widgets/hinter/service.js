@@ -138,7 +138,7 @@ Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
   quest.log.info(`Select row: ${index}: ${text}`);
   quest.do({index: `${index}`});
 
-  const value = quest.goblin.getState().get(`values.${index}`, null);
+  /*const value = quest.goblin.getState().get(`values.${index}`, null);
   const detail = quest.getAPI(quest.goblin.getX('detailId'), 'detail');
 
   //CANCEL PREVIOUS SELECT-ROW TASK
@@ -168,7 +168,7 @@ Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
       quest.cmd(`${workitem}.hinter-select-${name}`, {
         id: workitemId,
         selection: {index, text, value},
-      });*/
+      });
       detail.setEntity({entityId: value});
     }
 
@@ -182,7 +182,7 @@ Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
       console.log('canceling select-row task');
       clearTimeout(cancelId);
     });
-  }).then(task => task());
+  }).then(task => task());*/
 });
 
 Goblin.registerQuest(goblinName, 'validate-row', function*(
