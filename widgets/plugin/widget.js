@@ -187,7 +187,8 @@ class Plugin extends Widget {
           labelGlyph="solid/search"
           labelWidth="24px"
           fieldWidth="180px"
-          hintText="Ajouter depuis favoris"
+          hintText="Ajouter existant"
+          tooltip="Ajouter un élément existant en le choisissant dans une liste"
           kind="hinter"
           requiredHinter="no"
           hinter={this.props.searchHinter}
