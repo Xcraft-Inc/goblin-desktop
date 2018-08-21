@@ -273,6 +273,9 @@ module.exports = config => {
     logicHandlers[stepName] = (state, action) => {
       return state.merge('form', action.get('form'));
     };
+    logicHandlers[`${stepName}-main-button`] = (state, action) => {
+      return state.merge('form', action.get('form'));
+    };
     Goblin.registerQuest(goblinName, stepName, step.quest);
 
     if (step.mainButton) {
