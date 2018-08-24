@@ -176,17 +176,17 @@ class Wizard extends Form {
             <Container kind="pane-header">
               <Label text={title} kind="pane-header" />
             </Container>
-            <Container kind="panes">
-              <Container kind="pane">
-                <Form {...this.formConfig}>
+            <Container kind="pane-wizard">
+              <Form
+                {...this.formConfigWithComponent(() => (
                   <Step
                     {...this.props}
                     theme={this.context.theme}
                     do={this.doProxy}
                     setForm={this.setForm}
                   />
-                </Form>
-              </Container>
+                ))}
+              />
             </Container>
             <Container kind="actions">
               <Button
