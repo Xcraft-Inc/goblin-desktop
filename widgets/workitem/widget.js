@@ -140,6 +140,41 @@ class Workitem extends Form {
     }
   }
 
+  renderActionButton(button, index, count) {
+    return (
+      <Button
+        kind="action"
+        width="0px"
+        grow={button.get('grow') || '1'}
+        glyph={button.get('glyph')}
+        text={button.get('text')}
+        place={`${index + 1}/${count}`}
+        disabled={button.get('disabled')}
+        onClick={button.get('action')}
+      />
+    );
+  }
+
+  renderActionButtonsList() {
+    const result = [];
+    if (this.props.buttons) {
+      //? const buttons = Object.values(this.props.buttons);
+      const buttons = this.props.buttons.toArray();
+      let index = 0;
+      const count = buttons.length;
+      for (const button of buttons) {
+        result.push(this.renderActionButton(button, index++, count));
+      }
+    }
+    return result;
+  }
+
+  renderActionButtons() {
+    return (
+      <Container kind="actions">{this.renderActionButtonsList()}</Container>
+    );
+  }
+
   renderEditorActions() {
     switch (this.props.status) {
       case 'archived':
@@ -250,7 +285,7 @@ class Workitem extends Form {
             {this.props.children}
           </Form>
         </Container>
-        {this.renderEditorActions()}
+        {this.renderActionButtons()}
       </Container>
     );
   }

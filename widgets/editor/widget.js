@@ -16,7 +16,7 @@ class Editor extends Widget {
       id: 'id',
       entityId: 'entityId',
       firstFieldToFocus: 'firstFieldToFocus',
-      mainButton: 'mainButton',
+      buttons: 'buttons',
     };
   }
 
@@ -64,7 +64,7 @@ class Editor extends Widget {
         id={this.props.id}
         entityId={this.props.entityId}
         dragServiceId={this.props.dragServiceId}
-        mainButton={this.props.mainButton ? this.props.mainButton.toJS() : {}}
+        buttons={this.props.buttons}
       >
         <EditorUI
           {...this.props}
