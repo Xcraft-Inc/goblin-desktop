@@ -146,28 +146,23 @@ class Workitem extends Form {
         key={index}
         kind="action"
         width="0px"
-        grow={button.get('grow') || '1'}
-        glyph={button.get('glyph')}
-        text={button.get('text')}
+        grow="1"
         place={`${index + 1}/${count}`}
-        disabled={button.get('disabled')}
         onClick={button.get('action')}
+        {...button}
       />
     );
   }
 
   renderActionButtonsList() {
-    const result = [];
     if (this.props.buttons) {
-      //? const buttons = Object.values(this.props.buttons);
       const buttons = this.props.buttons.toArray();
-      let index = 0;
       const count = buttons.length;
-      for (const button of buttons) {
-        result.push(this.renderActionButton(button, index++, count));
-      }
+      return buttons.map((button, index) =>
+        this.renderActionButton(button, index, count)
+      );
     }
-    return result;
+    return null;
   }
 
   renderActionButtons() {
