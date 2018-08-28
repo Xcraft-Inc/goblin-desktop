@@ -76,6 +76,12 @@ class Detail extends Widget {
 
     const Detail = this.mapWidget(
       Workitem,
+      'buttons',
+      `backend.${workitemId}.buttons`
+    );
+
+    const DetailWithStatus = this.mapWidget(
+      Detail,
       'status',
       `backend.${entityId}.meta.status`
     );
@@ -86,7 +92,7 @@ class Detail extends Widget {
         width={width ? width : '700px'}
         busy={this.props.loading}
       >
-        <Detail
+        <DetailWithStatus
           kind="detail"
           id={workitemId}
           entityId={entityId}

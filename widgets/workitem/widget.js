@@ -143,6 +143,7 @@ class Workitem extends Form {
   renderActionButton(button, index, count) {
     return (
       <Button
+        key={index}
         kind="action"
         width="0px"
         grow={button.get('grow') || '1'}
@@ -314,7 +315,7 @@ class Workitem extends Form {
             {this.props.children}
           </Form>
         </Container>
-        {this.renderDetailActions()}
+        {this.renderActionButtons()}
       </Container>
     );
   }
