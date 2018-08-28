@@ -88,58 +88,6 @@ class Workitem extends Form {
 
   /******************************************************************************/
 
-  renderDetailActions() {
-    switch (this.props.status) {
-      case 'draft':
-      case 'archived':
-        return (
-          <Container kind="actions">
-            <Button
-              width="0px"
-              grow="1"
-              kind="action"
-              glyph="solid/pencil"
-              text="Editer"
-              place="1/2"
-              onClick={this.onEdit}
-            />
-            <Button
-              width="0px"
-              grow="0.5"
-              kind="action"
-              glyph="solid/check"
-              text="Publier"
-              place="2/2"
-              onClick={this.onPublish}
-            />
-          </Container>
-        );
-      case 'published':
-        return (
-          <Container kind="actions">
-            <Button
-              width="0px"
-              grow="1"
-              kind="action"
-              glyph="solid/pencil"
-              text="Editer"
-              place="1/2"
-              onClick={this.onEdit}
-            />
-            <Button
-              width="0px"
-              grow="0.5"
-              kind="action"
-              glyph="solid/archive"
-              text="Archiver"
-              place="2/2"
-              onClick={this.onArchive}
-            />
-          </Container>
-        );
-    }
-  }
-
   handleOnClick(button) {
     switch (button.id) {
       case 'validate':
@@ -194,69 +142,6 @@ class Workitem extends Form {
     return (
       <Container kind="actions">{this.renderActionButtonsList()}</Container>
     );
-  }
-
-  renderEditorActions() {
-    switch (this.props.status) {
-      case 'archived':
-      case 'draft':
-        return (
-          <Container kind="actions">
-            <Button
-              width="0px"
-              grow="1"
-              kind="action"
-              glyph="solid/check"
-              text="Publier"
-              place="1/2"
-              onClick={this.onPublish}
-              {...this.props.mainButton}
-            />
-            <Button
-              width="0px"
-              grow="1"
-              kind="action"
-              place="2/2"
-              glyph="solid/undo"
-              text="Réinitialiser"
-              onClick={this.onCancel}
-            />
-          </Container>
-        );
-      case 'published':
-        return (
-          <Container kind="actions">
-            <Button
-              width="0px"
-              grow="1"
-              kind="action"
-              glyph="solid/check"
-              text="Terminer"
-              place="1/3"
-              onClick={this.onSubmit}
-              {...this.props.mainButton}
-            />
-            <Button
-              width="0px"
-              grow="1"
-              kind="action"
-              place="2/3"
-              glyph="solid/undo"
-              text="Réinitialiser"
-              onClick={this.onCancel}
-            />
-            <Button
-              width="0px"
-              grow="1"
-              kind="action"
-              glyph="solid/archive"
-              text="Archiver"
-              place="3/3"
-              onClick={this.onArchive}
-            />
-          </Container>
-        );
-    }
   }
 
   renderStatus() {
