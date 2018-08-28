@@ -140,8 +140,8 @@ class Workitem extends Form {
     }
   }
 
-  handleOnClick(button, buttonId) {
-    switch (buttonId) {
+  handleOnClick(button) {
+    switch (button.id) {
       case 'validate':
         this.onSubmit();
         break;
@@ -166,7 +166,7 @@ class Workitem extends Form {
     }
   }
 
-  renderActionButton(button, buttonId, index, count) {
+  renderActionButton(button, index, count) {
     return (
       <Button
         key={index}
@@ -174,7 +174,7 @@ class Workitem extends Form {
         width="0px"
         grow="1"
         place={`${index + 1}/${count}`}
-        onClick={() => this.handleOnClick(button, buttonId)}
+        onClick={() => this.handleOnClick(button)}
         {...button}
       />
     );
@@ -183,12 +183,9 @@ class Workitem extends Form {
   renderActionButtonsList() {
     if (this.props.buttons) {
       const count = this.props.buttons.size;
-      let index = 0;
-      return this.props.buttons
-        .map((button, buttonId) =>
-          this.renderActionButton(button.toJS(), buttonId, index++, count)
-        )
-        .toArray();
+      return this.props.buttons.map((button, index) =>
+        this.renderActionButton(button.toJS(), index, count)
+      );
     }
     return null;
   }
