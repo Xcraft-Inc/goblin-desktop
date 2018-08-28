@@ -109,7 +109,7 @@ class Detail extends Widget {
             entityId={entityId}
             contextId={this.context.contextId}
           />
-        </Detail>
+        </DetailWithStatus>
       </Container>
     ));
   }
