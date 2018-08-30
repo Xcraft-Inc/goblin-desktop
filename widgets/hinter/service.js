@@ -56,7 +56,8 @@ Goblin.registerQuest(goblinName, 'create', function*(
   detailWidth,
   newWorkitem,
   newButtonTitle,
-  usePayload
+  usePayload,
+  withDetails
 ) {
   if (!name) {
     name = type;
@@ -82,6 +83,7 @@ Goblin.registerQuest(goblinName, 'create', function*(
   quest.goblin.setX('desktopId', desktopId);
   quest.goblin.setX('newWorkitem', newWorkitem);
   quest.goblin.setX('usePayload', usePayload);
+  quest.goblin.setX('withDetails', withDetails);
   quest.goblin.setX('cancel', () => null);
 
   /*hinter@workitem@id*/
@@ -137,7 +139,34 @@ Goblin.registerQuest(goblinName, 'create-new', function(quest, value) {
 Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
   quest.log.info(`Select row: ${index}: ${text}`);
   quest.do({index: `${index}`});
+  const withDetails = quest.goblin.getX('withDetails');
+  if (withDetails) {
+    const value = quest.goblin.getState().get(`values.${index}`, null);
+    const detail = quest.getAPI(quest.goblin.getX('detailId'), 'detail');
+    let payload = null;
+    const usePayload = quest.goblin.getX('usePayload');
+    if (usePayload) {
+      payload = quest.goblin.getState().get(`payloads.${index}`, null);
+      if (payload) {
+        payload = payload.toJS();
+      } else {
+        quest.goblin.setX('cancel', () => null);
+        return;
+      }
+    }
 
+    const type = quest.goblin.getState().get(`type`, null);
+    if (value && type) {
+      const workitem = quest.goblin.getX('workitem');
+      const workitemId = quest.goblin.getX('workitemId');
+      const name = quest.goblin.getX('name');
+      quest.cmd(`${workitem}.hinter-select-${name}`, {
+        id: workitemId,
+        selection: {index, text, value},
+      });
+      detail.setEntity({entityId: value});
+    }
+  }
   /*const value = quest.goblin.getState().get(`values.${index}`, null);
   const detail = quest.getAPI(quest.goblin.getX('detailId'), 'detail');
 

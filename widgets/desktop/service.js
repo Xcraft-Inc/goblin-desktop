@@ -168,6 +168,7 @@ Goblin.registerQuest(goblinName, 'create-hinter-for', function*(
   newButtonTitle,
   newWorkitem,
   usePayload,
+  withDetails,
   name,
   type,
   title,
@@ -209,6 +210,7 @@ Goblin.registerQuest(goblinName, 'create-hinter-for', function*(
       newButtonTitle,
       newWorkitem,
       usePayload,
+      withDetails,
     }
   );
 
