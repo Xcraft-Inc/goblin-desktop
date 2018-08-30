@@ -76,8 +76,6 @@ class Desktop extends Widget {
       id: 'id',
       username: 'username',
       routesMap: 'routes',
-      show: 'showNotifications',
-      data: 'notifications',
     };
   }
 
@@ -224,7 +222,8 @@ class Desktop extends Widget {
         const load = (size - offset) / overloadLimit;
         return (
           <div style={{fontWeight: 900}}>
-            WarehouseState: {(load * 100).toFixed(0)}% Feeds:{props.infos.feeds}
+            WarehouseState: {(load * 100).toFixed(0)}% Feeds:
+            {props.infos.feeds}
           </div>
         );
       },
