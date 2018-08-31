@@ -28,6 +28,7 @@ const logicHandlers = {
     return state
       .set('rows', action.get('rows'))
       .set('glyphs', action.get('glyphs'))
+      .set('status', action.get('status'))
       .set('values', action.get('values'))
       .set('payloads', action.get('payloads'))
       .set('selectedIndex', '0');
@@ -57,12 +58,29 @@ Goblin.registerQuest(goblinName, 'create', function*(
   newWorkitem,
   newButtonTitle,
   usePayload,
-  withDetails
+  withDetails,
+  filters
 ) {
   if (!name) {
     name = type;
   }
-  quest.do({id, name, type, title, glyph, kind, newWorkitem, newButtonTitle});
+
+  if (!filters) {
+    filters = ['published'];
+    quest.goblin.setX('filters', filters);
+  }
+
+  quest.do({
+    id,
+    name,
+    type,
+    title,
+    glyph,
+    kind,
+    newWorkitem,
+    newButtonTitle,
+    filters,
+  });
   const detailId = `${id.replace(`-hinter`, `-detail`)}`;
   quest.goblin.setX('detailId', detailId);
   yield quest.create('detail', {
@@ -249,16 +267,50 @@ Goblin.registerQuest(goblinName, 'validate-row', function*(
   }
 });
 
+Goblin.registerQuest(goblinName, 'set-filters', function(quest, filters) {
+  quest.goblin.setX('filters', filters);
+  const lastSelections = quest.goblin.getX('lastSelections');
+  if (lastSelections) {
+    quest.me.setSelections(lastSelections);
+  }
+});
+
 Goblin.registerQuest(goblinName, 'set-selections', function(
   quest,
   rows,
   glyphs,
+  status,
   values,
   payloads,
   usePayload,
   validate
 ) {
-  quest.do({rows, glyphs, values, payloads});
+  const filters = quest.goblin.getX('filters');
+  quest.goblin.setX('lastSelections', {
+    rows,
+    glyphs,
+    status,
+    values,
+    payloads,
+    usePayload,
+    validate,
+  });
+  const indexes = status.reduce((indexes, s, i) => {
+    if (filters.includes(s) || s === undefined) {
+      indexes.push(i);
+    }
+    return indexes;
+  }, []);
+
+  if (indexes.length !== rows.length) {
+    rows = rows.filter((_, i) => indexes.includes(i));
+    glyphs = glyphs.filter((_, i) => indexes.includes(i));
+    values = values.filter((_, i) => indexes.includes(i));
+    status = status.filter((_, i) => indexes.includes(i));
+    payloads = payloads.filter((_, i) => indexes.includes(i));
+  }
+
+  quest.do({rows, glyphs, values, status, payloads});
   if (rows.length > 0) {
     quest.me.selectRow({
       index: 0,
