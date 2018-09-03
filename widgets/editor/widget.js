@@ -16,7 +16,6 @@ class Editor extends Widget {
       id: 'id',
       entityId: 'entityId',
       firstFieldToFocus: 'firstFieldToFocus',
-      buttons: 'buttons',
     };
   }
 
@@ -52,11 +51,13 @@ class Editor extends Widget {
       );
     }
 
-    const Editor = this.mapWidget(
+    let Editor = this.mapWidget(
       Workitem,
       'status',
       `backend.${entityId}.meta.status`
     );
+
+    Editor = this.mapWidget(Editor, 'buttons', `backend.${id}.buttons`);
 
     return this.buildLoader(entityId, () => (
       <Editor
@@ -64,7 +65,6 @@ class Editor extends Widget {
         id={this.props.id}
         entityId={this.props.entityId}
         dragServiceId={this.props.dragServiceId}
-        buttons={this.props.buttons}
       >
         <EditorUI
           {...this.props}
