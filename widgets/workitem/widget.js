@@ -129,16 +129,17 @@ class Workitem extends Form {
   }
 
   renderActionButtonsList(buttons, layout) {
-    if (buttons) {
-      const count = buttons.size;
-      return buttons.map((button, index) =>
-        this.renderActionButton(button.toJS(), layout, index, count)
-      );
-    }
-    return null;
+    const count = buttons.size;
+    return buttons.map((button, index) =>
+      this.renderActionButton(button.toJS(), layout, index, count)
+    );
   }
 
   renderActionButtons() {
+    if (!this.props.buttons) {
+      return null;
+    }
+
     const primaryButtons = this.props.buttons.filter(b => {
       const layout = b.get('layout');
       return !layout || layout === 'primary';
