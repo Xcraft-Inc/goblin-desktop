@@ -110,17 +110,17 @@ class Workitem extends Form {
     }
 
     if (button.quest) {
-      this.doAs(this.service, button.quest);
+      this.doAs(this.service, button.quest, button.questParams);
     }
   }
 
-  renderActionButton(button, index, count) {
+  renderActionButton(button, layout, index, count) {
     return (
       <Button
         key={index}
-        kind="action"
-        width="0px"
-        grow="1"
+        kind={layout === 'secondary' ? 'secondary-action' : 'action'}
+        width={layout === 'secondary' ? null : '0px'}
+        grow={layout === 'secondary' ? null : '1'}
         place={`${index + 1}/${count}`}
         onClick={() => this.handleOnClick(button)}
         {...button}
@@ -128,20 +128,43 @@ class Workitem extends Form {
     );
   }
 
-  renderActionButtonsList() {
-    if (this.props.buttons) {
-      const count = this.props.buttons.size;
-      return this.props.buttons.map((button, index) =>
-        this.renderActionButton(button.toJS(), index, count)
+  renderActionButtonsList(buttons, layout) {
+    if (buttons) {
+      const count = buttons.size;
+      return buttons.map((button, index) =>
+        this.renderActionButton(button.toJS(), layout, index, count)
       );
     }
     return null;
   }
 
   renderActionButtons() {
-    return (
-      <Container kind="actions">{this.renderActionButtonsList()}</Container>
+    const primaryButtons = this.props.buttons.filter(b => {
+      const layout = b.get('layout');
+      return !layout || layout === 'primary';
+    });
+    const secondaryButtons = this.props.buttons.filter(
+      b => b.get('layout') === 'secondary'
     );
+
+    if (secondaryButtons.size > 0) {
+      return (
+        <Container kind="actions-lines">
+          <Container kind="actions-line-secondary">
+            {this.renderActionButtonsList(secondaryButtons, 'secondary')}
+          </Container>
+          <Container kind="actions-line-primary">
+            {this.renderActionButtonsList(primaryButtons, 'primary')}
+          </Container>
+        </Container>
+      );
+    } else {
+      return (
+        <Container kind="actions">
+          {this.renderActionButtonsList(primaryButtons, 'primary')}
+        </Container>
+      );
+    }
   }
 
   renderStatus() {
