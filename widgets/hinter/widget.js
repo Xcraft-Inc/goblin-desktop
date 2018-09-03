@@ -23,6 +23,7 @@ class Hinter extends Widget {
       glyph: 'glyph',
       rows: 'rows',
       glyphs: 'glyphs',
+      status: 'status',
       selectedIndex: 'selectedIndex',
       onNew: 'onNew',
       newButtonTitle: 'newButtonTitle',
@@ -82,6 +83,7 @@ class Hinter extends Widget {
       glyph,
       rows,
       glyphs,
+      status,
       selectedIndex,
       newButtonTitle,
     } = this.props;
@@ -100,11 +102,13 @@ class Hinter extends Widget {
 
     return (
       <HinterColumn
+        id={id}
         kind={kind}
         titleText={title}
         titleGlyph={glyph}
         rows={rows}
         glyphs={glyphs}
+        status={status}
         selectedIndex={selectedIndex}
         newButtonTitle={newButtonTitle}
         onNew={() => {
