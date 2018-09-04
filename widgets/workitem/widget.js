@@ -1,9 +1,11 @@
 import React from 'react';
 import Form from 'laboratory/form';
+import PropTypes from 'prop-types';
+
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
-import PropTypes from 'prop-types';
+import ScrollableContainer from 'gadgets/scrollable-container/widget';
 
 /******************************************************************************/
 
@@ -195,6 +197,8 @@ class Workitem extends Form {
       `backend.${this.props.entityId}.meta.summaries.info`
     );
 
+    const scrollableId = `workitem-edit@${this.props.entityId || 'generic'}`;
+
     return (
       <Container
         kind="view"
@@ -206,7 +210,7 @@ class Workitem extends Form {
           {this.props.version}
         </Container>
         {this.renderStatus()}
-        <Container kind="panes">
+        <ScrollableContainer kind="panes" id={scrollableId}>
           <Form
             component="div"
             validateOn="submit"
@@ -214,7 +218,7 @@ class Workitem extends Form {
           >
             {this.props.children}
           </Form>
-        </Container>
+        </ScrollableContainer>
         {this.renderActionButtons()}
       </Container>
     );
@@ -229,13 +233,16 @@ class Workitem extends Form {
       `backend.${this.props.entityId}.meta.summaries.info`
     );
 
+    const scrollableId = `workitem-readonly@${this.props.entityId ||
+      'generic'}`;
+
     return (
       <Container kind="column-full">
         <Container kind="pane-header">
           <Title kind="pane-header" singleLine="true" wrap="no" />
         </Container>
         {this.renderStatus()}
-        <Container kind="panes">
+        <ScrollableContainer kind="panes" id={scrollableId}>
           <Form
             component="div"
             validateOn="submit"
@@ -243,7 +250,7 @@ class Workitem extends Form {
           >
             {this.props.children}
           </Form>
-        </Container>
+        </ScrollableContainer>
         {this.renderActionButtons()}
       </Container>
     );
