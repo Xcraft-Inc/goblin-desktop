@@ -26,7 +26,7 @@ class Wizard extends Form {
       dialog: 'dialog',
       step: 'step',
       busy: 'busy',
-      mainButton: 'mainButton',
+      buttons: 'buttons',
     };
   }
 
@@ -60,6 +60,59 @@ class Wizard extends Form {
     this.doAs(workitem, 'change', {path, newValue});
   }
 
+  handleButtonClick(id, quest, questParams) {
+    switch (id) {
+      case 'main':
+        this.onNext();
+        break;
+      case 'cancel':
+        this.onCancel();
+        break;
+      default:
+        break;
+    }
+
+    if (quest) {
+      this.doAs(this.service, quest, questParams);
+    }
+  }
+
+  renderButton(button, id, index, size) {
+    button = button.toJS();
+    const {quest, questParams, ...props} = button;
+    let mainProps = {};
+    if (id === 'main') {
+      mainProps = {
+        busy: this.props.busy,
+      };
+    }
+    return (
+      <Button
+        key={id}
+        kind="action"
+        place={`${index + 1}/${size}`}
+        onClick={() => this.handleButtonClick(id, quest, questParams)}
+        {...mainProps}
+        {...props}
+      />
+    );
+  }
+
+  renderButtons(kind) {
+    if (!this.props.buttons) {
+      return null;
+    }
+    let index = 0;
+    const size = this.props.buttons.size;
+    return (
+      <Container kind={kind}>
+        {this.props.buttons
+          .map((button, id) => this.renderButton(button, id, index++, size))
+          .toArray()}
+      </Container>
+    );
+  }
+
   render() {
     const {id, title, kind} = this.props;
     if (!id) {
@@ -85,17 +138,6 @@ class Wizard extends Form {
     }
 
     const Form = this.Form;
-
-    let glyph = 'solid/step-forward';
-    let text = 'Suivant';
-    let grow = '1';
-    let disabled = false;
-    if (this.props.mainButton) {
-      glyph = this.props.mainButton.get('glyph');
-      text = this.props.mainButton.get('text');
-      grow = this.props.mainButton.get('grow');
-      disabled = this.props.mainButton.get('disabled');
-    }
 
     switch (kind) {
       case 'dialog': {
@@ -140,27 +182,7 @@ class Wizard extends Form {
                   />
                 </Form>
                 <Separator kind="space" height="20px" />
-                <Container kind="row">
-                  <Button
-                    busy={this.props.busy}
-                    width="0px"
-                    grow={grow}
-                    kind="action"
-                    place="1/2"
-                    glyph={glyph}
-                    text={text}
-                    onClick={this.onNext}
-                    disabled={disabled}
-                  />
-                  <Button
-                    glyph="solid/times"
-                    text="Annuler"
-                    grow="1"
-                    kind="action"
-                    place="2/2"
-                    onClick={this.onCancel}
-                  />
-                </Container>
+                {this.renderButtons('row')}
               </DialogModal>
             );
         }
@@ -188,27 +210,7 @@ class Wizard extends Form {
                 ))}
               />
             </Container>
-            <Container kind="actions">
-              <Button
-                busy={this.props.busy}
-                width="0px"
-                grow={grow}
-                kind="action"
-                place="1/2"
-                glyph={glyph}
-                text={text}
-                onClick={this.onNext}
-                disabled={disabled}
-              />
-              <Button
-                glyph="solid/times"
-                text="Annuler"
-                grow="1"
-                kind="action"
-                place="2/2"
-                onClick={this.onCancel}
-              />
-            </Container>
+            {this.renderButtons('actions')}
           </Container>
         );
       }

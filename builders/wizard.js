@@ -4,6 +4,25 @@ const common = require('goblin-workshop').common;
 function jsifyQuestName(quest) {
   return quest.replace(/-([a-z])/g, (m, g1) => g1.toUpperCase());
 }
+const {OrderedMap, fromJS} = require('immutable');
+
+const defaultButtons = OrderedMap()
+  .set(
+    'main',
+    fromJS({
+      glyph: 'solid/step-forward',
+      text: 'Suivant',
+      grow: '1',
+    })
+  )
+  .set(
+    'cancel',
+    fromJS({
+      glyph: 'solid/times',
+      text: 'Annuler',
+      grow: '1',
+    })
+  );
 
 module.exports = config => {
   const {
@@ -35,17 +54,15 @@ module.exports = config => {
         },
         gadgets: action.get('wizardGadgets'),
         busy: true,
-        mainButton: {
-          glyph: 'solid/step-forward',
-          text: 'Suivant',
-          grow: '1',
-          disabled: 'false',
-        },
+        buttons: defaultButtons,
         form: mergedInitialForm,
       });
     },
     'main-button': (state, action) => {
-      return state.set('mainButton', action.get('mainButton'));
+      return state.set('buttons.main', action.get('mainButton'));
+    },
+    buttons: (state, action) => {
+      return state.set('buttons', action.get('buttons'));
     },
     submit: (state, action) => {
       return state.applyForm(action.get('value'));
@@ -136,34 +153,7 @@ module.exports = config => {
 
   Goblin.registerQuest(goblinName, 'init', function*(quest) {
     const nextStep = wizardFlow[1];
-    quest.me.busy();
-
-    let form = quest.goblin
-      .getState()
-      .get('form')
-      .toJS();
-
-    const mb = `${nextStep}MainButton`;
-    if (quest.me[mb]) {
-      const mainButton = yield quest.me[mb]({form});
-      quest.dispatch('main-button', {mainButton});
-    }
-
-    quest.dispatch(`init-${nextStep}`);
-
-    yield quest.me[nextStep]({form});
-
-    if (quest.me[mb]) {
-      form = quest.goblin
-        .getState()
-        .get('form')
-        .toJS();
-      const mainButton = yield quest.me[mb]({form});
-      quest.dispatch('main-button', {mainButton});
-    }
-
-    quest.dispatch('next', {step: nextStep});
-    quest.me.busy();
+    yield quest.me.goto({step: nextStep});
   });
 
   Goblin.registerQuest(goblinName, 'next', function*(quest) {
@@ -175,54 +165,32 @@ module.exports = config => {
     }
     const nIndex = cIndex + 1;
     const nextStep = wizardFlow[nIndex];
-    quest.me.busy();
-
-    let form = quest.goblin
-      .getState()
-      .get('form')
-      .toJS();
-
-    const mb = `${nextStep}MainButton`;
-    if (quest.me[mb]) {
-      const mainButton = yield quest.me[mb]({form});
-      quest.dispatch('main-button', {mainButton});
-    }
-
-    quest.dispatch(`init-${nextStep}`);
-
-    yield quest.me[nextStep]({form});
-
-    if (quest.me[mb]) {
-      form = quest.goblin
-        .getState()
-        .get('form')
-        .toJS();
-      const mainButton = yield quest.me[mb]({form});
-      quest.dispatch('main-button', {mainButton});
-    }
-
-    quest.do({step: wizardFlow[nIndex]});
-    quest.me.busy();
+    yield quest.me.goto({step: nextStep});
   });
 
   Goblin.registerQuest(goblinName, 'goto', function*(quest, step) {
-    const nextStep = step;
-    quest.me.busy();
+    quest.me.busy(); // Set busy
+
+    quest.dispatch('next', {step});
 
     let form = quest.goblin
       .getState()
       .get('form')
       .toJS();
 
-    const mb = `${nextStep}MainButton`;
+    const mb = `${step}MainButton`;
     if (quest.me[mb]) {
       const mainButton = yield quest.me[mb]({form});
       quest.dispatch('main-button', {mainButton});
     }
 
-    quest.dispatch(`init-${nextStep}`);
+    quest.dispatch(`init-${step}`);
 
-    yield quest.me[nextStep]({form});
+    yield quest.me.updateButtons();
+
+    if (quest.me[step]) {
+      yield quest.me[step]({form});
+    }
 
     if (quest.me[mb]) {
       form = quest.goblin
@@ -233,8 +201,12 @@ module.exports = config => {
       quest.dispatch('main-button', {mainButton});
     }
 
-    quest.dispatch('next', {step});
-    quest.me.busy();
+    // Moved to the top of goto.
+    // The step is used in updateButtons.
+    // The quest of the step can use updateButtons without specifying the step.
+    //quest.dispatch('next', {step});
+
+    quest.me.busy(); // Clear busy
   });
 
   Goblin.registerQuest(goblinName, 'cancel', function(quest) {
@@ -247,6 +219,11 @@ module.exports = config => {
   Goblin.registerQuest(goblinName, 'change', function*(quest) {
     quest.do();
     yield quest.me.update();
+
+    const step = quest.goblin.getState().get('step');
+    if (steps[step].updateButtonsMode === 'onChange') {
+      yield quest.me.updateButtons();
+    }
   });
 
   Goblin.registerQuest(goblinName, 'update', function*(quest) {
@@ -259,6 +236,21 @@ module.exports = config => {
     if (steps[c] && steps[c].mainButton) {
       const mainButton = yield quest.me[`${c}MainButton`]({form});
       quest.dispatch('main-button', {mainButton});
+    }
+  });
+
+  Goblin.registerQuest(goblinName, 'update-buttons', function*(quest) {
+    const state = quest.goblin.getState();
+    const step = state.get('step');
+    const form = state.get('form').toJS();
+    const currentButtons = state.get('buttons');
+
+    if (steps[step] && steps[step].buttons) {
+      const newButtons = yield quest.me[`${step}Buttons`]({
+        form,
+        buttons: currentButtons,
+      });
+      quest.dispatch('buttons', {buttons: newButtons});
     }
   });
 
@@ -276,7 +268,10 @@ module.exports = config => {
     logicHandlers[`${stepName}-main-button`] = (state, action) => {
       return state.merge('form', action.get('form'));
     };
-    Goblin.registerQuest(goblinName, stepName, step.quest);
+
+    if (step.quest) {
+      Goblin.registerQuest(goblinName, stepName, step.quest);
+    }
 
     if (step.mainButton) {
       Goblin.registerQuest(
@@ -284,6 +279,10 @@ module.exports = config => {
         `${stepName}-main-button`,
         step.mainButton
       );
+    }
+
+    if (step.buttons) {
+      Goblin.registerQuest(goblinName, `${stepName}-buttons`, step.buttons);
     }
 
     for (const action in step.actions) {
