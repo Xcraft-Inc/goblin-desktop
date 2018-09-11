@@ -139,9 +139,9 @@ class Wizard extends Form {
 
     const Form = this.Form;
 
+    const mode = this.props.dialog.get('mode');
     switch (kind) {
       case 'dialog': {
-        const mode = this.props.dialog.get('mode');
         switch (mode) {
           case 'custom':
             return (
@@ -189,30 +189,55 @@ class Wizard extends Form {
       }
 
       default: {
-        return (
-          <Container
-            kind="view"
-            width={this.props.dialog.get('containerWidth') || '800px'}
-            spacing="large"
-          >
-            <Container kind="pane-header">
-              <Label text={title} kind="pane-header" />
-            </Container>
-            <Container kind="pane-wizard">
-              <Form
-                {...this.formConfigWithComponent(() => (
-                  <Step
-                    {...this.props}
-                    theme={this.context.theme}
-                    do={this.doProxy}
-                    setForm={this.setForm}
+        switch (mode) {
+          case 'simple': {
+            return (
+              <Container
+                kind="view"
+                width={this.props.dialog.get('containerWidth') || '800px'}
+                spacing="large"
+              >
+                <Form
+                  {...this.formConfigWithComponent(() => (
+                    <Step
+                      {...this.props}
+                      theme={this.context.theme}
+                      do={this.doProxy}
+                      setForm={this.setForm}
+                    />
+                  ))}
+                />
+              </Container>
+            );
+          }
+
+          default: {
+            return (
+              <Container
+                kind="view"
+                width={this.props.dialog.get('containerWidth') || '800px'}
+                spacing="large"
+              >
+                <Container kind="pane-header">
+                  <Label text={title} kind="pane-header" />
+                </Container>
+                <Container kind="pane-wizard">
+                  <Form
+                    {...this.formConfigWithComponent(() => (
+                      <Step
+                        {...this.props}
+                        theme={this.context.theme}
+                        do={this.doProxy}
+                        setForm={this.setForm}
+                      />
+                    ))}
                   />
-                ))}
-              />
-            </Container>
-            {this.renderButtons('actions')}
-          </Container>
-        );
+                </Container>
+                {this.renderButtons('actions')}
+              </Container>
+            );
+          }
+        }
       }
     }
   }
