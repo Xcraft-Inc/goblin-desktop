@@ -2,11 +2,11 @@ import React from 'react';
 import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
-import Button from 'gadgets/button/widget';
 import importer from 'laboratory/importer/';
 
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Separator from 'gadgets/separator/widget';
+import WizardButtons from '../wizard-buttons/widget';
 
 const uiImporter = importer('ui');
 class Wizard extends Form {
@@ -25,8 +25,6 @@ class Wizard extends Form {
       title: 'title',
       dialog: 'dialog',
       step: 'step',
-      busy: 'busy',
-      buttons: 'buttons',
     };
   }
 
@@ -58,59 +56,6 @@ class Wizard extends Form {
       path = path.substring(1);
     }
     this.doAs(workitem, 'change', {path, newValue});
-  }
-
-  handleButtonClick(id, quest, questParams) {
-    switch (id) {
-      case 'main':
-        this.onNext();
-        break;
-      case 'cancel':
-        this.onCancel();
-        break;
-      default:
-        break;
-    }
-
-    if (quest) {
-      this.doAs(this.service, quest, questParams);
-    }
-  }
-
-  renderButton(button, id, index, size) {
-    button = button.toJS();
-    const {quest, questParams, ...props} = button;
-    let mainProps = {};
-    if (id === 'main') {
-      mainProps = {
-        busy: this.props.busy,
-      };
-    }
-    return (
-      <Button
-        key={id}
-        kind="action"
-        place={`${index + 1}/${size}`}
-        onClick={() => this.handleButtonClick(id, quest, questParams)}
-        {...mainProps}
-        {...props}
-      />
-    );
-  }
-
-  renderButtons(kind) {
-    if (!this.props.buttons) {
-      return null;
-    }
-    let index = 0;
-    const size = this.props.buttons.size;
-    return (
-      <Container kind={kind}>
-        {this.props.buttons
-          .map((button, id) => this.renderButton(button, id, index++, size))
-          .toArray()}
-      </Container>
-    );
   }
 
   render() {
@@ -182,7 +127,12 @@ class Wizard extends Form {
                   />
                 </Form>
                 <Separator kind="space" height="20px" />
-                {this.renderButtons('row')}
+                <WizardButtons
+                  id={this.props.id}
+                  containerKind="row"
+                  onNext={this.onNext}
+                  onCancel={this.onCancel}
+                />
               </DialogModal>
             );
         }
@@ -233,7 +183,12 @@ class Wizard extends Form {
                     ))}
                   />
                 </Container>
-                {this.renderButtons('actions')}
+                <WizardButtons
+                  id={this.props.id}
+                  containerKind="actions"
+                  onNext={this.onNext}
+                  onCancel={this.onCancel}
+                />
               </Container>
             );
           }
