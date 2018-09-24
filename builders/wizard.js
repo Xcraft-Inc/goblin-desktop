@@ -261,6 +261,7 @@ module.exports = config => {
       if (step.form) {
         return state.merge('form', step.form);
       }
+      return state;
     };
     logicHandlers[stepName] = (state, action) => {
       return state.merge('form', action.get('form'));
