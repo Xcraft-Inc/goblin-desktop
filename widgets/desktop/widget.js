@@ -4,7 +4,6 @@ import Widget from 'laboratory/widget';
 import MouseTrap from 'mousetrap';
 import importer from 'laboratory/importer/';
 import {Unit} from 'electrum-theme';
-import _ from 'lodash';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Combo from 'gadgets/combo/widget';
