@@ -123,7 +123,7 @@ const logicHandlers = {
 };
 
 // Register quest's according rc.json
-Goblin.registerQuest(goblinName, 'create', function(
+Goblin.registerQuest(goblinName, 'create', function*(
   quest,
   labId,
   username,
@@ -138,13 +138,13 @@ Goblin.registerQuest(goblinName, 'create', function(
   quest.goblin.setX('configuration', configuration);
 
   // CREATE DEFAULT CONTEXT MANAGER
-  quest.create('contexts', {
+  yield quest.create('contexts', {
     id: `contexts@${quest.goblin.id}`,
     desktopId: quest.goblin.id,
   });
 
   // CREATE DEFAULT TABS MANAGER
-  quest.create('tabs', {
+  yield quest.create('tabs', {
     id: `tabs@${quest.goblin.id}`,
     desktopId: quest.goblin.id,
   });
