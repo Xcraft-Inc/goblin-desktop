@@ -51,6 +51,7 @@ class Desktop extends Widget {
 
   componentDidMount() {
     super.componentDidMount();
+    this.combo = ReactDOM.findDOMNode(this.comboButton);
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
   }
@@ -111,8 +112,7 @@ class Desktop extends Widget {
 
   renderMenuTheme() {
     if (this.showMenuTheme) {
-      const node = ReactDOM.findDOMNode(this.comboButton);
-      const rect = node.getBoundingClientRect();
+      const rect = this.combo.getBoundingClientRect();
       const top = Unit.add(
         rect.bottom + 'px',
         this.context.theme.shapes.flyingBalloonTriangleSize
