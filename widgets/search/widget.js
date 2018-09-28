@@ -40,7 +40,6 @@ class Search extends Form {
       'list',
       '.count'
     );
-
     return (
       <Container kind="view" width="400px" spacing="large">
         <Container kind="pane-header">

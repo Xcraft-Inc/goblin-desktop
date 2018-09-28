@@ -7,39 +7,7 @@ const actions = require('react-redux-form/immutable').actions;
 const logicState = {};
 
 // Define logic handlers according rc.json
-const logicHandlers = {
-  create: (state, action) => {
-    const id = action.get('id');
-    return state.set('', {
-      id: id,
-      name: action.get('name'),
-      type: action.get('type'),
-      kind: action.get('kind'),
-      title: action.get('title'),
-      glyph: action.get('glyph'),
-      onNew: !!action.get('newWorkitem'),
-      newButtonTitle: action.get('newButtonTitle'),
-      rows: [],
-      selectedIndex: null,
-      values: [],
-    });
-  },
-  'set-selections': (state, action) => {
-    return state
-      .set('rows', action.get('rows'))
-      .set('glyphs', action.get('glyphs'))
-      .set('status', action.get('status'))
-      .set('values', action.get('values'))
-      .set('payloads', action.get('payloads'))
-      .set('selectedIndex', '0');
-  },
-  'select-row': (state, action) => {
-    return state.set('selectedIndex', action.get('index'));
-  },
-  delete: state => {
-    return state.set('', {});
-  },
-};
+const logicHandlers = require('./logicHandlers.js');
 
 // Register quest's according rc.json
 
