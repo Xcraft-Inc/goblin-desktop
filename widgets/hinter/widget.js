@@ -12,6 +12,8 @@ class Hinter extends Widget {
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onValidate = this.onValidate.bind(this);
+    this.selectRow = this.selectRow.bind(this);
+    this.validateRow = this.validateRow.bind(this);
   }
 
   static get wiring() {
@@ -121,12 +123,8 @@ class Hinter extends Widget {
           }
         }}
         displayNewButton={onNew}
-        onRowClick={index => {
-          this.selectRow(index);
-        }}
-        onRowDbClick={index => {
-          this.validateRow(index);
-        }}
+        onRowClick={this.selectRow}
+        onRowDbClick={this.validateRow}
       />
     );
   }
