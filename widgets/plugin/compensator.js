@@ -4,10 +4,6 @@ const logicHandlers = {
   clear: state => {
     return state.set('entityIds', []).set('extendedId', null);
   },
-  remove: (state, action) => {
-    const entityId = action.get('entityId');
-    return state.unpush('entityIds', entityId);
-  },
   select: (state, action) => {
     const entityIds = action.get('entityIds');
     const clear = action.get('clear');
