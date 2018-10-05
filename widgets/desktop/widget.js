@@ -307,6 +307,7 @@ class Desktop extends Widget {
             <Container kind="top-bar">
               <TopBar desktopId={id} />
               <Container kind="main-tab-right">
+                <Button text={this.props.username} kind="main-tab-right" />
                 <Button
                   ref={x => (this.comboButton = x)}
                   glyph="solid/tint"
@@ -338,7 +339,6 @@ class Desktop extends Widget {
                     }}
                   />
                 ) : null}
-                <Button text={this.props.username} kind="main-tab-right" />
               </Container>
             </Container>
             <BeforeContent desktopId={id} />
