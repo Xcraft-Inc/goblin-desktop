@@ -2,7 +2,7 @@
 
 const Goblin = require('xcraft-core-goblin');
 const goblinName = 'hinter';
-const actions = require('react-redux-form/immutable').actions;
+const _ = require('lodash');
 // Define initial logic values
 const logicState = {};
 
@@ -82,7 +82,11 @@ Goblin.registerQuest(goblinName, 'create', function*(
   quest.goblin.setX('workitem', workitem);
   quest.goblin.setX('workitemId', workitemId);
   quest.goblin.setX('loaded', {});
-
+  quest.goblin.defer(
+    quest.sub(`${quest.goblin.id}.load-detail-requested`, (err, msg) => {
+      quest.me.loadDetail({...msg.data});
+    })
+  );
   return quest.goblin.id;
 });
 
@@ -122,82 +126,37 @@ Goblin.registerQuest(goblinName, 'create-new', function(quest, value) {
   );
 });
 
+const emitLoadDetails = _.debounce((quest, index, text) => {
+  quest.evt('load-detail-requested', {index, text});
+}, 1000);
 Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
   quest.log.info(`Select row: ${index}: ${text}`);
   quest.do({index: `${index}`});
   const withDetails = quest.goblin.getX('withDetails');
   if (withDetails) {
-    const value = quest.goblin.getState().get(`values.${index}`, null);
-    const detail = quest.getAPI(quest.goblin.getX('detailId'), 'detail');
-    let payload = null;
-    const usePayload = quest.goblin.getX('usePayload');
-    if (usePayload) {
-      payload = quest.goblin.getState().get(`payloads.${index}`, null);
-      if (payload) {
-        payload = payload.toJS();
-      } else {
-        quest.goblin.setX('cancel', () => null);
-        return;
-      }
-    }
+    emitLoadDetails(quest, index);
+  }
+});
 
-    const type = quest.goblin.getState().get(`type`, null);
-    if (value && type) {
-      const workitem = quest.goblin.getX('workitem');
-      const workitemId = quest.goblin.getX('workitemId');
-      const name = quest.goblin.getX('name');
-      quest.cmd(`${workitem}.hinter-select-${name}`, {
-        id: workitemId,
-        selection: {index, text, value},
-      });
-      detail.setEntity({entityId: value});
+Goblin.registerQuest(goblinName, 'load-detail', function*(quest, index) {
+  const value = quest.goblin.getState().get(`values.${index}`, null);
+  const detail = quest.getAPI(quest.goblin.getX('detailId'), 'detail');
+  let payload = null;
+  const usePayload = quest.goblin.getX('usePayload');
+  if (usePayload) {
+    payload = quest.goblin.getState().get(`payloads.${index}`, null);
+    if (payload) {
+      payload = payload.toJS();
+    } else {
+      quest.goblin.setX('cancel', () => null);
+      return;
     }
   }
-  /*const value = quest.goblin.getState().get(`values.${index}`, null);
-  const detail = quest.getAPI(quest.goblin.getX('detailId'), 'detail');
 
-  //CANCEL PREVIOUS SELECT-ROW TASK
-  quest.goblin.getX('cancel')();
-
-  detail.setLoading();
-
-  const task = () => {
-    console.log('runnin select row task:', index);
-    let payload = null;
-    const usePayload = quest.goblin.getX('usePayload');
-    if (usePayload) {
-      payload = quest.goblin.getState().get(`payloads.${index}`, null);
-      if (payload) {
-        payload = payload.toJS();
-      } else {
-        quest.goblin.setX('cancel', () => null);
-        return;
-      }
-    }
-
-    const type = quest.goblin.getState().get(`type`, null);
-    if (value && type) {
-      /*const workitem = quest.goblin.getX('workitem');
-      const workitemId = quest.goblin.getX('workitemId');
-      const name = quest.goblin.getX('name');
-      quest.cmd(`${workitem}.hinter-select-${name}`, {
-        id: workitemId,
-        selection: {index, text, value},
-      });
-      detail.setEntity({entityId: value});
-    }
-
-    quest.goblin.setX('cancel', () => null);
-  };
-
-  //Prepare a cancelable load task
-  new Promise(resolve => {
-    const cancelId = setTimeout(resolve, 500, task);
-    quest.goblin.setX('cancel', () => {
-      console.log('canceling select-row task');
-      clearTimeout(cancelId);
-    });
-  }).then(task => task());*/
+  const type = quest.goblin.getState().get(`type`, null);
+  if (value && type) {
+    yield detail.setEntity({entityId: value});
+  }
 });
 
 Goblin.registerQuest(goblinName, 'validate-row', function*(
