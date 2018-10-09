@@ -128,7 +128,7 @@ Goblin.registerQuest(goblinName, 'create-new', function(quest, value) {
 
 const emitLoadDetails = _.debounce((quest, index, text) => {
   quest.evt('load-detail-requested', {index, text});
-}, 1000);
+}, 200);
 Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
   quest.log.info(`Select row: ${index}: ${text}`);
   quest.do({index: `${index}`});
