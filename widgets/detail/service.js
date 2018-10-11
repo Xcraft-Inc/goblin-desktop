@@ -28,6 +28,9 @@ const logicHandlers = {
       .set('entityId', action.get('entityId'))
       .set('loading', false);
   },
+  'set-loading': state => {
+    return state.set('loading', true);
+  },
 };
 
 // Register quest's according rc.json
@@ -76,6 +79,10 @@ Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
     });
   }
   quest.do({widgetId: workitemId, entityId});
+});
+
+Goblin.registerQuest(goblinName, 'set-loading', function(quest) {
+  quest.do();
 });
 
 Goblin.registerQuest(goblinName, 'delete', function(quest) {

@@ -94,6 +94,7 @@ class Hinter extends Widget {
       glyph: 'glyph',
       status: 'status',
       onNew: 'onNew',
+      withDetails: 'withDetails',
       newButtonTitle: 'newButtonTitle',
     };
   }
@@ -123,15 +124,25 @@ class Hinter extends Widget {
   nextRow() {
     this.dispatch({type: 'next-row'});
     this.do('next-row');
+    if (this.props.withDetails) {
+      this.setLoadingForDetails();
+    }
   }
+
   prevRow() {
     this.dispatch({type: 'prev-row'});
     this.do('prev-row');
+    if (this.props.withDetails) {
+      this.setLoadingForDetails();
+    }
   }
 
   selectRow(index, value) {
     this.dispatch({type: 'select-row', index});
     this.do('select-row', {index, value});
+    if (this.props.withDetails) {
+      this.setLoadingForDetails();
+    }
   }
 
   onNew() {
@@ -158,6 +169,13 @@ class Hinter extends Widget {
       .substring(1);
     this.do('validate-row', {index, text: value, model});
     this.hideHinter();
+  }
+
+  setLoadingForDetails() {
+    const detailServiceId = this.props.id.replace(`-hinter`, `-detail`);
+    this.cmd(`detail.set-loading`, {
+      id: detailServiceId,
+    });
   }
 
   render() {

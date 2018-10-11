@@ -47,8 +47,10 @@ Goblin.registerQuest(goblinName, 'create', function*(
     kind,
     newWorkitem,
     newButtonTitle,
+    withDetails,
     filters,
   });
+
   const detailId = `${id.replace(`-hinter`, `-detail`)}`;
   quest.goblin.setX('detailId', detailId);
   yield quest.create('detail', {

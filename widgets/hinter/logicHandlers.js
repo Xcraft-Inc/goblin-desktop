@@ -12,6 +12,7 @@ module.exports = {
       newButtonTitle: action.get('newButtonTitle'),
       rows: [],
       selectedIndex: null,
+      withDetails: action.get('withDetails'),
       values: [],
     });
   },
