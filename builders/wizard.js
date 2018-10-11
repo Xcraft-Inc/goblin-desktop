@@ -219,23 +219,27 @@ module.exports = config => {
   Goblin.registerQuest(goblinName, 'change', function*(quest) {
     quest.do();
     yield quest.me.update();
-
-    const step = quest.goblin.getState().get('step');
-    if (steps[step].updateButtonsMode === 'onChange') {
-      yield quest.me.updateButtons();
-    }
   });
 
   Goblin.registerQuest(goblinName, 'update', function*(quest) {
-    const c = quest.goblin.getState().get('step');
-    const form = quest.goblin
-      .getState()
-      .get('form')
-      .toJS();
+    const state = quest.goblin.getState();
+    const stepName = state.get('step');
+    const step = steps[stepName];
 
-    if (steps[c] && steps[c].mainButton) {
-      const mainButton = yield quest.me[`${c}MainButton`]({form});
-      quest.dispatch('main-button', {mainButton});
+    if (step) {
+      if (step.mainButton) {
+        const form = state.get('form').toJS();
+        const mainButton = yield quest.me[`${stepName}MainButton`]({
+          form,
+        });
+        quest.dispatch('main-button', {mainButton});
+      }
+      if (step.updateButtonsMode === 'onChange') {
+        yield quest.me.updateButtons();
+      }
+      if (step.onChange) {
+        yield quest.me[`${stepName}OnChange`]();
+      }
     }
   });
 
@@ -284,6 +288,10 @@ module.exports = config => {
 
     if (step.buttons) {
       Goblin.registerQuest(goblinName, `${stepName}-buttons`, step.buttons);
+    }
+
+    if (step.onChange) {
+      Goblin.registerQuest(goblinName, `${stepName}-on-change`, step.onChange);
     }
 
     for (const action in step.actions) {
