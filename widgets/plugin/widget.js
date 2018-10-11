@@ -104,7 +104,18 @@ class Plugin extends Widget {
 
   onSwapExtended(entityId) {
     const service = this.props.id.split('@')[0];
-    this.doAs(service, 'extend', {entityId});
+
+    const extendedIds = this.getBackendState()
+      .get('extendedIds')
+      .toArray();
+    const indexOf = extendedIds.indexOf(entityId);
+
+    if (indexOf !== -1) {
+      this.doAs(service, 'collapse', {entityId});
+    } else {
+      this.doAs(service, 'extend', {entityId});
+    }
+
     this._scrollEntityId = entityId;
   }
 
