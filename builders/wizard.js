@@ -58,9 +58,6 @@ module.exports = config => {
         form: mergedInitialForm,
       });
     },
-    'main-button': (state, action) => {
-      return state.set('buttons.main', action.get('mainButton'));
-    },
     buttons: (state, action) => {
       return state.set('buttons', action.get('buttons'));
     },
@@ -178,27 +175,12 @@ module.exports = config => {
       .get('form')
       .toJS();
 
-    const mb = `${step}MainButton`;
-    if (quest.me[mb]) {
-      const mainButton = yield quest.me[mb]({form});
-      quest.dispatch('main-button', {mainButton});
-    }
-
     quest.dispatch(`init-${step}`);
 
     yield quest.me.updateButtons();
 
     if (quest.me[step]) {
       yield quest.me[step]({form});
-    }
-
-    if (quest.me[mb]) {
-      form = quest.goblin
-        .getState()
-        .get('form')
-        .toJS();
-      const mainButton = yield quest.me[mb]({form});
-      quest.dispatch('main-button', {mainButton});
     }
 
     // Moved to the top of goto.
@@ -227,13 +209,6 @@ module.exports = config => {
     const step = steps[stepName];
 
     if (step) {
-      if (step.mainButton) {
-        const form = state.get('form').toJS();
-        const mainButton = yield quest.me[`${stepName}MainButton`]({
-          form,
-        });
-        quest.dispatch('main-button', {mainButton});
-      }
       if (step.updateButtonsMode === 'onChange') {
         yield quest.me.updateButtons();
       }
@@ -278,14 +253,6 @@ module.exports = config => {
 
     if (step.quest) {
       Goblin.registerQuest(goblinName, stepName, step.quest);
-    }
-
-    if (step.mainButton) {
-      Goblin.registerQuest(
-        goblinName,
-        `${stepName}-main-button`,
-        step.mainButton
-      );
     }
 
     if (step.buttons) {
