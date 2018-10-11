@@ -59,8 +59,8 @@ class Wizard extends Form {
   }
 
   render() {
-    const {id, title, kind} = this.props;
-    if (!id) {
+    const {id, dialog, title, kind} = this.props;
+    if (!id || !dialog) {
       return null;
     }
     let Step = null;
