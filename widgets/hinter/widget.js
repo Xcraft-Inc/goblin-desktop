@@ -67,25 +67,30 @@ const Row = Widget.connect((s, p) => {
   };
 })(_Row);
 
-const _List = props => {
-  props.onInit(props.rows.size);
-  return (
-    <div>
-      {props.rows.map((row, index) => {
-        return (
-          <Row
-            key={index}
-            id={props.id}
-            rowIndex={index}
-            styles={props.rowStyles}
-            onRowClick={props.onRowClick}
-            onRowDbClick={props.onRowDbClick}
-          />
-        );
-      })}
-    </div>
-  );
-};
+class _List extends React.PureComponent {
+  componentDidUpdate() {
+    this.props.onInit(this.props.rows.size);
+  }
+
+  render() {
+    return (
+      <div>
+        {this.props.rows.map((row, index) => {
+          return (
+            <Row
+              key={index}
+              id={this.props.id}
+              rowIndex={index}
+              styles={this.props.rowStyles}
+              onRowClick={this.props.onRowClick}
+              onRowDbClick={this.props.onRowDbClick}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+}
 
 const List = Widget.connect((s, p) => {
   const rows = s.get(`backend.${p.id}.rows`, []);
