@@ -245,12 +245,13 @@ module.exports = config => {
 
   Goblin.registerQuest(goblinName, 'update-buttons', function*(quest) {
     const state = quest.goblin.getState();
-    const step = state.get('step');
-    const form = state.get('form').toJS();
-    const currentButtons = state.get('buttons');
+    const stepName = state.get('step');
+    const step = steps[stepName];
 
-    if (steps[step] && steps[step].buttons) {
-      const newButtons = yield quest.me[`${step}Buttons`]({
+    if (step && step.buttons) {
+      const form = state.get('form');
+      const currentButtons = state.get('buttons');
+      const newButtons = yield quest.me[`${stepName}Buttons`]({
         form,
         buttons: currentButtons,
       });
