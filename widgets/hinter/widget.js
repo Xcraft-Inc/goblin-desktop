@@ -1,38 +1,62 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'laboratory/widget';
 import MouseTrap from 'mousetrap';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 
-import _ from 'lodash';
+class _Row extends React.PureComponent {
+  constructor() {
+    super();
+    this._ref = null;
+  }
 
-const _Row = props => {
-  return (
-    <div
-      className={props.selected ? props.styles.boxActive : props.styles.box}
-      onClick={() =>
-        props.onRowClick ? props.onRowClick(props.rowIndex, props.text) : null
-      }
-      onDoubleClick={() =>
-        props.onRowDbClick
-          ? props.onRowDbClick(props.rowIndex, props.text)
-          : null
-      }
-    >
-      {props.glyph ? (
-        <Label glyph={props.glyph} glyphPosition="center" />
-      ) : null}
-      <Label
-        text={props.text}
-        kind="large-single"
-        justify="left"
-        grow="1"
-        wrap="no"
-      />
-    </div>
-  );
-};
+  componentDidUpdate() {
+    if (this._ref && this.props.selected) {
+      scrollIntoViewIfNeeded(this._ref, {
+        duration: 100,
+      });
+    }
+  }
+
+  render() {
+    return (
+      <div
+        ref={node => {
+          this._ref = ReactDOM.findDOMNode(node);
+        }}
+        className={
+          this.props.selected
+            ? this.props.styles.boxActive
+            : this.props.styles.box
+        }
+        onClick={() =>
+          this.props.onRowClick
+            ? this.props.onRowClick(this.props.rowIndex, this.props.text)
+            : null
+        }
+        onDoubleClick={() =>
+          this.props.onRowDbClick
+            ? this.props.onRowDbClick(this.props.rowIndex, this.props.text)
+            : null
+        }
+      >
+        {this.props.glyph ? (
+          <Label glyph={this.props.glyph} glyphPosition="center" />
+        ) : null}
+        <Label
+          text={this.props.text}
+          kind="large-single"
+          justify="left"
+          grow="1"
+          wrap="no"
+        />
+      </div>
+    );
+  }
+}
 
 const Row = Widget.connect((s, p) => {
   const selectedIndex = s.get(`widgets.${p.id}.selectedIndex`);
@@ -43,25 +67,30 @@ const Row = Widget.connect((s, p) => {
   };
 })(_Row);
 
-const _List = props => {
-  props.onInit(props.rows.size);
-  return (
-    <div>
-      {props.rows.map((row, index) => {
-        return (
-          <Row
-            key={index}
-            id={props.id}
-            rowIndex={index}
-            styles={props.rowStyles}
-            onRowClick={props.onRowClick}
-            onRowDbClick={props.onRowDbClick}
-          />
-        );
-      })}
-    </div>
-  );
-};
+class _List extends React.PureComponent {
+  componentDidUpdate() {
+    this.props.onInit(this.props.rows.size);
+  }
+
+  render() {
+    return (
+      <div>
+        {this.props.rows.map((row, index) => {
+          return (
+            <Row
+              key={index}
+              id={this.props.id}
+              rowIndex={index}
+              styles={this.props.rowStyles}
+              onRowClick={this.props.onRowClick}
+              onRowDbClick={this.props.onRowDbClick}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+}
 
 const List = Widget.connect((s, p) => {
   const rows = s.get(`backend.${p.id}.rows`, []);

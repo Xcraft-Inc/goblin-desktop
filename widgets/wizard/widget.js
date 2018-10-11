@@ -83,8 +83,7 @@ class Wizard extends Form {
     }
 
     const Form = this.Form;
-
-    const mode = this.props.dialog.get('mode');
+    const mode = dialog.get('mode');
     switch (kind) {
       case 'dialog': {
         switch (mode) {
