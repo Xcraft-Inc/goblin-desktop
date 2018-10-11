@@ -9,8 +9,7 @@ const actions = {
     return state.set('rowCount', action.get('rowCount'));
   },
   'select-row': (state, action) => {
-    const index = action.get('index') || 0;
-    return state.set('selectedIndex', index);
+    return state.set('selectedIndex', action.index);
   },
   'next-row': state => {
     const index = state.get('selectedIndex');

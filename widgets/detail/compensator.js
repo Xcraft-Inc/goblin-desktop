@@ -1,4 +1,11 @@
 export default (state, action = {}) => {
-  console.log('XXXXXX', action);
+  //Pre compensate loading
+  if (action.type === 'set-entity') {
+    if (state.get('entityId') !== action.data.entityId) {
+      return state.set('loading', true);
+    } else {
+      return state.set('loading', false);
+    }
+  }
   return state;
 };

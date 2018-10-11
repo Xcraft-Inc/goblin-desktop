@@ -25,13 +25,8 @@ const logicHandlers = {
   'set-entity': (state, action) => {
     return state
       .set('detailWidgetId', action.get('widgetId'))
-      .set('entityId', action.get('entityId'));
-  },
-  'set-loading': state => {
-    return state.set('loading', true);
-  },
-  'clear-loading': state => {
-    return state.set('loading', false);
+      .set('entityId', action.get('entityId'))
+      .set('loading', false);
   },
 };
 
@@ -59,14 +54,17 @@ Goblin.registerQuest(goblinName, 'create', function(
 
 const setMutex = new locks.RecursiveMutex();
 Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
-  yield setMutex.lock(entityId);
-  quest.defer(() => setMutex.unlock(entityId));
+  yield setMutex.lock(quest.goblin.id);
+  quest.defer(() => setMutex.unlock(quest.goblin.id));
   const desktopId = quest.goblin.getX('desktopId');
   const type = entityId.split('@')[0];
   const workitemId = `${type}-workitem@readonly@${desktopId}`;
   const existing = quest.goblin.getState().get('detailWidgetId');
-  quest.me.setLoading();
   if (existing) {
+    if (entityId === quest.goblin.getState().get('entityId')) {
+      quest.do({widgetId: workitemId, entityId});
+      return;
+    }
     const wiAPI = quest.getAPI(workitemId);
     yield wiAPI.changeEntity({entityId});
   } else {
@@ -77,16 +75,7 @@ Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
       mode: 'readonly',
     });
   }
-  quest.me.clearLoading();
   quest.do({widgetId: workitemId, entityId});
-});
-
-Goblin.registerQuest(goblinName, 'set-loading', function(quest) {
-  quest.do();
-});
-
-Goblin.registerQuest(goblinName, 'clear-loading', function(quest) {
-  quest.do();
 });
 
 Goblin.registerQuest(goblinName, 'delete', function(quest) {

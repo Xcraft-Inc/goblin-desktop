@@ -9,7 +9,17 @@ import _ from 'lodash';
 
 const _Row = props => {
   return (
-    <div className={props.selected ? props.styles.boxActive : props.styles.box}>
+    <div
+      className={props.selected ? props.styles.boxActive : props.styles.box}
+      onClick={() =>
+        props.onRowClick ? props.onRowClick(props.rowIndex, props.text) : null
+      }
+      onDoubleClick={() =>
+        props.onRowDbClick
+          ? props.onRowDbClick(props.rowIndex, props.text)
+          : null
+      }
+    >
       {props.glyph ? (
         <Label glyph={props.glyph} glyphPosition="center" />
       ) : null}
@@ -43,6 +53,8 @@ const _List = props => {
             id={props.id}
             rowIndex={index}
             styles={props.rowStyles}
+            onRowClick={props.onRowClick}
+            onRowDbClick={props.onRowDbClick}
           />
         );
       })}
@@ -66,7 +78,8 @@ class Hinter extends Widget {
     this.onNew = this.onNew.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
-    this.onValidate = this.onValidate.bind(this);
+    this.validate = this.validate.bind(this);
+    this.validateRow = this.validateRow.bind(this);
     this.selectRow = this.selectRow.bind(this);
     this.prevRow = this.prevRow.bind(this);
     this.nextRow = this.nextRow.bind(this);
@@ -88,8 +101,8 @@ class Hinter extends Widget {
   componentWillMount() {
     MouseTrap.bind('up', this.onKeyUp, 'keydown');
     MouseTrap.bind('down', this.onKeyDown, 'keydown');
-    MouseTrap.bind('return', this.onValidate);
-    MouseTrap.bind('tab', this.onValidate);
+    MouseTrap.bind('return', this.validate);
+    MouseTrap.bind('tab', this.validate);
   }
 
   componentWillUnmount() {
@@ -97,10 +110,6 @@ class Hinter extends Widget {
     MouseTrap.unbind('down');
     MouseTrap.unbind('return');
     MouseTrap.unbind('tab');
-  }
-
-  onValidate() {
-    this.validateRow(parseInt(this.props.selectedIndex));
   }
 
   onKeyUp() {
@@ -120,12 +129,9 @@ class Hinter extends Widget {
     this.do('prev-row');
   }
 
-  selectRow(index) {
-    if (index >= 0 && index < this.props.rows.size) {
-      const value = this.props.rows.get(index);
-      this.dispatch({type: 'select-row', index});
-      this.do('select-row', {index, value});
-    }
+  selectRow(index, value) {
+    this.dispatch({type: 'select-row', index});
+    this.do('select-row', {index, value});
   }
 
   onNew() {
@@ -136,15 +142,22 @@ class Hinter extends Widget {
     this.do('create-new', {value});
   }
 
-  validateRow(index) {
-    if (index >= 0 && index < this.props.rows.size) {
-      const value = this.props.rows.get(index);
-      const model = this.getRouting()
-        .get('location.hash')
-        .substring(1);
-      this.do('validate-row', {index, text: value, model});
-      this.hideHinter();
-    }
+  validate() {
+    const index = this.getBackendValue(
+      `backend.${this.props.id}.selectedIndex`
+    );
+    const value = this.getBackendValue(
+      `backend.${this.props.id}.rows[${index}]`
+    );
+    this.validateRow(index, value);
+  }
+
+  validateRow(index, value) {
+    const model = this.getRouting()
+      .get('location.hash')
+      .substring(1);
+    this.do('validate-row', {index, text: value, model});
+    this.hideHinter();
   }
 
   render() {
@@ -163,7 +176,12 @@ class Hinter extends Widget {
         </Container>
         <Container kind="panes">
           <Container kind="pane-top">
-            <List id={id} rowStyles={this.styles.classNames} />
+            <List
+              id={id}
+              rowStyles={this.styles.classNames}
+              onRowClick={this.selectRow}
+              onRowDbClick={this.validateRow}
+            />
           </Container>
         </Container>
         {onNew ? (
