@@ -44,6 +44,7 @@ const Row = Widget.connect((s, p) => {
 })(_Row);
 
 const _List = props => {
+  props.onInit(props.rows.size);
   return (
     <div>
       {props.rows.map((row, index) => {
@@ -83,6 +84,7 @@ class Hinter extends Widget {
     this.selectRow = this.selectRow.bind(this);
     this.prevRow = this.prevRow.bind(this);
     this.nextRow = this.nextRow.bind(this);
+    this.initHinter = this.initHinter.bind(this);
   }
 
   static get wiring() {
@@ -122,26 +124,34 @@ class Hinter extends Widget {
   }
 
   nextRow() {
-    this.dispatch({type: 'next-row'});
-    this.do('next-row');
-    if (this.props.withDetails) {
-      this.setLoadingForDetails();
+    const index = this.getSelectedIndex();
+    if (parseInt(index) < this.getRows().size - 1) {
+      this.dispatch({type: 'next-row'});
+      this.do('next-row');
+      if (this.props.withDetails) {
+        this.setLoadingForDetails();
+      }
     }
   }
 
   prevRow() {
-    this.dispatch({type: 'prev-row'});
-    this.do('prev-row');
-    if (this.props.withDetails) {
-      this.setLoadingForDetails();
+    const index = this.getSelectedIndex();
+    if (parseInt(index) > 0) {
+      this.dispatch({type: 'prev-row'});
+      this.do('prev-row');
+      if (this.props.withDetails) {
+        this.setLoadingForDetails();
+      }
     }
   }
 
   selectRow(index, value) {
-    this.dispatch({type: 'select-row', index});
-    this.do('select-row', {index, value});
-    if (this.props.withDetails) {
-      this.setLoadingForDetails();
+    if (parseInt(index) <= this.getRows().size - 1) {
+      this.dispatch({type: 'select-row', index});
+      this.do('select-row', {index, value});
+      if (this.props.withDetails) {
+        this.setLoadingForDetails();
+      }
     }
   }
 
@@ -178,14 +188,27 @@ class Hinter extends Widget {
     });
   }
 
+  getSelectedIndex() {
+    return this.getBackendValue(`backend.${this.props.id}.selectedIndex`);
+  }
+
+  getRows() {
+    return this.getBackendValue(`backend.${this.props.id}.rows`);
+  }
+
+  initHinter(rowCount) {
+    this.dispatch({
+      type: 'init-hinter',
+      rowCount,
+    });
+  }
+
   render() {
     const {id, onNew, glyph, title, newButtonTitle} = this.props;
 
     if (!id) {
       return null;
     }
-
-    this.dispatch({type: 'init-hinter'});
 
     return (
       <Container kind="view" grow="1" maxWidth="500px">
@@ -199,6 +222,7 @@ class Hinter extends Widget {
               rowStyles={this.styles.classNames}
               onRowClick={this.selectRow}
               onRowDbClick={this.validateRow}
+              onInit={this.initHinter}
             />
           </Container>
         </Container>

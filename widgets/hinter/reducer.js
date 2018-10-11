@@ -1,19 +1,19 @@
 import {fromJS} from 'immutable';
 const initialState = fromJS({
   selectedIndex: 0,
-  rowCount: 10,
+  rowCount: 0,
 });
 
 const actions = {
-  initHinter: (state, action) => {
-    return state.set('rowCount', action.get('rowCount'));
+  'init-hinter': (state, action) => {
+    return state.set('rowCount', action.rowCount).set('selectedIndex', 0);
   },
   'select-row': (state, action) => {
-    return state.set('selectedIndex', action.index);
+    return state.set('selectedIndex', parseInt(action.index));
   },
   'next-row': state => {
-    const index = state.get('selectedIndex');
-    if (index === state.get('rowCount')) {
+    const index = parseInt(state.get('selectedIndex'));
+    if (index === state.get('rowCount') - 1) {
       return state;
     }
     return state.set('selectedIndex', parseInt(index) + 1);
