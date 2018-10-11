@@ -3,11 +3,16 @@ import Widget from 'laboratory/widget';
 import MouseTrap from 'mousetrap';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
+import Button from 'gadgets/button/widget';
+
 import _ from 'lodash';
 
 const _Row = props => {
   return (
     <div className={props.selected ? props.styles.boxActive : props.styles.box}>
+      {props.glyph ? (
+        <Label glyph={props.glyph} glyphPosition="center" />
+      ) : null}
       <Label
         text={props.text}
         kind="large-single"
@@ -23,6 +28,7 @@ const Row = Widget.connect((s, p) => {
   const selectedIndex = s.get(`widgets.${p.id}.selectedIndex`);
   return {
     text: s.get(`backend.${p.id}.rows[${p.rowIndex}]`),
+    glyph: s.get(`backend.${p.id}.glyphs[${p.rowIndex}]`),
     selected: selectedIndex === p.rowIndex,
   };
 })(_Row);
@@ -46,8 +52,10 @@ const _List = props => {
 
 const List = Widget.connect((s, p) => {
   const rows = s.get(`backend.${p.id}.rows`, []);
+  const glyphs = s.get(`backend.${p.id}.glyphs`, []);
   return {
     rows: rows,
+    glyphs: glyphs,
   };
 })(_List);
 
@@ -55,6 +63,7 @@ class Hinter extends Widget {
   constructor() {
     super(...arguments);
 
+    this.onNew = this.onNew.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onValidate = this.onValidate.bind(this);
@@ -110,12 +119,21 @@ class Hinter extends Widget {
     this.dispatch({type: 'prev-row'});
     this.do('prev-row');
   }
+
   selectRow(index) {
     if (index >= 0 && index < this.props.rows.size) {
       const value = this.props.rows.get(index);
       this.dispatch({type: 'select-row', index});
       this.do('select-row', {index, value});
     }
+  }
+
+  onNew() {
+    const model = this.getRouting()
+      .get('location.hash')
+      .substring(1);
+    const value = this.getModelValue(model, true);
+    this.do('create-new', {value});
   }
 
   validateRow(index) {
@@ -130,36 +148,37 @@ class Hinter extends Widget {
   }
 
   render() {
-    const {
-      id,
-      onNew,
-      kind,
-      title,
-      glyph,
-      glyphs,
-      status,
-      selectedIndex,
-      newButtonTitle,
-    } = this.props;
+    const {id, onNew, glyph, title, newButtonTitle} = this.props;
 
     if (!id) {
       return null;
     }
+
     this.dispatch({type: 'init-hinter'});
+
     return (
       <Container kind="view" grow="1" maxWidth="500px">
         <Container kind="pane-header-light">
-          <Label
-            kind="title"
-            glyph={this.props.titleGlyph}
-            text={this.props.titleText}
-          />
+          <Label kind="title" glyph={glyph} text={title} />
         </Container>
         <Container kind="panes">
           <Container kind="pane-top">
             <List id={id} rowStyles={this.styles.classNames} />
           </Container>
         </Container>
+        {onNew ? (
+          <Container kind="actions">
+            <Button
+              kind="action"
+              place="1/1"
+              glyph="solid/plus"
+              text={newButtonTitle ? newButtonTitle : `Nouveau ${title}`}
+              width="0px"
+              grow="1"
+              onClick={this.onNew}
+            />
+          </Container>
+        ) : null}
       </Container>
     );
 
