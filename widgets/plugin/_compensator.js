@@ -70,7 +70,6 @@ const logicHandlers = {
 };
 
 export default (state, action = {}) => {
-  console.log(state.get('id'), action.type);
   if (logicHandlers[action.type]) {
     return logicHandlers[action.type](state, action);
   }
