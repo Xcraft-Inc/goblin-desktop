@@ -5,7 +5,6 @@ import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 
-import _ from 'lodash';
 
 const _Row = props => {
   return (
