@@ -238,7 +238,8 @@ module.exports = config => {
         yield quest.me.updateButtons();
       }
       if (step.onChange) {
-        yield quest.me[`${stepName}OnChange`]();
+        const form = state.get('form');
+        yield quest.me[`${stepName}OnChange`]({form});
       }
     }
   });
