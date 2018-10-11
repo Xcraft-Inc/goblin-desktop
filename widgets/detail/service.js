@@ -25,11 +25,13 @@ const logicHandlers = {
   'set-entity': (state, action) => {
     return state
       .set('detailWidgetId', action.get('widgetId'))
-      .set('entityId', action.get('entityId'))
-      .set('loading', false);
+      .set('entityId', action.get('entityId'));
   },
   'set-loading': state => {
     return state.set('loading', true);
+  },
+  'clear-loading': state => {
+    return state.set('loading', false);
   },
 };
 
@@ -63,6 +65,7 @@ Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
   const type = entityId.split('@')[0];
   const workitemId = `${type}-workitem@readonly@${desktopId}`;
   const existing = quest.goblin.getState().get('detailWidgetId');
+  quest.me.setLoading();
   if (existing) {
     const wiAPI = quest.getAPI(workitemId);
     yield wiAPI.changeEntity({entityId});
@@ -74,10 +77,15 @@ Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
       mode: 'readonly',
     });
   }
+  quest.me.clearLoading();
   quest.do({widgetId: workitemId, entityId});
 });
 
 Goblin.registerQuest(goblinName, 'set-loading', function(quest) {
+  quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'clear-loading', function(quest) {
   quest.do();
 });
 

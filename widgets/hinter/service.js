@@ -128,13 +128,28 @@ Goblin.registerQuest(goblinName, 'create-new', function(quest, value) {
 
 const emitLoadDetails = _.debounce((quest, index, text) => {
   quest.evt('load-detail-requested', {index, text});
-}, 200);
+}, 300);
 Goblin.registerQuest(goblinName, 'select-row', function(quest, index, text) {
   quest.log.info(`Select row: ${index}: ${text}`);
   quest.do({index: `${index}`});
   const withDetails = quest.goblin.getX('withDetails');
   if (withDetails) {
     emitLoadDetails(quest, index);
+  }
+});
+
+Goblin.registerQuest(goblinName, 'next-row', function(quest) {
+  quest.do();
+  const withDetails = quest.goblin.getX('withDetails');
+  if (withDetails) {
+    emitLoadDetails(quest, quest.goblin.getState().get('selectedIndex'));
+  }
+});
+Goblin.registerQuest(goblinName, 'prev-row', function(quest) {
+  quest.do();
+  const withDetails = quest.goblin.getX('withDetails');
+  if (withDetails) {
+    emitLoadDetails(quest, quest.goblin.getState().get('selectedIndex'));
   }
 });
 

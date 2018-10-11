@@ -1,9 +1,55 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import importer from 'laboratory/importer/';
-import HinterColumn from 'gadgets/hinter-column/widget';
 import MouseTrap from 'mousetrap';
-const widgetImporter = importer('widget');
+import Container from 'gadgets/container/widget';
+import Label from 'gadgets/label/widget';
+import _ from 'lodash';
+
+const _Row = props => {
+  return (
+    <div className={props.selected ? props.styles.boxActive : props.styles.box}>
+      <Label
+        text={props.text}
+        kind="large-single"
+        justify="left"
+        grow="1"
+        wrap="no"
+      />
+    </div>
+  );
+};
+
+const Row = Widget.connect((s, p) => {
+  const selectedIndex = s.get(`widgets.${p.id}.selectedIndex`);
+  return {
+    text: s.get(`backend.${p.id}.rows[${p.rowIndex}]`),
+    selected: selectedIndex === p.rowIndex,
+  };
+})(_Row);
+
+const _List = props => {
+  return (
+    <div>
+      {props.rows.map((row, index) => {
+        return (
+          <Row
+            key={index}
+            id={props.id}
+            rowIndex={index}
+            styles={props.rowStyles}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+const List = Widget.connect((s, p) => {
+  const rows = s.get(`backend.${p.id}.rows`, []);
+  return {
+    rows: rows,
+  };
+})(_List);
 
 class Hinter extends Widget {
   constructor() {
@@ -13,7 +59,8 @@ class Hinter extends Widget {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onValidate = this.onValidate.bind(this);
     this.selectRow = this.selectRow.bind(this);
-    this.validateRow = this.validateRow.bind(this);
+    this.prevRow = this.prevRow.bind(this);
+    this.nextRow = this.nextRow.bind(this);
   }
 
   static get wiring() {
@@ -23,10 +70,7 @@ class Hinter extends Widget {
       kind: 'kind',
       title: 'title',
       glyph: 'glyph',
-      rows: 'rows',
-      glyphs: 'glyphs',
       status: 'status',
-      selectedIndex: 'selectedIndex',
       onNew: 'onNew',
       newButtonTitle: 'newButtonTitle',
     };
@@ -51,16 +95,25 @@ class Hinter extends Widget {
   }
 
   onKeyUp() {
-    this.selectRow(parseInt(this.props.selectedIndex) - 1);
+    this.prevRow();
   }
 
   onKeyDown() {
-    this.selectRow(parseInt(this.props.selectedIndex) + 1);
+    this.nextRow();
   }
 
+  nextRow() {
+    this.dispatch({type: 'next-row'});
+    this.do('next-row');
+  }
+  prevRow() {
+    this.dispatch({type: 'prev-row'});
+    this.do('prev-row');
+  }
   selectRow(index) {
     if (index >= 0 && index < this.props.rows.size) {
       const value = this.props.rows.get(index);
+      this.dispatch({type: 'select-row', index});
       this.do('select-row', {index, value});
     }
   }
@@ -83,7 +136,6 @@ class Hinter extends Widget {
       kind,
       title,
       glyph,
-      rows,
       glyphs,
       status,
       selectedIndex,
@@ -93,16 +145,25 @@ class Hinter extends Widget {
     if (!id) {
       return null;
     }
-
-    /* NOT USED
-    const DedicatedWidget = widgetImporter (`${type}-hinter`);
-    if (DedicatedWidget) {
-      const wireDedicatedHinter = Widget.Wired (DedicatedWidget);
-      const WiredDedicatedWidget = wireDedicatedHinter (id);
-      return <WiredDedicatedWidget />;
-    } else {*/
-
+    this.dispatch({type: 'init-hinter'});
     return (
+      <Container kind="view" grow="1" maxWidth="500px">
+        <Container kind="pane-header-light">
+          <Label
+            kind="title"
+            glyph={this.props.titleGlyph}
+            text={this.props.titleText}
+          />
+        </Container>
+        <Container kind="panes">
+          <Container kind="pane-top">
+            <List id={id} rowStyles={this.styles.classNames} />
+          </Container>
+        </Container>
+      </Container>
+    );
+
+    /*return (
       <HinterColumn
         id={id}
         kind={kind}
@@ -126,7 +187,7 @@ class Hinter extends Widget {
         onRowClick={this.selectRow}
         onRowDbClick={this.validateRow}
       />
-    );
+    );*/
   }
 }
 
