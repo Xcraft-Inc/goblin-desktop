@@ -204,10 +204,13 @@ Goblin.registerQuest(goblinName, 'validate-row', function*(
   const type = quest.goblin.getState().get(`type`, null);
   if (value && type) {
     const name = quest.goblin.getX('name');
-    yield quest.cmd(`${workitem}.hinter-validate-${name}`, {
-      id: workitemId,
-      selection: {index, text, value, payload},
-    });
+    const cmd = `${workitem}.hinter-validate-${name}`;
+    if (quest.resp.getCommandsNames()[cmd]) {
+      yield quest.cmd(cmd, {
+        id: workitemId,
+        selection: {index, text, value, payload},
+      });
+    }
   }
 });
 
