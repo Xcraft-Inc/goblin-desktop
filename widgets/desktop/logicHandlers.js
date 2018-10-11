@@ -18,17 +18,14 @@ module.exports = {
   'add-context': (state, action) => {
     return state.set('current.workcontext', action.get('contextId'));
   },
-  'toggle-dnd': state => {
-    return state.set('dnd', state.get('dnd') === 'false' ? 'true' : 'false');
+  'set-dnd': (state, action) => {
+    return state.set('dnd', action.get('show'));
   },
-  'toggle-only-news': state => {
-    return state.set(
-      'onlyNews',
-      state.get('onlyNews') === 'false' ? 'true' : 'false'
-    );
+  'set-only-news': (state, action) => {
+    return state.set('onlyNews', action.get('show'));
   },
-  'toggle-notifications': (state, action) => {
-    return state.set('showNotifications', action.get('showValue'));
+  'set-notifications': (state, action) => {
+    return state.set('showNotifications', action.get('show'));
   },
   'add-notification': (state, action) => {
     const notificationId = action.get('notificationId');

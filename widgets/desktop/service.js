@@ -506,7 +506,7 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
   quest.do({notificationId, glyph, color, message, command});
   const dnd = quest.goblin.getState().get('dnd');
   if (dnd !== 'true') {
-    quest.dispatch('toggle-notifications', {showValue: 'true'});
+    quest.dispatch('set-notifications', {show: 'true'});
   }
   quest.dispatch('update-not-read-count');
   return quest.goblin
@@ -537,20 +537,17 @@ Goblin.registerQuest(goblinName, 'click-notification', function(
   }
 });
 
-Goblin.registerQuest(goblinName, 'toggle-dnd', function(quest) {
+Goblin.registerQuest(goblinName, 'set-dnd', function(quest, show) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'toggle-only-news', function(quest) {
+Goblin.registerQuest(goblinName, 'set-only-news', function(quest, show) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'toggle-notifications', function(quest) {
-  const state = quest.goblin.getState();
-  const showValue =
-    state.get('showNotifications') === 'false' ? 'true' : 'false';
-  quest.do({showValue});
-  if (showValue === 'false') {
+Goblin.registerQuest(goblinName, 'set-notifications', function(quest, show) {
+  quest.do();
+  if (show === 'false') {
     quest.dispatch('read-all');
   }
   quest.dispatch('update-not-read-count');

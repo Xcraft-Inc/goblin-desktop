@@ -22,7 +22,12 @@ class NotificationsButton extends Widget {
         glyphPosition="right"
         kind="view-tab-right"
         badgeValue={this.props.notReadCount}
-        onClick={() => this.doAs('desktop', 'toggle-notifications')}
+        onClick={() => {
+          const state = this.getBackendState();
+          const show =
+            state.get('showNotifications') === 'false' ? 'true' : 'false';
+          this.doAs('desktop', 'set-notifications', {show});
+        }}
       />
     );
   }

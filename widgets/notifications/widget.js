@@ -39,7 +39,11 @@ class Notifications extends Widget {
             }
             text="Ne pas me déranger"
             kind="button-notification"
-            onClick={() => this.doAs('desktop', 'toggle-dnd')}
+            onClick={() => {
+              const state = this.getBackendState();
+              const show = state.get('dnd') === 'false' ? 'true' : 'false';
+              this.doAs('desktop', 'set-dnd', {show});
+            }}
           />
         </div>
         <div className={headerRowClass}>
@@ -51,7 +55,11 @@ class Notifications extends Widget {
             }
             text="Seulement les nouvelles"
             kind="button-notification"
-            onClick={() => this.doAs('desktop', 'toggle-only-news')}
+            onClick={() => {
+              const state = this.getBackendState();
+              const show = state.get('onlyNews') === 'false' ? 'true' : 'false';
+              this.doAs('desktop', 'set-only-news', {show});
+            }}
           />
           <Label grow="1" />
           <Button
