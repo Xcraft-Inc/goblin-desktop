@@ -181,32 +181,6 @@ class Hinter extends Widget {
         ) : null}
       </Container>
     );
-
-    /*return (
-      <HinterColumn
-        id={id}
-        kind={kind}
-        titleText={title}
-        titleGlyph={glyph}
-        rows={rows}
-        glyphs={glyphs}
-        status={status}
-        selectedIndex={selectedIndex}
-        newButtonTitle={newButtonTitle}
-        onNew={() => {
-          if (onNew) {
-            const model = this.getRouting()
-              .get('location.hash')
-              .substring(1);
-            const value = this.getModelValue(model, true);
-            this.do('create-new', {value});
-          }
-        }}
-        displayNewButton={onNew}
-        onRowClick={this.selectRow}
-        onRowDbClick={this.validateRow}
-      />
-    );*/
   }
 }
 
