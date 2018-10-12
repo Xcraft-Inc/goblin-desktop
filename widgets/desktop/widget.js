@@ -234,7 +234,7 @@ class Desktop extends Widget {
   render() {
     const {id, routesMap} = this.props;
 
-    if (!id) {
+    if (!id || !routesMap) {
       return null;
     }
 
