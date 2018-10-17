@@ -242,12 +242,14 @@ Goblin.registerQuest(goblinName, 'set-selections', function(
     usePayload,
     validate,
   });
-  const indexes = status.reduce((indexes, s, i) => {
-    if (filters.includes(s) || s === undefined) {
-      indexes.push(i);
-    }
-    return indexes;
-  }, []);
+  const indexes = status
+    ? status.reduce((indexes, s, i) => {
+        if (filters.includes(s) || s === undefined) {
+          indexes.push(i);
+        }
+        return indexes;
+      }, [])
+    : rows.map((_, i) => i);
 
   if (indexes.length !== rows.length) {
     rows = rows.filter((_, i) => indexes.includes(i));
