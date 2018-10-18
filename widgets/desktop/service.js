@@ -238,6 +238,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
         contextId: workitem.contextId,
         workflowId: workitem.workflowId,
         mode: workitem.mode ? workitem.mode : false,
+        level: 1,
       },
       workitem.payload,
       {payload: workitem.payload}
