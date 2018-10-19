@@ -1,10 +1,9 @@
 import {Unit} from 'electrum-theme';
 import {ColorHelpers} from 'electrum-theme';
-const Bool = require('gadgets/helpers/bool-helpers');
 
 /******************************************************************************/
 
-export default function styles(theme, props) {
+export default function styles(theme) {
   const m = theme.shapes.containerMargin;
 
   const boxStyle = {
