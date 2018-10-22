@@ -88,7 +88,7 @@ class Search extends Form {
               );
             }}
             mapItem={entity => {
-              const text = entity.get('meta.summaries.description');
+              const text = entity.get('value');
               return {text, id: entity.get('id')};
             }}
           />
