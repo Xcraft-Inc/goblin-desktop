@@ -3,7 +3,11 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
+export const propNames = ['embeddedLevel'];
+
 export default function styles(theme, props) {
+  const {embeddedLevel} = props;
+
   const m = theme.shapes.containerMargin;
   const mm = Unit.multiply(m, -1);
   const halfMargin = Unit.multiply(m, 0.5);
@@ -70,7 +74,7 @@ export default function styles(theme, props) {
   //------//
 
   // Simulate a z-coordinate. For big level, the panel comes more forward.
-  const level = props.embeddedLevel || 1; // 1..n
+  const level = embeddedLevel || 1; // 1..n
   const yShadow = Unit.add('10px', Unit.multiply('10px', level)); // 20, 30, 40, 50, ...
   const blur = Unit.multiply('5px', level); // 5, 10, 15, 20, ...
   const alpha = Math.min(0.25 + level / 20, 0.8); // 0.30, 0.35, 0.40, 0.45, ...

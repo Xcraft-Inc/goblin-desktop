@@ -2,7 +2,7 @@ import {Unit} from 'electrum-theme';
 
 /******************************************************************************/
 
-export default function styles(theme, props) {
+export default function styles(theme) {
   const m = theme.shapes.containerMargin;
   const s = theme.shapes.lineSpacing;
   const width = '400px';
