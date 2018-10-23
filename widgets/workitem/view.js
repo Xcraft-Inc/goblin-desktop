@@ -2,6 +2,7 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 
 import Wizard from 'desktop/wizard/widget';
+import DataGrid from 'desktop/datagrid/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 
 import View from 'laboratory/view';
@@ -36,6 +37,9 @@ class WorkItem extends View {
         const dialog = did.split('@')[0];
         if (dialog.endsWith('-wizard')) {
           wireDialog = Widget.Wired(Wizard);
+          WiredDialog = wireDialog(did);
+        } else if (dialog.endsWith('-datagrid')) {
+          wireDialog = Widget.Wired(DataGrid);
           WiredDialog = wireDialog(did);
         }
         return <WiredDialog kind="dialog" />;

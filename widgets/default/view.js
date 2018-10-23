@@ -5,6 +5,7 @@ import View from 'laboratory/view';
 import Container from 'gadgets/container/widget';
 import Editor from 'desktop/editor/widget';
 import Search from 'desktop/search/widget';
+import DataGrid from 'desktop/datagrid/widget';
 import Wizard from 'desktop/wizard/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 
@@ -33,6 +34,11 @@ class DefaultView extends View {
 
       if (workitem.endsWith('-search')) {
         wireWidget = Widget.Wired(Search);
+        LeftPanel = wireWidget(workitemId);
+      }
+
+      if (workitem.endsWith('-datagrid')) {
+        wireWidget = Widget.Wired(DataGrid);
         LeftPanel = wireWidget(workitemId);
       }
 
