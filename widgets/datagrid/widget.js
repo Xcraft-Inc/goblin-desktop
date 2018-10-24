@@ -3,28 +3,32 @@ import Form from 'laboratory/form';
 
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
-import LabelTextField from 'gadgets/label-text-field/widget';
+import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
 import List from 'gadgets/list/widget';
-import CheckButton from 'gadgets/check-button/widget';
-import Separator from 'gadgets/separator/widget';
 
 class DataGrid extends Form {
   constructor() {
     super(...arguments);
+    this.onClose = this.onClose.bind(this);
   }
 
   static get wiring() {
     return {
       id: 'id',
       title: 'title',
-      type: 'type',
-      hintText: 'hintText',
+      dialog: 'dialog',
     };
   }
 
+  onClose(kind, desktopId, contextId) {
+    const service = this.props.id.split('@')[0];
+    this.doAs(service, 'close', {kind, desktopId, contextId});
+  }
+
   render() {
-    const {id, title, hintText, type} = this.props;
+    const {id, title, kind} = this.props;
+    const self = this;
     if (!id) {
       return null;
     }
@@ -40,32 +44,10 @@ class DataGrid extends Form {
       'list',
       '.count'
     );
-    return (
-      <Container kind="view" width="400px" spacing="large">
-        <Container kind="pane-header">
-          <Label text="Recherche" kind="pane-header" />
-          <Count />
-        </Container>
-        <Container kind="panes" navigationName="search">
-          <Container kind="pane">
-            <Container kind="row-pane">
-              <Label text={title} grow="1" kind="title" />
-            </Container>
-            <Form {...this.formConfig}>
-              <Container kind="row-pane">
-                <Container kind="column" grow="1">
-                  <LabelTextField
-                    defaultFocus="true"
-                    hinter={type}
-                    labelGlyph="solid/search"
-                    hintText={hintText}
-                    grow="1"
-                  />
-                </Container>
-              </Container>
-            </Form>
-          </Container>
 
+    function renderList() {
+      return (
+        <Form {...self.formConfig}>
           <DocumentsList
             renderItem={props => {
               return (
@@ -73,7 +55,7 @@ class DataGrid extends Form {
                   <Button
                     kind="container"
                     width="100%"
-                    onClick={() => this.navToDetail(this.props.id, props.id)}
+                    onClick={() => self.navToDetail(self.props.id, props.id)}
                     onDoubleClick={() => {}}
                   >
                     <Label
@@ -91,10 +73,44 @@ class DataGrid extends Form {
               const text = entity.get('value');
               return {text, id: entity.get('id')};
             }}
-          />
-        </Container>
-      </Container>
-    );
+          />{' '}
+        </Form>
+      );
+    }
+
+    switch (kind) {
+      case 'dialog': {
+        return (
+          <DialogModal
+            width={this.props.dialog.get('width')}
+            height={this.props.dialog.get('height')}
+            zIndex={this.props.dialog.get('zIndex')}
+            onBackgroundClick={this.onBackgroundClick}
+          >
+            {renderList()}
+            <Button
+              key={id}
+              text="Close"
+              kind="action"
+              place={`1/2`}
+              onClick={() => self.onClose(kind, self.desktopId, self.contextId)}
+            />
+          </DialogModal>
+        );
+      }
+
+      default: {
+        return (
+          <Container
+            kind="view"
+            width={this.props.dialog.get('containerWidth') || '800px'}
+            spacing="large"
+          >
+            {renderList()}
+          </Container>
+        );
+      }
+    }
   }
 }
 
