@@ -41,7 +41,6 @@ class Desktop extends Widget {
     this.state = {
       showMenuTheme: false,
     };
-    this.dispatch({type: 'init'});
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
