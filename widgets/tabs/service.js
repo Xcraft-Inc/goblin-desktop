@@ -51,18 +51,26 @@ Goblin.registerQuest(goblinName, 'remove', function*(
   close
 ) {
   const desktopId = quest.getDesktop();
+  const deskAPI = quest.getAPI(desktopId);
   const wi = quest.getAPI(workitemId);
-  let released = false;
-  if (close && wi && wi.close) {
-    yield wi.close({kind: 'terminate', desktopId});
-    released = true;
+  if (close && wi) {
+    if (wi.close) {
+      yield wi.close({kind: 'terminate', desktopId});
+    } else {
+      const nameId = workitemId.split('@');
+      yield deskAPI.removeWorkitem({
+        workitem: {
+          id: workitemId.replace(nameId[0] + '@', ''),
+          name: nameId[0],
+          kind: 'tab',
+          contextId: contextId,
+        },
+        close: false,
+      });
+    }
   }
 
   if (tabId) {
-    const tabButton = quest.getAPI(tabId);
-    if (close && tabButton && !released) {
-      quest.release(tabId);
-    }
     quest.do();
   }
 
