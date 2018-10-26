@@ -25,12 +25,17 @@ class DataGridEntity extends Form {
     let RowUI = <div>Missing row custom UI</div>;
 
     if (customUI && customUI.row) {
-      RowUI = this.WithState(customUI.row, '')();
+      RowUI = this.WithState(customUI.row, 'id')('.id');
     }
 
     return (
       <Form {...self.formConfig}>
-        <RowUI />
+        <RowUI
+          id={id}
+          theme={this.context.theme}
+          do={this.do}
+          contextId={this.context.contextId}
+        />
       </Form>
     );
   }
