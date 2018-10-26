@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'laboratory/widget';
 import MouseTrap from 'mousetrap';
@@ -25,7 +24,7 @@ class _Row extends React.PureComponent {
     return (
       <div
         ref={node => {
-          this._ref = ReactDOM.findDOMNode(node);
+          this._ref = node;
         }}
         className={
           this.props.selected
