@@ -403,7 +403,7 @@ Goblin.registerQuest(goblinName, 'remove-dialog', function(quest, dialogId) {
     route: buildDialogNavRequest(state),
   });
   quest.me.cleanWorkitem({workitemId: dialogId});
-  quest.release(dialogId);
+  quest.kill([dialogId]);
 });
 
 Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {
