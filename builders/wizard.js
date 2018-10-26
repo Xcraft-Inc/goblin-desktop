@@ -1,9 +1,9 @@
 'use strict';
+
 const Goblin = require('xcraft-core-goblin');
+const {jsify} = require('xcraft-core-utils').string;
 const common = require('goblin-workshop').common;
-function jsifyQuestName(quest) {
-  return quest.replace(/-([a-z])/g, (m, g1) => g1.toUpperCase());
-}
+
 const {OrderedMap, fromJS} = require('immutable');
 
 const defaultButtons = OrderedMap()
@@ -88,7 +88,7 @@ module.exports = config => {
           for (const handler of Object.keys(gadgets[key].onActions)) {
             quest.goblin.defer(
               quest.sub(`${newGadgetId}.${handler}`, (err, msg) => {
-                const questName = jsifyQuestName(`${key}-${handler}`);
+                const questName = jsify(`${key}-${handler}`);
                 quest.me[questName](msg.data);
               })
             );
