@@ -2,10 +2,6 @@ import React from 'react';
 import Form from 'laboratory/form';
 import _ from 'lodash';
 
-import Label from 'gadgets/label/widget';
-import Button from 'gadgets/button/widget';
-import Field from 'gadgets/field/widget';
-
 class DataGridEntity extends Form {
   constructor() {
     super(...arguments);
@@ -18,17 +14,23 @@ class DataGridEntity extends Form {
   }
 
   render() {
+    const {id, customUI} = this.props;
     const self = this;
-    if (!this.props.id) {
+    if (!id) {
       return null;
     }
 
     const Form = this.Form;
 
+    let RowUI = <div>Missing row custom UI</div>;
+
+    if (customUI && customUI.row) {
+      RowUI = this.WithState(customUI.row, '')();
+    }
+
     return (
       <Form {...self.formConfig}>
-        <Field kind="label" grow="1" labelWidth="0px" model=".nabuId" />
-        <Field model=".description" grow="1" labelWidth="0px" />
+        <RowUI />
       </Form>
     );
   }

@@ -7,6 +7,9 @@ import Button from 'gadgets/button/widget';
 import DataGridTable from './datagrid-table';
 import DataGridEntity from './datagrid-entity';
 
+import importer from 'laboratory/importer/';
+const uiImporter = importer('ui');
+
 class DataGrid extends Widget {
   constructor() {
     super(...arguments);
@@ -35,13 +38,16 @@ class DataGrid extends Widget {
 
     const Table = DataGridTable.connectTo(this);
 
+    const workitem = id.split('@')[0];
+    const entityUI = uiImporter(workitem);
+
     function renderTable() {
       return (
         <Table
           renderItem={props => {
             return (
               <Container kind="row-pane" subkind="large-box">
-                <DataGridEntity {...props} />
+                <DataGridEntity customUI={entityUI} {...props} />
               </Container>
             );
           }}
