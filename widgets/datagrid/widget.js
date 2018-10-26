@@ -1,13 +1,13 @@
 import React from 'react';
-import Form from 'laboratory/form';
+import Widget from 'laboratory/widget';
 
 import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
-import List from 'gadgets/list/widget';
+import DataGridTable from './datagrid-table';
+import DataGridEntity from './datagrid-entity';
 
-class DataGrid extends Form {
+class DataGrid extends Widget {
   constructor() {
     super(...arguments);
     this.onClose = this.onClose.bind(this);
@@ -33,48 +33,20 @@ class DataGrid extends Form {
       return null;
     }
 
-    const Form = this.Form;
-    const DocumentsList = List.connectTo(this);
+    const Table = DataGridTable.connectTo(this);
 
-    const Count = this.mapWidgetToFormPlugin(
-      p => (
-        <Container busy={p.count === undefined}>{p.count} documents</Container>
-      ),
-      'count',
-      'list',
-      '.count'
-    );
-
-    function renderList() {
+    function renderTable() {
       return (
-        <Form {...self.formConfig}>
-          <DocumentsList
-            renderItem={props => {
-              return (
-                <Container kind="row-pane" subkind="large-box">
-                  <Button
-                    kind="container"
-                    width="100%"
-                    onClick={() => self.navToDetail(self.props.id, props.id)}
-                    onDoubleClick={() => {}}
-                  >
-                    <Label
-                      text={props.text}
-                      kind="large-single"
-                      justify="left"
-                      grow="1"
-                      wrap="no"
-                    />
-                  </Button>
-                </Container>
-              );
-            }}
-            mapItem={entity => {
-              const text = entity.get('value');
-              return {text, id: entity.get('id')};
-            }}
-          />{' '}
-        </Form>
+        <Table
+          renderItem={props => {
+            return (
+              <Container kind="row-pane" subkind="large-box">
+                <DataGridEntity {...props} />
+              </Container>
+            );
+          }}
+          mapItem={entity => ({id: entity.get('id')})}
+        />
       );
     }
 
@@ -87,7 +59,7 @@ class DataGrid extends Form {
             zIndex={this.props.dialog.get('zIndex')}
             onBackgroundClick={this.onBackgroundClick}
           >
-            {renderList()}
+            {renderTable()}
             <Button
               key={id}
               text="Close"
@@ -106,7 +78,7 @@ class DataGrid extends Form {
             width={this.props.dialog.get('containerWidth') || '800px'}
             spacing="large"
           >
-            {renderList()}
+            {renderTable()}
           </Container>
         );
       }
