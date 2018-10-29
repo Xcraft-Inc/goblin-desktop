@@ -61,4 +61,4 @@ class Board extends Widget {
   }
 }
 
-export default Board;
+export default Widget.Wired(Board)();
