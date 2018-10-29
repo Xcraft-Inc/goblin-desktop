@@ -103,7 +103,7 @@ module.exports = config => {
     }
 
     quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
-    yield quest.me.initialize();
+    yield quest.me.initWizard();
     quest.me.busy();
     return quest.goblin.id;
   });
@@ -148,7 +148,7 @@ module.exports = config => {
     });
   }
 
-  Goblin.registerQuest(goblinName, 'initialize', function*(quest) {
+  Goblin.registerQuest(goblinName, 'init-wizard', function*(quest) {
     const nextStep = wizardFlow[1];
     yield quest.me.goto({step: nextStep});
   });
