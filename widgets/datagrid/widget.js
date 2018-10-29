@@ -60,9 +60,11 @@ class DataGrid extends Widget {
       case 'dialog': {
         return (
           <DialogModal
-            width={this.props.dialog.get('width')}
-            height={this.props.dialog.get('height')}
-            zIndex={this.props.dialog.get('zIndex')}
+            width={
+              this.props.dialog ? this.props.dialog.get('width') : '1000px'
+            }
+            height={this.props.dialog ? this.props.dialog.get('height') : null}
+            zIndex={this.props.dialog ? this.props.dialog.get('zIndex') : null}
             onBackgroundClick={this.onBackgroundClick}
           >
             {renderTable()}
@@ -81,7 +83,11 @@ class DataGrid extends Widget {
         return (
           <Container
             kind="view"
-            width={this.props.dialog.get('width') || '800px'}
+            width={
+              this.props.dialog
+                ? this.props.dialog.get('width') || '800px'
+                : '800px'
+            }
             spacing="large"
           >
             {renderTable()}
