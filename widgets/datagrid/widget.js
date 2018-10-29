@@ -81,7 +81,7 @@ class DataGrid extends Widget {
         return (
           <Container
             kind="view"
-            width={this.props.dialog.get('containerWidth') || '800px'}
+            width={this.props.dialog.get('width') || '800px'}
             spacing="large"
           >
             {renderTable()}
