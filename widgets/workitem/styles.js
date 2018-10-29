@@ -1,40 +1,41 @@
 /******************************************************************************/
 
 export default function styles() {
-  const formStyle = {
+  const form = {
     height: '100%',
     display: 'flex',
   };
 
-  const detailStyle = {
+  const detail = {
     display: 'flex',
     flexGrow: 1,
   };
 
-  const boardStyle = {
+  const board = {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  };
+
+  const roadbook = {
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
   };
 
-  const roadbookStyle = {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-  };
-
-  const deskStyle = {
+  const desk = {
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
   };
 
   return {
-    form: formStyle,
-    detail: detailStyle,
-    board: boardStyle,
-    roadbook: roadbookStyle,
-    desk: deskStyle,
+    form,
+    detail,
+    board,
+    roadbook,
+    desk,
   };
 }
 

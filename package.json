@@ -18,7 +18,8 @@
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
     "react-redux-form": "^1.16.10",
-    "xcraft-core-goblin": "^2.0.0"
+    "xcraft-core-goblin": "^2.0.0",
+    "xcraft-core-utils": "^1.1.0"
   },
   "devDependencies": {
     "xcraft-dev-rules": "^0.2.0",

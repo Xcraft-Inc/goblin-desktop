@@ -151,11 +151,11 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function*(
   quest.do({widgetId});
 
   if (close) {
-    quest.cmd(`${workitem.name}.close`, {
+    yield quest.cmd(`${workitem.name}.close`, {
       id: widgetId,
     });
   }
-
+  quest.kill([widgetId]);
   quest.evt(`${widgetId}.workitem.closed`);
 });
 
@@ -227,9 +227,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
   const widgetId = `${workitem.name}${
     workitem.mode ? `@${workitem.mode}` : ''
   }@${desktopId}@${workitem.id}`;
-  yield quest.createFor(
-    workitem.name,
-    widgetId,
+  yield quest.create(
     widgetId,
     Object.assign(
       {
@@ -405,7 +403,7 @@ Goblin.registerQuest(goblinName, 'remove-dialog', function(quest, dialogId) {
     route: buildDialogNavRequest(state),
   });
   quest.me.cleanWorkitem({workitemId: dialogId});
-  quest.release(dialogId);
+  quest.kill([dialogId]);
 });
 
 Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {

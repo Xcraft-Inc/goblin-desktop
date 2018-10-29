@@ -1,9 +1,9 @@
 'use strict';
+
 const Goblin = require('xcraft-core-goblin');
+const {jsify} = require('xcraft-core-utils').string;
 const common = require('goblin-workshop').common;
-function jsifyQuestName(quest) {
-  return quest.replace(/-([a-z])/g, (m, g1) => g1.toUpperCase());
-}
+
 const {OrderedMap, fromJS} = require('immutable');
 
 const defaultButtons = OrderedMap()
@@ -88,7 +88,7 @@ module.exports = config => {
           for (const handler of Object.keys(gadgets[key].onActions)) {
             quest.goblin.defer(
               quest.sub(`${newGadgetId}.${handler}`, (err, msg) => {
-                const questName = jsifyQuestName(`${key}-${handler}`);
+                const questName = jsify(`${key}-${handler}`);
                 quest.me[questName](msg.data);
               })
             );
@@ -103,7 +103,7 @@ module.exports = config => {
     }
 
     quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
-    yield quest.me.init();
+    yield quest.me.initWizard();
     quest.me.busy();
     return quest.goblin.id;
   });
@@ -148,7 +148,7 @@ module.exports = config => {
     });
   }
 
-  Goblin.registerQuest(goblinName, 'init', function*(quest) {
+  Goblin.registerQuest(goblinName, 'init-wizard', function*(quest) {
     const nextStep = wizardFlow[1];
     yield quest.me.goto({step: nextStep});
   });
@@ -157,7 +157,7 @@ module.exports = config => {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === wizardFlow.length - 1) {
-      quest.evt('done', {finished: true});
+      yield quest.me.done();
       return;
     }
     const nIndex = cIndex + 1;
@@ -189,6 +189,13 @@ module.exports = config => {
     //quest.dispatch('next', {step});
 
     quest.me.busy(); // Clear busy
+  });
+
+  Goblin.registerQuest(goblinName, 'done', function(quest) {
+    const desktopId = quest.goblin.getX('desktopId');
+    const desk = quest.getAPI(desktopId);
+    desk.removeDialog({dialogId: quest.goblin.id});
+    quest.evt('done', {finished: true});
   });
 
   Goblin.registerQuest(goblinName, 'cancel', function(quest) {
