@@ -97,7 +97,7 @@ class DataGridTable extends Widget {
     }
 
     return (
-      <Container kind="pane">
+      <Container kind="panes">
         <ReactList
           pageSize={this.props.pageSize / 2}
           length={this.props.count}
