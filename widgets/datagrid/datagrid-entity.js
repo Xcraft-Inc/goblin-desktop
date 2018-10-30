@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'laboratory/form';
+import Container from 'gadgets/container/widget';
 import _ from 'lodash';
 
 class DataGridEntity extends Form {
@@ -14,7 +15,7 @@ class DataGridEntity extends Form {
   }
 
   render() {
-    const {id, customUI} = this.props;
+    const {id, entityUI, columns, datagrid} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -22,20 +23,35 @@ class DataGridEntity extends Form {
 
     const Form = this.Form;
 
-    let RowUI = <div>Missing row custom UI</div>;
+    function renderCell(column, index) {
+      let CellUI = <div>Missing row cell UI</div>;
 
-    if (customUI && customUI.row) {
-      RowUI = this.WithState(customUI.row, 'id')('.id');
+      if (entityUI && entityUI.rowCell) {
+        CellUI = self.WithState(entityUI.rowCell, 'id')('.id');
+      }
+
+      return (
+        <CellUI
+          key={column.get('name')}
+          id={id}
+          name={column.get('name')}
+          field={column.get('field')}
+          index={index}
+          theme={self.context.theme}
+          entity={self}
+          datagrid={datagrid}
+          contextId={self.context.contextId}
+        />
+      );
     }
 
     return (
       <Form {...self.formConfig}>
-        <RowUI
-          id={id}
-          theme={this.context.theme}
-          do={this.do}
-          contextId={this.context.contextId}
-        />
+        <Container kind="row">
+          {columns.map((column, index) => {
+            return renderCell(column, index);
+          })}
+        </Container>
       </Form>
     );
   }

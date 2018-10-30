@@ -21,6 +21,7 @@ class DataGrid extends Widget {
       id: 'id',
       title: 'title',
       dialog: 'dialog',
+      columns: 'columns',
     };
   }
 
@@ -30,7 +31,7 @@ class DataGrid extends Widget {
   }
 
   render() {
-    const {id, title, kind} = this.props;
+    const {id, kind, title, columns} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -41,13 +42,20 @@ class DataGrid extends Widget {
     const workitem = id.split('@')[0];
     const entityUI = uiImporter(workitem);
 
+    function renderHeader() {}
+
     function renderTable() {
       return (
         <Table
           renderItem={props => {
             return (
               <Container kind="row-pane" subkind="large-box">
-                <DataGridEntity customUI={entityUI} {...props} />
+                <DataGridEntity
+                  entityUI={entityUI}
+                  columns={columns}
+                  datagrid={self}
+                  {...props}
+                />
               </Container>
             );
           }}
@@ -67,6 +75,7 @@ class DataGrid extends Widget {
             zIndex={this.props.dialog ? this.props.dialog.get('zIndex') : null}
             onBackgroundClick={this.onBackgroundClick}
           >
+            {renderHeader()}
             {renderTable()}
             <Button
               key={id}
@@ -90,6 +99,7 @@ class DataGrid extends Widget {
             }
             spacing="large"
           >
+            {renderHeader()}
             {renderTable()}
           </Container>
         );
