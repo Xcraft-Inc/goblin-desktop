@@ -21,7 +21,7 @@ class DataGrid extends Widget {
       id: 'id',
       title: 'title',
       dialog: 'dialog',
-      columns: 'columns',
+      columnsSize: 'columnsSize',
     };
   }
 
@@ -52,7 +52,7 @@ class DataGrid extends Widget {
               <Container kind="row-pane" subkind="large-box">
                 <DataGridEntity
                   entityUI={entityUI}
-                  columns={columns}
+                  columnsSize={columnsSize}
                   datagrid={self}
                   {...props}
                 />
