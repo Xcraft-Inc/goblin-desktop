@@ -6,6 +6,7 @@ import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
 import DataGridTable from './datagrid-table';
 import DataGridEntity from './datagrid-entity';
+import DataGridHeaders from './datagrid-headers';
 
 import importer from 'laboratory/importer/';
 const uiImporter = importer('ui');
@@ -31,18 +32,27 @@ class DataGrid extends Widget {
   }
 
   render() {
-    const {id, kind, title, columns} = this.props;
+    const {id, kind, title, columnsSize} = this.props;
     const self = this;
     if (!id) {
       return null;
     }
 
     const Table = DataGridTable.connectTo(this);
+    const Headers = DataGridHeaders.connectTo(this);
 
     const workitem = id.split('@')[0];
     const entityUI = uiImporter(workitem);
 
-    function renderHeader() {}
+    function renderHeaders() {
+      return (
+        <Headers
+          entityUI={entityUI}
+          columnsSize={columnsSize}
+          datagrid={self}
+        />
+      );
+    }
 
     function renderTable() {
       return (
@@ -75,7 +85,7 @@ class DataGrid extends Widget {
             zIndex={this.props.dialog ? this.props.dialog.get('zIndex') : null}
             onBackgroundClick={this.onBackgroundClick}
           >
-            {renderHeader()}
+            {renderHeaders()}
             {renderTable()}
             <Button
               key={id}
@@ -99,7 +109,7 @@ class DataGrid extends Widget {
             }
             spacing="large"
           >
-            {renderHeader()}
+            {renderHeaders()}
             {renderTable()}
           </Container>
         );
