@@ -44,6 +44,10 @@ class DataGridHeaders extends Form {
               index={index}
               theme={self.context.theme}
               datagrid={datagrid}
+              doAsDatagrid={(quest, args) => {
+                const service = datagrid.props.id.split('@')[0];
+                self.doAs(service, quest, args);
+              }}
               contextId={self.context.contextId}
             />
           </Connect>
