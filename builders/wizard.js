@@ -104,7 +104,7 @@ module.exports = config => {
 
     quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
     yield quest.me.initWizard();
-    quest.me.busy();
+    yield quest.me.busy();
     return quest.goblin.id;
   });
 
@@ -166,7 +166,7 @@ module.exports = config => {
   });
 
   Goblin.registerQuest(goblinName, 'goto', function*(quest, step) {
-    quest.me.busy(); // Set busy
+    yield quest.me.busy(); // Set busy
 
     quest.dispatch('next', {step});
 
@@ -188,7 +188,7 @@ module.exports = config => {
     // The quest of the step can use updateButtons without specifying the step.
     //quest.dispatch('next', {step});
 
-    quest.me.busy(); // Clear busy
+    yield quest.me.busy(); // Clear busy
   });
 
   Goblin.registerQuest(goblinName, 'done', function(quest) {
