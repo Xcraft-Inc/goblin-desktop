@@ -4,6 +4,7 @@ import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Connect from 'laboratory/connect';
 import Label from 'gadgets/label/widget';
+import Field from 'gadgets/field/widget';
 import _ from 'lodash';
 
 class Header extends Widget {
@@ -98,6 +99,81 @@ class Header extends Widget {
   }
 }
 
+class Filter extends Widget {
+  render() {
+    const {column, doAsDatagrid} = this.props;
+
+    if (column.get('filterable')) {
+      return (
+        <Field
+          model={`.filters.${column.get('field')}`}
+          grow="1"
+          labelWidth="0px"
+          onDebouncedChange={value =>
+            doAsDatagrid('filter', {field: column.get('field'), value})
+          }
+        />
+      );
+    } else {
+      return <div />;
+    }
+  }
+}
+
+class Filters extends Form {
+  constructor() {
+    super(...arguments);
+  }
+
+  static connectTo(datagrid) {
+    return Widget.Wired(Filters)(`${datagrid.props.id}`);
+  }
+
+  static get wiring() {
+    return {
+      id: 'id',
+    };
+  }
+
+  render() {
+    const {id, columnsSize, datagrid} = this.props;
+    const self = this;
+    if (!id) {
+      return null;
+    }
+
+    const Form = this.Form;
+
+    function renderFilter(index) {
+      return (
+        <Connect
+          key={`${id}_${index}`}
+          column={() => datagrid.getModelValue(`.columns[${index}]`)}
+        >
+          <Filter
+            key={`${id}_${index}`}
+            id={id}
+            doAsDatagrid={(quest, args) => {
+              const service = datagrid.props.id.split('@')[0];
+              self.doAs(service, quest, args);
+            }}
+          />
+        </Connect>
+      );
+    }
+
+    return (
+      <Form {...self.formConfig}>
+        <Container kind="row">
+          {Array.apply(null, {length: columnsSize}).map((_, i) => {
+            return renderFilter(i);
+          })}
+        </Container>
+      </Form>
+    );
+  }
+}
+
 class DataGridHeaders extends Form {
   constructor() {
     super(...arguments);
@@ -121,8 +197,9 @@ class DataGridHeaders extends Form {
     }
 
     const Form = this.Form;
+    const DatagridFilters = Filters.connectTo(datagrid);
 
-    function renderCell(index) {
+    function renderHeader(index) {
       if (entityUI && entityUI.headerCell) {
         return (
           <Connect
@@ -148,13 +225,16 @@ class DataGridHeaders extends Form {
     }
 
     return (
-      <Form {...self.formConfig}>
-        <Container kind="row">
-          {Array.apply(null, {length: columnsSize}).map((_, i) => {
-            return renderCell(i);
-          })}
-        </Container>
-      </Form>
+      <Container kind="pane">
+        <Form {...self.formConfig}>
+          <Container kind="row">
+            {Array.apply(null, {length: columnsSize}).map((_, i) => {
+              return renderHeader(i);
+            })}
+          </Container>
+        </Form>
+        <DatagridFilters datagrid={datagrid} columnsSize={columnsSize} />
+      </Container>
     );
   }
 }
