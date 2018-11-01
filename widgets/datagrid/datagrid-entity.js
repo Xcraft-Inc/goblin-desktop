@@ -16,7 +16,7 @@ class DataGridEntity extends Form {
   }
 
   render() {
-    const {id, entityUI, columnsSize, datagrid} = this.props;
+    const {id, entityUI, columnsNo, datagrid} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -58,7 +58,7 @@ class DataGridEntity extends Form {
     return (
       <Form {...self.formConfig}>
         <Container kind="row">
-          {Array.apply(null, {length: columnsSize}).map((_, i) => {
+          {Array.apply(null, {length: columnsNo}).map((_, i) => {
             return renderCell(i);
           })}
         </Container>

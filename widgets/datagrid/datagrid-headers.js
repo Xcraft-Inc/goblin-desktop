@@ -136,7 +136,7 @@ class Filters extends Form {
   }
 
   render() {
-    const {id, columnsSize, datagrid} = this.props;
+    const {id, columnsNo, datagrid} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -165,7 +165,7 @@ class Filters extends Form {
     return (
       <Form {...self.formConfig}>
         <Container kind="row">
-          {Array.apply(null, {length: columnsSize}).map((_, i) => {
+          {Array.apply(null, {length: columnsNo}).map((_, i) => {
             return renderFilter(i);
           })}
         </Container>
@@ -190,7 +190,7 @@ class DataGridHeaders extends Form {
   }
 
   render() {
-    const {id, entityUI, columnsSize, datagrid} = this.props;
+    const {id, entityUI, columnsNo, datagrid} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -228,12 +228,12 @@ class DataGridHeaders extends Form {
       <Container kind="pane">
         <Form {...self.formConfig}>
           <Container kind="row">
-            {Array.apply(null, {length: columnsSize}).map((_, i) => {
+            {Array.apply(null, {length: columnsNo}).map((_, i) => {
               return renderHeader(i);
             })}
           </Container>
         </Form>
-        <DatagridFilters datagrid={datagrid} columnsSize={columnsSize} />
+        <DatagridFilters datagrid={datagrid} columnsNo={columnsNo} />
       </Container>
     );
   }

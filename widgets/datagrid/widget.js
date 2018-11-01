@@ -22,7 +22,7 @@ class DataGrid extends Widget {
       id: 'id',
       title: 'title',
       dialog: 'dialog',
-      columnsSize: 'columnsSize',
+      columnsNo: 'columnsNo',
     };
   }
 
@@ -32,7 +32,7 @@ class DataGrid extends Widget {
   }
 
   render() {
-    const {id, kind, title, columnsSize} = this.props;
+    const {id, kind, title, columnsNo} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -46,11 +46,7 @@ class DataGrid extends Widget {
 
     function renderHeaders() {
       return (
-        <Headers
-          entityUI={entityUI}
-          columnsSize={columnsSize}
-          datagrid={self}
-        />
+        <Headers entityUI={entityUI} columnsNo={columnsNo} datagrid={self} />
       );
     }
 
@@ -62,7 +58,7 @@ class DataGrid extends Widget {
               <Container kind="row-pane" subkind="large-box">
                 <DataGridEntity
                   entityUI={entityUI}
-                  columnsSize={columnsSize}
+                  columnsNo={columnsNo}
                   datagrid={self}
                   {...props}
                 />
