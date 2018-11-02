@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'laboratory/form';
+import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import importer from 'laboratory/importer/';
@@ -197,4 +198,4 @@ class Wizard extends Form {
   }
 }
 
-export default Wizard;
+export default Widget.Wired(Wizard)();

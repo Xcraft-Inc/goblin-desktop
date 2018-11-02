@@ -172,4 +172,4 @@ class Tabs extends Widget {
   }
 }
 
-export default Tabs;
+export default Widget.Wired(Tabs)();

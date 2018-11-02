@@ -28,10 +28,10 @@ class MapView extends View {
 
     if (dialogId) {
       const dialog = dialogId.split('@')[0];
-      let wireDialog = null;
       if (dialog.endsWith('-wizard')) {
-        wireDialog = Widget.Wired(Wizard);
-        WiredDialog = wireDialog(dialogId);
+        WiredDialog = Wizard;
+      } else {
+        throw new Error(`${dialog} dialog kind not implemented in MapView`);
       }
     }
 
@@ -39,7 +39,7 @@ class MapView extends View {
       <Container kind="row" grow="1" width="100%">
         <Container kind="tickets-root">
           <MapWorkitem />
-          {WiredDialog ? <WiredDialog kind="dialog" /> : null}
+          {WiredDialog ? <WiredDialog id={dialogId} kind="dialog" /> : null}
         </Container>
       </Container>
     );

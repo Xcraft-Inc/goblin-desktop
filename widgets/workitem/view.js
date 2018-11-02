@@ -32,17 +32,20 @@ class WorkItem extends View {
       );
     } else {
       if (did) {
-        let wireDialog = null;
         let WiredDialog = null;
-        const dialog = did.split('@')[0];
-        if (dialog.endsWith('-wizard')) {
-          wireDialog = Widget.Wired(Wizard);
-          WiredDialog = wireDialog(did);
-        } else if (dialog.endsWith('-datagrid')) {
-          wireDialog = Widget.Wired(DataGrid);
-          WiredDialog = wireDialog(did);
+        if (did) {
+          const dialog = did.split('@')[0];
+          if (dialog.endsWith('-wizard')) {
+            WiredDialog = Wizard;
+          } else if (dialog.endsWith('-datagrid')) {
+            WiredDialog = DataGrid;
+          } else {
+            throw new Error(
+              `${dialog} dialog kind not implemented in WorkItem`
+            );
+          }
         }
-        return <WiredDialog kind="dialog" />;
+        return <WiredDialog id={did} kind="dialog" />;
       } else {
         return null;
       }
