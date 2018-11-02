@@ -86,6 +86,10 @@ class Header extends Widget {
       );
     }
 
+    if (!column.get('field') || column.get('field') === '') {
+      return <div />;
+    }
+
     if (column.get('sortable')) {
       return (
         <div style={{display: 'flex'}}>
@@ -103,7 +107,11 @@ class Filter extends Widget {
   render() {
     const {column, doAsDatagrid} = this.props;
 
-    if (column.get('filterable')) {
+    if (
+      column.get('field') &&
+      column.get('field') !== '' &&
+      column.get('filterable')
+    ) {
       return (
         <Field
           model={`.filters.${column.get('field')}`}
