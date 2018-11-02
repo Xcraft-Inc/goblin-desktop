@@ -19,11 +19,9 @@ class DetailView extends View {
       hinterName = hinter.replace('-hidden', '');
     }
 
-    const wireDetail = Widget.Wired(Detail);
     const hash = this.getHash();
     const workitemId = hash.split('.')[1];
-    const WiredDetail = wireDetail(`${hinterName}-detail@${workitemId}`);
-    return <WiredDetail />;
+    return <Detail id={`${hinterName}-detail@${workitemId}`} />;
   }
 }
 

@@ -77,4 +77,4 @@ class Editor extends Widget {
   }
 }
 
-export default Editor;
+export default Widget.Wired(Editor)();
