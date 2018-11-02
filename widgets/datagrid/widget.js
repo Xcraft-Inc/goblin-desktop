@@ -87,7 +87,8 @@ class DataGrid extends Widget {
               key={id}
               text="Close"
               kind="action"
-              place={`1/2`}
+              justify="center"
+              place="single"
               onClick={() => self.onClose(kind, self.desktopId, self.contextId)}
             />
           </DialogModal>
