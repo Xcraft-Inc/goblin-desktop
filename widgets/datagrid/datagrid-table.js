@@ -101,10 +101,11 @@ class DatagridTable extends Widget {
         <ReactList
           pageSize={this.props.pageSize / 2}
           length={this.props.count}
-          type={this.props.type || 'variable'}
+          type={this.props.type}
           itemsRenderer={this.renderTable}
           itemRenderer={this.renderItem}
           className={this.props.className}
+          useStaticSize={this.props.type === 'variable' ? false : true}
         />
       </Container>
     );
