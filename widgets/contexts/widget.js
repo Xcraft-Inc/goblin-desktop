@@ -2,11 +2,11 @@ import React from 'react';
 import Button from 'gadgets/button/widget';
 import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
-const Wired = Widget.Wired(Button);
 
-class Contexts extends Widget {
+export default class Contexts extends Widget {
   constructor() {
     super(...arguments);
+    this.goToContext = this.goToContext.bind(this);
   }
 
   static get wiring() {
@@ -30,33 +30,57 @@ class Contexts extends Widget {
     this.navToContext(contextId);
   }
 
-  render() {
-    const {contexts, current} = this.props;
+  renderContext(context) {
+    const contextId = context.get('contextId');
+    return (
+      <ContextButton
+        key={contextId}
+        context={context}
+        goToContext={this.goToContext}
+        active={this.props.current === contextId}
+      />
+    );
+  }
 
+  renderContexts() {
+    if (!this.props.contexts) {
+      return null;
+    }
+    return this.props.contexts
+      .map(context => this.renderContext(context))
+      .toArray();
+  }
+
+  render() {
     if (!this.props.id) {
       return null;
     }
-    let renderedContexts = [];
-    if (contexts) {
-      renderedContexts = contexts.toArray();
-    }
 
-    return (
-      <Container kind="main-tab">
-        {renderedContexts.map((v, k) => {
-          return (
-            <Button
-              key={k}
-              text={v.get('name')}
-              kind="main-tab"
-              onClick={() => this.goToContext(v.get('contextId'))}
-              active={current === v.get('contextId') ? 'true' : 'false'}
-            />
-          );
-        })}
-      </Container>
-    );
+    return <Container kind="main-tab">{this.renderContexts()}</Container>;
   }
 }
 
-export default Contexts;
+/******************************************************************************/
+
+class ContextButton extends Widget {
+  constructor() {
+    super(...arguments);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.props.goToContext(this.props.context.get('contextId'));
+  }
+
+  render() {
+    return (
+      <Button
+        key={this.props.context.get('contextId')}
+        text={this.props.context.get('name')}
+        kind="main-tab"
+        onClick={this.handleClick}
+        active={this.props.active}
+      />
+    );
+  }
+}
