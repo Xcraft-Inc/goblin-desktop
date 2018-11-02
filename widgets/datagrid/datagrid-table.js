@@ -8,9 +8,15 @@ import Container from 'gadgets/container/widget';
 class DatagridTable extends Widget {
   constructor() {
     super(...arguments);
+    const self = this;
     this.renderItem = this.renderItem.bind(this);
     this.renderTable = this.renderTable.bind(this);
     this.renderRow = this.renderRow.bind(this);
+
+    const doAsList = (quest, args) => {
+      const service = self.props.id.split('@')[0];
+      self.doAs(service, quest, args);
+    };
 
     const load = range => {
       let cFrom = this.getFormValue('.from');
@@ -19,7 +25,7 @@ class DatagridTable extends Widget {
         return;
       }
       if (range[0] - 10 < cFrom || range[1] + 10 >= cTo) {
-        this.do('load-range', {from: range[0], to: range[1]});
+        doAsList('load-range', {from: range[0], to: range[1]});
       }
     };
     this.loadIndex = _.debounce(load, 200);
