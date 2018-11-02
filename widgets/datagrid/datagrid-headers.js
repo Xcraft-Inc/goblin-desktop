@@ -182,7 +182,7 @@ class Filters extends Form {
   }
 }
 
-class DataGridHeaders extends Form {
+class DatagridHeaders extends Form {
   constructor() {
     super(...arguments);
   }
@@ -194,7 +194,7 @@ class DataGridHeaders extends Form {
   }
 
   static connectTo(instance) {
-    return Widget.Wired(DataGridHeaders)(`${instance.props.id}`);
+    return Widget.Wired(DatagridHeaders)(`${instance.props.id}`);
   }
 
   render() {
@@ -247,4 +247,4 @@ class DataGridHeaders extends Form {
   }
 }
 
-export default DataGridHeaders;
+export default DatagridHeaders;

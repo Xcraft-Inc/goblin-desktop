@@ -4,14 +4,14 @@ import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
-import DataGridTable from './datagrid-table';
-import DataGridEntity from './datagrid-entity';
-import DataGridHeaders from './datagrid-headers';
+import DatagridTable from './datagrid-table';
+import DatagridEntity from './datagrid-entity';
+import DatagridHeaders from './datagrid-headers';
 
 import importer from 'laboratory/importer/';
 const uiImporter = importer('ui');
 
-class DataGrid extends Widget {
+class Datagrid extends Widget {
   constructor() {
     super(...arguments);
     this.onClose = this.onClose.bind(this);
@@ -38,8 +38,8 @@ class DataGrid extends Widget {
       return null;
     }
 
-    const Table = DataGridTable.connectTo(this);
-    const Headers = DataGridHeaders.connectTo(this);
+    const Table = DatagridTable.connectTo(this);
+    const Headers = DatagridHeaders.connectTo(this);
 
     const workitem = id.split('@')[0];
     const entityUI = uiImporter(workitem);
@@ -57,7 +57,7 @@ class DataGrid extends Widget {
           renderItem={props => {
             return (
               <Container kind="row-pane" subkind="large-box">
-                <DataGridEntity
+                <DatagridEntity
                   entityUI={entityUI}
                   columnsNo={columnsNo}
                   datagrid={self}
@@ -116,4 +116,4 @@ class DataGrid extends Widget {
   }
 }
 
-export default Widget.Wired(DataGrid)();
+export default Widget.Wired(Datagrid)();
