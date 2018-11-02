@@ -2,7 +2,7 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 
 import Wizard from 'desktop/wizard/widget';
-import DataGrid from 'desktop/datagrid/widget';
+import DataGrid from 'desktop/data-grid/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 
 import View from 'laboratory/view';
