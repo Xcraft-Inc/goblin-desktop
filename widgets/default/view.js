@@ -4,7 +4,7 @@ import View from 'laboratory/view';
 import Container from 'gadgets/container/widget';
 import Editor from 'desktop/editor/widget';
 import Search from 'desktop/search/widget';
-import DataGrid from 'desktop/datagrid/widget';
+import DataGrid from 'desktop/data-grid/widget';
 import Wizard from 'desktop/wizard/widget';
 
 const viewImporter = importer('view');

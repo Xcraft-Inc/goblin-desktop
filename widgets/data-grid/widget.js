@@ -53,6 +53,7 @@ class DataGrid extends Widget {
     function renderTable() {
       return (
         <Table
+          className={self.styles.classNames.item}
           renderItem={props => {
             return (
               <Container kind="row-pane" subkind="large-box">
