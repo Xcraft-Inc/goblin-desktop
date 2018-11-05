@@ -112,6 +112,7 @@ class DatagridTable extends Widget {
           itemRenderer={this.renderItem}
           className={this.props.className}
           useStaticSize={this.props.type === 'variable' ? false : true}
+          threshold={this.props.type === 'uniform' ? 300 : 100}
         />
       </Container>
     );
