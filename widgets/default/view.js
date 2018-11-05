@@ -39,6 +39,8 @@ class DefaultView extends View {
       const dialog = dialogId.split('@')[0];
       if (dialog.endsWith('-wizard')) {
         WiredDialog = Wizard;
+      } else if (dialog.endsWith('-datagrid')) {
+        WiredDialog = Datagrid;
       } else {
         throw new Error(
           `${dialog} dialog kind not implemented in default view`

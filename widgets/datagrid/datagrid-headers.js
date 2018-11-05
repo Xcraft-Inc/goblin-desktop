@@ -12,10 +12,10 @@ class Header extends Widget {
     super(...arguments);
     this.tooltips = {
       asc: {
-        id: 'ascending order',
+        nabuId: 'ascending order',
       },
       desc: {
-        id: 'descending order',
+        nabuId: 'descending order',
       },
     };
   }
@@ -161,10 +161,9 @@ class Filters extends Form {
           <Filter
             key={`${id}_${index}`}
             id={id}
-            doAsDatagrid={(quest, args) => {
-              const service = datagrid.props.id.split('@')[0];
-              self.doAs(service, quest, args);
-            }}
+            doAsDatagrid={(quest, args) =>
+              self.doFor(datagrid.props.id, quest, args)
+            }
           />
         </Connect>
       );
