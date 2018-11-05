@@ -12,10 +12,10 @@ class Header extends Widget {
     super(...arguments);
     this.tooltips = {
       asc: {
-        id: 'ascending order',
+        nabuId: 'ascending order',
       },
       desc: {
-        id: 'descending order',
+        nabuId: 'descending order',
       },
     };
   }
