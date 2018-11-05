@@ -75,7 +75,6 @@ class Datagrid extends Widget {
           onRef={list => {
             self.list = list;
           }}
-          className={self.styles.classNames.item}
           renderItem={props => {
             return (
               <Container kind="row-pane" subkind="large-box">

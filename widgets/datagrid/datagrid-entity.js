@@ -2,6 +2,7 @@ import React from 'react';
 import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Connect from 'laboratory/connect';
+import DatagridCell from '../datagrid-cell/widget';
 import _ from 'lodash';
 
 class DatagridEntity extends Form {
@@ -33,22 +34,30 @@ class DatagridEntity extends Form {
             key={`${id}_${index}`}
             column={() => datagrid.getModelValue(`.columns[${index}]`)}
           >
-            <CellUI
-              key={`${id}_${index}`}
-              id={id}
-              index={index}
-              theme={self.context.theme}
-              entity={self}
-              datagrid={datagrid}
-              doAsEntity={(quest, args) => {
-                const service = self.props.id.split('@')[0];
-                self.doAs(service, quest, args);
+            <DatagridCell
+              cellUI={column => {
+                return (
+                  <CellUI
+                    key={`${id}_${index}`}
+                    id={id}
+                    index={index}
+                    column={column}
+                    theme={self.context.theme}
+                    entity={self}
+                    datagrid={datagrid}
+                    doAsEntity={(quest, args) => {
+                      const service = self.props.id.split('@')[0];
+                      self.doAs(service, quest, args);
+                    }}
+                    doAsDatagrid={(quest, args) => {
+                      const service = datagrid.props.id.split('@')[0];
+                      self.doAs(service, quest, args);
+                    }}
+                    contextId={self.context.contextId}
+                  />
+                );
               }}
-              doAsDatagrid={(quest, args) => {
-                const service = datagrid.props.id.split('@')[0];
-                self.doAs(service, quest, args);
-              }}
-              contextId={self.context.contextId}
+              columnsNo={columnsNo}
             />
           </Connect>
         );

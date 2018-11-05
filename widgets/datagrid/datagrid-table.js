@@ -8,7 +8,6 @@ import Container from 'gadgets/container/widget';
 class DatagridTable extends Widget {
   constructor() {
     super(...arguments);
-    const self = this;
     this.renderItem = this.renderItem.bind(this);
     this.renderTable = this.renderTable.bind(this);
     this.renderRow = this.renderRow.bind(this);
