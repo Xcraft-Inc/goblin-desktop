@@ -40,14 +40,12 @@ class DatagridEntity extends Form {
               theme={self.context.theme}
               entity={self}
               datagrid={datagrid}
-              doAsEntity={(quest, args) => {
-                const service = self.props.id.split('@')[0];
-                self.doAs(service, quest, args);
-              }}
-              doAsDatagrid={(quest, args) => {
-                const service = datagrid.props.id.split('@')[0];
-                self.doAs(service, quest, args);
-              }}
+              doAsEntity={(quest, args) =>
+                self.doFor(self.props.id, quest, args)
+              }
+              doAsDatagrid={(quest, args) =>
+                self.doFor(datagrid.props.id, quest, args)
+              }
               contextId={self.context.contextId}
             />
           </Connect>
