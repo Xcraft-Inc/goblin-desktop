@@ -15,6 +15,9 @@ class Datagrid extends Widget {
   constructor() {
     super(...arguments);
     this.onClose = this.onClose.bind(this);
+    this.scrollTo = this.scrollTo.bind(this);
+    this.scrollAround = this.scrollAround.bind(this);
+    this.getVisibleRange = this.getVisibleRange.bind(this);
   }
 
   static get wiring() {
@@ -29,6 +32,22 @@ class Datagrid extends Widget {
   onClose(kind, desktopId, contextId) {
     const service = this.props.id.split('@')[0];
     this.doAs(service, 'close', {kind, desktopId, contextId});
+  }
+
+  scrollTo(index) {
+    if (this.list && this.list.scrollTo) {
+      this.list.scrollTo(index);
+    }
+  }
+  scrollAround(index) {
+    if (this.list && this.list.scrollAround) {
+      this.list.scrollAround(index);
+    }
+  }
+  getVisibleRange() {
+    if (this.list && this.list.getVisibleRange) {
+      return this.list.getVisibleRange();
+    }
   }
 
   render() {
@@ -53,6 +72,9 @@ class Datagrid extends Widget {
     function renderTable() {
       return (
         <Table
+          onRef={list => {
+            self.list = list;
+          }}
           className={self.styles.classNames.item}
           renderItem={props => {
             return (
