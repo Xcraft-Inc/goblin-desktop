@@ -8,6 +8,7 @@ import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Combo from 'gadgets/combo/widget';
 import NabuToolBar from 'nabu/toolbar/widget';
+import Monitor from 'desktop/monitor/widget';
 import Notifications from 'desktop/notifications/widget';
 import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
@@ -190,42 +191,6 @@ class Desktop extends Widget {
     );
   }
 
-  connectLocalStateMonitor() {
-    return this.mapWidget(
-      props => {
-        const size = props.state.size;
-        return (
-          <div
-            style={{fontWeight: 900, marginLeft: '10px', marginRight: '10px'}}
-          >
-            LocalState: {size}
-          </div>
-        );
-      },
-      'state',
-      'backend'
-    );
-  }
-
-  connectWarehouseInfosMonitor() {
-    return this.mapWidget(
-      props => {
-        if (!props.infos) {
-          return <div style={{fontWeight: 900}}>WarehouseInfos: N/A</div>;
-        }
-        const size = props.infos.size;
-        return (
-          <div style={{fontWeight: 900}}>
-            WarehouseState: {size} Feeds:
-            {props.infos.feeds}
-          </div>
-        );
-      },
-      'infos',
-      'infos.warehouse'
-    );
-  }
-
   render() {
     const {id, routesMap} = this.props;
 
@@ -233,8 +198,6 @@ class Desktop extends Widget {
       return null;
     }
 
-    const LocalStateMonitor = this.connectLocalStateMonitor();
-    const WarehouseMonitor = this.connectWarehouseInfosMonitor();
     const CommandsPrompt = this.connectCommandsPrompt();
     const routes = {
       '/hinter/': {},
@@ -344,8 +307,7 @@ class Desktop extends Widget {
             </div>
             <Container kind="footer">
               <NabuToolBar />
-              <LocalStateMonitor />
-              <WarehouseMonitor />
+              <Monitor id={this.props.id} />
               <CommandsPrompt />
             </Container>
           </Container>
