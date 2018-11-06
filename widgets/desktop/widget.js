@@ -194,12 +194,11 @@ class Desktop extends Widget {
     return this.mapWidget(
       props => {
         const size = props.state.size;
-        const offset = props.offset || 25;
-        const overloadLimit = props.overloadLimit || 300;
-        const load = (size - offset) / overloadLimit;
         return (
-          <div style={{fontWeight: 900}}>
-            LocalState: {(load * 100).toFixed(0)}%
+          <div
+            style={{fontWeight: 900, marginLeft: '10px', marginRight: '10px'}}
+          >
+            LocalState: {size}
           </div>
         );
       },
@@ -215,12 +214,9 @@ class Desktop extends Widget {
           return <div style={{fontWeight: 900}}>WarehouseInfos: N/A</div>;
         }
         const size = props.infos.size;
-        const offset = props.offset || 25;
-        const overloadLimit = props.overloadLimit || 300;
-        const load = (size - offset) / overloadLimit;
         return (
           <div style={{fontWeight: 900}}>
-            WarehouseState: {(load * 100).toFixed(0)}% Feeds:
+            WarehouseState: {size} Feeds:
             {props.infos.feeds}
           </div>
         );
