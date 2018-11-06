@@ -65,7 +65,12 @@ class Datagrid extends Widget {
 
     function renderHeaders() {
       return (
-        <Headers entityUI={entityUI} columnsNo={columnsNo} datagrid={self} />
+        <Headers
+          entityUI={entityUI}
+          columnsNo={columnsNo}
+          datagrid={self}
+          className={self.styles.classNames.entity}
+        />
       );
     }
 

@@ -5,6 +5,7 @@ import Container from 'gadgets/container/widget';
 import Connect from 'laboratory/connect';
 import Label from 'gadgets/label/widget';
 import Field from 'gadgets/field/widget';
+import DatagridCell from '../datagrid-cell/widget';
 import _ from 'lodash';
 
 class Header extends Widget {
@@ -30,6 +31,7 @@ class Header extends Widget {
       component,
       headerCell,
       context,
+      columnsNo,
     } = this.props;
     const self = this;
 
@@ -73,29 +75,42 @@ class Header extends Widget {
       const CellUI = component.WithState(headerCell, 'id')('.id');
 
       return (
-        <CellUI
-          key={`${id}_${index}`}
-          id={id}
-          index={index}
-          theme={context.theme}
+        <DatagridCell
+          cellUI={column => {
+            return (
+              <CellUI
+                key={`${id}_${index}`}
+                id={id}
+                index={index}
+                theme={context.theme}
+                column={column}
+                datagrid={datagrid}
+                doAsDatagrid={doAsDatagrid}
+                contextId={context.contextId}
+              />
+            );
+          }}
+          columnsNo={columnsNo}
           column={column}
-          datagrid={datagrid}
-          doAsDatagrid={doAsDatagrid}
-          contextId={context.contextId}
         />
       );
     }
 
-    if (!column.get('field') || column.get('field') === '') {
-      return <div />;
-    }
-
     if (column.get('sortable')) {
       return (
-        <div style={{display: 'flex'}}>
-          {renderComponent()}
-          {renderSortingHeader()}
-        </div>
+        <DatagridCell
+          columnsNo={columnsNo}
+          column={column}
+          margin="0px"
+          cellUI={_ => {
+            return (
+              <Container kind="row">
+                {renderComponent()}
+                {renderSortingHeader()}
+              </Container>
+            );
+          }}
+        />
       );
     } else {
       return renderComponent();
@@ -123,7 +138,7 @@ class Filter extends Widget {
         />
       );
     } else {
-      return <div />;
+      return <div style={{width: '40px'}} />;
     }
   }
 }
@@ -158,19 +173,28 @@ class Filters extends Form {
           key={`${id}_${index}`}
           column={() => datagrid.getModelValue(`.columns[${index}]`)}
         >
-          <Filter
-            key={`${id}_${index}`}
-            id={id}
-            doAsDatagrid={(quest, args) =>
-              self.doFor(datagrid.props.id, quest, args)
-            }
+          <DatagridCell
+            columnsNo={columnsNo}
+            margin="0px"
+            cellUI={column => {
+              return (
+                <Filter
+                  key={`${id}_${index}`}
+                  id={id}
+                  column={column}
+                  doAsDatagrid={(quest, args) =>
+                    self.doFor(datagrid.props.id, quest, args)
+                  }
+                />
+              );
+            }}
           />
         </Connect>
       );
     }
 
     return (
-      <Form {...self.formConfig}>
+      <Form {...self.formConfig} className={this.props.className}>
         <Container kind="row">
           {Array.apply(null, {length: columnsNo}).map((_, i) => {
             return renderFilter(i);
@@ -225,6 +249,7 @@ class DatagridHeaders extends Form {
               component={self}
               headerCell={entityUI.headerCell}
               context={self.context}
+              columnsNo={columnsNo}
             />
           </Connect>
         );
@@ -232,16 +257,20 @@ class DatagridHeaders extends Form {
     }
 
     return (
-      <Container kind="pane">
-        <Form {...self.formConfig}>
+      <div>
+        <Form {...self.formConfig} className={this.props.className}>
           <Container kind="row">
             {Array.apply(null, {length: columnsNo}).map((_, i) => {
               return renderHeader(i);
             })}
           </Container>
         </Form>
-        <DatagridFilters datagrid={datagrid} columnsNo={columnsNo} />
-      </Container>
+        <DatagridFilters
+          datagrid={datagrid}
+          columnsNo={columnsNo}
+          className={this.props.className}
+        />
+      </div>
     );
   }
 }

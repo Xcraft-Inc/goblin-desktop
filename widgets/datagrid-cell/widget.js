@@ -14,9 +14,15 @@ class DatagridCell extends Form {
   }
 
   render() {
-    const {cellUI, column, columnsNo} = this.props;
+    const {cellUI, column, columnsNo, margin} = this.props;
 
-    return <div className={this.styles.classNames.item}>{cellUI(column)}</div>;
+    function renderCell() {
+      if (cellUI) {
+        return cellUI(column);
+      }
+    }
+
+    return <div className={this.styles.classNames.item}>{renderCell()}</div>;
   }
 }
 
