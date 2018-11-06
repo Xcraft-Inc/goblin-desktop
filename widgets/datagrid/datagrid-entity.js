@@ -65,7 +65,7 @@ class DatagridEntity extends Form {
     }
 
     return (
-      <Form {...self.formConfig}>
+      <Form {...self.formConfig} style={{flexGrow: 1, marginRight: '20px'}}>
         <Container kind="row">
           {Array.apply(null, {length: columnsNo}).map((_, i) => {
             return renderCell(i);
