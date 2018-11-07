@@ -43,9 +43,11 @@ class Header extends Widget {
             const dir = datagrid.getModelValue(`.sort.dir`);
 
             if (key === column.get('field')) {
-              return dir === 'asc' ? 'solid/arrow-up' : 'solid/arrow-down';
+              return dir === 'asc'
+                ? 'solid/sort-alpha-up'
+                : 'solid/sort-alpha-down';
             } else {
-              return 'solid/circle';
+              return 'solid/sort';
             }
           }}
           tooltip={() => {
