@@ -307,7 +307,7 @@ class Desktop extends Widget {
             </div>
             <Container kind="footer">
               <NabuToolBar />
-              <Monitor id={this.props.id} />
+              <Monitor id={this.props.id + '$monitor'} />
               <CommandsPrompt />
             </Container>
           </Container>
