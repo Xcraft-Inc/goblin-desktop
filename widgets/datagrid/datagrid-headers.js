@@ -138,7 +138,8 @@ class Filter extends Widget {
         />
       );
     } else {
-      return <div style={{width: '40px'}} />;
+      var defaultWidth = column.get('width') ? column.get('width') : '0px';
+      return <div style={{width: defaultWidth}} />;
     }
   }
 }
