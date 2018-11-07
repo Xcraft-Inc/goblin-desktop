@@ -135,6 +135,7 @@ class Filter extends Widget {
           onDebouncedChange={value =>
             doAsDatagrid('filter', {field: column.get('field'), value})
           }
+          hintText={`Search on ${column.get('field')}`}
         />
       );
     } else {
