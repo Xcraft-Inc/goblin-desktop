@@ -7,8 +7,6 @@ import Label from 'gadgets/label/widget';
 import LabelTextField from 'gadgets/label-text-field/widget';
 import Button from 'gadgets/button/widget';
 import List from 'gadgets/list/widget';
-import CheckButton from 'gadgets/check-button/widget';
-import Separator from 'gadgets/separator/widget';
 
 class Search extends Form {
   constructor() {
