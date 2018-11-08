@@ -92,7 +92,6 @@ class Header extends Widget {
               />
             );
           }}
-          columnsNo={columnsNo}
           column={column}
         />
       );
@@ -101,7 +100,6 @@ class Header extends Widget {
     if (column.get('sortable')) {
       return (
         <DatagridCell
-          columnsNo={columnsNo}
           column={column}
           margin="0px"
           cellUI={_ => {
@@ -141,8 +139,7 @@ class Filter extends Widget {
         />
       );
     } else {
-      var defaultWidth = column.get('width') ? column.get('width') : '0px';
-      return <div style={{width: defaultWidth}} />;
+      return <div />;
     }
   }
 }
@@ -178,7 +175,6 @@ class Filters extends Form {
           column={() => datagrid.getModelValue(`.columns[${index}]`)}
         >
           <DatagridCell
-            columnsNo={columnsNo}
             margin="0px"
             cellUI={column => {
               return (

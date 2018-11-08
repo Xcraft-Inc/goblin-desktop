@@ -14,7 +14,7 @@ class DatagridCell extends Form {
   }
 
   render() {
-    const {cellUI, column, columnsNo, margin} = this.props;
+    const {cellUI, column, margin} = this.props;
 
     function renderCell() {
       if (cellUI) {

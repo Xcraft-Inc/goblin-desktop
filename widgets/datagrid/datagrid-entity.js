@@ -57,7 +57,6 @@ class DatagridEntity extends Form {
                   />
                 );
               }}
-              columnsNo={columnsNo}
             />
           </Connect>
         );
