@@ -68,8 +68,17 @@ class Search extends Form {
 
           <DocumentsList
             renderItem={props => {
+              const containerProps = {};
+              if (!props.id && props.height) {
+                containerProps.height = `${props.height}px`;
+              }
               return (
-                <Container kind="row-pane" subkind="large-box">
+                <Container
+                  {...containerProps}
+                  kind="row-pane"
+                  subkind="large-box"
+                  busy={!props.id}
+                >
                   <Button
                     kind="container"
                     width="100%"
@@ -88,8 +97,8 @@ class Search extends Form {
               );
             }}
             mapItem={entity => {
-              const text = entity.get('value');
-              return {text, id: entity.get('id')};
+              const text = entity ? entity.get('value') : '';
+              return {text, id: entity ? entity.get('id') : null};
             }}
           />
         </Container>
