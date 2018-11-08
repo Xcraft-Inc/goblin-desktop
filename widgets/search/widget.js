@@ -54,6 +54,7 @@ class Search extends Form {
               <Container kind="row-pane">
                 <Container kind="column" grow="1">
                   <LabelTextField
+                    id={`${this.props.id}$hinter`}
                     defaultFocus="true"
                     hinter={type}
                     labelGlyph="solid/search"
