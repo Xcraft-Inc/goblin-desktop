@@ -55,6 +55,14 @@ Goblin.registerQuest(goblinName, 'create', function*(
   quest.do({id: quest.goblin.id, routes});
 
   quest.log.info(`Desktop ${quest.goblin.id} created!`);
+  quest.goblin.defer(
+    quest.sub(
+      `*::*.${quest.goblin.id.split('@')[1]}.desktop-notification-broadcasted`,
+      (err, msg) => {
+        quest.me.addNotification({...msg.data});
+      }
+    )
+  );
   return quest.goblin.id;
 });
 
@@ -497,17 +505,34 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
   glyph,
   color,
   message,
-  command
+  command,
+  broadcast
 ) {
   if (!notificationId) {
     notificationId = uuidV4();
   }
+
+  if (broadcast) {
+    quest.evt(
+      `${quest.goblin.id.split('@')[1]}.desktop-notification-broadcasted`,
+      {
+        notificationId,
+        glyph,
+        color,
+        message,
+        command,
+      }
+    );
+    return;
+  }
+
   quest.do({notificationId, glyph, color, message, command});
   const dnd = quest.goblin.getState().get('dnd');
   if (dnd !== 'true') {
     quest.dispatch('set-notifications', {show: 'true'});
   }
   quest.dispatch('update-not-read-count');
+
   return quest.goblin
     .getState()
     .get(`notifications.${notificationId}`, null)
