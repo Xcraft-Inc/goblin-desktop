@@ -31,7 +31,6 @@ class Header extends Widget {
       component,
       headerCell,
       context,
-      columnsNo,
     } = this.props;
     const self = this;
 
@@ -104,7 +103,7 @@ class Header extends Widget {
           margin="0px"
           cellUI={_ => {
             return (
-              <Container kind="row">
+              <Container kind="row" width={column.get('width')}>
                 {renderComponent()}
                 {renderSortingHeader()}
               </Container>
@@ -249,7 +248,6 @@ class DatagridHeaders extends Form {
               component={self}
               headerCell={entityUI.headerCell}
               context={self.context}
-              columnsNo={columnsNo}
             />
           </Connect>
         );
