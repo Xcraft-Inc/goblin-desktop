@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from 'laboratory/form';
 import _ from 'lodash';
+import Widget from 'laboratory/widget';
 
 class DatagridCell extends Form {
   constructor() {
@@ -26,4 +27,8 @@ class DatagridCell extends Form {
   }
 }
 
-export default DatagridCell;
+export default Widget.connect((state, props) => {
+  return {
+    column: state.get(`backend.${props.id}.columns[${props.index}]`),
+  };
+})(DatagridCell);

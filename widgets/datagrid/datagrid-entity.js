@@ -1,13 +1,14 @@
 import React from 'react';
 import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
-import Connect from 'laboratory/connect';
 import DatagridCell from '../datagrid-cell/widget';
 import _ from 'lodash';
 
 class DatagridEntity extends Form {
   constructor() {
     super(...arguments);
+
+    this.renderCell = this.renderCell.bind(this);
   }
 
   static get wiring() {
@@ -16,58 +17,51 @@ class DatagridEntity extends Form {
     };
   }
 
+  renderCell(index) {
+    if (this.props.entityUI && this.props.entityUI.rowCell) {
+      const CellUI = this.WithState(this.props.entityUI.rowCell, 'id')('.id');
+
+      return (
+        <DatagridCell
+          id={this.props.datagrid.props.id}
+          index={index}
+          cellUI={column => {
+            return (
+              <CellUI
+                key={`${this.props.id}_${this.props.index}`}
+                id={this.props.id}
+                index={this.props.index}
+                column={column}
+                theme={this.context.theme}
+                entity={this}
+                datagrid={this.props.datagrid}
+                doAsEntity={(quest, args) =>
+                  this.doFor(this.props.id, quest, args)
+                }
+                doAsDatagrid={(quest, args) =>
+                  this.doFor(this.props.datagrid.props.id, quest, args)
+                }
+                contextId={this.context.contextId}
+              />
+            );
+          }}
+        />
+      );
+    }
+  }
+
   render() {
-    const {id, entityUI, columnsNo, datagrid} = this.props;
-    const self = this;
-    if (!id) {
+    if (!this.props.id) {
       return null;
     }
 
     const Form = this.Form;
 
-    function renderCell(index) {
-      if (entityUI && entityUI.rowCell) {
-        const CellUI = self.WithState(entityUI.rowCell, 'id')('.id');
-
-        return (
-          <Connect
-            key={`${id}_${index}`}
-            column={() => datagrid.getModelValue(`.columns[${index}]`)}
-          >
-            <DatagridCell
-              cellUI={column => {
-                return (
-                  <CellUI
-                    key={`${id}_${index}`}
-                    id={id}
-                    index={index}
-                    column={column}
-                    theme={self.context.theme}
-                    entity={self}
-                    datagrid={datagrid}
-                    doAsEntity={(quest, args) => {
-                      const service = self.props.id.split('@')[0];
-                      self.doAs(service, quest, args);
-                    }}
-                    doAsDatagrid={(quest, args) => {
-                      const service = datagrid.props.id.split('@')[0];
-                      self.doAs(service, quest, args);
-                    }}
-                    contextId={self.context.contextId}
-                  />
-                );
-              }}
-            />
-          </Connect>
-        );
-      }
-    }
-
     return (
-      <Form {...self.formConfig} className={this.props.className}>
+      <Form {...this.formConfig} className={this.props.className}>
         <Container kind="row">
-          {Array.apply(null, {length: columnsNo}).map((_, i) => {
-            return renderCell(i);
+          {Array.apply(null, {length: this.props.columnsNo}).map((_, i) => {
+            return this.renderCell(i);
           })}
         </Container>
       </Form>
