@@ -36,6 +36,7 @@ class Header extends Widget {
     };
 
     this.renderSortingHeader = this.renderSortingHeader.bind(this);
+    this.renderComponent = this.renderComponent.bind(this);
   }
 
   renderSortingHeader() {
@@ -54,7 +55,7 @@ class Header extends Widget {
     );
   }
 
-  render() {
+  renderComponent() {
     const {
       id,
       index,
@@ -66,31 +67,33 @@ class Header extends Widget {
       context,
     } = this.props;
 
-    function renderComponent() {
-      const CellUI = component.WithState(headerCell, 'id')('.id');
+    const CellUI = component.WithState(headerCell, 'id')('.id');
 
-      return (
-        <DatagridCell
-          id={datagrid.props.id}
-          index={index}
-          cellUI={column => {
-            return (
-              <CellUI
-                key={`${id}_${index}`}
-                id={id}
-                index={index}
-                theme={context.theme}
-                column={column}
-                datagrid={datagrid}
-                doAsDatagrid={doAsDatagrid}
-                contextId={context.contextId}
-              />
-            );
-          }}
-          column={column}
-        />
-      );
-    }
+    return (
+      <DatagridCell
+        id={datagrid.props.id}
+        index={index}
+        cellUI={column => {
+          return (
+            <CellUI
+              key={`${id}_${index}`}
+              id={id}
+              index={index}
+              theme={context.theme}
+              column={column}
+              datagrid={datagrid}
+              doAsDatagrid={doAsDatagrid}
+              contextId={context.contextId}
+            />
+          );
+        }}
+        column={column}
+      />
+    );
+  }
+
+  render() {
+    const {index, column, datagrid} = this.props;
 
     if (column.get('sortable')) {
       return (
@@ -102,7 +105,7 @@ class Header extends Widget {
           cellUI={_ => {
             return (
               <Container kind="row" width={column.get('width')}>
-                {renderComponent()}
+                {this.renderComponent()}
                 {this.renderSortingHeader()}
               </Container>
             );
@@ -110,7 +113,7 @@ class Header extends Widget {
         />
       );
     } else {
-      return renderComponent();
+      return this.renderComponent();
     }
   }
 }
@@ -123,8 +126,7 @@ const HeaderConnected = Widget.connect((state, props) => {
 
 class Filter extends Widget {
   render() {
-    const {column, filterCell, doAsDatagrid, id, index, datagrid} = this.props;
-    const self = this;
+    const {column, doAsDatagrid} = this.props;
 
     if (
       column.get('field') &&
@@ -151,6 +153,8 @@ class Filter extends Widget {
 class Filters extends Form {
   constructor() {
     super(...arguments);
+
+    this.renderFilter = this.renderFilter.bind(this);
   }
 
   static connectTo(datagrid) {
@@ -163,8 +167,34 @@ class Filters extends Form {
     };
   }
 
+  renderFilter(index) {
+    const {id, datagrid} = this.props;
+
+    return (
+      <DatagridCell
+        id={datagrid.props.id}
+        index={index}
+        margin="0px"
+        cellUI={column => {
+          return (
+            <Filter
+              key={`${id}_${index}`}
+              id={id}
+              index={index}
+              datagrid={datagrid}
+              column={column}
+              doAsDatagrid={(quest, args) =>
+                self.doFor(datagrid.props.id, quest, args)
+              }
+            />
+          );
+        }}
+      />
+    );
+  }
+
   render() {
-    const {id, columnsNo, datagrid} = this.props;
+    const {id, columnsNo} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -172,35 +202,11 @@ class Filters extends Form {
 
     const Form = this.Form;
 
-    function renderFilter(index) {
-      return (
-        <DatagridCell
-          id={datagrid.props.id}
-          index={index}
-          margin="0px"
-          cellUI={column => {
-            return (
-              <Filter
-                key={`${id}_${index}`}
-                id={id}
-                index={index}
-                datagrid={datagrid}
-                column={column}
-                doAsDatagrid={(quest, args) =>
-                  self.doFor(datagrid.props.id, quest, args)
-                }
-              />
-            );
-          }}
-        />
-      );
-    }
-
     return (
       <Form {...self.formConfig} className={this.props.className}>
         <Container kind="row">
           {Array.apply(null, {length: columnsNo}).map((_, i) => {
-            return renderFilter(i);
+            return this.renderFilter(i);
           })}
         </Container>
       </Form>
@@ -211,6 +217,8 @@ class Filters extends Form {
 class DatagridHeaders extends Form {
   constructor() {
     super(...arguments);
+
+    this.renderHeader = this.renderHeader.bind(this);
   }
 
   static get wiring() {
@@ -223,8 +231,29 @@ class DatagridHeaders extends Form {
     return Widget.Wired(DatagridHeaders)(`${instance.props.id}`);
   }
 
+  renderHeader(index) {
+    const {entityUI, datagrid, id} = this.props;
+
+    if (entityUI && entityUI.headerCell) {
+      return (
+        <HeaderConnected
+          key={`${id}_${index}`}
+          id={id}
+          index={index}
+          datagrid={datagrid}
+          doAsDatagrid={(quest, args) =>
+            this.doFor(datagrid.props.id, quest, args)
+          }
+          component={this}
+          headerCell={entityUI.headerCell}
+          context={this.context}
+        />
+      );
+    }
+  }
+
   render() {
-    const {id, entityUI, columnsNo, datagrid} = this.props;
+    const {id, columnsNo, datagrid} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -233,31 +262,12 @@ class DatagridHeaders extends Form {
     const Form = this.Form;
     const DatagridFilters = Filters.connectTo(datagrid);
 
-    function renderHeader(index) {
-      if (entityUI && entityUI.headerCell) {
-        return (
-          <HeaderConnected
-            key={`${id}_${index}`}
-            id={id}
-            index={index}
-            datagrid={datagrid}
-            doAsDatagrid={(quest, args) =>
-              self.doFor(datagrid.props.id, quest, args)
-            }
-            component={self}
-            headerCell={entityUI.headerCell}
-            context={self.context}
-          />
-        );
-      }
-    }
-
     return (
       <div>
         <Form {...self.formConfig} className={this.props.className}>
           <Container kind="row">
             {Array.apply(null, {length: columnsNo}).map((_, i) => {
-              return renderHeader(i);
+              return this.renderHeader(i);
             })}
           </Container>
         </Form>

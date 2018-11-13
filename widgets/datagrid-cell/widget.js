@@ -6,6 +6,8 @@ import Widget from 'laboratory/widget';
 class DatagridCell extends Form {
   constructor() {
     super(...arguments);
+
+    this.renderCell = this.renderCell.bind(this);
   }
 
   static get wiring() {
@@ -14,16 +16,18 @@ class DatagridCell extends Form {
     };
   }
 
-  render() {
-    const {cellUI, column, margin} = this.props;
+  renderCell() {
+    const {cellUI, column} = this.props;
 
-    function renderCell() {
-      if (cellUI) {
-        return cellUI(column);
-      }
+    if (cellUI) {
+      return cellUI(column);
     }
+  }
 
-    return <div className={this.styles.classNames.item}>{renderCell()}</div>;
+  render() {
+    return (
+      <div className={this.styles.classNames.item}>{this.renderCell()}</div>
+    );
   }
 }
 
