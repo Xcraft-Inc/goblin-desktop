@@ -184,7 +184,7 @@ class Filters extends Form {
               datagrid={datagrid}
               column={column}
               doAsDatagrid={(quest, args) =>
-                self.doFor(datagrid.props.id, quest, args)
+                this.doFor(datagrid.props.id, quest, args)
               }
             />
           );
