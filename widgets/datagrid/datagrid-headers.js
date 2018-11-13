@@ -31,12 +31,8 @@ class Header extends Widget {
   constructor() {
     super(...arguments);
     this.tooltips = {
-      asc: {
-        nabuId: 'ascending order',
-      },
-      desc: {
-        nabuId: 'descending order',
-      },
+      asc: this.T('ascending order'),
+      desc: this.T('descending order'),
     };
 
     this.renderSortingHeader = this.renderSortingHeader.bind(this);
