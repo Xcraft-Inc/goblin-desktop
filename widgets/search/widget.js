@@ -24,7 +24,9 @@ class _DefaultItem extends Widget {
 
 const DefaultItem = Widget.connect((state, props) => {
   return {
-    text: state.get(`backend.${props.id}.meta.summaries.description`),
+    text: props.id
+      ? state.get(`backend.${props.id}.meta.summaries.description`)
+      : '',
   };
 })(_DefaultItem);
 
