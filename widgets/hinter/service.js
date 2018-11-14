@@ -100,7 +100,7 @@ Goblin.registerQuest(goblinName, 'set-current-detail-entity', function(
   detail.setEntity({entityId});
 });
 
-Goblin.registerQuest(goblinName, 'create-new', function(quest, value) {
+Goblin.registerQuest(goblinName, 'create-new', function*(quest, value) {
   const desk = quest.getAPI(quest.goblin.getX('desktopId'));
   const workitem = quest.goblin.getX('newWorkitem');
   workitem.id = quest.uuidV4();
@@ -109,7 +109,7 @@ Goblin.registerQuest(goblinName, 'create-new', function(quest, value) {
   if (workitem.mapNewValueTo) {
     workitem.payload[workitem.mapNewValueTo] = value;
   }
-  desk.addWorkitem({workitem, navigate: true});
+  yield desk.addWorkitem({workitem, navigate: true});
 
   quest.goblin.defer(
     quest.sub(`${workitem.name}@${workitem.id}.validated`, (err, msg) => {
