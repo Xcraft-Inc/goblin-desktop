@@ -8,6 +8,60 @@ import LabelTextField from 'gadgets/label-text-field/widget';
 import Button from 'gadgets/button/widget';
 import List from 'gadgets/list/widget';
 
+class _DefaultItem extends Widget {
+  render() {
+    return (
+      <Label
+        text={this.props.text}
+        kind="large-single"
+        justify="left"
+        grow="1"
+        wrap="no"
+      />
+    );
+  }
+}
+
+const DefaultItem = Widget.connect((state, props) => {
+  return {
+    text: state.get(`backend.${props.id}.meta.summaries.description`),
+  };
+})(_DefaultItem);
+
+class _ListItem extends Widget {
+  constructor() {
+    super(...arguments);
+    this.nav = this.nav.bind(this);
+  }
+
+  nav() {
+    this.navToDetail(this.props.searchId, this.props.id);
+  }
+  render() {
+    const containerProps = {};
+    if (!this.props.id && this.props.height) {
+      containerProps.height = `${this.props.height}px`;
+    }
+    return (
+      <Container
+        {...containerProps}
+        kind="row-pane"
+        subkind="large-box"
+        busy={!this.props.id}
+      >
+        <Button kind="container" width="100%" onClick={this.nav}>
+          {this.props.id ? <DefaultItem id={this.props.id} /> : null}
+        </Button>
+      </Container>
+    );
+  }
+}
+
+const ListItem = Widget.connect((state, props) => {
+  const id = state.get(`backend.${props.listId}.list.${props.itemId}`, null);
+  return {id, searchId: props.id};
+})(_ListItem);
+
 class Search extends Form {
   constructor() {
     super(...arguments);
@@ -66,41 +120,7 @@ class Search extends Form {
             </Form>
           </Container>
 
-          <DocumentsList
-            renderItem={props => {
-              const containerProps = {};
-              if (!props.id && props.height) {
-                containerProps.height = `${props.height}px`;
-              }
-              return (
-                <Container
-                  {...containerProps}
-                  kind="row-pane"
-                  subkind="large-box"
-                  busy={!props.id}
-                >
-                  <Button
-                    kind="container"
-                    width="100%"
-                    onClick={() => this.navToDetail(this.props.id, props.id)}
-                    onDoubleClick={() => {}}
-                  >
-                    <Label
-                      text={props.text}
-                      kind="large-single"
-                      justify="left"
-                      grow="1"
-                      wrap="no"
-                    />
-                  </Button>
-                </Container>
-              );
-            }}
-            mapItem={entity => {
-              const text = entity ? entity.get('value') : '';
-              return {text, id: entity ? entity.get('id') : null};
-            }}
-          />
+          <DocumentsList renderItem={ListItem} />
         </Container>
       </Container>
     );
