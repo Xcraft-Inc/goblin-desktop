@@ -598,6 +598,10 @@ Goblin.registerQuest(goblinName, 'get-user-info', function(quest) {
   return quest.goblin.getState().get('username');
 });
 
+Goblin.registerQuest(goblinName, 'get-lab-id', function(quest) {
+  return quest.goblin.getX('labId');
+});
+
 Goblin.registerQuest(goblinName, 'get-workitems', function(quest) {
   const state = quest.goblin.getState();
   const wks = state.get('workitems');
