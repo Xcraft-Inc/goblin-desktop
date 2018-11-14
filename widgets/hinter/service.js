@@ -214,15 +214,15 @@ Goblin.registerQuest(goblinName, 'validate-row', function*(
   }
 });
 
-Goblin.registerQuest(goblinName, 'set-filters', function(quest, filters) {
+Goblin.registerQuest(goblinName, 'set-filters', function*(quest, filters) {
   quest.goblin.setX('filters', filters);
   const lastSelections = quest.goblin.getX('lastSelections');
   if (lastSelections) {
-    quest.me.setSelections(lastSelections);
+    yield quest.me.setSelections(lastSelections);
   }
 });
 
-Goblin.registerQuest(goblinName, 'set-selections', function(
+Goblin.registerQuest(goblinName, 'set-selections', function*(
   quest,
   rows,
   glyphs,
@@ -261,14 +261,14 @@ Goblin.registerQuest(goblinName, 'set-selections', function(
 
   quest.do({rows, glyphs, values, status, payloads});
   if (rows.length > 0) {
-    quest.me.selectRow({
+    yield quest.me.selectRow({
       index: 0,
       text: rows[0],
       payload: usePayload ? payloads[0] : {},
       usePayload,
     });
     if (validate) {
-      quest.me.validateRow({
+      yield quest.me.validateRow({
         index: 0,
         text: rows[0],
       });

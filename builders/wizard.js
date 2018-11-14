@@ -95,7 +95,7 @@ module.exports = config => {
           }
         }
 
-        quest.create(`${gadget.type}-gadget`, {
+        yield quest.create(`${gadget.type}-gadget`, {
           id: newGadgetId,
           options: gadget.options || null,
         });
