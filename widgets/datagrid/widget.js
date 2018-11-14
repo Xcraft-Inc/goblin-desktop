@@ -106,9 +106,12 @@ class Datagrid extends Widget {
     );
   }
 
+  closeAction() {
+    this.onClose(this.props.kind, this.desktopId, this.contextId);
+  }
+
   render() {
     const {id, kind} = this.props;
-    const self = this;
     if (!id) {
       return null;
     }
@@ -126,15 +129,15 @@ class Datagrid extends Widget {
             zIndex={this.props.dialog ? this.props.dialog.get('zIndex') : null}
             onBackgroundClick={this.onBackgroundClick}
           >
-            {this.renderHeaders()}
-            {this.renderTable()}
+            {this.renderHeaders}
+            {this.renderTable}
             <Button
               key={id}
               text="Close"
               kind="action"
               justify="center"
               place="single"
-              onClick={() => self.onClose(kind, self.desktopId, self.contextId)}
+              onClick={this.closeAction}
             />
           </DialogModal>
         );
@@ -151,8 +154,8 @@ class Datagrid extends Widget {
             }
             spacing="large"
           >
-            {this.renderHeaders()}
-            {this.renderTable()}
+            {this.renderHeaders}
+            {this.renderTable}
           </Container>
         );
       }

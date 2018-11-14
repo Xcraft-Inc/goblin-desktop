@@ -25,9 +25,7 @@ class DatagridCell extends Form {
   }
 
   render() {
-    return (
-      <div className={this.styles.classNames.item}>{this.renderCell()}</div>
-    );
+    return <div className={this.styles.classNames.item}>{this.renderCell}</div>;
   }
 }
 
