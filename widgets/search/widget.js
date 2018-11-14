@@ -31,11 +31,11 @@ const DefaultItem = Widget.connect((state, props) => {
 class _ListItem extends Widget {
   constructor() {
     super(...arguments);
-    this.nav = this.nav.bind(this);
+    this.listNav = this.listNav.bind(this);
   }
 
-  nav() {
-    this.navToDetail(this.props.searchId, this.props.id);
+  listNav() {
+    this.navToDetail(this.props.parentId, this.props.id);
   }
   render() {
     const containerProps = {};
@@ -49,7 +49,7 @@ class _ListItem extends Widget {
         subkind="large-box"
         busy={!this.props.id}
       >
-        <Button kind="container" width="100%" onClick={this.nav}>
+        <Button kind="container" width="100%" onClick={this.listNav}>
           {this.props.id ? <DefaultItem id={this.props.id} /> : null}
         </Button>
       </Container>
@@ -59,7 +59,11 @@ class _ListItem extends Widget {
 
 const ListItem = Widget.connect((state, props) => {
   const id = state.get(`backend.${props.listId}.list.${props.itemId}`, null);
-  return {id, searchId: props.id};
+  return {
+    id,
+    height: props.height,
+    parentId: props.parentId,
+  };
 })(_ListItem);
 
 class Search extends Form {
@@ -120,7 +124,7 @@ class Search extends Form {
             </Form>
           </Container>
 
-          <DocumentsList renderItem={ListItem} />
+          <DocumentsList renderItem={ListItem} parentId={this.props.id} />
         </Container>
       </Container>
     );
