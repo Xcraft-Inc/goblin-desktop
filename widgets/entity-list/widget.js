@@ -67,7 +67,7 @@ class _ListItem extends Widget {
     return (
       <Container
         {...containerProps}
-        kind="table-row"
+        kind="content"
         grow="1"
         busy={!this.props.id}
       >
