@@ -5,12 +5,11 @@ export default function styles() {
     flexGrow: '1',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: '#ccc',
+    backgroundColor: 'white',
   };
   const header = {
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: '#ddd',
     flexGrow: '1',
   };
 

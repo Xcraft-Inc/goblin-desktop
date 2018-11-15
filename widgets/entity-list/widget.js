@@ -12,26 +12,37 @@ class _Entity extends Widget {
     if (!id || !entity) {
       return null;
     }
+    const rowStyle = {
+      borderTop: '1px solid #aaa',
+      display: 'flex',
+      flexDirection: 'row',
+      padding: '5px 1px 5px 1px',
+      backgroundColor: 'white',
+      cursor: 'default',
+    };
     return (
-      <Container kind="row">
+      <div style={rowStyle}>
         {columns.map((c, i) => {
+          let text = entity.get(c, null);
+          if (entity.get('meta.references').has(c) && text !== null) {
+            const ref = this.getBackendValue(`backend.${text}`);
+            if (ref) {
+              text = ref.get('meta.summaries.info');
+            }
+          }
           return (
             <TableCell
               rowId={i}
               key={c}
               index={i}
-              width={undefined}
-              level={1}
-              textAlign={undefined}
-              indent={undefined}
-              fontSizeStrategy={undefined}
+              grow="1"
               isLast="false"
               isHeader="false"
-              text={entity.get(c, '')}
+              text={text}
             />
           );
         })}
-      </Container>
+      </div>
     );
   }
 }
@@ -56,9 +67,8 @@ class _ListItem extends Widget {
     return (
       <Container
         {...containerProps}
-        kind="row"
+        kind="table-row"
         grow="1"
-        width="100%"
         busy={!this.props.id}
       >
         {this.props.id ? (
@@ -111,6 +121,7 @@ class EntityList extends Widget {
                 fontSizeStrategy={undefined}
                 isLast="false"
                 isHeader="true"
+                grow="1"
                 text={c}
               />
             );
