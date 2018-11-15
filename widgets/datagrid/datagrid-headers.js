@@ -126,13 +126,41 @@ const HeaderConnected = Widget.connect((state, props) => {
 
 class Filter extends Widget {
   render() {
-    const {column, doAsDatagrid} = this.props;
+    const {
+      column,
+      doAsDatagrid,
+      entityUI,
+      datagrid,
+      id,
+      index,
+      component,
+    } = this.props;
 
-    if (
-      column.get('field') &&
-      column.get('field') !== '' &&
-      column.get('filterable')
-    ) {
+    if (column.get('customFilter') && entityUI && entityUI.filterCell) {
+      const CellUI = component.WithState(entityUI.filterCell, 'id')('.id');
+
+      return (
+        <DatagridCell
+          id={datagrid.props.id}
+          index={index}
+          cellUI={column => {
+            return (
+              <CellUI
+                key={`${id}_${index}`}
+                id={id}
+                index={index}
+                theme={this.context.theme}
+                column={column}
+                datagrid={datagrid}
+                doAsDatagrid={doAsDatagrid}
+                contextId={this.context.contextId}
+              />
+            );
+          }}
+          column={column}
+        />
+      );
+    } else if (column.get('field') && column.get('filterable')) {
       return (
         <Field
           model={`.filters.${column.get('field')}`}
@@ -168,7 +196,7 @@ class Filters extends Form {
   }
 
   renderFilter(index) {
-    const {id, datagrid} = this.props;
+    const {id, datagrid, entityUI, component} = this.props;
 
     return (
       <DatagridCell
@@ -182,7 +210,9 @@ class Filters extends Form {
               key={`${id}_${index}`}
               id={id}
               index={index}
+              component={component}
               datagrid={datagrid}
+              entityUI={entityUI}
               column={column}
               doAsDatagrid={(quest, args) =>
                 this.doFor(datagrid.props.id, quest, args)
@@ -254,7 +284,7 @@ class DatagridHeaders extends Form {
   }
 
   render() {
-    const {id, columnsNo, datagrid} = this.props;
+    const {id, columnsNo, datagrid, entityUI} = this.props;
     const self = this;
     if (!id) {
       return null;
@@ -273,6 +303,8 @@ class DatagridHeaders extends Form {
           </Container>
         </Form>
         <DatagridFilters
+          component={this}
+          entityUI={entityUI}
           datagrid={datagrid}
           columnsNo={columnsNo}
           className={this.props.className}
