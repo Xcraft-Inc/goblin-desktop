@@ -1,7 +1,9 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
+import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import List from 'gadgets/list/widget';
+import TableCell from 'gadgets/table-cell/widget';
 import Label from 'gadgets/label/widget';
 
 class _Entity extends Widget {
@@ -12,13 +14,21 @@ class _Entity extends Widget {
     }
     return (
       <Container kind="row">
-        {columns.map(c => {
+        {columns.map((c, i) => {
           return (
-            <Container key={c} kind="column" grow="1">
-              <Container kind="row">
-                <Label text={entity.get(c, '')} />
-              </Container>
-            </Container>
+            <TableCell
+              rowId={i}
+              key={c}
+              index={i}
+              width={undefined}
+              level={1}
+              textAlign={undefined}
+              indent={undefined}
+              fontSizeStrategy={undefined}
+              isLast="false"
+              isHeader="false"
+              text={entity.get(c, '')}
+            />
           );
         })}
       </Container>
@@ -91,12 +101,24 @@ class EntityList extends Widget {
       <div className={this.styles.classNames.full}>
         <div className={this.styles.classNames.header}>
           {columns.map(c => {
-            return <Label key={c} text={c} />;
+            return (
+              <TableCell
+                key={c}
+                width={undefined}
+                level={1}
+                textAlign={undefined}
+                indent={undefined}
+                fontSizeStrategy={undefined}
+                isLast="false"
+                isHeader="true"
+                text={c}
+              />
+            );
           })}
         </div>
-        <div className={this.styles.classNames.list}>
+        <ScrollableContainer id={listId} height="100%">
           <List id={listId} renderItem={ListItem} parentId={columns} />
-        </div>
+        </ScrollableContainer>
       </div>
     );
   }

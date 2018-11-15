@@ -14,17 +14,9 @@ export default function styles() {
     flexGrow: '1',
   };
 
-  const list = {
-    display: 'flex',
-    flexDirection: 'row',
-    flexGrow: '1',
-    overflowY: 'scroll',
-  };
-
   return {
     full,
     header,
-    list,
   };
 }
 
