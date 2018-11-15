@@ -19,6 +19,7 @@ class Datagrid extends Widget {
     this.scrollAround = this.scrollAround.bind(this);
     this.getVisibleRange = this.getVisibleRange.bind(this);
 
+    this.onClick = this.onClick.bind(this);
     this.initializeEntity = this.initializeEntity.bind(this);
     this.renderHeaders = this.renderHeaders.bind(this);
     this.renderTable = this.renderTable.bind(this);
@@ -38,6 +39,10 @@ class Datagrid extends Widget {
   onClose(kind, desktopId, contextId) {
     const service = this.props.id.split('@')[0];
     this.doAs(service, 'close', {kind, desktopId, contextId});
+  }
+
+  onClick() {
+    this.onClose(this.props.kind, this.desktopId, this.contextId);
   }
 
   scrollTo(index) {
@@ -108,7 +113,6 @@ class Datagrid extends Widget {
 
   render() {
     const {id, kind} = this.props;
-    const self = this;
     if (!id) {
       return null;
     }
@@ -134,7 +138,7 @@ class Datagrid extends Widget {
               kind="action"
               justify="center"
               place="single"
-              onClick={() => self.onClose(kind, self.desktopId, self.contextId)}
+              onClick={() => this.onClick()}
             />
           </DialogModal>
         );
