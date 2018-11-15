@@ -6,6 +6,7 @@ import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import LabelTextField from 'gadgets/label-text-field/widget';
 import Button from 'gadgets/button/widget';
+import StatusFilters from 'desktop/status-filters/widget';
 import List from 'gadgets/list/widget';
 
 class _DefaultItem extends Widget {
@@ -89,7 +90,7 @@ class Search extends Form {
     }
 
     const Form = this.Form;
-    const DocumentsList = List.connectTo(this);
+    const listId = `list@${id}`;
 
     const Count = this.mapWidgetToFormPlugin(
       p => (
@@ -99,6 +100,7 @@ class Search extends Form {
       'list',
       '.count'
     );
+
     return (
       <Container kind="view" width="400px" spacing="large">
         <Container kind="pane-header">
@@ -125,8 +127,10 @@ class Search extends Form {
               </Container>
             </Form>
           </Container>
-
-          <DocumentsList renderItem={ListItem} parentId={this.props.id} />
+          <Container kind="pane">
+            <StatusFilters id={listId} />
+            <List id={listId} renderItem={ListItem} parentId={this.props.id} />
+          </Container>
         </Container>
       </Container>
     );
