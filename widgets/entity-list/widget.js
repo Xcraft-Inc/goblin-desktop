@@ -8,7 +8,7 @@ import Label from 'gadgets/label/widget';
 
 class _Entity extends Widget {
   render() {
-    const {id, entity, columns} = this.props;
+    const {id, rowIndex, entity, columns} = this.props;
     if (!id || !entity) {
       return null;
     }
@@ -17,7 +17,7 @@ class _Entity extends Widget {
       display: 'flex',
       flexDirection: 'row',
       padding: '5px 1px 5px 1px',
-      backgroundColor: 'white',
+      backgroundColor: rowIndex % 2 === 0 ? '#eee' : 'white',
       cursor: 'default',
     };
     return (
@@ -76,6 +76,7 @@ class _ListItem extends Widget {
             id={this.props.id}
             itemId={this.props.itemId}
             columns={this.props.columns}
+            rowIndex={this.props.rowIndex}
           />
         ) : null}
       </Container>
@@ -90,6 +91,7 @@ const ListItem = Widget.connect((state, props) => {
     height: props.height,
     itemId: props.itemId,
     columns: props.parentId,
+    rowIndex: props.index,
   };
 })(_ListItem);
 
