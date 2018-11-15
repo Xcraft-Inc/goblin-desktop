@@ -4,8 +4,6 @@ import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
-import {queryStringQuery} from 'elastic-builder';
-
 class EntityList extends Widget {
   constructor() {
     super(...arguments);
