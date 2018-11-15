@@ -172,6 +172,7 @@ class Filters extends Form {
 
     return (
       <DatagridCell
+        key={`${id}_${index}`}
         id={datagrid.props.id}
         index={index}
         margin="0px"
