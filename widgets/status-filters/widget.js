@@ -14,7 +14,7 @@ class StatusFilter extends Widget {
   static get wiring() {
     return {
       id: 'id',
-      status: 'status',
+      contentIndex: 'contentIndex',
     };
   }
 
@@ -26,7 +26,9 @@ class StatusFilter extends Widget {
             state.push(status);
           }
         } else {
-          const isInList = this.props.status.contains(status);
+          const isInList = this.props.contentIndex
+            .get('value')
+            .contains(status);
           if (isInList) {
             state.push(status);
           }
@@ -35,12 +37,15 @@ class StatusFilter extends Widget {
       },
       []
     );
-    this.doAs('list', 'change-status', {status: newStatusList});
+    this.doAs('list', 'change-content-index', {
+      name: 'status',
+      value: newStatusList,
+    });
   }
 
   buildStatusFlag() {
     return ['draft', 'published', 'archived'].reduce((state, status) => {
-      state[status] = this.props.status.contains(status);
+      state[status] = this.props.contentIndex.get('value').contains(status);
       return state;
     }, {});
   }
@@ -50,8 +55,8 @@ class StatusFilter extends Widget {
   }
 
   render() {
-    const {id, status} = this.props;
-    if (!id || !status) {
+    const {id, contentIndex} = this.props;
+    if (!id || !contentIndex) {
       return null;
     }
 
