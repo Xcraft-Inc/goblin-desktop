@@ -24,10 +24,12 @@ class _DefaultItem extends Widget {
 }
 
 const DefaultItem = Widget.connect((state, props) => {
+  let text = state.get(`backend.${props.id}.meta.summaries.description`);
+  if (!text) {
+    text = '...';
+  }
   return {
-    text: props.id
-      ? state.get(`backend.${props.id}.meta.summaries.description`)
-      : '',
+    text,
   };
 })(_DefaultItem);
 
