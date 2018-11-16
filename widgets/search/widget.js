@@ -128,9 +128,9 @@ class Search extends Form {
                 </Container>
               </Container>
             </Form>
+            <StatusFilters id={listId} />
           </Container>
           <Container kind="pane">
-            <StatusFilters id={listId} />
             <List id={listId} renderItem={ListItem} parentId={this.props.id} />
           </Container>
         </Container>
