@@ -5,15 +5,7 @@ import TableCell from 'gadgets/table-cell/widget';
 class _Driller extends Widget {
   constructor() {
     super(...arguments);
-    this.drillDown = this.drillDown.bind(this);
-  }
-
-  drillDown(entityId) {
-    return () => {
-      if (entityId) {
-        this.props.onDrillDown(entityId);
-      }
-    };
+    this._loadRequested = false;
   }
 
   render() {
@@ -27,13 +19,16 @@ class _Driller extends Widget {
         />
       );
     } else {
+      if (this._loadRequested === false) {
+        this.props.onDrillDown(this.props.entityId);
+        this._loadRequested = true;
+      }
       return (
         <TableCell
           grow="1"
           isLast="false"
           isHeader="false"
-          text="charger"
-          onDoubleClick={this.drillDown(this.props.entityId)}
+          text="chargement..."
         />
       );
     }
