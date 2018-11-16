@@ -4,6 +4,8 @@ import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
+import {getColumnProps, getColumnText} from './helpers.js';
+
 class EntityList extends Widget {
   constructor() {
     super(...arguments);
@@ -37,8 +39,8 @@ class EntityList extends Widget {
                 key={c}
                 isLast="false"
                 isHeader="true"
-                grow="1"
-                text={c}
+                {...getColumnProps(c)}
+                text={getColumnText(c)}
               />
             );
           })}

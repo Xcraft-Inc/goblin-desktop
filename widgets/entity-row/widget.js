@@ -1,7 +1,7 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import TableCell from 'gadgets/table-cell/widget';
-
+import {getColumnProps, getColumnPath} from '../entity-list/helpers.js';
 class _Driller extends Widget {
   constructor() {
     super(...arguments);
@@ -12,10 +12,10 @@ class _Driller extends Widget {
     if (this.props.loaded) {
       return (
         <TableCell
-          grow="1"
           isLast="false"
           isHeader="false"
           text={this.props.text}
+          {...getColumnProps(this.props.column)}
         />
       );
     } else {
@@ -38,6 +38,7 @@ class _Driller extends Widget {
 const Driller = Widget.connect((state, props) => {
   const loaded = !!state.get(`backend.${props.entityId}.id`, null);
   return {
+    column: props.column,
     entityId: props.entityId,
     loaded: loaded,
     text: loaded
@@ -67,14 +68,18 @@ class EntityRow extends Widget {
     return (
       <div style={rowStyle}>
         {columns.map((c, i) => {
-          let text = entity.get(c, null);
+          let text = entity.get(getColumnPath(c), null);
 
-          if (entity.get('meta.references').has(c) && text !== null) {
+          if (
+            entity.get('meta.references').has(getColumnPath(c)) &&
+            text !== null
+          ) {
             return (
               <Driller
                 entityId={text}
                 rowId={i}
-                key={c}
+                key={i}
+                column={c}
                 onDrillDown={this.props.onDrillDown}
               />
             );
@@ -82,11 +87,11 @@ class EntityRow extends Widget {
             return (
               <TableCell
                 rowId={i}
-                key={c}
+                key={i}
                 index={i}
-                grow="1"
                 isLast="false"
                 isHeader="false"
+                {...getColumnProps(c)}
                 text={text}
               />
             );
