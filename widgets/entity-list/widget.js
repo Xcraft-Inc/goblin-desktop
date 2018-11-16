@@ -5,6 +5,7 @@ import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
 import {getColumnProps, getColumnText} from './helpers.js';
+import Shredder from 'xcraft-core-shredder';
 
 class EntityList extends Widget {
   constructor() {
@@ -32,7 +33,9 @@ class EntityList extends Widget {
     }
     return (
       <div className={this.styles.classNames.full}>
+        <div style={{paddingTop: '20px'}} />
         <div className={this.styles.classNames.header}>
+          <TableCell isLast="false" isHeader="true" width="50px" text="n°" />
           {columns.map(c => {
             return (
               <TableCell
@@ -49,7 +52,10 @@ class EntityList extends Widget {
           <List
             id={listId}
             renderItem={EntityListItem}
-            parentId={{onDrillDown: this.drillDown, columns}}
+            parentId={{
+              onDrillDown: this.drillDown,
+              columns: new Shredder(columns),
+            }}
           />
         </ScrollableContainer>
       </div>

@@ -1,7 +1,14 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import TableCell from 'gadgets/table-cell/widget';
-import {getColumnProps, getColumnPath} from '../entity-list/helpers.js';
+import {
+  getColumnProps,
+  getColumnTargetPath,
+  getColumnSubPath,
+  getColumnPath,
+} from '../entity-list/helpers.js';
+
+import Shredder from 'xcraft-core-shredder';
 class _Driller extends Widget {
   constructor() {
     super(...arguments);
@@ -37,13 +44,12 @@ class _Driller extends Widget {
 
 const Driller = Widget.connect((state, props) => {
   const loaded = !!state.get(`backend.${props.entityId}.id`, null);
+  const path = props.path || 'meta.summaries.info';
   return {
     column: props.column,
     entityId: props.entityId,
     loaded: loaded,
-    text: loaded
-      ? state.get(`backend.${props.entityId}.meta.summaries.info`)
-      : '',
+    text: loaded ? state.get(`backend.${props.entityId}.${path}`) : '',
   };
 })(_Driller);
 
@@ -67,11 +73,31 @@ class EntityRow extends Widget {
     };
     return (
       <div style={rowStyle}>
+        <TableCell
+          rowId={rowIndex}
+          key={rowIndex}
+          index={rowIndex}
+          isLast="false"
+          isHeader="false"
+          width="50px"
+          wrap="no-end"
+          text={
+            new Shredder({
+              text: rowIndex + 1,
+              weight: 'bold',
+            })
+          }
+        />
         {columns.map((c, i) => {
-          let text = entity.get(getColumnPath(c), null);
-
+          const columnPath = getColumnPath(c);
+          const targetPath = getColumnTargetPath(c);
+          const columnSubPath = getColumnSubPath(c);
+          let text = entity.get(columnPath, null);
           if (
-            entity.get('meta.references').has(getColumnPath(c)) &&
+            ((entity.get('meta.references') &&
+              entity.get('meta.references').has(targetPath)) ||
+              (entity.get('meta.values') &&
+                entity.get('meta.values').has(targetPath))) &&
             text !== null
           ) {
             return (
@@ -81,6 +107,7 @@ class EntityRow extends Widget {
                 key={i}
                 column={c}
                 onDrillDown={this.props.onDrillDown}
+                path={columnSubPath}
               />
             );
           } else {
