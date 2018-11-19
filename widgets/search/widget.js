@@ -24,12 +24,9 @@ class _DefaultItem extends Widget {
 }
 
 const DefaultItem = Widget.connect((state, props) => {
-  let text = state.get(`backend.${props.id}.meta.summaries.description`);
-  if (!text) {
-    text = '...';
-  }
+  const text = state.get(`backend.${props.id}.meta.summaries.description`);
   return {
-    text,
+    text: text ? text : '...',
   };
 })(_DefaultItem);
 
@@ -43,6 +40,7 @@ class _ListItem extends Widget {
   listNav() {
     this.navToDetail(this.props.parentId, this.props.id);
   }
+
   render() {
     const containerProps = {};
     if (!this.props.id && this.props.height) {
