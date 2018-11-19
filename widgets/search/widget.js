@@ -48,7 +48,7 @@ class _ListItem extends Widget {
     if (!this.props.id && this.props.height) {
       containerProps.height = `${this.props.height}px`;
     }
-    if (this.props.id && !this._loadRequested) {
+    if (this.props.onDrillDown && this.props.id && !this._loadRequested) {
       setTimeout(() => this.props.onDrillDown(this.props.id), 0);
       this._loadRequested = true;
     }
