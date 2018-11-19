@@ -36,6 +36,7 @@ const DefaultItem = Widget.connect((state, props) => {
 class _ListItem extends Widget {
   constructor() {
     super(...arguments);
+    this._loadRequested = false;
     this.listNav = this.listNav.bind(this);
   }
 
@@ -46,6 +47,10 @@ class _ListItem extends Widget {
     const containerProps = {};
     if (!this.props.id && this.props.height) {
       containerProps.height = `${this.props.height}px`;
+    }
+    if (this.props.id && !this._loadRequested) {
+      setTimeout(() => this.props.onDrillDown(this.props.id), 0);
+      this._loadRequested = true;
     }
     return (
       <Container
@@ -67,13 +72,15 @@ const ListItem = Widget.connect((state, props) => {
   return {
     id,
     height: props.height,
-    parentId: props.parentId,
+    parentId: props.parentId.parentId,
+    onDrillDown: props.parentId.onDrillDown,
   };
 })(_ListItem);
 
 class Search extends Form {
   constructor() {
     super(...arguments);
+    this.drillDown = this.drillDown.bind(this);
   }
 
   static get wiring() {
@@ -83,6 +90,10 @@ class Search extends Form {
       type: 'type',
       hintText: 'hintText',
     };
+  }
+
+  drillDown(entityId) {
+    this.doAs(`${this.props.type}-search`, 'drill-down', {entityId});
   }
 
   render() {
@@ -131,7 +142,11 @@ class Search extends Form {
             <StatusFilters id={listId} />
           </Container>
           <Container kind="pane">
-            <List id={listId} renderItem={ListItem} parentId={this.props.id} />
+            <List
+              id={listId}
+              renderItem={ListItem}
+              parentId={{parentId: this.props.id, onDrillDown: this.drillDown}}
+            />
           </Container>
         </Container>
       </Container>
