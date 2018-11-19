@@ -27,7 +27,7 @@ class _Driller extends Widget {
       );
     } else {
       if (this._loadRequested === false) {
-        setTimeout(() => this.props.onDrillDown(this.props.entityId), 0);
+        setTimeout(this.props.onDrillDown, 0, this.props.entityId);
         this._loadRequested = true;
       }
       return (
@@ -63,7 +63,7 @@ class EntityRow extends Widget {
     const {id, rowIndex, entity, columns} = this.props;
     if (!id || !entity) {
       if (this._loadRequested === false) {
-        setTimeout(() => this.props.onDrillDown(id), 0);
+        setTimeout(this.props.onDrillDown, 0, id);
         this._loadRequested = true;
       }
       return null;

@@ -51,7 +51,7 @@ class _ListItem extends Widget {
       this.props.id &&
       !this._requestedId !== this.props.id
     ) {
-      setTimeout(() => this.props.onDrillDown(this.props.id), 0);
+      setTimeout(this.props.onDrillDown, 0, this.props.id);
       this._requestedId = this.props.id;
     }
     return (
