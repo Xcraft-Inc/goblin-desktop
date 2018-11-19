@@ -77,7 +77,16 @@ class EntityRow extends Widget {
         setTimeout(this.props.onDrillDown, 0, id);
         this._idRequested = id;
       }
-      return <div style={rowStyle} />;
+      return (
+        <div style={rowStyle}>
+          <TableCell
+            grow="1"
+            isLast="false"
+            isHeader="false"
+            text="chargement..."
+          />
+        </div>
+      );
     }
 
     return (
