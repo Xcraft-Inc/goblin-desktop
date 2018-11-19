@@ -36,7 +36,7 @@ const DefaultItem = Widget.connect((state, props) => {
 class _ListItem extends Widget {
   constructor() {
     super(...arguments);
-    this._loadRequested = false;
+    this._requestedId = null;
     this.listNav = this.listNav.bind(this);
   }
 
@@ -48,9 +48,13 @@ class _ListItem extends Widget {
     if (!this.props.id && this.props.height) {
       containerProps.height = `${this.props.height}px`;
     }
-    if (this.props.onDrillDown && this.props.id && !this._loadRequested) {
+    if (
+      this.props.onDrillDown &&
+      this.props.id &&
+      !this._requestedId !== this.props.id
+    ) {
       setTimeout(() => this.props.onDrillDown(this.props.id), 0);
-      this._loadRequested = true;
+      this._requestedId = this.props.id;
     }
     return (
       <Container
