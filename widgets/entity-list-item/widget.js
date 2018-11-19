@@ -11,17 +11,15 @@ class EntityListItem extends Widget {
   render() {
     const height = '28px';
     return (
-      <Container height={height} grow="1" busy={!this.props.id}>
-        {this.props.id ? (
-          <EntityRow
-            id={this.props.id}
-            height={height}
-            itemId={this.props.itemId}
-            columns={this.props.columns}
-            rowIndex={this.props.rowIndex}
-            onDrillDown={this.props.onDrillDown}
-          />
-        ) : null}
+      <Container height={height} grow="1">
+        <EntityRow
+          id={this.props.id}
+          height={height}
+          itemId={this.props.itemId}
+          columns={this.props.columns}
+          rowIndex={this.props.rowIndex}
+          onDrillDown={this.props.onDrillDown}
+        />
       </Container>
     );
   }

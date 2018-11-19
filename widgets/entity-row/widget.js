@@ -83,6 +83,7 @@ class EntityRow extends Widget {
             grow="1"
             isLast="false"
             isHeader="false"
+            textAlign="center"
             text="chargement..."
           />
         </div>
