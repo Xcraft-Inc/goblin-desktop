@@ -76,7 +76,7 @@ class Search extends Form {
 
     this._entityIds = [];
     this._drillDownInternal = this._drillDownInternal.bind(this);
-    this._drillDown = throttle(this._drillDownInternal, 200).bind(this);
+    this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
   }
 
