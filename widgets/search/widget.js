@@ -9,27 +9,6 @@ import Button from 'gadgets/button/widget';
 import StatusFilters from 'desktop/status-filters/widget';
 import List from 'gadgets/list/widget';
 
-class _DefaultItem extends Widget {
-  render() {
-    return (
-      <Label
-        text={this.props.text}
-        kind="large-single"
-        justify="left"
-        grow="1"
-        wrap="no"
-      />
-    );
-  }
-}
-
-const DefaultItem = Widget.connect((state, props) => {
-  const text = state.get(`backend.${props.id}.meta.summaries.description`);
-  return {
-    text: text ? text : '...',
-  };
-})(_DefaultItem);
-
 class _ListItem extends Widget {
   constructor() {
     super(...arguments);
@@ -43,7 +22,7 @@ class _ListItem extends Widget {
 
   render() {
     const containerProps = {};
-    if (!this.props.id && this.props.height) {
+    if (!this.props.exists && this.props.height) {
       containerProps.height = `${this.props.height}px`;
     }
     if (
@@ -59,11 +38,19 @@ class _ListItem extends Widget {
         {...containerProps}
         kind="row-pane"
         subkind="large-box"
-        busy={!this.props.id}
+        busy={!this.props.exists}
       >
-        <Button kind="container" width="100%" onClick={this.listNav}>
-          {this.props.id ? <DefaultItem id={this.props.id} /> : null}
-        </Button>
+        {this.props.exists ? (
+          <Button kind="container" width="100%" onClick={this.listNav}>
+            <Label
+              text={this.props.text}
+              kind="large-single"
+              justify="left"
+              grow="1"
+              wrap="no"
+            />
+          </Button>
+        ) : null}
       </Container>
     );
   }
@@ -71,8 +58,11 @@ class _ListItem extends Widget {
 
 const ListItem = Widget.connect((state, props) => {
   const id = state.get(`backend.${props.listId}.list.${props.itemId}`, null);
+  const text = state.get(`backend.${id}.meta.summaries.description`);
   return {
     id,
+    exists: state.has(`backend.${id}`),
+    text: text ? text : '...',
     height: props.height,
     parentId: props.parentId.parentId,
     onDrillDown: props.parentId.onDrillDown,
