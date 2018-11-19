@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from 'laboratory/form';
 import Widget from 'laboratory/widget';
+import throttle from 'lodash/throttle';
 
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
@@ -72,6 +73,10 @@ const ListItem = Widget.connect((state, props) => {
 class Search extends Form {
   constructor() {
     super(...arguments);
+
+    this._entityIds = [];
+    this._drillDownInternal = this._drillDownInternal.bind(this);
+    this._drillDown = throttle(this._drillDownInternal, 200).bind(this);
     this.drillDown = this.drillDown.bind(this);
   }
 
@@ -84,8 +89,16 @@ class Search extends Form {
     };
   }
 
+  _drillDownInternal() {
+    this.doAs(`${this.props.type}-search`, 'drill-down', {
+      entityIds: this._entityIds,
+    });
+    this._entityIds = [];
+  }
+
   drillDown(entityId) {
-    this.doAs(`${this.props.type}-search`, 'drill-down', {entityId});
+    this._entityIds.push(entityId);
+    this._drillDown();
   }
 
   render() {
