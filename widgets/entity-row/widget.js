@@ -27,7 +27,7 @@ class _Driller extends Widget {
       );
     } else {
       if (this._loadRequested === false) {
-        this.props.onDrillDown(this.props.entityId);
+        setTimeout(() => this.props.onDrillDown(this.props.entityId), 0);
         this._loadRequested = true;
       }
       return (
