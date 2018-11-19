@@ -61,13 +61,7 @@ class EntityRow extends Widget {
 
   render() {
     const {id, rowIndex, entity, columns} = this.props;
-    if (!id || !entity) {
-      if (this._idRequested !== id) {
-        setTimeout(this.props.onDrillDown, 0, id);
-        this._idRequested = id;
-      }
-      return null;
-    }
+    const loaded = id && entity;
     const rowStyle = {
       height: this.props.height,
       borderTop: '1px solid #aaa',
@@ -77,6 +71,15 @@ class EntityRow extends Widget {
       backgroundColor: rowIndex % 2 === 0 ? '#eee' : 'white',
       cursor: 'default',
     };
+
+    if (!loaded) {
+      if (this._idRequested !== id) {
+        setTimeout(this.props.onDrillDown, 0, id);
+        this._idRequested = id;
+      }
+      return <div style={rowStyle} />;
+    }
+
     return (
       <div style={rowStyle}>
         <TableCell
