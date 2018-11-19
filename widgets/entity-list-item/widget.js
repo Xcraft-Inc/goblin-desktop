@@ -9,15 +9,13 @@ class EntityListItem extends Widget {
   }
 
   render() {
-    const containerProps = {};
-    if (!this.props.id && this.props.height) {
-      containerProps.height = `${this.props.height}px`;
-    }
+    const height = '28px';
     return (
-      <Container {...containerProps} grow="1" busy={!this.props.id}>
+      <Container height={height} grow="1" busy={!this.props.id}>
         {this.props.id ? (
           <EntityRow
             id={this.props.id}
+            height={height}
             itemId={this.props.itemId}
             columns={this.props.columns}
             rowIndex={this.props.rowIndex}
@@ -33,7 +31,6 @@ export default Widget.connect((state, props) => {
   const id = state.get(`backend.${props.listId}.list.${props.itemId}`, null);
   return {
     id,
-    height: props.height,
     itemId: props.itemId,
     columns: props.parentId.columns,
     onDrillDown: props.parentId.onDrillDown,

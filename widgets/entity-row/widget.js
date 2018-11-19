@@ -69,6 +69,7 @@ class EntityRow extends Widget {
       return null;
     }
     const rowStyle = {
+      height: this.props.height,
       borderTop: '1px solid #aaa',
       display: 'flex',
       flexDirection: 'row',

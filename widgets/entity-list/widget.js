@@ -51,6 +51,7 @@ class EntityList extends Widget {
         <ScrollableContainer id={listId} height="100%">
           <List
             id={listId}
+            type={'uniform'}
             renderItem={EntityListItem}
             parentId={{
               onDrillDown: this.drillDown,
