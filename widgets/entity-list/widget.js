@@ -1,5 +1,6 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
+import throttle from 'lodash/throttle';
 import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
@@ -10,11 +11,23 @@ import Shredder from 'xcraft-core-shredder';
 class EntityList extends Widget {
   constructor() {
     super(...arguments);
+
+    this._entityIds = [];
+    this._drillDownInternal = this._drillDownInternal.bind(this);
+    this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
   }
 
+  _drillDownInternal() {
+    this.doAs(`${this.props.type}-list`, 'drill-down', {
+      entityIds: this._entityIds,
+    });
+    this._entityIds = [];
+  }
+
   drillDown(entityId) {
-    this.doAs(`${this.props.type}-list`, 'drill-down', {entityId});
+    this._entityIds.push(entityId);
+    this._drillDown();
   }
 
   static get wiring() {
