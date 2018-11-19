@@ -56,15 +56,15 @@ const Driller = Widget.connect((state, props) => {
 class EntityRow extends Widget {
   constructor() {
     super(...arguments);
-    this._loadRequested = false;
+    this._idRequested = null;
   }
 
   render() {
     const {id, rowIndex, entity, columns} = this.props;
     if (!id || !entity) {
-      if (this._loadRequested === false) {
+      if (this._idRequested !== id) {
         setTimeout(this.props.onDrillDown, 0, id);
-        this._loadRequested = true;
+        this._idRequested = id;
       }
       return null;
     }
