@@ -35,8 +35,9 @@ Goblin.registerQuest(goblinName, 'create', function*(
 
   if (!filters) {
     filters = ['published'];
-    quest.goblin.setX('filters', filters);
   }
+
+  quest.goblin.setX('filters', filters);
 
   quest.do({
     id,
