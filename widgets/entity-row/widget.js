@@ -12,7 +12,20 @@ import Shredder from 'xcraft-core-shredder';
 class _Driller extends Widget {
   constructor() {
     super(...arguments);
+    this.renewTTL = this.renewTTL.bind(this);
     this._loadRequested = false;
+    this._renewInterval = null;
+  }
+
+  renewTTL(id) {
+    if (this._renewInterval) {
+      clearInterval(this._renewInterval);
+    }
+    this._renewInterval = setInterval(this.props.onDrillDown, 2500, id);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._renewInterval);
   }
 
   render() {
@@ -28,6 +41,7 @@ class _Driller extends Widget {
     } else {
       if (this._loadRequested === false) {
         setTimeout(this.props.onDrillDown, 0, this.props.entityId);
+        this.renewTTL(this.props.entityId);
         this._loadRequested = true;
       }
       return (
@@ -56,7 +70,20 @@ const Driller = Widget.connect((state, props) => {
 class EntityRow extends Widget {
   constructor() {
     super(...arguments);
+    this.renewTTL = this.renewTTL.bind(this);
     this._idRequested = null;
+    this._renewInterval = null;
+  }
+
+  renewTTL(id) {
+    if (this._renewInterval) {
+      clearInterval(this._renewInterval);
+    }
+    this._renewInterval = setInterval(this.props.onDrillDown, 2500, id);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._renewInterval);
   }
 
   render() {
@@ -75,6 +102,7 @@ class EntityRow extends Widget {
     if (!loaded) {
       if (this._idRequested !== id) {
         setTimeout(this.props.onDrillDown, 0, id);
+        this.renewTTL(id);
         this._idRequested = id;
       }
       return (

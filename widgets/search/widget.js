@@ -15,6 +15,19 @@ class _ListItem extends Widget {
     super(...arguments);
     this._requestedId = null;
     this.listNav = this.listNav.bind(this);
+    this.renewTTL = this.renewTTL.bind(this);
+    this._renewInterval = null;
+  }
+
+  renewTTL(id) {
+    if (this._renewInterval) {
+      clearInterval(this._renewInterval);
+    }
+    this._renewInterval = setInterval(this.props.onDrillDown, 2500, id);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._renewInterval);
   }
 
   listNav() {
@@ -32,6 +45,7 @@ class _ListItem extends Widget {
       !this._requestedId !== this.props.id
     ) {
       setTimeout(this.props.onDrillDown, 0, this.props.id);
+      this.renewTTL(this.props.id);
       this._requestedId = this.props.id;
     }
     return (

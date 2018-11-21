@@ -68,6 +68,7 @@ class EntityList extends Widget {
             renderItem={EntityListItem}
             parentId={{
               onDrillDown: this.drillDown,
+              onRenewTTL: this.renewTTL,
               columns: new Shredder(columns),
             }}
           />
