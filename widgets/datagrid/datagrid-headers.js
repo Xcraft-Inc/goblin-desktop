@@ -93,9 +93,45 @@ class Header extends Widget {
   }
 
   render() {
-    const {index, column, datagrid} = this.props;
+    const {
+      index,
+      column,
+      datagrid,
+      component,
+      entityUI,
+      id,
+      doAsDatagrid,
+    } = this.props;
 
-    if (column.get('sortable')) {
+    if (column.get('customSort')) {
+      const CellUI = component.WithState(entityUI.sortCell, 'id')('.id');
+
+      return (
+        <DatagridCell
+          id={datagrid.props.id}
+          index={index}
+          column={column}
+          margin="0px"
+          cellUI={_ => {
+            return (
+              <Container kind="row" width={column.get('width')}>
+                {this.renderComponent()}
+                <CellUI
+                  key={`${id}_${index}`}
+                  id={id}
+                  index={index}
+                  theme={this.context.theme}
+                  column={column}
+                  datagrid={datagrid}
+                  doAsDatagrid={doAsDatagrid}
+                  contextId={this.context.contextId}
+                />
+              </Container>
+            );
+          }}
+        />
+      );
+    } else if (column.get('sortable')) {
       return (
         <DatagridCell
           id={datagrid.props.id}
@@ -278,6 +314,7 @@ class DatagridHeaders extends Form {
           component={this}
           headerCell={entityUI.headerCell}
           context={this.context}
+          entityUI={entityUI}
         />
       );
     }
