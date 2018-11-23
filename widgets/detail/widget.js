@@ -57,21 +57,7 @@ class Detail extends Widget {
     }
 
     const workitemUI = uiImporter(detailWidget);
-    let DetailUI = this.WithState(workitemUI.panel.readonly, 'entityId')(
-      '.entityId'
-    );
 
-    if (
-      workitemUI.mappers &&
-      workitemUI.mappers.panel &&
-      workitemUI.mappers.panel.readonly
-    ) {
-      DetailUI = this.mapWidget(
-        DetailUI,
-        workitemUI.mappers.panel.readonly,
-        `backend.${entityId}`
-      );
-    }
     const workitemId = detailWidgetId;
 
     const Detail = this.mapWidget(
@@ -86,32 +72,49 @@ class Detail extends Widget {
       `backend.${entityId}.meta.status`
     );
 
-    return this.buildLoader(entityId, () => (
-      <Container
-        kind={kind ? kind : 'view-right'}
-        width={width ? width : '700px'}
-        busy={this.props.loading}
-      >
-        <DetailWithStatus
-          kind="detail"
-          id={workitemId}
-          entityId={entityId}
-          title={() => {
-            return <div>Détails</div>;
-          }}
-          readonly="true"
-          dragServiceId={this.props.dragServiceId}
+    return this.buildLoader(entityId, () => {
+      let DetailUI = this.WithState(workitemUI.panel.readonly, 'entityId')(
+        '.entityId'
+      );
+
+      if (
+        workitemUI.mappers &&
+        workitemUI.mappers.panel &&
+        workitemUI.mappers.panel.readonly
+      ) {
+        DetailUI = this.mapWidget(
+          DetailUI,
+          workitemUI.mappers.panel.readonly,
+          `backend.${entityId}`
+        );
+      }
+      return (
+        <Container
+          kind={kind ? kind : 'view-right'}
+          width={width ? width : '700px'}
+          busy={this.props.loading}
         >
-          <DetailUI
+          <DetailWithStatus
+            kind="detail"
             id={workitemId}
-            theme={this.context.theme}
-            do={this.doProxy}
             entityId={entityId}
-            contextId={this.context.contextId}
-          />
-        </DetailWithStatus>
-      </Container>
-    ));
+            title={() => {
+              return <div>Détails</div>;
+            }}
+            readonly="true"
+            dragServiceId={this.props.dragServiceId}
+          >
+            <DetailUI
+              id={workitemId}
+              theme={this.context.theme}
+              do={this.doProxy}
+              entityId={entityId}
+              contextId={this.context.contextId}
+            />
+          </DetailWithStatus>
+        </Container>
+      );
+    });
   }
 }
 
