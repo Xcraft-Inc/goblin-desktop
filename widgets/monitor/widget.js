@@ -9,6 +9,7 @@ class Monitor extends Widget {
   constructor() {
     super(...arguments);
     this.toggleEnabled = this.toggleEnabled.bind(this);
+    this.collectRequested = false;
   }
 
   toggleEnabled() {
@@ -19,6 +20,16 @@ class Monitor extends Widget {
     return this.mapWidget(
       props => {
         const size = props.state.size;
+        if (size > 1000 && this.collectRequested === false) {
+          this.collectRequested = true;
+          setTimeout(() => {
+            this.doAs('warehouse', 'collect');
+            setTimeout(() => {
+              this.collectRequested = false;
+              console.log('collect ready');
+            }, 10000);
+          }, 1000);
+        }
         return <div style={{fontWeight: 900}}>LocalState: {size}</div>;
       },
       'state',
