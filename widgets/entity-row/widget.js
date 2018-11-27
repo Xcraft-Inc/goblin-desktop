@@ -1,12 +1,15 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import TableCell from 'gadgets/table-cell/widget';
-import {
+
+const {ListHelpers} = require('goblin-toolbox');
+const {
   getColumnProps,
   getColumnTargetPath,
   getColumnSubPath,
   getColumnPath,
-} from '../entity-list/helpers.js';
+  isTargetingValueOrRef,
+} = ListHelpers;
 
 import Shredder from 'xcraft-core-shredder';
 class _Driller extends Widget {
@@ -140,13 +143,7 @@ class EntityRow extends Widget {
           const targetPath = getColumnTargetPath(c);
           const columnSubPath = getColumnSubPath(c);
           let text = entity.get(columnPath, null);
-          if (
-            ((entity.get('meta.references') &&
-              entity.get('meta.references').has(targetPath)) ||
-              (entity.get('meta.values') &&
-                entity.get('meta.values').has(targetPath))) &&
-            text !== null
-          ) {
+          if (isTargetingValueOrRef(entity, targetPath) && text !== null) {
             return (
               <Driller
                 entityId={text}

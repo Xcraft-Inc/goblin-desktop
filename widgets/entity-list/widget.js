@@ -5,8 +5,45 @@ import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
-import {getColumnProps, getColumnText} from './helpers.js';
 import Shredder from 'xcraft-core-shredder';
+
+const {ListHelpers} = require('goblin-toolbox');
+const {getColumnProps, getColumnText} = ListHelpers;
+
+class ListToolbar extends Widget {
+  constructor() {
+    super(...arguments);
+    this.exportToCsv = this.exportToCsv.bind(this);
+  }
+
+  exportToCsv() {
+    this.doAs(`${this.props.type}-list`, 'export-to-csv', {});
+  }
+
+  render() {
+    const {id, exporting} = this.props;
+    if (!id) {
+      return null;
+    }
+    return (
+      <div style={{paddingTop: '20px'}}>
+        {exporting ? (
+          <div>export csv en cours...</div>
+        ) : (
+          <button onClick={this.exportToCsv}>
+            exporter en csv sur le disque
+          </button>
+        )}
+      </div>
+    );
+  }
+}
+const Toolbar = Widget.connect((state, props) => {
+  return {
+    exporting: state.get(`backend.${props.id}.exporting`, false),
+    type: state.get(`backend.${props.id}.type`),
+  };
+})(ListToolbar);
 
 class EntityList extends Widget {
   constructor() {
@@ -46,7 +83,7 @@ class EntityList extends Widget {
     }
     return (
       <div className={this.styles.classNames.full}>
-        <div style={{paddingTop: '20px'}} />
+        <Toolbar id={id} />
         <div className={this.styles.classNames.header}>
           <TableCell isLast="false" isHeader="true" width="50px" text="n°" />
           {columns.map(c => {
