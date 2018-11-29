@@ -24,7 +24,7 @@ class _Driller extends Widget {
     if (this._renewInterval) {
       clearInterval(this._renewInterval);
     }
-    this._renewInterval = setInterval(this.props.onDrillDown, 2500, id);
+    this._renewInterval = setInterval(this.props.onDrillDown, 15000, id);
   }
 
   componentWillUnmount() {
@@ -82,7 +82,7 @@ class EntityRow extends Widget {
     if (this._renewInterval) {
       clearInterval(this._renewInterval);
     }
-    this._renewInterval = setInterval(this.props.onDrillDown, 2500, id);
+    this._renewInterval = setInterval(this.props.onDrillDown, 15000, id);
   }
 
   componentWillUnmount() {
