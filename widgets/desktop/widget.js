@@ -168,7 +168,7 @@ class Desktop extends Widget {
                 }}
                 type="text"
                 list="commands"
-                autoFocus="true"
+                autoFocus={true}
                 onKeyPress={e => {
                   if (e.key === 'Enter') {
                     this.dispatch({type: 'TOGGLEPROMPT'});
