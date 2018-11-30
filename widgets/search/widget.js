@@ -97,6 +97,7 @@ class Search extends Form {
   static get wiring() {
     return {
       id: 'id',
+      name: 'name',
       title: 'title',
       type: 'type',
       hintText: 'hintText',
@@ -104,7 +105,8 @@ class Search extends Form {
   }
 
   _drillDownInternal() {
-    this.doAs(`${this.props.type}-search`, 'drill-down', {
+    const name = this.props.name || `${this.props.type}-search`;
+    this.doAs(name, 'drill-down', {
       entityIds: this._entityIds,
     });
     this._entityIds = [];
