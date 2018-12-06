@@ -33,24 +33,6 @@ class Editor extends Widget {
       return null;
     }
 
-    const workitem = this.props.id.split('@')[0];
-
-    const workitemUI = uiImporter(workitem);
-    let EditorUI = this.WithState(workitemUI.panel.edit, 'entityId')(
-      '.entityId'
-    );
-    if (
-      workitemUI.mappers &&
-      workitemUI.mappers.panel &&
-      workitemUI.mappers.panel.edit
-    ) {
-      EditorUI = this.mapWidget(
-        EditorUI,
-        workitemUI.mappers.panel.edit,
-        `backend.${entityId}`
-      );
-    }
-
     let Editor = this.mapWidget(
       Workitem,
       'status',
@@ -59,21 +41,40 @@ class Editor extends Widget {
 
     Editor = this.mapWidget(Editor, 'buttons', `backend.${id}.buttons`);
 
-    return this.buildLoader(entityId, () => (
-      <Editor
-        kind="editor"
-        id={this.props.id}
-        entityId={this.props.entityId}
-        dragServiceId={this.props.dragServiceId}
-      >
-        <EditorUI
-          {...this.props}
-          theme={this.context.theme}
-          do={this.doProxy}
-          contextId={this.context.contextId}
-        />
-      </Editor>
-    ));
+    return this.buildLoader(entityId, () => {
+      const workitem = this.props.id.split('@')[0];
+
+      const workitemUI = uiImporter(workitem);
+      let EditorUI = this.WithState(workitemUI.panel.edit, 'entityId')(
+        '.entityId'
+      );
+      if (
+        workitemUI.mappers &&
+        workitemUI.mappers.panel &&
+        workitemUI.mappers.panel.edit
+      ) {
+        EditorUI = this.mapWidget(
+          EditorUI,
+          workitemUI.mappers.panel.edit,
+          `backend.${entityId}`
+        );
+      }
+      return (
+        <Editor
+          kind="editor"
+          id={this.props.id}
+          entityId={this.props.entityId}
+          dragServiceId={this.props.dragServiceId}
+        >
+          <EditorUI
+            {...this.props}
+            theme={this.context.theme}
+            do={this.doProxy}
+            contextId={this.context.contextId}
+          />
+        </Editor>
+      );
+    });
   }
 }
 
