@@ -78,7 +78,7 @@ class EntityList extends Widget {
   render() {
     const {id, columns} = this.props;
     const listId = `list@${id}`;
-    if (!id) {
+    if (!id || !columns) {
       return null;
     }
     return (
