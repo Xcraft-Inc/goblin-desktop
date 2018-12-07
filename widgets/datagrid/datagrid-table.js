@@ -62,7 +62,6 @@ class DatagridTable extends Widget {
     return {
       id: 'id',
       count: 'count',
-      pageSize: 'pageSize',
       type: 'type',
       contentIndex: 'contentIndex',
     };
@@ -130,7 +129,6 @@ class DatagridTable extends Widget {
       <Container kind="panes">
         <ReactList
           ref={this.listRef}
-          pageSize={this.props.pageSize / 2}
           length={this.props.count}
           type={this.props.type}
           itemsRenderer={this.renderTable}
