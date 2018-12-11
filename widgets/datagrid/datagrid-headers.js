@@ -3,7 +3,6 @@ import Widget from 'laboratory/widget';
 import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
-import Field from 'gadgets/field/widget';
 import DatagridCell from '../datagrid-cell/widget';
 import _ from 'lodash';
 
@@ -160,69 +159,15 @@ const HeaderConnected = Widget.connect((state, props) => {
   };
 })(Header);
 
-class Filter extends Widget {
-  render() {
-    const {
-      column,
-      doAsDatagrid,
-      entityUI,
-      datagrid,
-      id,
-      index,
-      component,
-    } = this.props;
-
-    if (column.get('customFilter') && entityUI && entityUI.filterCell) {
-      const CellUI = component.WithState(entityUI.filterCell, 'id')('.id');
-
-      return (
-        <DatagridCell
-          id={datagrid.props.id}
-          index={index}
-          cellUI={column => {
-            return (
-              <CellUI
-                key={`${id}_${index}`}
-                id={id}
-                index={index}
-                theme={this.context.theme}
-                column={column}
-                datagrid={datagrid}
-                doAsDatagrid={doAsDatagrid}
-                contextId={this.context.contextId}
-              />
-            );
-          }}
-          column={column}
-        />
-      );
-    } else if (column.get('field') && column.get('filterable')) {
-      return (
-        <Field
-          model={`.filters.${column.get('field')}`}
-          grow="1"
-          labelWidth="0px"
-          onDebouncedChange={value =>
-            doAsDatagrid('filter', {field: column.get('field'), value})
-          }
-          hintText={`Search on ${column.get('field')}`}
-        />
-      );
-    } else {
-      return <div />;
-    }
-  }
-}
-
-class Filters extends Form {
+class Hinter extends Form {
   constructor() {
     super(...arguments);
 
-    this.renderFilter = this.renderFilter.bind(this);
+    this.renderHinter = this.renderHinter.bind(this);
   }
 
   static connectTo(datagrid) {
-    return Widget.Wired(Filters)(`${datagrid.props.id}`);
+    return Widget.Wired(Hinter)(`${datagrid.props.id}`);
   }
 
   static get wiring() {
@@ -231,51 +176,30 @@ class Filters extends Form {
     };
   }
 
-  renderFilter(index) {
-    const {id, datagrid, entityUI, component} = this.props;
+  renderHinter() {
+    const {id, entityUI, component} = this.props;
+    const CellUI = component.WithState(entityUI.hinter, 'id')('.id');
 
     return (
-      <DatagridCell
-        key={`${id}_${index}`}
-        id={datagrid.props.id}
-        index={index}
-        margin="0px"
-        cellUI={column => {
-          return (
-            <Filter
-              key={`${id}_${index}`}
-              id={id}
-              index={index}
-              component={component}
-              datagrid={datagrid}
-              entityUI={entityUI}
-              column={column}
-              doAsDatagrid={(quest, args) =>
-                this.doFor(datagrid.props.id, quest, args)
-              }
-            />
-          );
-        }}
+      <CellUI
+        key={`${id}`}
+        id={id}
+        theme={this.context.theme}
+        contextId={this.context.contextId}
       />
     );
   }
 
   render() {
-    const {id, columnsNo} = this.props;
-    const self = this;
-    if (!id) {
+    if (!this.props.id) {
       return null;
     }
 
     const Form = this.Form;
 
     return (
-      <Form {...self.formConfig} className={this.props.className}>
-        <Container kind="row">
-          {Array.apply(null, {length: columnsNo}).map((_, i) => {
-            return this.renderFilter(i);
-          })}
-        </Container>
+      <Form {...this.formConfig} className={this.props.className}>
+        <Container kind="row">{this.renderHinter()}</Container>
       </Form>
     );
   }
@@ -328,7 +252,7 @@ class DatagridHeaders extends Form {
     }
 
     const Form = this.Form;
-    const DatagridFilters = Filters.connectTo(datagrid);
+    const DatagridHinter = Hinter.connectTo(datagrid);
 
     return (
       <div>
@@ -339,7 +263,7 @@ class DatagridHeaders extends Form {
             })}
           </Container>
         </Form>
-        <DatagridFilters
+        <DatagridHinter
           component={this}
           entityUI={entityUI}
           datagrid={datagrid}
