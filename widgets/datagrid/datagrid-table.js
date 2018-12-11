@@ -20,6 +20,32 @@ class DatagridTable extends Widget {
     this.renderItem = this.renderItem.bind(this);
     this.renderTable = this.renderTable.bind(this);
     this.renderRow = this.renderRow.bind(this);
+
+    this._entityIds = [];
+    this._drillDownInternal = this._drillDownInternal.bind(this);
+    this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
+    this.drillDown = this.drillDown.bind(this);
+    this.renewTTL = this.renewTTL.bind(this);
+  }
+
+  _drillDownInternal() {
+    const name = this.props.name || `${this.props.type}-search`;
+    this.doAs(name, 'drill-down', {
+      entityIds: this._entityIds,
+    });
+    this._entityIds = [];
+  }
+
+  drillDown(entityId) {
+    this._entityIds.push(entityId);
+    this._drillDown();
+  }
+
+  renewTTL(id) {
+    if (this._renewInterval) {
+      clearInterval(this._renewInterval);
+    }
+    this._renewInterval = setInterval(this.drillDown, 15000, id);
   }
 
   _fetchInternal() {
@@ -84,7 +110,7 @@ class DatagridTable extends Widget {
       if (!item) {
         return {_loading: true};
       } else {
-        const entity = this.getModelValue(`backend.${item.get('id')}`, true);
+        const entity = this.getModelValue(`backend.${item}`, true);
 
         if (!entity) {
           return {_loading: true};
@@ -125,6 +151,9 @@ class DatagridTable extends Widget {
       return null;
     }
 
+    setTimeout(this.onDrillDown, 0, this.props.id);
+    this.renewTTL(this.props.id);
+
     return (
       <Container kind="panes">
         <ReactList
@@ -135,7 +164,6 @@ class DatagridTable extends Widget {
           itemRenderer={this.renderItem}
           className={this.props.className}
           useStaticSize={this.props.type === 'variable' ? false : true}
-          threshold={this.props.type === 'uniform' ? 300 : 100}
         />
       </Container>
     );
