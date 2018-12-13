@@ -159,11 +159,9 @@ const HeaderConnected = Widget.connect((state, props) => {
   };
 })(Header);
 
-class Hinter extends Form {
+class Hinter extends Widget {
   constructor() {
     super(...arguments);
-
-    this.renderHinter = this.renderHinter.bind(this);
   }
 
   static connectTo(datagrid) {
@@ -176,8 +174,12 @@ class Hinter extends Form {
     };
   }
 
-  renderHinter() {
-    const {id, entityUI, component} = this.props;
+  render() {
+    const {id, entityUI, component, datagrid} = this.props;
+    if (!id) {
+      return null;
+    }
+
     const CellUI = component.WithState(entityUI.hinter, 'id')('.id');
 
     return (
@@ -186,21 +188,11 @@ class Hinter extends Form {
         id={id}
         theme={this.context.theme}
         contextId={this.context.contextId}
+        datagrid={datagrid}
+        doAsDatagrid={(quest, args) =>
+          this.doFor(datagrid.props.id, quest, args)
+        }
       />
-    );
-  }
-
-  render() {
-    if (!this.props.id) {
-      return null;
-    }
-
-    const Form = this.Form;
-
-    return (
-      <Form {...this.formConfig} className={this.props.className}>
-        <Container kind="row">{this.renderHinter()}</Container>
-      </Form>
     );
   }
 }
