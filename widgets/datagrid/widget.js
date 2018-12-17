@@ -84,12 +84,10 @@ class Datagrid extends Widget {
   }
 
   renderTable() {
-    const {columnsNo} = this.props;
-
-    const Table = DatagridTable.connectTo(this);
+    const {columnsNo, ...others} = this.props;
 
     return (
-      <Table
+      <DatagridTable
         onRef={list => {
           this.list = list;
         }}
@@ -107,6 +105,7 @@ class Datagrid extends Widget {
           );
         }}
         mapItem={entity => ({id: entity.get('id')})}
+        {...others}
       />
     );
   }
