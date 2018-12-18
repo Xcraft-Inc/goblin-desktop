@@ -14,12 +14,14 @@ const uiImporter = importer('ui');
 class Datagrid extends Widget {
   constructor() {
     super(...arguments);
-    this.onClose = this.onClose.bind(this);
+
     this.scrollTo = this.scrollTo.bind(this);
     this.scrollAround = this.scrollAround.bind(this);
     this.getVisibleRange = this.getVisibleRange.bind(this);
 
     this.onClick = this.onClick.bind(this);
+    this.onClose = this.onClose.bind(this);
+
     this.initializeEntity = this.initializeEntity.bind(this);
     this.renderHeaders = this.renderHeaders.bind(this);
     this.renderTable = this.renderTable.bind(this);
@@ -84,16 +86,23 @@ class Datagrid extends Widget {
   }
 
   renderTable() {
+    setTimeout(this._fetch, 0);
+
     const {columnsNo, ...others} = this.props;
 
     return (
       <DatagridTable
+        do={(command, args) => this.do(command, args)}
         onRef={list => {
           this.list = list;
         }}
         renderItem={props => {
           return (
-            <Container kind="row-pane" subkind="large-box">
+            <Container
+              kind="row-pane"
+              subkind="large-box"
+              verticalSpacing="large"
+            >
               <DatagridEntity
                 entityUI={this.entityUI}
                 columnsNo={columnsNo}
