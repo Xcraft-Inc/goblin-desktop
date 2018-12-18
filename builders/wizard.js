@@ -67,6 +67,9 @@ module.exports = config => {
     change: (state, action) => {
       return state.set(action.get('path'), action.get('newValue'));
     },
+    apply: (state, action) => {
+      return state.merge(action.get('path', ''), action.get('patch'));
+    },
     next: (state, action) => {
       return state.set('step', action.get('step'));
     },
@@ -207,6 +210,11 @@ module.exports = config => {
   });
 
   Goblin.registerQuest(goblinName, 'change', function*(quest) {
+    quest.do();
+    yield quest.me.update();
+  });
+
+  Goblin.registerQuest(goblinName, 'apply', function*(quest) {
     quest.do();
     yield quest.me.update();
   });
