@@ -4,6 +4,7 @@ import throttle from 'lodash/throttle';
 import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
+import Button from 'gadgets/button/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
 
@@ -26,13 +27,18 @@ class ListToolbar extends Widget {
       return null;
     }
     return (
-      <div style={{paddingTop: '20px'}}>
+      <div style={{marginBottom: '20px'}}>
         {exporting ? (
-          <div>export csv en cours...</div>
+          <div>Export csv en cours...</div>
         ) : (
-          <button onClick={this.exportToCsv}>
-            exporter en csv sur le disque
-          </button>
+          <Button
+            kind="action"
+            place="1/1"
+            width="300px"
+            glyph="solid/save"
+            text="Exporter en csv sur le disque"
+            onClick={this.exportToCsv}
+          />
         )}
       </div>
     );
