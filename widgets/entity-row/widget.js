@@ -16,6 +16,7 @@ import Shredder from 'xcraft-core-shredder';
 
 import {
   date as DateConverters,
+  time as TimeConverters,
   price as PriceConverters,
 } from 'xcraft-core-converters';
 
@@ -29,6 +30,12 @@ function getColumnText(c, entity) {
       if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
         // Canonical date "yyyy-mm-dd" ?
         return DateConverters.getDisplayed(text);
+      }
+      break;
+    case 'time':
+      if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
+        // Canonical time "00:00:00" ?
+        return TimeConverters.getDisplayed(text);
       }
       break;
     case 'price':
@@ -127,15 +134,11 @@ class EntityRow extends Widget {
   render() {
     const {id, rowIndex, entity, columns} = this.props;
     const loaded = id && entity;
-    const rowStyle = {
-      height: this.props.height,
-      borderTop: '1px solid #aaa',
-      display: 'flex',
-      flexDirection: 'row',
-      padding: '5px 1px 5px 1px',
-      backgroundColor: rowIndex % 2 === 0 ? '#eee' : 'white',
-      cursor: 'default',
-    };
+
+    const style =
+      rowIndex % 2 === 0
+        ? this.styles.classNames.even
+        : this.styles.classNames.odd;
 
     if (!loaded) {
       if (this._idRequested !== id) {
@@ -144,7 +147,7 @@ class EntityRow extends Widget {
         this._idRequested = id;
       }
       return (
-        <div style={rowStyle}>
+        <div className={style}>
           <TableCell
             grow="1"
             isLast="false"
@@ -157,7 +160,7 @@ class EntityRow extends Widget {
     }
 
     return (
-      <div style={rowStyle}>
+      <div className={style}>
         <TableCell
           rowId={rowIndex}
           key={rowIndex}

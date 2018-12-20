@@ -4,7 +4,7 @@ import Container from 'gadgets/container/widget';
 import EntityList from 'desktop/entity-list/widget';
 import Wizard from 'desktop/wizard/widget';
 
-class EntityListView extends View {
+export default class EntityListView extends View {
   render() {
     const {workitemId, dialogId} = this.props;
     let WiredDialog = null;
@@ -31,5 +31,3 @@ class EntityListView extends View {
     );
   }
 }
-
-export default EntityListView;

@@ -1,7 +1,6 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import throttle from 'lodash/throttle';
-import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
 import Button from 'gadgets/button/widget';
@@ -9,7 +8,7 @@ import EntityListItem from 'desktop/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
 
 const {ListHelpers} = require('goblin-toolbox');
-const {getColumnProps, getColumnText} = ListHelpers;
+const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;
 
 /******************************************************************************/
 
@@ -29,16 +28,16 @@ class ListToolbar extends Widget {
       return null;
     }
     return (
-      <div style={{marginBottom: '20px'}}>
+      <div>
         {exporting ? (
           <div>Export csv en cours...</div>
         ) : (
           <Button
             kind="action"
             place="1/1"
-            width="300px"
+            width="250px"
             glyph="solid/save"
-            text="Exporter en csv sur le disque"
+            text="Exporter un fichier csv"
             onClick={this.exportToCsv}
           />
         )}
@@ -92,35 +91,45 @@ class EntityList extends Widget {
       return null;
     }
     const listId = `list@${id}`;
+
+    const width = getEstimatedWidth(columns);
+    const listStyle = {
+      minWidth: width,
+    };
+
     return (
       <div className={this.styles.classNames.full}>
-        <Toolbar id={id} />
-        <div className={this.styles.classNames.header}>
-          <TableCell isLast="false" isHeader="true" width="50px" text="n°" />
-          {columns.map(c => {
-            return (
-              <TableCell
-                key={c}
-                isLast="false"
-                isHeader="true"
-                {...getColumnProps(c)}
-                text={getColumnText(c)}
-              />
-            );
-          })}
+        <div className={this.styles.classNames.toolbar}>
+          <Toolbar id={id} />
         </div>
-        <ScrollableContainer id={listId} height="100%">
-          <List
-            id={listId}
-            type={'uniform'}
-            renderItem={EntityListItem}
-            parentId={{
-              onDrillDown: this.drillDown,
-              onRenewTTL: this.renewTTL,
-              columns: new Shredder(columns),
-            }}
-          />
-        </ScrollableContainer>
+        <div className={this.styles.classNames.list} style={listStyle}>
+          <div className={this.styles.classNames.header}>
+            <TableCell isLast="false" isHeader="true" width="50px" text="n°" />
+            {columns.map(c => {
+              return (
+                <TableCell
+                  key={c}
+                  isLast="false"
+                  isHeader="true"
+                  {...getColumnProps(c)}
+                  text={getColumnText(c)}
+                />
+              );
+            })}
+          </div>
+          <div className={this.styles.classNames.rows}>
+            <List
+              id={listId}
+              type={'uniform'}
+              renderItem={EntityListItem}
+              parentId={{
+                onDrillDown: this.drillDown,
+                onRenewTTL: this.renewTTL,
+                columns: new Shredder(columns),
+              }}
+            />
+          </div>
+        </div>
       </div>
     );
   }

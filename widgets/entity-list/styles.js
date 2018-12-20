@@ -1,29 +1,57 @@
+import {defaultProps} from 'recompose';
+
 /******************************************************************************/
 
-export default function styles() {
+export default function styles(theme, props) {
   const full = {
-    margin: '50px',
-    padding: '50px',
+    margin: '0px',
+    padding: '0px',
+    overflowX: 'hidden',
+    overflowY: 'hidden',
     flexGrow: '1',
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: 'white',
   };
 
-  const button = {
-    padding: '20px',
+  const toolbar = {
+    margin: '20px',
+  };
+
+  const list = {
+    position: 'relative',
+    height: '100%',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
   };
 
   const header = {
+    minHeight: '24px',
+    padding: '0px 36px 0px 16px',
+    borderBottom: '1px solid #888',
     display: 'flex',
     flexDirection: 'row',
     flexGrow: '1',
   };
 
+  const rows = {
+    height: '100%',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+  };
+
   return {
     full,
-    button,
+    toolbar,
+    list,
     header,
+    rows,
   };
 }
 
