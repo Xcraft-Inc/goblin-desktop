@@ -11,6 +11,8 @@ import Shredder from 'xcraft-core-shredder';
 const {ListHelpers} = require('goblin-toolbox');
 const {getColumnProps, getColumnText} = ListHelpers;
 
+/******************************************************************************/
+
 class ListToolbar extends Widget {
   constructor() {
     super(...arguments);
@@ -44,12 +46,15 @@ class ListToolbar extends Widget {
     );
   }
 }
+
 const Toolbar = Widget.connect((state, props) => {
   return {
     exporting: state.get(`backend.${props.id}.exporting`, false),
     type: state.get(`backend.${props.id}.type`),
   };
 })(ListToolbar);
+
+/******************************************************************************/
 
 class EntityList extends Widget {
   constructor() {
@@ -83,10 +88,10 @@ class EntityList extends Widget {
 
   render() {
     const {id, columns} = this.props;
-    const listId = `list@${id}`;
     if (!id || !columns) {
       return null;
     }
+    const listId = `list@${id}`;
     return (
       <div className={this.styles.classNames.full}>
         <Toolbar id={id} />
@@ -120,5 +125,7 @@ class EntityList extends Widget {
     );
   }
 }
+
+/******************************************************************************/
 
 export default Widget.Wired(EntityList)();

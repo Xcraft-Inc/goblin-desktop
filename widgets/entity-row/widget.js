@@ -8,10 +8,41 @@ const {
   getColumnTargetPath,
   getColumnSubPath,
   getColumnPath,
+  getColumnType,
   isTargetingValueOrRef,
 } = ListHelpers;
 
 import Shredder from 'xcraft-core-shredder';
+
+import {
+  date as DateConverters,
+  price as PriceConverters,
+} from 'xcraft-core-converters';
+
+/******************************************************************************/
+
+function getColumnText(c, entity) {
+  const columnPath = getColumnPath(c);
+  const text = entity.get(columnPath, null);
+  switch (getColumnType(c)) {
+    case 'date':
+      if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
+        // Canonical date "yyyy-mm-dd" ?
+        return DateConverters.getDisplayed(text);
+      }
+      break;
+    case 'price':
+      if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
+        // Numeric price ?
+        return PriceConverters.getDisplayed(text);
+      }
+      break;
+  }
+  return text;
+}
+
+/******************************************************************************/
+
 class _Driller extends Widget {
   constructor() {
     super(...arguments);
@@ -59,6 +90,8 @@ class _Driller extends Widget {
   }
 }
 
+/******************************************************************************/
+
 const Driller = Widget.connect((state, props) => {
   const loaded = !!state.get(`backend.${props.entityId}.id`, null);
   const path = props.path || 'meta.summaries.info';
@@ -69,6 +102,8 @@ const Driller = Widget.connect((state, props) => {
     text: loaded ? state.get(`backend.${props.entityId}.${path}`) : '',
   };
 })(_Driller);
+
+/******************************************************************************/
 
 class EntityRow extends Widget {
   constructor() {
@@ -115,7 +150,7 @@ class EntityRow extends Widget {
             isLast="false"
             isHeader="false"
             textAlign="center"
-            text="chargement..."
+            text="Chargement..."
           />
         </div>
       );
@@ -139,10 +174,9 @@ class EntityRow extends Widget {
           }
         />
         {columns.map((c, i) => {
-          const columnPath = getColumnPath(c);
           const targetPath = getColumnTargetPath(c);
           const columnSubPath = getColumnSubPath(c);
-          let text = entity.get(columnPath, null);
+          const text = getColumnText(c, entity);
           if (isTargetingValueOrRef(entity, targetPath) && text !== null) {
             return (
               <Driller
@@ -172,6 +206,8 @@ class EntityRow extends Widget {
     );
   }
 }
+
+/******************************************************************************/
 
 export default Widget.connect((state, props) => {
   return {
