@@ -19,9 +19,18 @@ export default function styles(theme, props) {
   };
 
   const list = {
-    position: 'relative',
+    width: '100%',
     height: '100%',
     overflowX: 'auto',
+    overflowY: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: '1',
+  };
+
+  const content = {
+    height: '100%',
+    overflowX: 'hidden',
     overflowY: 'hidden',
     display: 'flex',
     flexDirection: 'column',
@@ -50,6 +59,7 @@ export default function styles(theme, props) {
     full,
     toolbar,
     list,
+    content,
     header,
     rows,
   };

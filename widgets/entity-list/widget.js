@@ -93,7 +93,7 @@ class EntityList extends Widget {
     const listId = `list@${id}`;
 
     const width = getEstimatedWidth(columns);
-    const listStyle = {
+    const widthStyle = {
       minWidth: width,
     };
 
@@ -102,32 +102,39 @@ class EntityList extends Widget {
         <div className={this.styles.classNames.toolbar}>
           <Toolbar id={id} />
         </div>
-        <div className={this.styles.classNames.list} style={listStyle}>
-          <div className={this.styles.classNames.header}>
-            <TableCell isLast="false" isHeader="true" width="50px" text="n°" />
-            {columns.map(c => {
-              return (
-                <TableCell
-                  key={c}
-                  isLast="false"
-                  isHeader="true"
-                  {...getColumnProps(c)}
-                  text={getColumnText(c)}
-                />
-              );
-            })}
-          </div>
-          <div className={this.styles.classNames.rows}>
-            <List
-              id={listId}
-              type={'uniform'}
-              renderItem={EntityListItem}
-              parentId={{
-                onDrillDown: this.drillDown,
-                onRenewTTL: this.renewTTL,
-                columns: new Shredder(columns),
-              }}
-            />
+        <div className={this.styles.classNames.list}>
+          <div className={this.styles.classNames.content} style={widthStyle}>
+            <div className={this.styles.classNames.header}>
+              <TableCell
+                isLast="false"
+                isHeader="true"
+                width="50px"
+                text="n°"
+              />
+              {columns.map(c => {
+                return (
+                  <TableCell
+                    key={c}
+                    isLast="false"
+                    isHeader="true"
+                    {...getColumnProps(c)}
+                    text={getColumnText(c)}
+                  />
+                );
+              })}
+            </div>
+            <div className={this.styles.classNames.rows}>
+              <List
+                id={listId}
+                type={'uniform'}
+                renderItem={EntityListItem}
+                parentId={{
+                  onDrillDown: this.drillDown,
+                  onRenewTTL: this.renewTTL,
+                  columns: new Shredder(columns),
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
