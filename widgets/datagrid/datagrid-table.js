@@ -4,6 +4,7 @@ import ReactList from 'react-list';
 import Container from 'gadgets/container/widget';
 import throttle from 'lodash/throttle';
 import _ from 'lodash';
+import DatagridItem from './datagrid-item';
 
 class DatagridTable extends Widget {
   constructor() {
@@ -55,18 +56,13 @@ class DatagridTable extends Widget {
   }
 
   renderItem(index) {
-    setTimeout(this._fetch, 10);
+    setTimeout(this._fetch, 0);
 
-    const Item = this.props.renderItem;
     return (
-      <Item
-        id={this.props.listIds.get(index)}
-        key={index}
+      <DatagridItem
         index={index}
-        listId={this.props.id}
-        itemId={`${index}-item`}
-        height={this._height}
-        parentId={this.props.parentId}
+        id={this.props.listIds.get(index)}
+        renderItem={this.props.renderItem}
       />
     );
   }
