@@ -584,8 +584,16 @@ class Plugin extends Widget {
 
 /******************************************************************************/
 
-const select = root => (state, id) => prop =>
-  state.get(`${root}.${id}.${prop}`);
+const select = root => (state, id) => prop => {
+  if (!id) {
+    return null;
+  }
+  const target = state.get(`${root}.${id}`);
+  if (!target) {
+    return null;
+  }
+  return target.get(prop);
+};
 
 const withBackend = select('backend');
 const withWidget = select('widgets');
@@ -594,7 +602,6 @@ export default Widget.connect((state, props) => {
   const plugin = withBackend(state, props.id);
   const entity = withBackend(state, plugin('forEntity'));
   const widget = withWidget(state, props.id);
-
   return {
     id: props.id,
     title: plugin('title'),
