@@ -1,9 +1,10 @@
 'use strict';
-
 import Widget from 'laboratory/widget';
 import React from 'react';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
+import Field from 'gadgets/field/widget';
+import LocalForm from 'laboratory/localform';
 
 class Monitor extends Widget {
   constructor() {
@@ -59,11 +60,13 @@ class Monitor extends Widget {
   renderMonitors() {
     const LocalStateMonitor = this.connectLocalStateMonitor();
     const WarehouseMonitor = this.connectWarehouseInfosMonitor();
-
     return (
       <div style={{margin: '10px'}}>
         <LocalStateMonitor />
         <WarehouseMonitor />
+        <LocalForm id={this.props.id}>
+          <Field model=".toto" />
+        </LocalForm>
       </div>
     );
   }
