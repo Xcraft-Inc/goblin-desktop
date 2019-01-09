@@ -14,6 +14,7 @@ import DragCab from 'gadgets/drag-cab/widget';
 import Combo from 'gadgets/combo/widget';
 
 import importer from 'laboratory/importer/';
+import widget from '../monitor/widget';
 const uiImporter = importer('ui');
 
 /******************************************************************************/
@@ -48,24 +49,6 @@ class Plugin extends Widget {
     });
   }
 
-  static createFor(name, instance) {
-    return instance.getPluginToEntityMapper(Plugin, name, 'entityIds')(
-      '.entityIds'
-    );
-  }
-
-  static get wiring() {
-    return {
-      id: 'id',
-      title: 'title',
-      extendedId: 'extendedId',
-      entityIds: 'entityIds',
-      editorWidget: 'editorWidget',
-      arity: 'arity',
-      mode: 'mode',
-    };
-  }
-
   _scrollIntoView(duration) {
     if (
       !this._scrollEntityId ||
@@ -92,7 +75,7 @@ class Plugin extends Widget {
     const service = this.props.id.split('@')[0];
     switch (actionName) {
       case 'add':
-        this.doAs(service, actionName, {extendOnAdd: this.props.extendOnAdd});
+        this.doAs(service, actionName);
         break;
       case 'clear':
         this.doAs(service, actionName);
@@ -103,20 +86,7 @@ class Plugin extends Widget {
   }
 
   onSwapExtended(entityId) {
-    const service = this.props.id.split('@')[0];
-
-    const extendedIds = this.getBackendState()
-      .get('extendedIds')
-      .toArray();
-    const indexOf = extendedIds.indexOf(entityId);
-
-    if (indexOf !== -1) {
-      this.doAs(service, 'collapse', {entityId});
-    } else {
-      this.doAs(service, 'extend', {entityId});
-    }
-
-    this._scrollEntityId = entityId;
+    this.dispatch({type: 'TOGGLE_EXTENDED', entityId});
   }
 
   onDeleteEntity(entityId) {
@@ -613,4 +583,32 @@ class Plugin extends Widget {
 }
 
 /******************************************************************************/
-export default Plugin;
+
+const select = root => (state, id) => prop => {
+  if (!id) {
+    return null;
+  }
+  const target = state.get(`${root}.${id}`);
+  if (!target) {
+    return null;
+  }
+  return target.get(prop);
+};
+
+const withBackend = select('backend');
+const withWidget = select('widgets');
+
+export default Widget.connect((state, props) => {
+  const plugin = withBackend(state, props.id);
+  const entity = withBackend(state, plugin('forEntity'));
+  const widget = withWidget(state, props.id);
+  return {
+    id: props.id,
+    title: plugin('title'),
+    editorWidget: plugin('editorWidget'),
+    arity: plugin('arity'),
+    mode: plugin('mode'),
+    entityIds: entity(plugin('entityPath')),
+    extendedId: widget('extendedId'),
+  };
+})(Plugin);

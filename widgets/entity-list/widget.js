@@ -1,14 +1,16 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import throttle from 'lodash/throttle';
-import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
+import Button from 'gadgets/button/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
 
 const {ListHelpers} = require('goblin-toolbox');
-const {getColumnProps, getColumnText} = ListHelpers;
+const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;
+
+/******************************************************************************/
 
 class ListToolbar extends Widget {
   constructor() {
@@ -26,24 +28,32 @@ class ListToolbar extends Widget {
       return null;
     }
     return (
-      <div style={{paddingTop: '20px'}}>
+      <div>
         {exporting ? (
-          <div>export csv en cours...</div>
+          <div>Export csv en cours...</div>
         ) : (
-          <button onClick={this.exportToCsv}>
-            exporter en csv sur le disque
-          </button>
+          <Button
+            kind="action"
+            place="1/1"
+            width="250px"
+            glyph="solid/save"
+            text="Exporter un fichier csv"
+            onClick={this.exportToCsv}
+          />
         )}
       </div>
     );
   }
 }
+
 const Toolbar = Widget.connect((state, props) => {
   return {
     exporting: state.get(`backend.${props.id}.exporting`, false),
     type: state.get(`backend.${props.id}.type`),
   };
 })(ListToolbar);
+
+/******************************************************************************/
 
 class EntityList extends Widget {
   constructor() {
@@ -77,42 +87,61 @@ class EntityList extends Widget {
 
   render() {
     const {id, columns} = this.props;
-    const listId = `list@${id}`;
-    if (!id) {
+    if (!id || !columns) {
       return null;
     }
+    const listId = `list@${id}`;
+
+    const width = getEstimatedWidth(columns);
+    const widthStyle = {
+      minWidth: width,
+    };
+
     return (
       <div className={this.styles.classNames.full}>
-        <Toolbar id={id} />
-        <div className={this.styles.classNames.header}>
-          <TableCell isLast="false" isHeader="true" width="50px" text="n°" />
-          {columns.map(c => {
-            return (
+        <div className={this.styles.classNames.toolbar}>
+          <Toolbar id={id} />
+        </div>
+        <div className={this.styles.classNames.list}>
+          <div className={this.styles.classNames.content} style={widthStyle}>
+            <div className={this.styles.classNames.header}>
               <TableCell
-                key={c}
                 isLast="false"
                 isHeader="true"
-                {...getColumnProps(c)}
-                text={getColumnText(c)}
+                width="50px"
+                text="n°"
               />
-            );
-          })}
+              {columns.map(c => {
+                return (
+                  <TableCell
+                    key={c}
+                    isLast="false"
+                    isHeader="true"
+                    {...getColumnProps(c)}
+                    text={getColumnText(c)}
+                  />
+                );
+              })}
+            </div>
+            <div className={this.styles.classNames.rows}>
+              <List
+                id={listId}
+                type={'uniform'}
+                renderItem={EntityListItem}
+                parentId={{
+                  onDrillDown: this.drillDown,
+                  onRenewTTL: this.renewTTL,
+                  columns: new Shredder(columns),
+                }}
+              />
+            </div>
+          </div>
         </div>
-        <ScrollableContainer id={listId} height="100%">
-          <List
-            id={listId}
-            type={'uniform'}
-            renderItem={EntityListItem}
-            parentId={{
-              onDrillDown: this.drillDown,
-              onRenewTTL: this.renewTTL,
-              columns: new Shredder(columns),
-            }}
-          />
-        </ScrollableContainer>
       </div>
     );
   }
 }
+
+/******************************************************************************/
 
 export default Widget.Wired(EntityList)();
