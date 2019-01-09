@@ -235,7 +235,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
   const widgetId = `${workitem.name}${
     workitem.mode ? `@${workitem.mode}` : ''
   }@${desktopId}@${workitem.id}`;
-  yield quest.create(
+  const workitemAPI = yield quest.create(
     widgetId,
     Object.assign(
       {
@@ -250,6 +250,10 @@ Goblin.registerQuest(goblinName, 'add-workitem', function*(
       {payload: workitem.payload}
     )
   );
+
+  if (workitemAPI.waitLoaded) {
+    yield workitemAPI.waitLoaded();
+  }
 
   switch (workitem.kind) {
     default:
@@ -465,6 +469,10 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function(
 
 Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function(quest) {
   const last = quest.goblin.getState().get('last');
+  if (!last) {
+    return;
+  }
+
   const contextId = last.get('workcontext');
   const view = last.get('view');
   const workitemId = last.get('workitem');
@@ -592,6 +600,10 @@ Goblin.registerQuest(goblinName, 'get-configuration', function(quest) {
 
 Goblin.registerQuest(goblinName, 'get-user-info', function(quest) {
   return quest.goblin.getState().get('username');
+});
+
+Goblin.registerQuest(goblinName, 'get-lab-id', function(quest) {
+  return quest.goblin.getX('labId');
 });
 
 Goblin.registerQuest(goblinName, 'get-workitems', function(quest) {

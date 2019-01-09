@@ -319,8 +319,8 @@ class Plugin extends Widget {
         ? this.styles.classNames.extendedEmbeddedItem
         : this.styles.classNames.extendedItem
       : Bool.isTrue(this.props.embedded)
-        ? this.styles.classNames.compactedEmbeddedItem
-        : this.styles.classNames.compactedItem;
+      ? this.styles.classNames.compactedEmbeddedItem
+      : this.styles.classNames.compactedItem;
 
     const key1 = Bool.isTrue(this.props.readonly) ? 'readonly' : 'edit';
     const key2 = extended ? 'extend' : 'compact';
@@ -352,15 +352,17 @@ class Plugin extends Widget {
             readonly={this.props.readonly}
             dragServiceId={this.props.dragServiceId}
           >
-            <UI
-              id={workitemId}
-              theme={this.context.theme}
-              entityId={entityId}
-              embeddedLevel={this.props.embeddedLevel}
-              origin={this.props.origin}
-              contextId={this.context.contextId}
-              do={this.doProxy(index)}
-            />
+            {this.buildLoader(entityId, () => (
+              <UI
+                id={workitemId}
+                theme={this.context.theme}
+                entityId={entityId}
+                embeddedLevel={this.props.embeddedLevel}
+                origin={this.props.origin}
+                contextId={this.context.contextId}
+                do={this.doProxy(index)}
+              />
+            ))}
           </Workitem>
         );
       } else {
@@ -394,8 +396,8 @@ class Plugin extends Widget {
           ? this.styles.classNames.extendedEmbeddedReadonlyButtons
           : this.styles.classNames.extendedReadonlyButtons
         : Bool.isTrue(this.props.embedded)
-          ? this.styles.classNames.extendedEmbeddedButtons
-          : this.styles.classNames.extendedButtons;
+        ? this.styles.classNames.extendedEmbeddedButtons
+        : this.styles.classNames.extendedButtons;
 
       const canDelete =
         !Bool.isTrue(this.props.readonly) &&
@@ -446,8 +448,8 @@ class Plugin extends Widget {
           ? this.styles.classNames.compactedEmbeddedReadonlyButtons
           : this.styles.classNames.compactedReadonlyButtons
         : Bool.isTrue(this.props.embedded)
-          ? this.styles.classNames.compactedEmbeddedButtons
-          : this.styles.classNames.compactedButtons;
+        ? this.styles.classNames.compactedEmbeddedButtons
+        : this.styles.classNames.compactedButtons;
 
       const kind =
         Bool.isTrue(this.props.readonly) || !Bool.isTrue(this.props.embedded)
@@ -489,12 +491,12 @@ class Plugin extends Widget {
         ? this.styles.classNames.extendedEmbeddedRow
         : this.styles.classNames.extendedRow
       : numberOfIds > 1 && this.props.horizontalSeparator !== 'compact'
-        ? Bool.isTrue(this.props.embedded)
-          ? this.styles.classNames.compactedEmbeddedDashedRow
-          : this.styles.classNames.compactedDashedRow
-        : Bool.isTrue(this.props.embedded)
-          ? this.styles.classNames.compactedEmbeddedRow
-          : this.styles.classNames.compactedRow;
+      ? Bool.isTrue(this.props.embedded)
+        ? this.styles.classNames.compactedEmbeddedDashedRow
+        : this.styles.classNames.compactedDashedRow
+      : Bool.isTrue(this.props.embedded)
+      ? this.styles.classNames.compactedEmbeddedRow
+      : this.styles.classNames.compactedRow;
 
     return (
       <Container

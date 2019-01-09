@@ -3,7 +3,6 @@ import Widget from 'laboratory/widget';
 import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
-import Field from 'gadgets/field/widget';
 import DatagridCell from '../datagrid-cell/widget';
 import _ from 'lodash';
 
@@ -93,9 +92,45 @@ class Header extends Widget {
   }
 
   render() {
-    const {index, column, datagrid} = this.props;
+    const {
+      index,
+      column,
+      datagrid,
+      component,
+      entityUI,
+      id,
+      doAsDatagrid,
+    } = this.props;
 
-    if (column.get('sortable')) {
+    if (column.get('customSort')) {
+      const CellUI = component.WithState(entityUI.sortCell, 'id')('.id');
+
+      return (
+        <DatagridCell
+          id={datagrid.props.id}
+          index={index}
+          column={column}
+          margin="0px"
+          cellUI={_ => {
+            return (
+              <Container kind="row" width={column.get('width')}>
+                {this.renderComponent()}
+                <CellUI
+                  key={`${id}_${index}`}
+                  id={id}
+                  index={index}
+                  theme={this.context.theme}
+                  column={column}
+                  datagrid={datagrid}
+                  doAsDatagrid={doAsDatagrid}
+                  contextId={this.context.contextId}
+                />
+              </Container>
+            );
+          }}
+        />
+      );
+    } else if (column.get('sortable')) {
       return (
         <DatagridCell
           id={datagrid.props.id}
@@ -124,41 +159,13 @@ const HeaderConnected = Widget.connect((state, props) => {
   };
 })(Header);
 
-class Filter extends Widget {
-  render() {
-    const {column, doAsDatagrid} = this.props;
-
-    if (
-      column.get('field') &&
-      column.get('field') !== '' &&
-      column.get('filterable')
-    ) {
-      return (
-        <Field
-          model={`.filters.${column.get('field')}`}
-          grow="1"
-          labelWidth="0px"
-          onDebouncedChange={value =>
-            doAsDatagrid('filter', {field: column.get('field'), value})
-          }
-          hintText={`Search on ${column.get('field')}`}
-        />
-      );
-    } else {
-      return <div />;
-    }
-  }
-}
-
-class Filters extends Form {
+class Hinter extends Widget {
   constructor() {
     super(...arguments);
-
-    this.renderFilter = this.renderFilter.bind(this);
   }
 
   static connectTo(datagrid) {
-    return Widget.Wired(Filters)(`${datagrid.props.id}`);
+    return Widget.Wired(Hinter)(`${datagrid.props.id}`);
   }
 
   static get wiring() {
@@ -167,49 +174,25 @@ class Filters extends Form {
     };
   }
 
-  renderFilter(index) {
-    const {id, datagrid} = this.props;
-
-    return (
-      <DatagridCell
-        id={datagrid.props.id}
-        index={index}
-        margin="0px"
-        cellUI={column => {
-          return (
-            <Filter
-              key={`${id}_${index}`}
-              id={id}
-              index={index}
-              datagrid={datagrid}
-              column={column}
-              doAsDatagrid={(quest, args) =>
-                this.doFor(datagrid.props.id, quest, args)
-              }
-            />
-          );
-        }}
-      />
-    );
-  }
-
   render() {
-    const {id, columnsNo} = this.props;
-    const self = this;
+    const {id, entityUI, component, datagrid} = this.props;
     if (!id) {
       return null;
     }
 
-    const Form = this.Form;
+    const CellUI = component.WithState(entityUI.hinter, 'id')('.id');
 
     return (
-      <Form {...self.formConfig} className={this.props.className}>
-        <Container kind="row">
-          {Array.apply(null, {length: columnsNo}).map((_, i) => {
-            return this.renderFilter(i);
-          })}
-        </Container>
-      </Form>
+      <CellUI
+        key={`${id}`}
+        id={id}
+        theme={this.context.theme}
+        contextId={this.context.contextId}
+        datagrid={datagrid}
+        doAsDatagrid={(quest, args) =>
+          this.doFor(datagrid.props.id, quest, args)
+        }
+      />
     );
   }
 }
@@ -247,20 +230,21 @@ class DatagridHeaders extends Form {
           component={this}
           headerCell={entityUI.headerCell}
           context={this.context}
+          entityUI={entityUI}
         />
       );
     }
   }
 
   render() {
-    const {id, columnsNo, datagrid} = this.props;
+    const {id, columnsNo, datagrid, entityUI} = this.props;
     const self = this;
     if (!id) {
       return null;
     }
 
     const Form = this.Form;
-    const DatagridFilters = Filters.connectTo(datagrid);
+    const DatagridHinter = Hinter.connectTo(datagrid);
 
     return (
       <div>
@@ -271,7 +255,9 @@ class DatagridHeaders extends Form {
             })}
           </Container>
         </Form>
-        <DatagridFilters
+        <DatagridHinter
+          component={this}
+          entityUI={entityUI}
           datagrid={datagrid}
           columnsNo={columnsNo}
           className={this.props.className}

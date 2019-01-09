@@ -23,15 +23,17 @@ class DatagridEntity extends Form {
 
       return (
         <DatagridCell
+          key={`${this.props.id}_${index}`}
           id={this.props.datagrid.props.id}
           index={index}
-          cellUI={column => {
+          cellUI={(column, columns) => {
             return (
               <CellUI
-                key={`${this.props.id}_${this.props.index}`}
+                key={`${this.props.id}_${index}`}
                 id={this.props.id}
                 index={this.props.index}
                 column={column}
+                columns={columns}
                 theme={this.context.theme}
                 entity={this}
                 datagrid={this.props.datagrid}

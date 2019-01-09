@@ -95,7 +95,7 @@ module.exports = config => {
           }
         }
 
-        quest.create(`${gadget.type}-gadget`, {
+        yield quest.create(`${gadget.type}-gadget`, {
           id: newGadgetId,
           options: gadget.options || null,
         });
@@ -153,16 +153,17 @@ module.exports = config => {
     yield quest.me.goto({step: nextStep});
   });
 
-  Goblin.registerQuest(goblinName, 'next', function*(quest) {
+  Goblin.registerQuest(goblinName, 'next', function*(quest, result) {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === wizardFlow.length - 1) {
-      yield quest.me.done();
-      return;
+      yield quest.me.done({result});
+      return result;
     }
     const nIndex = cIndex + 1;
     const nextStep = wizardFlow[nIndex];
     yield quest.me.goto({step: nextStep});
+    return result;
   });
 
   Goblin.registerQuest(goblinName, 'goto', function*(quest, step) {
@@ -191,11 +192,11 @@ module.exports = config => {
     yield quest.me.busy(); // Clear busy
   });
 
-  Goblin.registerQuest(goblinName, 'done', function(quest) {
+  Goblin.registerQuest(goblinName, 'done', function(quest, result) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
     desk.removeDialog({dialogId: quest.goblin.id});
-    quest.evt('done', {finished: true});
+    quest.evt('done', {finished: true, result});
   });
 
   Goblin.registerQuest(goblinName, 'cancel', function(quest) {

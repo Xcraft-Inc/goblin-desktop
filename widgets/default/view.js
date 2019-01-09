@@ -6,6 +6,7 @@ import Editor from 'desktop/editor/widget';
 import Search from 'desktop/search/widget';
 import Datagrid from 'desktop/datagrid/widget';
 import Wizard from 'desktop/wizard/widget';
+import WorkitemDialog from 'desktop/workitem-dialog/widget';
 
 const viewImporter = importer('view');
 
@@ -41,6 +42,8 @@ class DefaultView extends View {
         WiredDialog = Wizard;
       } else if (dialog.endsWith('-datagrid')) {
         WiredDialog = Datagrid;
+      } else if (dialog.endsWith('-workitem')) {
+        WiredDialog = WorkitemDialog;
       } else {
         throw new Error(
           `${dialog} dialog kind not implemented in default view`

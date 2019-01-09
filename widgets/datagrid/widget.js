@@ -14,10 +14,13 @@ const uiImporter = importer('ui');
 class Datagrid extends Widget {
   constructor() {
     super(...arguments);
-    this.onClose = this.onClose.bind(this);
+
     this.scrollTo = this.scrollTo.bind(this);
     this.scrollAround = this.scrollAround.bind(this);
     this.getVisibleRange = this.getVisibleRange.bind(this);
+
+    this.onClick = this.onClick.bind(this);
+    this.onClose = this.onClose.bind(this);
 
     this.initializeEntity = this.initializeEntity.bind(this);
     this.renderHeaders = this.renderHeaders.bind(this);
@@ -38,6 +41,10 @@ class Datagrid extends Widget {
   onClose(kind, desktopId, contextId) {
     const service = this.props.id.split('@')[0];
     this.doAs(service, 'close', {kind, desktopId, contextId});
+  }
+
+  onClick() {
+    this.onClose(this.props.kind, this.desktopId, this.contextId);
   }
 
   scrollTo(index) {
@@ -79,18 +86,23 @@ class Datagrid extends Widget {
   }
 
   renderTable() {
-    const {columnsNo} = this.props;
+    setTimeout(this._fetch, 0);
 
-    const Table = DatagridTable.connectTo(this);
+    const {columnsNo, ...others} = this.props;
 
     return (
-      <Table
+      <DatagridTable
+        do={(command, args) => this.do(command, args)}
         onRef={list => {
           this.list = list;
         }}
         renderItem={props => {
           return (
-            <Container kind="row-pane" subkind="large-box">
+            <Container
+              kind="row-pane"
+              subkind="large-box"
+              verticalSpacing="large"
+            >
               <DatagridEntity
                 entityUI={this.entityUI}
                 columnsNo={columnsNo}
@@ -102,13 +114,13 @@ class Datagrid extends Widget {
           );
         }}
         mapItem={entity => ({id: entity.get('id')})}
+        {...others}
       />
     );
   }
 
   render() {
     const {id, kind} = this.props;
-    const self = this;
     if (!id) {
       return null;
     }
@@ -134,7 +146,7 @@ class Datagrid extends Widget {
               kind="action"
               justify="center"
               place="single"
-              onClick={() => self.onClose(kind, self.desktopId, self.contextId)}
+              onClick={() => this.onClick()}
             />
           </DialogModal>
         );

@@ -1,99 +1,79 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import ReactList from 'react-list';
-import _ from 'lodash';
-
 import Container from 'gadgets/container/widget';
+import throttle from 'lodash/throttle';
+import _ from 'lodash';
+import DatagridItem from './datagrid-item';
 
 class DatagridTable extends Widget {
   constructor() {
     super(...arguments);
+
     this.renderItem = this.renderItem.bind(this);
-    this.renderTable = this.renderTable.bind(this);
-    this.renderRow = this.renderRow.bind(this);
+    this.estimateItemSize = this.estimateItemSize.bind(this);
 
-    const doAsList = (quest, args) => {
-      const service = self.props.id.split('@')[0];
-      self.doAs(service, quest, args);
-    };
+    this._height = 40;
+    this._threshold = 20;
+    this._fetchInternal = this._fetchInternal.bind(this);
+    this._fetch = throttle(this._fetchInternal, 200).bind(this);
+    this._range = [];
 
-    const load = range => {
-      let cFrom = this.getFormValue('.from');
-      let cTo = this.getFormValue('.to');
-      if (range[0] < this.props.pageSize) {
-        return;
-      }
-      if (range[0] - 10 < cFrom || range[1] + 10 >= cTo) {
-        doAsList('load-range', {from: range[0], to: range[1]});
-      }
-    };
-    this.loadIndex = _.debounce(load, 200);
+    this.listRef = React.createRef();
   }
 
-  static connectTo(instance) {
-    return Widget.Wired(DatagridTable)(`list@${instance.props.id}`);
-  }
-
-  static get wiring() {
-    return {
-      id: 'id',
-      count: 'count',
-      pageSize: 'pageSize',
-      type: 'type',
-    };
-  }
-
-  renderItem(index, key) {
-    return {model: `.list.${index}-item`, index, key};
-  }
-
-  renderRow(row) {
-    const loadingWrapper = props => {
-      if (props._loading) {
-        return <div>loading...</div>;
-      } else {
-        const Item = this.props.renderItem;
-        return <Item {...props} />;
-      }
-    };
-    const ListItem = this.getWidgetToFormMapper(loadingWrapper, item => {
-      if (!item) {
-        return {_loading: true};
-      } else {
-        const entity = this.getModelValue(`backend.${item.get('id')}`, true);
-
-        if (!entity) {
-          return {_loading: true};
-        } else {
-          return this.props.mapItem(entity, row.index);
-        }
-      }
-    })(row.model);
-
-    return <ListItem key={row.key} />;
-  }
-
-  renderTable(items, ref) {
-    if (!items) {
-      return null;
+  _fetchInternal() {
+    if (!this.listRef.current) {
+      return;
     }
 
-    if (items.length) {
-      const range = [items[0].index, items[items.length - 1].index];
-      // Horrible hack qui corrige le problème de la liste de gauche qui est
-      // vide la plupart du temps lors de l'ouverture du panneau de recherche !
-      if (range.length !== 2 || range[0] !== 0 || range[1] !== 0) {
-        this.loadIndex(range);
-      }
+    const range = this.listRef.current
+      ? this.listRef.current.getVisibleRange()
+      : [0, 0];
+    const {count} = this.props;
+
+    if (
+      range[0] >= this._range[0] - this._threshold / 2 &&
+      range[1] <= this._range[1] + this._threshold / 2
+    ) {
+      return;
     }
+
+    this._range = range.slice();
+
+    /* Add a margin of this._threshold entries (if possible) for the range */
+    range[0] =
+      range[0] >= this._threshold //
+        ? range[0] - this._threshold
+        : 0;
+    range[1] =
+      range[1] + this._threshold < count
+        ? range[1] + this._threshold
+        : count - 1;
+
+    const service = `datagrid@${this.props.id}`;
+    this.doFor(service, 'fetch', {range});
+  }
+
+  renderItem(index) {
+    setTimeout(this._fetch, 0);
 
     return (
-      <div ref={ref}>
-        {items.map(row => {
-          return this.renderRow(row);
-        })}
-      </div>
+      <DatagridItem
+        index={index}
+        id={this.props.listIds.get(index)}
+        renderItem={this.props.renderItem}
+      />
     );
+  }
+
+  estimateItemSize(index, cache) {
+    if (cache[index]) {
+      this._height = cache[index];
+      return this._height;
+    }
+    this._height = cache[0] ? cache[0] : 40;
+    return this._height;
   }
 
   render() {
@@ -104,19 +84,20 @@ class DatagridTable extends Widget {
     return (
       <Container kind="panes">
         <ReactList
-          ref={this.props.onRef}
-          pageSize={this.props.pageSize / 2}
+          ref={this.listRef}
           length={this.props.count}
-          type={this.props.type}
-          itemsRenderer={this.renderTable}
+          type={this.props.type || 'variable'}
           itemRenderer={this.renderItem}
-          className={this.props.className}
-          useStaticSize={this.props.type === 'variable' ? false : true}
-          threshold={this.props.type === 'uniform' ? 300 : 100}
+          itemSizeEstimator={this.estimateItemSize}
         />
       </Container>
     );
   }
 }
 
-export default DatagridTable;
+export default Widget.connect((state, props) => {
+  return {
+    listIds: state.get(`backend.datagrid@${props.id}.list`),
+    count: state.get(`backend.datagrid@${props.id}.count`),
+  };
+})(DatagridTable);

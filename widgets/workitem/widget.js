@@ -15,7 +15,7 @@ class Workitem extends Form {
     this.onSubmit = this.onSubmit.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.onEdit = this.onEdit.bind(this);
-    this.onDelete = this.onDelete.bind(this);
+    this.onTrash = this.onTrash.bind(this);
     this.onArchive = this.onArchive.bind(this);
     this.onPublish = this.onPublish.bind(this);
   }
@@ -78,8 +78,8 @@ class Workitem extends Form {
     }
   }
 
-  onDelete() {
-    this.doAs(this.service, 'delete-entity');
+  onTrash() {
+    this.doAs(this.service, 'trash-entity');
     this.hideHinter();
   }
 
@@ -106,6 +106,9 @@ class Workitem extends Form {
         break;
       case 'archive':
         this.onArchive();
+        break;
+      case 'trash':
+        this.onTrash();
         break;
       default:
         break;
@@ -181,6 +184,12 @@ class Workitem extends Form {
       return (
         <Container kind="pane-warning" subkind="archived">
           <Label kind="pane-warning" text="Archivé" />
+        </Container>
+      );
+    } else if (this.props.status === 'trashed') {
+      return (
+        <Container kind="pane-warning" subkind="trashed">
+          <Label kind="pane-warning" text="Détruit" />
         </Container>
       );
     } else {
