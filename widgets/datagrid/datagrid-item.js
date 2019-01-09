@@ -11,7 +11,7 @@ class DatagridItem extends Widget {
 
   render() {
     if (!this.props.message) {
-      return <div />;
+      return <div>Loading... </div>;
     }
 
     const Item = this.props.renderItem;
