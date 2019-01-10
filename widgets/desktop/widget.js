@@ -7,7 +7,7 @@ import {Unit} from 'electrum-theme';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Combo from 'gadgets/combo/widget';
-import NabuToolBar from 'nabu/nabuToolbar/widget';
+import NabuToolbar from 'nabu/nabu-toolbar/widget';
 import Monitor from 'desktop/monitor/widget';
 import Notifications from 'desktop/notifications/widget';
 import IMG_GOBLIN from './goblin.png';
@@ -198,6 +198,7 @@ class Desktop extends Widget {
       return null;
     }
 
+    const Toolbar = NabuToolbar.connectTo(this);
     const CommandsPrompt = this.connectCommandsPrompt();
     const routes = {
       '/hinter/': {},
@@ -306,7 +307,7 @@ class Desktop extends Widget {
               {this.renderMenuTheme()}
             </div>
             <Container kind="footer">
-              <NabuToolBar />
+              <Toolbar />
               <Monitor id={this.props.id + '$monitor'} />
               <CommandsPrompt />
             </Container>
