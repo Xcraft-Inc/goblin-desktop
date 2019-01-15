@@ -62,6 +62,7 @@ class DatagridTable extends Widget {
       <DatagridItem
         index={index}
         id={this.props.listIds.get(index)}
+        key={index}
         renderItem={this.props.renderItem}
       />
     );
