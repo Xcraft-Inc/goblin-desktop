@@ -307,7 +307,7 @@ class Desktop extends Widget {
               {this.renderMenuTheme()}
             </div>
             <Container kind="footer">
-              <Toolbar />
+              <Toolbar desktopId={id} />
               <Monitor id={this.props.id + '$monitor'} />
               <CommandsPrompt />
             </Container>
