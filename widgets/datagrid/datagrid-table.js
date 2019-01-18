@@ -51,7 +51,7 @@ class DatagridTable extends Widget {
         ? range[1] + this._threshold
         : count - 1;
 
-    const service = `datagrid@${this.props.id}`;
+    const service = `list@${this.props.id}`;
     this.doFor(service, 'fetch', {range});
   }
 
@@ -98,7 +98,7 @@ class DatagridTable extends Widget {
 
 export default Widget.connect((state, props) => {
   return {
-    listIds: state.get(`backend.datagrid@${props.id}.list`),
-    count: state.get(`backend.datagrid@${props.id}.count`),
+    listIds: state.get(`backend.list@${props.id}.list`),
+    count: state.get(`backend.list@${props.id}.count`),
   };
 })(DatagridTable);
