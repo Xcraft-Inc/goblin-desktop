@@ -14,7 +14,7 @@ import DragCab from 'gadgets/drag-cab/widget';
 import Combo from 'gadgets/combo/widget';
 
 import importer from 'laboratory/importer/';
-import widget from '../monitor/widget';
+
 const uiImporter = importer('ui');
 
 /******************************************************************************/
