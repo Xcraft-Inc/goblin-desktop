@@ -27,7 +27,6 @@
     },
     "production": {
       "plugins": [
-        "react-hot-loader/babel",
         [
           "react-transform",
           {
