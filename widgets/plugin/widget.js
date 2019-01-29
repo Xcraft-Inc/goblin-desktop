@@ -86,6 +86,7 @@ class Plugin extends Widget {
   }
 
   onSwapExtended(entityId) {
+    this._scrollEntityId = entityId;
     this.dispatch({type: 'TOGGLE_EXTENDED', entityId});
   }
 
