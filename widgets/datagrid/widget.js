@@ -132,7 +132,9 @@ class Datagrid extends Widget {
         return (
           <DialogModal
             width={
-              this.props.dialog ? this.props.dialog.get('width') : '1000px'
+              this.props.dialog
+                ? this.props.dialog.get('width') || '1000px'
+                : '1000px'
             }
             height={this.props.dialog ? this.props.dialog.get('height') : null}
             zIndex={this.props.dialog ? this.props.dialog.get('zIndex') : null}
