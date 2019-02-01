@@ -22,49 +22,50 @@ const logicState = {};
 const logicHandlers = require('./logicHandlers.js');
 
 // Register quest's according rc.json
-Goblin.registerQuest(goblinName, 'create', function*(
-  quest,
-  labId,
-  username,
-  configuration,
-  routes
-) {
-  if (!labId) {
-    throw new Error('Missing labId');
-  }
+Goblin.registerQuest(
+  goblinName,
+  'create',
+  function*(quest, labId, username, configuration, routes) {
+    if (!labId) {
+      throw new Error('Missing labId');
+    }
 
-  quest.goblin.setX('labId', labId);
-  quest.goblin.setX('configuration', configuration);
+    quest.goblin.setX('labId', labId);
+    quest.goblin.setX('configuration', configuration);
 
-  // CREATE DEFAULT CONTEXT MANAGER
-  yield quest.create('contexts', {
-    id: `contexts@${quest.goblin.id}`,
-    desktopId: quest.goblin.id,
-  });
+    // CREATE DEFAULT CONTEXT MANAGER
+    yield quest.create('contexts', {
+      id: `contexts@${quest.goblin.id}`,
+      desktopId: quest.goblin.id,
+    });
 
-  // CREATE DEFAULT TABS MANAGER
-  yield quest.create('tabs', {
-    id: `tabs@${quest.goblin.id}`,
-    desktopId: quest.goblin.id,
-  });
+    // CREATE DEFAULT TABS MANAGER
+    yield quest.create('tabs', {
+      id: `tabs@${quest.goblin.id}`,
+      desktopId: quest.goblin.id,
+    });
 
-  if (!routes) {
-    routes = defaultRoutes;
-  }
+    if (!routes) {
+      routes = defaultRoutes;
+    }
 
-  quest.do({id: quest.goblin.id, routes});
+    quest.do({id: quest.goblin.id, routes});
 
-  quest.log.info(`Desktop ${quest.goblin.id} created!`);
-  quest.goblin.defer(
-    quest.sub(
-      `*::*.${quest.goblin.id.split('@')[1]}.desktop-notification-broadcasted`,
-      (err, msg) => {
-        quest.me.addNotification({...msg.data});
-      }
-    )
-  );
-  return quest.goblin.id;
-});
+    quest.log.info(`Desktop ${quest.goblin.id} created!`);
+    quest.goblin.defer(
+      quest.sub(
+        `*::*.${
+          quest.goblin.id.split('@')[1]
+        }.desktop-notification-broadcasted`,
+        (err, msg) => {
+          quest.me.addNotification({...msg.data});
+        }
+      )
+    );
+    return quest.goblin.id;
+  },
+  ['*::*.desktop-notification-broadcasted']
+);
 
 Goblin.registerQuest(goblinName, 'create-hinter-for', function*(
   quest,

@@ -64,9 +64,6 @@ class Monitor extends Widget {
       <div style={{margin: '10px'}}>
         <LocalStateMonitor />
         <WarehouseMonitor />
-        <LocalForm id={this.props.id}>
-          <Field model=".toto" />
-        </LocalForm>
       </div>
     );
   }
