@@ -4,6 +4,7 @@ import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import DatagridCell from '../datagrid-cell/widget';
+import {T} from 'goblin-nabu/widgets/helpers/t.js';
 import _ from 'lodash';
 
 const LabelConnected = Widget.connect((state, props) => {
@@ -30,8 +31,8 @@ class Header extends Widget {
   constructor() {
     super(...arguments);
     this.tooltips = {
-      asc: this.T('ascending order'),
-      desc: this.T('descending order'),
+      asc: T('ascending order'),
+      desc: T('descending order'),
     };
 
     this.renderSortingHeader = this.renderSortingHeader.bind(this);
