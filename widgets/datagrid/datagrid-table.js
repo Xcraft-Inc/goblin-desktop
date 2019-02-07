@@ -3,7 +3,6 @@ import Widget from 'laboratory/widget';
 import ReactList from 'react-list';
 import Container from 'gadgets/container/widget';
 import throttle from 'lodash/throttle';
-import _ from 'lodash';
 import DatagridItem from './datagrid-item';
 
 class DatagridTable extends Widget {
@@ -17,7 +16,7 @@ class DatagridTable extends Widget {
     this._threshold = 20;
     this._fetchInternal = this._fetchInternal.bind(this);
     this._fetch = throttle(this._fetchInternal, 200).bind(this);
-    this._range = [];
+    this._range = {};
 
     this.listRef = React.createRef();
   }
@@ -32,14 +31,22 @@ class DatagridTable extends Widget {
       : [0, 0];
     const {count} = this.props;
 
+    /* Ensure to test against the right list id. Because the fetching is
+     * executed by a setTimeout, it's possible that an other list will
+     * be presented.
+     */
+    if (!this._range[this.props.id]) {
+      this._range[this.props.id] = [];
+    }
+
     if (
-      range[0] >= this._range[0] - this._threshold / 2 &&
-      range[1] <= this._range[1] + this._threshold / 2
+      range[0] >= this._range[this.props.id][0] - this._threshold / 2 &&
+      range[1] <= this._range[this.props.id][1] + this._threshold / 2
     ) {
       return;
     }
 
-    this._range = range.slice();
+    this._range[this.props.id] = range.slice();
 
     /* Add a margin of this._threshold entries (if possible) for the range */
     range[0] =
@@ -51,8 +58,7 @@ class DatagridTable extends Widget {
         ? range[1] + this._threshold
         : count - 1;
 
-    const service = `list@${this.props.id}`;
-    this.doFor(service, 'fetch', {range});
+    this.doAs('list', 'fetch', {range});
   }
 
   renderItem(index) {

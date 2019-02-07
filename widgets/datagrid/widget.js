@@ -25,8 +25,6 @@ class Datagrid extends Widget {
     this.initializeEntity = this.initializeEntity.bind(this);
     this.renderHeaders = this.renderHeaders.bind(this);
     this.renderTable = this.renderTable.bind(this);
-
-    let entityUI = null;
   }
 
   static get wiring() {
