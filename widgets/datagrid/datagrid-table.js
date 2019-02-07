@@ -58,7 +58,8 @@ class DatagridTable extends Widget {
         ? range[1] + this._threshold
         : count - 1;
 
-    this.doAs('list', 'fetch', {range});
+    const service = `list@${this.props.id}`;
+    this.doFor(service, 'fetch', {range});
   }
 
   renderItem(index) {
