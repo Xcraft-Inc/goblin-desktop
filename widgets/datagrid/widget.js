@@ -5,7 +5,6 @@ import Container from 'gadgets/container/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
 import List from 'gadgets/list/widget';
-import DatagridTable from './datagrid-table';
 import DatagridEntity from './datagrid-entity';
 import DatagridHeaders from './datagrid-headers';
 import DatagridItem from './datagrid-item';
@@ -88,11 +87,14 @@ class Datagrid extends Widget {
   renderTable() {
     setTimeout(this._fetch, 0);
 
-    const {columnsNo, ...others} = this.props;
+    const {columnsNo, id, ...others} = this.props;
+    const listId = `list@${id}`;
 
     return (
       <Container kind="panes">
-        <DatagridTable
+        <List
+          id={listId}
+          type={'uniform'}
           do={(command, args) => this.do(command, args)}
           onRef={list => {
             this.list = list;
@@ -101,7 +103,6 @@ class Datagrid extends Widget {
             return (
               <DatagridItem
                 index={index}
-                key={index}
                 renderItem={props => {
                   return (
                     <DatagridEntity
