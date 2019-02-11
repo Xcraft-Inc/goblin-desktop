@@ -37,22 +37,25 @@ class Desktop extends Widget {
   constructor() {
     super(...arguments);
 
-    this.comboButton = null;
+    this.comboButtonLanguage = null;
+    this.comboButtonTheme = null;
 
     this.state = {
+      showMenuLanguage: false,
       showMenuTheme: false,
     };
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
+    this.onChangeLanguage = this.onChangeLanguage.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
     this.onTab = this.onTab.bind(this);
     this.onShiftTab = this.onShiftTab.bind(this);
-    this.onLanguageChoice = this.onLanguageChoice.bind(this);
   }
 
   componentDidMount() {
     super.componentDidMount();
-    this.combo = ReactDOM.findDOMNode(this.comboButton);
+    this.comboLanguage = ReactDOM.findDOMNode(this.comboButtonLanguage);
+    this.comboTheme = ReactDOM.findDOMNode(this.comboButtonTheme);
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
   }
@@ -60,6 +63,16 @@ class Desktop extends Widget {
   componentWillUnmount() {
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
+  }
+
+  get showMenuLanguage() {
+    return this.state.showMenuLanguage;
+  }
+
+  set showMenuLanguage(value) {
+    this.setState({
+      showMenuLanguage: value,
+    });
   }
 
   get showMenuTheme() {
@@ -88,6 +101,10 @@ class Desktop extends Widget {
     this.do('change-mandate');
   }
 
+  onChangeLanguage(name) {
+    // TODO
+  }
+
   onChangeTheme(name) {
     currentThemeName = name;
     this.do('change-theme', {name});
@@ -103,10 +120,6 @@ class Desktop extends Widget {
     e.preventDefault();
   }
 
-  onLanguageChoice() {
-    // TODO
-  }
-
   /******************************************************************************/
 
   renderNofications() {
@@ -115,9 +128,41 @@ class Desktop extends Widget {
     return <WiredNotifications />;
   }
 
+  renderMenuLanguage() {
+    if (this.showMenuLanguage) {
+      const rect = this.comboLanguage.getBoundingClientRect();
+      const top = Unit.add(
+        rect.bottom + 'px',
+        this.context.theme.shapes.flyingBalloonTriangleSize
+      );
+
+      const list = [];
+      for (const langue of ['fr-CH', 'de-CH', 'us-EN']) {
+        list.push({
+          text: langue,
+          active: langue === 'fr-CH',
+          action: () => this.onChangeLanguage(langue.name),
+        });
+      }
+
+      return (
+        <Combo
+          menuType="wrap"
+          width="200px"
+          left={(rect.left + rect.right) / 2}
+          top={top}
+          list={list}
+          close={() => (this.showMenuLanguage = false)}
+        />
+      );
+    } else {
+      return null;
+    }
+  }
+
   renderMenuTheme() {
     if (this.showMenuTheme) {
-      const rect = this.combo.getBoundingClientRect();
+      const rect = this.comboTheme.getBoundingClientRect();
       const top = Unit.add(
         rect.bottom + 'px',
         this.context.theme.shapes.flyingBalloonTriangleSize
@@ -273,15 +318,15 @@ class Desktop extends Widget {
               <Container kind="main-tab-right">
                 <Button text={this.props.username} kind="main-tab-right" />
                 <Button
-                  ref={x => (this.comboButton = x)}
+                  ref={x => (this.comboButtonLanguage = x)}
                   glyph="solid/flag"
                   kind="main-tab-right"
-                  active={this.showMenuTheme}
+                  active={this.showMenuLanguage}
                   tooltip="Choix de la langue de l'interface"
-                  onClick={this.onLanguageChoice}
+                  onClick={() => (this.showMenuLanguage = true)}
                 />
                 <Button
-                  ref={x => (this.comboButton = x)}
+                  ref={x => (this.comboButtonTheme = x)}
                   glyph="solid/tint"
                   kind="main-tab-right"
                   active={this.showMenuTheme}
@@ -317,6 +362,7 @@ class Desktop extends Widget {
             <div className={contentClass}>
               <Content desktopId={id} />
               {this.renderNofications()}
+              {this.renderMenuLanguage()}
               {this.renderMenuTheme()}
             </div>
             <Container kind="footer">
