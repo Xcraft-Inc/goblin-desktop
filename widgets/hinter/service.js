@@ -111,22 +111,6 @@ Goblin.registerQuest(goblinName, 'create-new', function*(quest, value) {
     workitem.payload[workitem.mapNewValueTo] = value;
   }
   yield desk.addWorkitem({workitem, navigate: true});
-
-  quest.goblin.defer(
-    quest.sub(`${workitem.name}@${workitem.id}.validated`, (err, msg) => {
-      const entity = msg.data;
-      const rows = [''];
-      const values = [entity.id];
-      const payloads = [entity];
-      quest.me.setSelections({
-        rows,
-        values,
-        payloads,
-        usePayload: true,
-        validate: true,
-      });
-    })
-  );
 });
 
 const emitLoadDetails = _.debounce((quest, index, text) => {
