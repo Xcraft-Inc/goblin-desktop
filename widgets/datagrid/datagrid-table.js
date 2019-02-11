@@ -65,14 +65,29 @@ class DatagridTable extends Widget {
   renderItem(index) {
     setTimeout(this._fetch, 0);
 
+    const Item = this.props.renderItem;
+    return (
+      <Item
+        key={index}
+        index={index}
+        listId={this.props.id}
+        itemId={`${index}-item`}
+        height={this._height}
+        parentId={this.props.parentId}
+        id={this.props.listIds.get(index)}
+      />
+    );
+
+    /*setTimeout (this._fetch, 0);
+
     return (
       <DatagridItem
         index={index}
-        id={this.props.listIds.get(index)}
+        id={this.props.listIds.get (index)}
         key={index}
         renderItem={this.props.renderItem}
       />
-    );
+    );*/
   }
 
   estimateItemSize(index, cache) {

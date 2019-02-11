@@ -4,9 +4,11 @@ import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
+import List from 'gadgets/list/widget';
 import DatagridTable from './datagrid-table';
 import DatagridEntity from './datagrid-entity';
 import DatagridHeaders from './datagrid-headers';
+import DatagridItem from './datagrid-item';
 
 import importer from 'laboratory/importer/';
 const uiImporter = importer('ui');
@@ -89,31 +91,35 @@ class Datagrid extends Widget {
     const {columnsNo, ...others} = this.props;
 
     return (
-      <DatagridTable
-        do={(command, args) => this.do(command, args)}
-        onRef={list => {
-          this.list = list;
-        }}
-        renderItem={props => {
-          return (
-            <Container
-              kind="row-pane"
-              subkind="large-box"
-              verticalSpacing="large"
-            >
-              <DatagridEntity
-                entityUI={this.entityUI}
-                columnsNo={columnsNo}
-                datagrid={this}
-                className={this.styles.classNames.entity}
-                {...props}
+      <Container kind="panes">
+        <DatagridTable
+          do={(command, args) => this.do(command, args)}
+          onRef={list => {
+            this.list = list;
+          }}
+          renderItem={index => {
+            return (
+              <DatagridItem
+                index={index}
+                key={index}
+                renderItem={props => {
+                  return (
+                    <DatagridEntity
+                      entityUI={this.entityUI}
+                      columnsNo={columnsNo}
+                      datagrid={this}
+                      className={this.styles.classNames.entity}
+                      {...props}
+                    />
+                  );
+                }}
               />
-            </Container>
-          );
-        }}
-        mapItem={entity => ({id: entity.get('id')})}
-        {...others}
-      />
+            );
+          }}
+          mapItem={entity => ({id: entity.get('id')})}
+          {...others}
+        />
+      </Container>
     );
   }
 
