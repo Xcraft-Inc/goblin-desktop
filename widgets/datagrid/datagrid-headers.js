@@ -4,7 +4,7 @@ import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import DatagridCell from '../datagrid-cell/widget';
-import {T} from 'goblin-nabu/widgets/helpers/t.js';
+import T from 'goblin-nabu/widgets/helpers/t.js';
 import _ from 'lodash';
 
 const LabelConnected = Widget.connect((state, props) => {
