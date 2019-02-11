@@ -58,14 +58,6 @@ class Workitem extends Form {
     });
   }
 
-  onPublish() {
-    this.doAs(this.service, 'close', {
-      kind: 'publish',
-      desktopId: this.desktopId,
-      contextId: this.contextId,
-    });
-  }
-
   onCancel() {
     this.doAs(this.service, 'restore-entity');
     this.hideHinter();
@@ -78,14 +70,28 @@ class Workitem extends Form {
     }
   }
 
+  onPublish() {
+    this.doAs(this.service, 'close', {
+      kind: 'publish',
+      desktopId: this.desktopId,
+      contextId: this.contextId,
+    });
+  }
+
   onTrash() {
-    this.doAs(this.service, 'trash-entity');
-    this.hideHinter();
+    this.doAs(this.service, 'close', {
+      kind: 'trash',
+      desktopId: this.desktopId,
+      contextId: this.contextId,
+    });
   }
 
   onArchive() {
-    this.doAs(this.service, 'archive-entity');
-    this.hideHinter();
+    this.doAs(this.service, 'close', {
+      kind: 'archive',
+      desktopId: this.desktopId,
+      contextId: this.contextId,
+    });
   }
 
   /******************************************************************************/

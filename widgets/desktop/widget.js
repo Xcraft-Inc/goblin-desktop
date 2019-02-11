@@ -47,6 +47,7 @@ class Desktop extends Widget {
     this.onChangeTheme = this.onChangeTheme.bind(this);
     this.onTab = this.onTab.bind(this);
     this.onShiftTab = this.onShiftTab.bind(this);
+    this.onLanguageChoice = this.onLanguageChoice.bind(this);
   }
 
   componentDidMount() {
@@ -100,6 +101,10 @@ class Desktop extends Widget {
   onShiftTab(e) {
     console.log('desktop.onShiftTab');
     e.preventDefault();
+  }
+
+  onLanguageChoice() {
+    // TODO
   }
 
   /******************************************************************************/
@@ -267,6 +272,14 @@ class Desktop extends Widget {
               <TopBar desktopId={id} />
               <Container kind="main-tab-right">
                 <Button text={this.props.username} kind="main-tab-right" />
+                <Button
+                  ref={x => (this.comboButton = x)}
+                  glyph="solid/flag"
+                  kind="main-tab-right"
+                  active={this.showMenuTheme}
+                  tooltip="Choix de la langue de l'interface"
+                  onClick={this.onLanguageChoice}
+                />
                 <Button
                   ref={x => (this.comboButton = x)}
                   glyph="solid/tint"
