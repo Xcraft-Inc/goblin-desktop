@@ -11,6 +11,7 @@ import MainTabMenu from 'desktop/main-tab-menu/widget';
 import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
+const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
 
 /******************************************************************************/
 
@@ -29,6 +30,22 @@ const themes = [
   {text: 'Dragula', value: 'default-dragula'},
 ];
 
+const LocaleMenuConnected = Widget.connect((state, props) => {
+  const locales = state.get(`backend.nabu.locales`);
+  const toolbarId = getToolbarId(props.desktopId);
+  const toolbar = toolbarId ? state.get(`backend.${toolbarId}`) : null;
+
+  return {
+    items: locales
+      ? locales.map(locale => ({
+          value: locale.get('id'),
+          text: locale.get('name'),
+        }))
+      : [],
+    currentItemValue: toolbar ? toolbar.get('selectedLocaleId') : null,
+  };
+})(MainTabMenu);
+
 /******************************************************************************/
 
 class Desktop extends Widget {
@@ -37,7 +54,7 @@ class Desktop extends Widget {
 
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
+    this.onChangeLocale = this.onChangeLocale.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
     this.onTab = this.onTab.bind(this);
     this.onShiftTab = this.onShiftTab.bind(this);
@@ -70,8 +87,13 @@ class Desktop extends Widget {
     this.do('change-mandate');
   }
 
-  onChangeLanguage(name) {
-    // TODO
+  onChangeLocale(value) {
+    const toolbarId = getToolbarId(this.props.id);
+    if (toolbarId) {
+      this.doFor(toolbarId, 'set-selected-locale', {
+        localeId: value,
+      });
+    }
   }
 
   onChangeTheme(name) {
@@ -222,6 +244,13 @@ class Desktop extends Widget {
               <TopBar desktopId={id} />
               <Container kind="main-tab-right">
                 <Button text={this.props.username} kind="main-tab-right" />
+                <LocaleMenuConnected
+                  glyph="solid/flag"
+                  kind="main-tab-right"
+                  tooltip="Choix de la locale"
+                  onChange={this.onChangeLocale}
+                  desktopId={id}
+                />
                 <MainTabMenu
                   glyph="solid/tint"
                   kind="main-tab-right"
