@@ -1,34 +1,32 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Widget from 'laboratory/widget';
 import MouseTrap from 'mousetrap';
 import importer from 'laboratory/importer/';
-import {Unit} from 'electrum-theme';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
-import Combo from 'gadgets/combo/widget';
 import NabuToolbar from 'nabu/nabu-toolbar/widget';
 import Monitor from 'desktop/monitor/widget';
 import Notifications from 'desktop/notifications/widget';
+import MainTabMenu from 'desktop/main-tab-menu/widget';
 import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
 
 /******************************************************************************/
 
-let currentThemeName = 'default'; // FIXME: Move to state !?
+let currentTheme = 'default';
 
 const themes = [
-  {text: 'Standard', name: 'default'},
-  {text: 'Standard compact', name: 'default-compact'},
-  {text: 'Vert', name: 'default-green'},
-  {text: 'Vert spécial', name: 'special-green'},
-  {text: 'Vert arrondi', name: 'smooth-green'},
-  {text: 'Rose', name: 'default-pink'},
-  {text: 'Rose compact', name: 'compact-pink'},
-  {text: 'Monochrome compact', name: 'compact-mono'},
-  {text: 'Foncé', name: 'default-dark'},
-  {text: 'Dragula', name: 'default-dragula'},
+  {text: 'Standard', value: 'default'},
+  {text: 'Standard compact', value: 'default-compact'},
+  {text: 'Vert', value: 'default-green'},
+  {text: 'Vert spécial', value: 'special-green'},
+  {text: 'Vert arrondi', value: 'smooth-green'},
+  {text: 'Rose', value: 'default-pink'},
+  {text: 'Rose compact', value: 'compact-pink'},
+  {text: 'Monochrome compact', value: 'compact-mono'},
+  {text: 'Foncé', value: 'default-dark'},
+  {text: 'Dragula', value: 'default-dragula'},
 ];
 
 /******************************************************************************/
@@ -37,13 +35,6 @@ class Desktop extends Widget {
   constructor() {
     super(...arguments);
 
-    this.comboButtonLanguage = null;
-    this.comboButtonTheme = null;
-
-    this.state = {
-      showMenuLanguage: false,
-      showMenuTheme: false,
-    };
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeLanguage = this.onChangeLanguage.bind(this);
@@ -54,8 +45,6 @@ class Desktop extends Widget {
 
   componentDidMount() {
     super.componentDidMount();
-    this.comboLanguage = ReactDOM.findDOMNode(this.comboButtonLanguage);
-    this.comboTheme = ReactDOM.findDOMNode(this.comboButtonTheme);
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
   }
@@ -63,26 +52,6 @@ class Desktop extends Widget {
   componentWillUnmount() {
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
-  }
-
-  get showMenuLanguage() {
-    return this.state.showMenuLanguage;
-  }
-
-  set showMenuLanguage(value) {
-    this.setState({
-      showMenuLanguage: value,
-    });
-  }
-
-  get showMenuTheme() {
-    return this.state.showMenuTheme;
-  }
-
-  set showMenuTheme(value) {
-    this.setState({
-      showMenuTheme: value,
-    });
   }
 
   static get wiring() {
@@ -106,7 +75,7 @@ class Desktop extends Widget {
   }
 
   onChangeTheme(name) {
-    currentThemeName = name;
+    currentTheme = name;
     this.do('change-theme', {name});
   }
 
@@ -126,70 +95,6 @@ class Desktop extends Widget {
     const WiredNotifications = wiredNotifications(this.props.id);
 
     return <WiredNotifications />;
-  }
-
-  renderMenuLanguage() {
-    if (this.showMenuLanguage) {
-      const rect = this.comboLanguage.getBoundingClientRect();
-      const top = Unit.add(
-        rect.bottom + 'px',
-        this.context.theme.shapes.flyingBalloonTriangleSize
-      );
-
-      const list = [];
-      for (const langue of ['fr-CH', 'de-CH', 'us-EN']) {
-        list.push({
-          text: langue,
-          active: langue === 'fr-CH',
-          action: () => this.onChangeLanguage(langue.name),
-        });
-      }
-
-      return (
-        <Combo
-          menuType="wrap"
-          width="200px"
-          left={(rect.left + rect.right) / 2}
-          top={top}
-          list={list}
-          close={() => (this.showMenuLanguage = false)}
-        />
-      );
-    } else {
-      return null;
-    }
-  }
-
-  renderMenuTheme() {
-    if (this.showMenuTheme) {
-      const rect = this.comboTheme.getBoundingClientRect();
-      const top = Unit.add(
-        rect.bottom + 'px',
-        this.context.theme.shapes.flyingBalloonTriangleSize
-      );
-
-      const list = [];
-      for (const theme of themes) {
-        list.push({
-          text: theme.text,
-          active: theme.name === currentThemeName,
-          action: () => this.onChangeTheme(theme.name),
-        });
-      }
-
-      return (
-        <Combo
-          menuType="wrap"
-          width="200px"
-          left={(rect.left + rect.right) / 2}
-          top={top}
-          list={list}
-          close={() => (this.showMenuTheme = false)}
-        />
-      );
-    } else {
-      return null;
-    }
   }
 
   connectCommandsPrompt() {
@@ -317,21 +222,13 @@ class Desktop extends Widget {
               <TopBar desktopId={id} />
               <Container kind="main-tab-right">
                 <Button text={this.props.username} kind="main-tab-right" />
-                <Button
-                  ref={x => (this.comboButtonLanguage = x)}
-                  glyph="solid/flag"
-                  kind="main-tab-right"
-                  active={this.showMenuLanguage}
-                  tooltip="Choix de la langue de l'interface"
-                  onClick={() => (this.showMenuLanguage = true)}
-                />
-                <Button
-                  ref={x => (this.comboButtonTheme = x)}
+                <MainTabMenu
                   glyph="solid/tint"
                   kind="main-tab-right"
-                  active={this.showMenuTheme}
                   tooltip="Choix du thème"
-                  onClick={() => (this.showMenuTheme = true)}
+                  items={themes}
+                  onChange={this.onChangeTheme}
+                  currentItemValue={currentTheme}
                 />
                 <Button
                   glyph="solid/tv"
@@ -362,8 +259,6 @@ class Desktop extends Widget {
             <div className={contentClass}>
               <Content desktopId={id} />
               {this.renderNofications()}
-              {this.renderMenuLanguage()}
-              {this.renderMenuTheme()}
             </div>
             <Container kind="footer">
               <Toolbar desktopId={id} />
