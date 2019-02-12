@@ -4,6 +4,7 @@ import MouseTrap from 'mousetrap';
 import importer from 'laboratory/importer/';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
+import Separator from 'gadgets/separator/widget';
 import NabuToolbar from 'nabu/nabu-toolbar/widget';
 import Monitor from 'desktop/monitor/widget';
 import Notifications from 'desktop/notifications/widget';
@@ -52,10 +53,14 @@ class Desktop extends Widget {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      showFooter: true,
+    };
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeLocale = this.onChangeLocale.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
+    this.renderFooter = this.renderFooter.bind(this);
     this.onTab = this.onTab.bind(this);
     this.onShiftTab = this.onShiftTab.bind(this);
   }
@@ -69,6 +74,16 @@ class Desktop extends Widget {
   componentWillUnmount() {
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
+  }
+
+  get showFooter() {
+    return this.state.showFooter;
+  }
+
+  set showFooter(value) {
+    this.setState({
+      showFooter: value,
+    });
   }
 
   static get wiring() {
@@ -168,6 +183,23 @@ class Desktop extends Widget {
     );
   }
 
+  renderFooter() {
+    if (this.showFooter) {
+      const CommandsPrompt = this.connectCommandsPrompt();
+      const Toolbar = NabuToolbar.connectTo(this);
+
+      return (
+        <Container kind="footer">
+          <Toolbar />
+          <Monitor id={this.props.id + '$monitor'} />
+          <CommandsPrompt />
+        </Container>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     const {id, routesMap} = this.props;
 
@@ -175,8 +207,6 @@ class Desktop extends Widget {
       return null;
     }
 
-    const Toolbar = NabuToolbar.connectTo(this);
-    const CommandsPrompt = this.connectCommandsPrompt();
     const routes = {
       '/hinter/': {},
       '/task-bar/': {},
@@ -236,6 +266,13 @@ class Desktop extends Widget {
               onClick={this.onChangeMandate}
             />
             <Tasks desktopId={id} />
+            <Separator kind="sajex" />
+            <Button
+              kind="task-show-footer"
+              glyph="solid/chevron-right"
+              tooltip="Montre ou cache la barre de pied de page"
+              onClick={() => (this.showFooter = !this.showFooter)}
+            />
           </Container>
         </Container>
         <Container kind="right">
@@ -289,11 +326,7 @@ class Desktop extends Widget {
               <Content desktopId={id} />
               {this.renderNofications()}
             </div>
-            <Container kind="footer">
-              <Toolbar desktopId={id} />
-              <Monitor id={this.props.id + '$monitor'} />
-              <CommandsPrompt />
-            </Container>
+            {this.renderFooter()}
           </Container>
         </Container>
       </Container>
