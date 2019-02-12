@@ -6,6 +6,7 @@ import importer from 'laboratory/importer/';
 import {Unit} from 'electrum-theme';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
+import Separator from 'gadgets/separator/widget';
 import Combo from 'gadgets/combo/widget';
 import NabuToolBar from 'nabu/toolbar/widget';
 import Monitor from 'desktop/monitor/widget';
@@ -41,6 +42,7 @@ class Desktop extends Widget {
 
     this.state = {
       showMenuTheme: false,
+      showFooter: true,
     };
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
@@ -69,6 +71,16 @@ class Desktop extends Widget {
   set showMenuTheme(value) {
     this.setState({
       showMenuTheme: value,
+    });
+  }
+
+  get showFooter() {
+    return this.state.showFooter;
+  }
+
+  set showFooter(value) {
+    this.setState({
+      showFooter: value,
     });
   }
 
@@ -196,6 +208,22 @@ class Desktop extends Widget {
     );
   }
 
+  renderFooter() {
+    if (this.showFooter) {
+      const CommandsPrompt = this.connectCommandsPrompt();
+
+      return (
+        <Container kind="footer">
+          <NabuToolBar />
+          <Monitor id={this.props.id + '$monitor'} />
+          <CommandsPrompt />
+        </Container>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     const {id, routesMap} = this.props;
 
@@ -203,7 +231,6 @@ class Desktop extends Widget {
       return null;
     }
 
-    const CommandsPrompt = this.connectCommandsPrompt();
     const routes = {
       '/hinter/': {},
       '/task-bar/': {},
@@ -263,6 +290,13 @@ class Desktop extends Widget {
               onClick={this.onChangeMandate}
             />
             <Tasks desktopId={id} />
+            <Separator kind="sajex" />
+            <Button
+              kind="task-show-footer"
+              glyph="solid/chevron-right"
+              tooltip="Montre ou cache la barre de pied de page"
+              onClick={() => (this.showFooter = !this.showFooter)}
+            />
           </Container>
         </Container>
         <Container kind="right">
@@ -318,11 +352,7 @@ class Desktop extends Widget {
               {this.renderNofications()}
               {this.renderMenuTheme()}
             </div>
-            <Container kind="footer">
-              <NabuToolBar />
-              <Monitor id={this.props.id + '$monitor'} />
-              <CommandsPrompt />
-            </Container>
+            {this.renderFooter()}
           </Container>
         </Container>
       </Container>
