@@ -122,7 +122,8 @@ class Workitem extends Form {
     }
 
     if (button.quest) {
-      this.doAs(this.service, button.quest, button.questParams);
+      const service = button.questService || this.service;
+      this.doAs(service, button.quest, button.questParams);
     }
   }
 
