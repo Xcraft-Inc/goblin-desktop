@@ -1,4 +1,5 @@
 import React from 'react';
+import Widget from 'laboratory/widget';
 import Form from 'laboratory/form';
 import PropTypes from 'prop-types';
 
@@ -121,7 +122,11 @@ class Workitem extends Form {
     }
 
     if (button.quest) {
-      this.doAs(this.service, button.quest, button.questParams);
+      if (button.questService) {
+        this.doFor(button.questService, button.quest, button.questParams);
+      } else {
+        this.doAs(this.service, button.quest, button.questParams);
+      }
     }
   }
 
@@ -179,28 +184,49 @@ class Workitem extends Form {
     }
   }
 
-  renderStatus() {
+  renderStatusBase() {
     if (this.props.status === 'draft') {
       return (
-        <Container kind="pane-warning" subkind="draft">
+        <Container kind="pane-warning" subkind="draft" grow="1">
           <Label kind="pane-warning" text="Brouillon" />
         </Container>
       );
     } else if (this.props.status === 'archived') {
       return (
-        <Container kind="pane-warning" subkind="archived">
+        <Container kind="pane-warning" subkind="archived" grow="1">
           <Label kind="pane-warning" text="Archivé" />
         </Container>
       );
     } else if (this.props.status === 'trashed') {
       return (
-        <Container kind="pane-warning" subkind="trashed">
+        <Container kind="pane-warning" subkind="trashed" grow="1">
           <Label kind="pane-warning" text="Détruit" />
         </Container>
       );
     } else {
       return null;
     }
+  }
+
+  renderStatusBusiness() {
+    if (this.props.businessStatus) {
+      return (
+        <Container kind="pane-warning" subkind="business" grow="1">
+          <Label kind="pane-warning" text={this.props.businessStatus} />
+        </Container>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderStatus() {
+    return (
+      <Container kind="row">
+        {this.renderStatusBase()}
+        {this.renderStatusBusiness()}
+      </Container>
+    );
   }
 
   renderEditor() {
@@ -366,4 +392,18 @@ class Workitem extends Form {
 }
 
 /******************************************************************************/
-export default Workitem;
+export default Widget.connect((state, props) => {
+  if (props.entityId) {
+    return {
+      status: state.get(`backend.${props.entityId}.meta.status`),
+      businessStatus: state.get(`backend.${props.entityId}.status`),
+      entityType: state.get(`backend.${props.entityId}.meta.type`),
+    };
+  } else {
+    return {
+      status: null,
+      businessStatus: null,
+      entityType: null,
+    };
+  }
+})(Workitem);

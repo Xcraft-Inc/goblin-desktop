@@ -66,12 +66,6 @@ class Detail extends Widget {
       `backend.${workitemId}.buttons`
     );
 
-    const DetailWithStatus = this.mapWidget(
-      Detail,
-      'status',
-      `backend.${entityId}.meta.status`
-    );
-
     return this.buildLoader(entityId, () => {
       let DetailUI = this.WithState(workitemUI.panel.readonly, 'entityId')(
         '.entityId'
@@ -94,7 +88,7 @@ class Detail extends Widget {
           width={width ? width : '700px'}
           busy={this.props.loading}
         >
-          <DetailWithStatus
+          <Detail
             kind="detail"
             id={workitemId}
             entityId={entityId}
@@ -111,7 +105,7 @@ class Detail extends Widget {
               entityId={entityId}
               contextId={this.context.contextId}
             />
-          </DetailWithStatus>
+          </Detail>
         </Container>
       );
     });

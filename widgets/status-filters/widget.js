@@ -5,6 +5,7 @@ import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import CheckButton from 'gadgets/check-button/widget';
 
+const managedStatus = ['draft', 'published', 'archived', 'trashed'];
 class StatusFilter extends Widget {
   constructor() {
     super(...arguments);
@@ -19,24 +20,19 @@ class StatusFilter extends Widget {
   }
 
   _changeStatus(changed, newState) {
-    const newStatusList = ['draft', 'published', 'archived'].reduce(
-      (state, status) => {
-        if (changed === status) {
-          if (newState) {
-            state.push(status);
-          }
-        } else {
-          const isInList = this.props.contentIndex
-            .get('value')
-            .contains(status);
-          if (isInList) {
-            state.push(status);
-          }
+    const newStatusList = managedStatus.reduce((state, status) => {
+      if (changed === status) {
+        if (newState) {
+          state.push(status);
         }
-        return state;
-      },
-      []
-    );
+      } else {
+        const isInList = this.props.contentIndex.get('value').contains(status);
+        if (isInList) {
+          state.push(status);
+        }
+      }
+      return state;
+    }, []);
     this.doAs('list', 'change-content-index', {
       name: 'status',
       value: newStatusList,
@@ -44,7 +40,7 @@ class StatusFilter extends Widget {
   }
 
   buildStatusFlag() {
-    return ['draft', 'published', 'archived'].reduce((state, status) => {
+    return managedStatus.reduce((state, status) => {
       state[status] = this.props.contentIndex.get('value').contains(status);
       return state;
     }, {});
@@ -60,7 +56,7 @@ class StatusFilter extends Widget {
       return null;
     }
 
-    const {published, draft, archived} = this.buildStatusFlag();
+    const {published, draft, archived, trashed} = this.buildStatusFlag();
     return (
       <Container kind="row-pane">
         <Container kind="column" grow="1">
@@ -95,6 +91,17 @@ class StatusFilter extends Widget {
               tooltip="Montre les éléments archivés"
               checked={archived}
               onClick={this.changeStatus('archived')}
+            />
+          </Container>
+          <Container kind="row">
+            <Label width="30px" />
+            <CheckButton
+              justify="left"
+              heightStrategy="compact"
+              text="Supprimés"
+              tooltip="Montre les éléments supprimés"
+              checked={trashed}
+              onClick={this.changeStatus('trashed')}
             />
           </Container>
         </Container>

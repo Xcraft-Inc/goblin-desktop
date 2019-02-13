@@ -8,7 +8,7 @@ class WizardButtons extends Widget {
     super(...arguments);
   }
 
-  handleButtonClick(id, quest, questParams) {
+  handleButtonClick(id, questService, quest, questParams) {
     switch (id) {
       case 'main':
         this.props.onNext();
@@ -21,13 +21,17 @@ class WizardButtons extends Widget {
     }
 
     if (quest) {
-      this.doAs(this.service, quest, questParams);
+      if (questService) {
+        this.doFor(questService, quest, questParams);
+      } else {
+        this.doAs(this.service, quest, questParams);
+      }
     }
   }
 
   renderButton(button, id, index, size) {
     button = button.toJS();
-    const {quest, questParams, ...props} = button;
+    const {questService, quest, questParams, ...props} = button;
     let mainProps = {};
     if (id === 'main') {
       mainProps = {
@@ -39,7 +43,9 @@ class WizardButtons extends Widget {
         key={id}
         kind="action"
         place={`${index + 1}/${size}`}
-        onClick={() => this.handleButtonClick(id, quest, questParams)}
+        onClick={() =>
+          this.handleButtonClick(id, questService, quest, questParams)
+        }
         {...mainProps}
         {...props}
       />

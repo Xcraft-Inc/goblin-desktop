@@ -33,13 +33,7 @@ class Editor extends Widget {
       return null;
     }
 
-    let Editor = this.mapWidget(
-      Workitem,
-      'status',
-      `backend.${entityId}.meta.status`
-    );
-
-    Editor = this.mapWidget(Editor, 'buttons', `backend.${id}.buttons`);
+    const Editor = this.mapWidget(Workitem, 'buttons', `backend.${id}.buttons`);
 
     return this.buildLoader(entityId, () => {
       const workitem = this.props.id.split('@')[0];

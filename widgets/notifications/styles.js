@@ -7,7 +7,7 @@ export default function styles(theme) {
   const s = theme.shapes.lineSpacing;
   const width = '400px';
 
-  const panelStyle = {
+  const panel = {
     position: 'absolute',
     top: '0px',
     right: '0px',
@@ -22,22 +22,12 @@ export default function styles(theme) {
     zIndex: '5',
   };
 
-  const panelHiddenStyle = {
-    position: 'absolute',
-    top: '0px',
+  const panelHidden = {
+    ...panel,
     right: Unit.multiply(width, -1),
-    overflowY: 'hidden',
-    maxHeight: '100%',
-    width: width,
-    display: 'flex',
-    flexDirection: 'column',
-    margin: '0px',
-    backgroundColor: theme.palette.notificationBackground,
-    transition: theme.transitions.easeOut(),
-    zIndex: '5',
   };
 
-  const headerStyle = {
+  const header = {
     display: 'inline',
     flexGrow: '1',
     padding: Unit.multiply(m, 0.5) + ' ' + m,
@@ -46,24 +36,24 @@ export default function styles(theme) {
     color: theme.palette.notificationText,
   };
 
-  const headerRowStyle = {
+  const headerRow = {
     minHeight: '32px',
     display: 'flex',
     flexDirection: 'row',
   };
 
-  const notificationsStyle = {
+  const notifications = {
     margin: '0px',
     backgroundColor: null,
     overflowY: 'auto',
   };
 
   return {
-    panel: panelStyle,
-    panelHidden: panelHiddenStyle,
-    header: headerStyle,
-    headerRow: headerRowStyle,
-    notifications: notificationsStyle,
+    panel,
+    panelHidden,
+    header,
+    headerRow,
+    notifications,
   };
 }
 
