@@ -184,28 +184,49 @@ class Workitem extends Form {
     }
   }
 
-  renderStatus() {
+  renderStatusBase() {
     if (this.props.status === 'draft') {
       return (
-        <Container kind="pane-warning" subkind="draft">
+        <Container kind="pane-warning" subkind="draft" grow="1">
           <Label kind="pane-warning" text="Brouillon" />
         </Container>
       );
     } else if (this.props.status === 'archived') {
       return (
-        <Container kind="pane-warning" subkind="archived">
+        <Container kind="pane-warning" subkind="archived" grow="1">
           <Label kind="pane-warning" text="Archivé" />
         </Container>
       );
     } else if (this.props.status === 'trashed') {
       return (
-        <Container kind="pane-warning" subkind="trashed">
+        <Container kind="pane-warning" subkind="trashed" grow="1">
           <Label kind="pane-warning" text="Détruit" />
         </Container>
       );
     } else {
       return null;
     }
+  }
+
+  renderStatusBusiness() {
+    if (this.props.businessStatus) {
+      return (
+        <Container kind="pane-warning" subkind="business" grow="1">
+          <Label kind="pane-warning" text={this.props.businessStatus} />
+        </Container>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderStatus() {
+    return (
+      <Container kind="row">
+        {this.renderStatusBase()}
+        {this.renderStatusBusiness()}
+      </Container>
+    );
   }
 
   renderEditor() {
