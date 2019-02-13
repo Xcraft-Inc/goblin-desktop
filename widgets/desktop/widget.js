@@ -209,19 +209,18 @@ class Desktop extends Widget {
   }
 
   renderFooter() {
-    if (this.showFooter) {
-      const CommandsPrompt = this.connectCommandsPrompt();
+    const CommandsPrompt = this.connectCommandsPrompt();
+    const footerClass = this.showFooter
+      ? this.styles.classNames.footer
+      : this.styles.classNames.footerHidden;
 
-      return (
-        <Container kind="footer">
-          <NabuToolBar />
-          <Monitor id={this.props.id + '$monitor'} />
-          <CommandsPrompt />
-        </Container>
-      );
-    } else {
-      return null;
-    }
+    return (
+      <div className={footerClass}>
+        <NabuToolBar />
+        <Monitor id={this.props.id + '$monitor'} />
+        <CommandsPrompt />
+      </div>
+    );
   }
 
   render() {
@@ -275,7 +274,9 @@ class Desktop extends Widget {
       routes['/before-content/'].path
     );
 
-    const contentClass = this.styles.classNames.content;
+    const contentClass = this.showFooter
+      ? this.styles.classNames.content
+      : this.styles.classNames.contentWithoutfooter;
 
     return (
       <Container kind="root">
