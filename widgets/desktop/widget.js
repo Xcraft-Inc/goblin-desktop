@@ -190,7 +190,7 @@ class Desktop extends Widget {
 
       return (
         <Container kind="footer">
-          <Toolbar />
+          <Toolbar desktopId={this.props.id} />
           <Monitor id={this.props.id + '$monitor'} />
           <CommandsPrompt />
         </Container>
