@@ -51,7 +51,7 @@ const config = {
     finish: {
       form: {},
       quest: function*(quest, form, next) {
-        yield quest.me.next({result: workitemId, form});
+        yield quest.me.next({result: form.password});
       },
     },
   },
