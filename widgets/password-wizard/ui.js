@@ -26,7 +26,7 @@ function renderMain(props) {
         model=".form.showPassword"
       />
       <Field
-        kind="field"
+        kind="number"
         labelText="Longueur du mot de passe aléatoire"
         labelWidth="275px"
         width="325px"
