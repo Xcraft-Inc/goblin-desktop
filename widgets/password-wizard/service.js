@@ -12,11 +12,16 @@ const config = {
   name: 'password',
   title: 'Choisir le nouveau mot de passe',
   quests: {
-    createRandomPassword: function*(quest, passwordLength) {
+    createRandomPassword: function*(quest, form) {
+      const state = quest.goblin.getState();
+      const passwordLength = state.get('form.passwordLength');
       let password = '';
+      const charsLength = chars.length;
       for (let i = 1; i <= passwordLength; i++) {
-        let typeChar = quest.me.getRandomInt(chars.length);
-        let selectedChar = quest.me.getRandomInt(chars[typeChar].length);
+        let typeChar = yield quest.me.getRandomInt({max: charsLength});
+        let selectedChar = yield quest.me.getRandomInt({
+          max: chars[typeChar].length,
+        });
         password += chars[typeChar][selectedChar];
       }
       yield quest.me.change({
@@ -24,7 +29,7 @@ const config = {
         newValue: password,
       });
     },
-    getRandomInt: function(max) {
+    getRandomInt: function(quest, max) {
       return Math.floor(Math.random() * Math.floor(max));
     },
   },
@@ -38,17 +43,15 @@ const config = {
         });
       },
       form: {
-        password: '',
         showPassword: 'true',
+        passwordLength: '8',
       },
       quest: function(quest) {},
     },
     finish: {
       form: {},
       quest: function*(quest, form, next) {
-        const callerAPI = quest.getAPI(form.callerId);
-        yield callerAPI.setPassword({password: form.password});
-        quest.me.next();
+        yield quest.me.next({result: workitemId, form});
       },
     },
   },

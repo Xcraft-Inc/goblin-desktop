@@ -5,6 +5,10 @@ import Button from 'gadgets/button/widget';
 
 function renderMain(props) {
   const type = props.showPassword === 'true' ? {} : {type: 'password'};
+  const disableRandomPasswordButton =
+    props.passwordLength && Number.isInteger(parseInt(props.passwordLength))
+      ? false
+      : true;
   return (
     <Container kind="column" grow="1">
       <Field
@@ -21,18 +25,22 @@ function renderMain(props) {
         labelText="Afficher le mot de passe"
         model=".form.showPassword"
       />
+      <Field
+        kind="field"
+        labelText="Longueur du mot de passe aléatoire"
+        labelWidth="275px"
+        width="325px"
+        model=".form.passwordLength"
+      />
       <Button
         kind="action"
         grow="1"
         place="1/1"
-        width="300px"
+        width="495px"
         glyph="solid/user-secret"
-        text="Changer le mot de passe"
-        onClick={() =>
-          props.do('createRandomPassword', {
-            passwordLength: props.passwordLength,
-          })
-        }
+        text="Générer un mot de passe aléatoire"
+        disabled={disableRandomPasswordButton}
+        onClick={() => props.do('createRandomPassword')}
       />
     </Container>
   );
