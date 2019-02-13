@@ -1,4 +1,5 @@
 import React from 'react';
+import Widget from 'laboratory/widget';
 import Form from 'laboratory/form';
 import PropTypes from 'prop-types';
 
@@ -366,4 +367,18 @@ class Workitem extends Form {
 }
 
 /******************************************************************************/
-export default Workitem;
+export default Widget.connect((state, props) => {
+  if (props.entityId) {
+    return {
+      status: state.get(`backend.${props.entityId}.meta.status`),
+      businessStatus: state.get(`backend.${props.entityId}.status`),
+      entityType: state.get(`backend.${props.entityId}.meta.type`),
+    };
+  } else {
+    return {
+      status: null,
+      businessStatus: null,
+      entityType: null,
+    };
+  }
+})(Workitem);
