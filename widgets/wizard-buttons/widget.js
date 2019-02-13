@@ -21,8 +21,11 @@ class WizardButtons extends Widget {
     }
 
     if (quest) {
-      const service = questService || this.service;
-      this.doAs(service, quest, questParams);
+      if (questService) {
+        this.doFor(questService, quest, questParams);
+      } else {
+        this.doAs(this.service, quest, questParams);
+      }
     }
   }
 
