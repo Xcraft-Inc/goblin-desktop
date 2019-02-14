@@ -40,7 +40,7 @@ function renderMain(props) {
         glyph="solid/user-secret"
         text="Générer un mot de passe aléatoire"
         disabled={disableRandomPasswordButton}
-        onClick={() => props.do('createRandomPassword')}
+        onClick={() => props.do('setRandomPassword')}
       />
     </Container>
   );

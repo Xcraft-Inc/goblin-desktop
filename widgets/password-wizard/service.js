@@ -1,36 +1,19 @@
 'use strict';
 const {buildWizard} = require('goblin-desktop');
-
-const chars = [
-  'abcdefghijkmnopqrstuvwxyz',
-  'ABCDEFGHJKLMNPQRSTUVWXYZ',
-  '@+-=*&%?!_',
-  '23456789',
-];
+const createRandomPassword = require('./createRandomPassword');
 
 const config = {
   name: 'password',
   title: 'Choisir le nouveau mot de passe',
   quests: {
-    createRandomPassword: function*(quest, form) {
+    setRandomPassword: function*(quest) {
       const state = quest.goblin.getState();
       const passwordLength = state.get('form.passwordLength');
-      let password = '';
-      const charsLength = chars.length;
-      for (let i = 1; i <= passwordLength; i++) {
-        let typeChar = yield quest.me.getRandomInt({max: charsLength});
-        let selectedChar = yield quest.me.getRandomInt({
-          max: chars[typeChar].length,
-        });
-        password += chars[typeChar][selectedChar];
-      }
+      const password = createRandomPassword(passwordLength);
       yield quest.me.change({
         path: 'form.password',
         newValue: password,
       });
-    },
-    getRandomInt: function(quest, max) {
-      return Math.floor(Math.random() * Math.floor(max));
     },
   },
   steps: {
@@ -50,7 +33,7 @@ const config = {
     },
     finish: {
       form: {},
-      quest: function*(quest, form, next) {
+      quest: function*(quest, form) {
         yield quest.me.next({result: form.password});
       },
     },
