@@ -154,7 +154,6 @@ class EntityRow extends Widget {
             grow="1"
             isLast="false"
             isHeader="false"
-            textAlign="center"
             text={
               <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
             }
