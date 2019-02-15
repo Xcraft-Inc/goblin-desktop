@@ -155,7 +155,9 @@ class EntityRow extends Widget {
             isLast="false"
             isHeader="false"
             textAlign="center"
-            text="Chargement..."
+            text={
+              <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
+            }
           />
         </div>
       );
