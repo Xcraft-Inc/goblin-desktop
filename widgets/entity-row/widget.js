@@ -1,6 +1,7 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import TableCell from 'gadgets/table-cell/widget';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 const {ListHelpers} = require('goblin-toolbox');
 const {
@@ -90,7 +91,7 @@ class _Driller extends Widget {
           grow="1"
           isLast="false"
           isHeader="false"
-          text="chargement..."
+          text={<FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />}
           {...getColumnProps(this.props.column)}
         />
       );
