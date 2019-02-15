@@ -88,7 +88,6 @@ class _Driller extends Widget {
       }
       return (
         <TableCell
-          grow="1"
           isLast="false"
           isHeader="false"
           text={<FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />}
