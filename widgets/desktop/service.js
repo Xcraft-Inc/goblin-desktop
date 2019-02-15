@@ -425,7 +425,7 @@ Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {
   });
 });
 
-Goblin.registerQuest(goblinName, 'nav-to-context', function(quest, contextId) {
+Goblin.registerQuest(goblinName, 'nav-to-context', function*(quest, contextId) {
   const state = quest.goblin.getState();
   const view = state.get(`current.views.${contextId}`, null);
   let route;
@@ -442,6 +442,11 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function(quest, contextId) {
   }
   quest.evt(`nav.requested`, {
     route,
+  });
+
+  const contexts = quest.getAPI(`contexts@${quest.goblin.id}`);
+  yield contexts.setCurrent({
+    contextId,
   });
 
   quest.do();
