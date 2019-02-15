@@ -91,6 +91,7 @@ class _Driller extends Widget {
           isLast="false"
           isHeader="false"
           text="chargement..."
+          {...getColumnProps(this.props.column)}
         />
       );
     }
