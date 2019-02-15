@@ -36,7 +36,8 @@ class _ListItem extends Widget {
 
   render() {
     const containerProps = {};
-    if (!this.props.exists && this.props.height) {
+    const text = this.props.text ? this.props.text : '...';
+    if ((!this.props.exists || !this.props.text) && this.props.height) {
       containerProps.height = `${this.props.height}px`;
     }
     if (
@@ -58,7 +59,7 @@ class _ListItem extends Widget {
         {this.props.exists ? (
           <Button kind="container" width="100%" onClick={this.listNav}>
             <Label
-              text={this.props.text}
+              text={text}
               kind="large-single"
               justify="left"
               grow="1"
@@ -77,7 +78,7 @@ const ListItem = Widget.connect((state, props) => {
   return {
     id,
     exists: state.has(`backend.${id}`),
-    text: text ? text : '...',
+    text,
     height: props.height,
     parentId: props.parentId.parentId,
     onDrillDown: props.parentId.onDrillDown,
