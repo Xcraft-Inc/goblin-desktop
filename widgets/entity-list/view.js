@@ -3,6 +3,7 @@ import View from 'laboratory/view';
 import Container from 'gadgets/container/widget';
 import EntityList from 'desktop/entity-list/widget';
 import Wizard from 'desktop/wizard/widget';
+import Datagrid from 'desktop/datagrid/widget';
 
 export default class EntityListView extends View {
   render() {
@@ -17,6 +18,8 @@ export default class EntityListView extends View {
       const dialog = dialogId.split('@')[0];
       if (dialog.endsWith('-wizard')) {
         WiredDialog = Wizard;
+      } else if (dialog.endsWith('-datagrid')) {
+        WiredDialog = Datagrid;
       } else {
         throw new Error(
           `${dialog} dialog kind not implemented in default view`

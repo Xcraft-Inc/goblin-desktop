@@ -475,6 +475,10 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function(
 
 Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function(quest) {
   const last = quest.goblin.getState().get('last');
+  if (!last) {
+    return;
+  }
+
   const contextId = last.get('workcontext');
   const view = last.get('view');
   const workitemId = last.get('workitem');

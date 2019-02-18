@@ -1,8 +1,8 @@
 import React from 'react';
-import Widget from 'laboratory/widget';
 
 import Wizard from 'desktop/wizard/widget';
-import DialogModal from 'gadgets/dialog-modal/widget';
+import Datagrid from 'desktop/datagrid/widget';
+import WorkitemDialog from 'desktop/workitem-dialog/widget';
 
 import View from 'laboratory/view';
 import importer from 'laboratory/importer/';
@@ -36,6 +36,10 @@ class WorkItem extends View {
           const dialog = did.split('@')[0];
           if (dialog.endsWith('-wizard')) {
             WiredDialog = Wizard;
+          } else if (dialog.endsWith('-datagrid')) {
+            WiredDialog = Datagrid;
+          } else if (dialog.endsWith('-workitem')) {
+            WiredDialog = WorkitemDialog;
           } else {
             throw new Error(
               `${dialog} dialog kind not implemented in WorkItem`
