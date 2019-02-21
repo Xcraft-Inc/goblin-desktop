@@ -142,7 +142,7 @@ class EntityRow extends Widget {
         : this.styles.classNames.odd;
 
     if (!loaded) {
-      if (this._idRequested !== id) {
+      if (id && this._idRequested !== id) {
         setTimeout(this.props.onDrillDown, 0, id);
         this.renewTTL(id);
         this._idRequested = id;
