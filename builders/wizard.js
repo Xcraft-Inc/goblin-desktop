@@ -105,6 +105,13 @@ module.exports = config => {
       }
     }
 
+    quest.goblin.defer(
+      quest.sub(`*::${quest.goblin.id}.step`, function*(err, msg) {
+        const {action, ...other} = msg.data;
+        yield quest.me[action](other);
+      })
+    );
+
     quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
     yield quest.me.initWizard();
     yield quest.me.busy();
@@ -151,21 +158,21 @@ module.exports = config => {
     });
   }
 
-  Goblin.registerQuest(goblinName, 'init-wizard', function*(quest) {
+  Goblin.registerQuest(goblinName, 'init-wizard', function(quest) {
     const nextStep = wizardFlow[1];
-    yield quest.me.goto({step: nextStep});
+    quest.evt('step', {action: 'goto', step: nextStep});
   });
 
-  Goblin.registerQuest(goblinName, 'next', function*(quest, result) {
+  Goblin.registerQuest(goblinName, 'next', function(quest, result) {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === wizardFlow.length - 1) {
-      yield quest.me.done({result});
+      quest.evt('step', {action: 'done', result});
       return result;
     }
     const nIndex = cIndex + 1;
     const nextStep = wizardFlow[nIndex];
-    yield quest.me.goto({step: nextStep});
+    quest.evt('step', {action: 'goto', step: nextStep});
     return result;
   });
 
