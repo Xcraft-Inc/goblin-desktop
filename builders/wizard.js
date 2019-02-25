@@ -74,7 +74,10 @@ module.exports = config => {
       return state.set('step', action.get('step'));
     },
     busy: state => {
-      return state.set('busy', !state.get('busy'));
+      return state.set('busy', true);
+    },
+    idle: state => {
+      return state.set('busy', false);
     },
   };
 
@@ -114,11 +117,15 @@ module.exports = config => {
 
     quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
     yield quest.me.initWizard();
-    yield quest.me.busy();
+    yield quest.me.idle();
     return quest.goblin.id;
   });
 
   Goblin.registerQuest(goblinName, 'busy', function(quest) {
+    quest.do();
+  });
+
+  Goblin.registerQuest(goblinName, 'idle', function(quest) {
     quest.do();
   });
 
@@ -199,7 +206,7 @@ module.exports = config => {
     // The quest of the step can use updateButtons without specifying the step.
     //quest.dispatch('next', {step});
 
-    yield quest.me.busy(); // Clear busy
+    yield quest.me.idle(); // Clear busy
   });
 
   Goblin.registerQuest(goblinName, 'done', function*(quest, result) {
