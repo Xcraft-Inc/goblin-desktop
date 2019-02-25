@@ -164,7 +164,7 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function*(
       id: widgetId,
     });
   }
-  quest.kill([widgetId]);
+  yield quest.kill([widgetId]);
   quest.evt(`${widgetId}.workitem.closed`);
 });
 
@@ -416,7 +416,7 @@ Goblin.registerQuest(goblinName, 'remove-dialog', function*(quest, dialogId) {
     route: buildDialogNavRequest(state),
   });
   yield quest.me.cleanWorkitem({workitemId: dialogId});
-  quest.kill([dialogId]);
+  yield quest.kill([dialogId]);
 });
 
 Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {
