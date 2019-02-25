@@ -205,14 +205,14 @@ module.exports = config => {
   Goblin.registerQuest(goblinName, 'done', function*(quest, result) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
-    yield desk.removeDialog({dialogId: quest.goblin.id});
+    yield desk.closeDialog({dialogId: quest.goblin.id});
     quest.evt('done', {finished: true, result});
   });
 
   Goblin.registerQuest(goblinName, 'cancel', function*(quest) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
-    yield desk.removeDialog({dialogId: quest.goblin.id});
+    yield desk.closeDialog({dialogId: quest.goblin.id});
     quest.evt('done', quest.cancel());
   });
 
