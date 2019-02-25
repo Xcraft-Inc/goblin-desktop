@@ -90,9 +90,9 @@ module.exports = config => {
         if (gadgets[key].onActions) {
           for (const handler of Object.keys(gadgets[key].onActions)) {
             quest.goblin.defer(
-              quest.sub(`${newGadgetId}.${handler}`, (err, msg) => {
+              quest.sub(`${newGadgetId}.${handler}`, function*(err, msg) {
                 const questName = jsify(`${key}-${handler}`);
-                quest.me[questName](msg.data);
+                yield quest.me[questName](msg.data);
               })
             );
           }
@@ -134,11 +134,11 @@ module.exports = config => {
         for (const handler of Object.keys(gadgets[key].onActions)) {
           logicHandlers[`${key}-${handler}`] = gadgets[key].onActions[handler];
 
-          Goblin.registerQuest(goblinName, `${key}-${handler}`, function(
+          Goblin.registerQuest(goblinName, `${key}-${handler}`, function*(
             quest
           ) {
             quest.do();
-            quest.me.update();
+            yield quest.me.update();
           });
         }
       }
@@ -195,17 +195,17 @@ module.exports = config => {
     yield quest.me.busy(); // Clear busy
   });
 
-  Goblin.registerQuest(goblinName, 'done', function(quest, result) {
+  Goblin.registerQuest(goblinName, 'done', function*(quest, result) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
-    desk.removeDialog({dialogId: quest.goblin.id});
+    yield desk.removeDialog({dialogId: quest.goblin.id});
     quest.evt('done', {finished: true, result});
   });
 
-  Goblin.registerQuest(goblinName, 'cancel', function(quest) {
+  Goblin.registerQuest(goblinName, 'cancel', function*(quest) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
-    desk.removeDialog({dialogId: quest.goblin.id});
+    yield desk.removeDialog({dialogId: quest.goblin.id});
     quest.evt('done', quest.cancel());
   });
 
