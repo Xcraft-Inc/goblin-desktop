@@ -238,6 +238,8 @@ module.exports = config => {
     const stepName = state.get('step');
     const step = steps[stepName];
 
+    yield quest.me.busy();
+
     if (step) {
       if (step.updateButtonsMode === 'onChange') {
         yield quest.me.updateButtons();
@@ -247,6 +249,8 @@ module.exports = config => {
         yield quest.me[`${stepName}OnChange`]({form});
       }
     }
+
+    yield quest.me.idle();
   });
 
   Goblin.registerQuest(goblinName, 'update-buttons', function*(quest) {
