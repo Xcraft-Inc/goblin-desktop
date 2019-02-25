@@ -74,44 +74,63 @@ module.exports = config => {
       return state.set('step', action.get('step'));
     },
     busy: state => {
-      return state.set('busy', !state.get('busy'));
+      return state.set('busy', true);
+    },
+    idle: state => {
+      return state.set('busy', false);
     },
   };
 
-  Goblin.registerQuest(goblinName, 'create', function*(quest, desktopId, form) {
-    quest.goblin.setX('desktopId', desktopId);
-    const wizardGadgets = {};
-    if (gadgets) {
-      for (const key of Object.keys(gadgets)) {
-        const gadget = gadgets[key];
-        const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
-        wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
+  Goblin.registerQuest(
+    goblinName,
+    'create',
+    function*(quest, desktopId, form) {
+      quest.goblin.setX('desktopId', desktopId);
+      const wizardGadgets = {};
+      if (gadgets) {
+        for (const key of Object.keys(gadgets)) {
+          const gadget = gadgets[key];
+          const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
+          wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
 
-        if (gadgets[key].onActions) {
-          for (const handler of Object.keys(gadgets[key].onActions)) {
-            quest.goblin.defer(
-              quest.sub(`${newGadgetId}.${handler}`, function*(err, msg) {
-                const questName = jsify(`${key}-${handler}`);
-                yield quest.me[questName](msg.data);
-              })
-            );
+          if (gadgets[key].onActions) {
+            for (const handler of Object.keys(gadgets[key].onActions)) {
+              quest.goblin.defer(
+                quest.sub(`${newGadgetId}.${handler}`, function*(err, msg) {
+                  const questName = jsify(`${key}-${handler}`);
+                  yield quest.me[questName](msg.data);
+                })
+              );
+            }
           }
+
+          yield quest.create(`${gadget.type}-gadget`, {
+            id: newGadgetId,
+            options: gadget.options || null,
+          });
         }
-
-        yield quest.create(`${gadget.type}-gadget`, {
-          id: newGadgetId,
-          options: gadget.options || null,
-        });
       }
-    }
 
-    quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
-    yield quest.me.initWizard();
-    yield quest.me.busy();
-    return quest.goblin.id;
-  });
+      quest.goblin.defer(
+        quest.sub(`*::${quest.goblin.id}.step`, function*(err, msg) {
+          const {action, ...other} = msg.data;
+          yield quest.me[action](other);
+        })
+      );
+
+      quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
+      yield quest.me.initWizard();
+      yield quest.me.idle();
+      return quest.goblin.id;
+    },
+    ['*::*.step']
+  );
 
   Goblin.registerQuest(goblinName, 'busy', function(quest) {
+    quest.do();
+  });
+
+  Goblin.registerQuest(goblinName, 'idle', function(quest) {
     quest.do();
   });
 
@@ -151,21 +170,21 @@ module.exports = config => {
     });
   }
 
-  Goblin.registerQuest(goblinName, 'init-wizard', function*(quest) {
+  Goblin.registerQuest(goblinName, 'init-wizard', function(quest) {
     const nextStep = wizardFlow[1];
-    yield quest.me.goto({step: nextStep});
+    quest.evt('step', {action: 'goto', step: nextStep});
   });
 
-  Goblin.registerQuest(goblinName, 'next', function*(quest, result) {
+  Goblin.registerQuest(goblinName, 'next', function(quest, result) {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === wizardFlow.length - 1) {
-      yield quest.me.done({result});
+      quest.evt('step', {action: 'done', result});
       return result;
     }
     const nIndex = cIndex + 1;
     const nextStep = wizardFlow[nIndex];
-    yield quest.me.goto({step: nextStep});
+    quest.evt('step', {action: 'goto', step: nextStep});
     return result;
   });
 
@@ -192,20 +211,20 @@ module.exports = config => {
     // The quest of the step can use updateButtons without specifying the step.
     //quest.dispatch('next', {step});
 
-    yield quest.me.busy(); // Clear busy
+    yield quest.me.idle(); // Clear busy
   });
 
   Goblin.registerQuest(goblinName, 'done', function*(quest, result) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
-    yield desk.removeDialog({dialogId: quest.goblin.id});
+    yield desk.closeDialog({dialogId: quest.goblin.id});
     quest.evt('done', {finished: true, result});
   });
 
   Goblin.registerQuest(goblinName, 'cancel', function*(quest) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
-    yield desk.removeDialog({dialogId: quest.goblin.id});
+    yield desk.closeDialog({dialogId: quest.goblin.id});
     quest.evt('done', quest.cancel());
   });
 
@@ -224,6 +243,8 @@ module.exports = config => {
     const stepName = state.get('step');
     const step = steps[stepName];
 
+    yield quest.me.busy();
+
     if (step) {
       if (step.updateButtonsMode === 'onChange') {
         yield quest.me.updateButtons();
@@ -233,6 +254,8 @@ module.exports = config => {
         yield quest.me[`${stepName}OnChange`]({form});
       }
     }
+
+    yield quest.me.idle();
   });
 
   Goblin.registerQuest(goblinName, 'update-buttons', function*(quest) {
