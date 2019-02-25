@@ -77,10 +77,10 @@ Goblin.registerQuest(goblinName, 'remove', function*(
   quest.evt('removed', {workitemId});
 
   const desk = quest.getAPI(desktopId);
-  desk.cleanWorkitem({workitemId});
+  yield desk.cleanWorkitem({workitemId});
 
   if (navToLastWorkitem) {
-    desk.navToLastWorkitem();
+    yield desk.navToLastWorkitem();
   } else {
     // Navigate last tab
     const contextTabs = quest.goblin.getState().get(`tabs.${contextId}`);
@@ -90,13 +90,13 @@ Goblin.registerQuest(goblinName, 'remove', function*(
     const newLast = contextTabs.state.last();
 
     if (newLast) {
-      desk.navToWorkitem({
+      yield desk.navToWorkitem({
         contextId: contextId,
         view: newLast.get('view'),
         workitemId: newLast.get('workitemId'),
       });
     } else {
-      desk.clearWorkitem({contextId});
+      yield desk.clearWorkitem({contextId});
     }
   }
 });
