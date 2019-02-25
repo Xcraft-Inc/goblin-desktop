@@ -37,12 +37,9 @@ const LocaleMenuConnected = Widget.connect((state, props) => {
   const toolbar = toolbarId ? state.get(`backend.${toolbarId}`) : null;
 
   return {
-    items: locales
-      ? locales.map(locale => ({
-          value: locale.get('id'),
-          text: locale.get('name'),
-        }))
-      : [],
+    items: locales,
+    itemsTextKey: 'name',
+    itemsValueKey: 'id',
     currentItemValue: toolbar ? toolbar.get('selectedLocaleId') : null,
   };
 })(MainTabMenu);

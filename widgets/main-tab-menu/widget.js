@@ -56,11 +56,19 @@ class MainTabMenu extends Widget {
         this.context.theme.shapes.flyingBalloonTriangleSize
       );
 
-      const list = this.props.items.map(item => ({
-        text: item.text,
-        active: item.value === this.currentItem,
-        action: () => this.onChange(item.value),
-      }));
+      const list = this.props.items.map(item => {
+        const text = this.props.itemsTextKey
+          ? item.get(this.props.itemsTextKey)
+          : item.text;
+        const value = this.props.itemsValueKey
+          ? item.get(this.props.itemsValueKey)
+          : item.value;
+        return {
+          text,
+          active: value === this.currentItem,
+          action: () => this.onChange(value),
+        };
+      });
 
       return (
         <Combo
