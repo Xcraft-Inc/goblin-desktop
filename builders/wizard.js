@@ -81,45 +81,50 @@ module.exports = config => {
     },
   };
 
-  Goblin.registerQuest(goblinName, 'create', function*(quest, desktopId, form) {
-    quest.goblin.setX('desktopId', desktopId);
-    const wizardGadgets = {};
-    if (gadgets) {
-      for (const key of Object.keys(gadgets)) {
-        const gadget = gadgets[key];
-        const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
-        wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
+  Goblin.registerQuest(
+    goblinName,
+    'create',
+    function*(quest, desktopId, form) {
+      quest.goblin.setX('desktopId', desktopId);
+      const wizardGadgets = {};
+      if (gadgets) {
+        for (const key of Object.keys(gadgets)) {
+          const gadget = gadgets[key];
+          const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
+          wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
 
-        if (gadgets[key].onActions) {
-          for (const handler of Object.keys(gadgets[key].onActions)) {
-            quest.goblin.defer(
-              quest.sub(`${newGadgetId}.${handler}`, function*(err, msg) {
-                const questName = jsify(`${key}-${handler}`);
-                yield quest.me[questName](msg.data);
-              })
-            );
+          if (gadgets[key].onActions) {
+            for (const handler of Object.keys(gadgets[key].onActions)) {
+              quest.goblin.defer(
+                quest.sub(`${newGadgetId}.${handler}`, function*(err, msg) {
+                  const questName = jsify(`${key}-${handler}`);
+                  yield quest.me[questName](msg.data);
+                })
+              );
+            }
           }
+
+          yield quest.create(`${gadget.type}-gadget`, {
+            id: newGadgetId,
+            options: gadget.options || null,
+          });
         }
-
-        yield quest.create(`${gadget.type}-gadget`, {
-          id: newGadgetId,
-          options: gadget.options || null,
-        });
       }
-    }
 
-    quest.goblin.defer(
-      quest.sub(`*::${quest.goblin.id}.step`, function*(err, msg) {
-        const {action, ...other} = msg.data;
-        yield quest.me[action](other);
-      })
-    );
+      quest.goblin.defer(
+        quest.sub(`*::${quest.goblin.id}.step`, function*(err, msg) {
+          const {action, ...other} = msg.data;
+          yield quest.me[action](other);
+        })
+      );
 
-    quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
-    yield quest.me.initWizard();
-    yield quest.me.idle();
-    return quest.goblin.id;
-  });
+      quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
+      yield quest.me.initWizard();
+      yield quest.me.idle();
+      return quest.goblin.id;
+    },
+    ['*::*.step']
+  );
 
   Goblin.registerQuest(goblinName, 'busy', function(quest) {
     quest.do();
