@@ -32,8 +32,17 @@ class DatagridCell extends Form {
 }
 
 export default Widget.connect((state, props) => {
+  const column = state.get(`backend.${props.id}.columns[${props.index}]`);
+  const needColumns = state.get(`backend.${props.id}.needColumns`);
+
+  let columns = undefined;
+  const columnName = column.get('name');
+  if (needColumns && needColumns.includes(columnName)) {
+    columns = state.get(`backend.${props.id}.columns`);
+  }
+
   return {
-    column: state.get(`backend.${props.id}.columns[${props.index}]`),
-    columns: state.get(`backend.${props.id}.columns`),
+    column,
+    columns,
   };
 })(DatagridCell);
