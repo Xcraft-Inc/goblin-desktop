@@ -86,7 +86,14 @@ class MainTabMenu extends Widget {
   }
 
   render() {
-    const {items, onChange, currentItemValue, ...other} = this.props;
+    const {
+      items,
+      onChange,
+      currentItemValue,
+      itemsTextKey,
+      itemsValueKey,
+      ...other
+    } = this.props;
     const contentClass = this.styles.classNames.content;
 
     return (
