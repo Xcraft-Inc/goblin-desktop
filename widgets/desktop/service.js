@@ -4,7 +4,7 @@ const path = require('path');
 const Goblin = require('xcraft-core-goblin');
 const uuidV4 = require('uuid/v4');
 const goblinName = path.basename(module.parent.filename, '.js');
-
+const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
 const defaultRoutes = {
@@ -66,6 +66,11 @@ Goblin.registerQuest(
   },
   ['*::*.desktop-notification-broadcasted']
 );
+
+Goblin.registerQuest(goblinName, 'getCurrentLocale', function*(quest) {
+  const toolbarApi = quest.getAPI(getToolbarId(quest.goblin.id));
+  return yield toolbarApi.getSelectedLocaleId();
+});
 
 Goblin.registerQuest(goblinName, 'create-hinter-for', function*(
   quest,
