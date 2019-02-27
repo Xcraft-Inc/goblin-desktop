@@ -1,3 +1,5 @@
+//T:2019-02-27
+
 import React from 'react';
 
 import Wizard from 'desktop/wizard/widget';
@@ -6,7 +8,10 @@ import WorkitemDialog from 'desktop/workitem-dialog/widget';
 
 import View from 'laboratory/view';
 import importer from 'laboratory/importer/';
+import T from 't';
+
 const viewImporter = importer('view');
+
 class WorkItem extends View {
   constructor() {
     super(...arguments);

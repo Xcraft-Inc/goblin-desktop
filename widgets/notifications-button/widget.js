@@ -1,3 +1,5 @@
+//T:2019-02-27
+import T from 't';
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Button from 'gadgets/button/widget';
@@ -17,7 +19,7 @@ class NotificationsButton extends Widget {
   render() {
     return (
       <Button
-        text="Notifications"
+        text={T('Notifications')}
         glyph="solid/bell"
         glyphPosition="right"
         kind="view-tab-right"
