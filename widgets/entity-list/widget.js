@@ -7,7 +7,7 @@ import Button from 'gadgets/button/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
 
-const {ListHelpers} = require('goblin-toolbox');
+import {ListHelpers} from 'goblin-toolbox';
 const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;
 
 /******************************************************************************/
