@@ -1,3 +1,5 @@
+//T:2019-02-27
+
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Form from 'laboratory/form';
@@ -7,6 +9,8 @@ import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 import ScrollableContainer from 'gadgets/scrollable-container/widget';
+
+import T from 't';
 
 /******************************************************************************/
 
@@ -188,19 +192,19 @@ class Workitem extends Form {
     if (this.props.status === 'draft') {
       return (
         <Container kind="pane-warning" subkind="draft" grow="1">
-          <Label kind="pane-warning" text="Brouillon" />
+          <Label kind="pane-warning" text={T('Brouillon')} />
         </Container>
       );
     } else if (this.props.status === 'archived') {
       return (
         <Container kind="pane-warning" subkind="archived" grow="1">
-          <Label kind="pane-warning" text="Archivé" />
+          <Label kind="pane-warning" text={T('Archivé')} />
         </Container>
       );
     } else if (this.props.status === 'trashed') {
       return (
         <Container kind="pane-warning" subkind="trashed" grow="1">
-          <Label kind="pane-warning" text="Détruit" />
+          <Label kind="pane-warning" text={T('Détruit')} />
         </Container>
       );
     } else {

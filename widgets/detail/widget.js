@@ -1,9 +1,12 @@
+//T:2019-02-27
+
 import React from 'react';
 import Widget from 'laboratory/widget';
 import importer from 'laboratory/importer/';
 
 import Container from 'gadgets/container/widget';
 import Workitem from 'desktop/workitem/widget';
+import T from 't';
 
 const uiImporter = importer('ui');
 
@@ -93,7 +96,7 @@ class Detail extends Widget {
             id={workitemId}
             entityId={entityId}
             title={() => {
-              return <div>Détails</div>;
+              return <div>{T('Détails')}</div>;
             }}
             readonly="true"
             dragServiceId={this.props.dragServiceId}

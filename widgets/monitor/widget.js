@@ -1,10 +1,13 @@
 'use strict';
+//T:2019-02-27
+
 import Widget from 'laboratory/widget';
 import React from 'react';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Field from 'gadgets/field/widget';
 import LocalForm from 'laboratory/localform';
+import T from 't';
 
 class Monitor extends Widget {
   constructor() {
@@ -74,7 +77,7 @@ class Monitor extends Widget {
       <Container kind="row">
         <Button
           kind="button-footer"
-          text="Monitor"
+          text={T('Monitor')}
           onClick={this.toggleEnabled}
         />
         {enabled ? this.renderMonitors() : null}
