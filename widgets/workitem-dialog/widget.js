@@ -1,3 +1,5 @@
+//T:2019-02-27
+import T from 't';
 import React from 'react';
 import Widget from 'laboratory/widget';
 
@@ -5,17 +7,17 @@ import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
 
 import importer from 'laboratory/importer/';
-const uiImporter = importer ('ui');
+const uiImporter = importer('ui');
 
 class WorkitemDialog extends Widget {
-  constructor () {
-    super (...arguments);
-    this.onClose = this.onClose.bind (this);
-    this.onClick = this.onClick.bind (this);
-    this.initializeEntity = this.initializeEntity.bind (this);
+  constructor() {
+    super(...arguments);
+    this.onClose = this.onClose.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.initializeEntity = this.initializeEntity.bind(this);
   }
 
-  static get wiring () {
+  static get wiring() {
     return {
       id: 'id',
       title: 'title',
@@ -30,9 +32,9 @@ class WorkitemDialog extends Widget {
   }
   */
 
-  onClose (kind, desktopId, contextId) {
-    const service = this.props.id.split ('@')[0];
-    this.doAs (service, 'close', {kind, desktopId, contextId});
+  onClose(kind, desktopId, contextId) {
+    const service = this.props.id.split('@')[0];
+    this.doAs(service, 'close', {kind, desktopId, contextId});
   }
 
   onClick() {
@@ -69,7 +71,7 @@ class WorkitemDialog extends Widget {
           <DialogUI />
           <Button
             key={id}
-            text="Close"
+            text={T('Fermer')}
             kind="action"
             justify="center"
             place="single"

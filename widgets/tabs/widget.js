@@ -1,3 +1,5 @@
+//T:2019-02-27
+import T from 't';
 import React from 'react';
 import Button from 'gadgets/button/widget';
 import Widget from 'laboratory/widget';
@@ -77,7 +79,7 @@ class Tabs extends Widget {
                 if (props.loaded) {
                   return (
                     <Button
-                      text={props.info || 'Nouveau'}
+                      text={props.info || T('Nouveau', 'nouvelle fiche')}
                       kind="view-tab"
                       glyph={v.get('glyph')}
                       onClick={() =>
@@ -89,7 +91,7 @@ class Tabs extends Widget {
                 } else {
                   return (
                     <Button
-                      text="Chargement..."
+                      text={T('Chargement…')}
                       kind="view-tab"
                       glyph={v.get('glyph')}
                       onClick={() =>
