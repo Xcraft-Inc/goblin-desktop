@@ -1,6 +1,8 @@
 'use strict';
+//T:2019-02-27
 
 const Goblin = require('xcraft-core-goblin');
+const T = require('goblin-nabu/widgets/helpers/t.js');
 const {jsify} = require('xcraft-core-utils').string;
 const common = require('goblin-workshop').common;
 
@@ -11,7 +13,7 @@ const defaultButtons = OrderedMap()
     'main',
     fromJS({
       glyph: 'solid/step-forward',
-      text: 'Suivant',
+      text: T('Suivant', 'Bouton du wizard'),
       grow: '1',
     })
   )
@@ -19,7 +21,7 @@ const defaultButtons = OrderedMap()
     'cancel',
     fromJS({
       glyph: 'solid/times',
-      text: 'Annuler',
+      text: T('Annuler', 'Bouton du wizard'),
       grow: '1',
     })
   );
