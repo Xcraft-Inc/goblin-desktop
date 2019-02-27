@@ -1,5 +1,7 @@
+//T:2019-02-27
 import React from 'react';
 import Widget from 'laboratory/widget';
+import T from 't';
 import MouseTrap from 'mousetrap';
 import importer from 'laboratory/importer/';
 import Container from 'gadgets/container/widget';
@@ -19,16 +21,16 @@ const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
 let currentTheme = 'default';
 
 const themes = [
-  {text: 'Standard', value: 'default'},
-  {text: 'Standard compact', value: 'default-compact'},
-  {text: 'Vert', value: 'default-green'},
-  {text: 'Vert spécial', value: 'special-green'},
-  {text: 'Vert arrondi', value: 'smooth-green'},
-  {text: 'Rose', value: 'default-pink'},
-  {text: 'Rose compact', value: 'compact-pink'},
-  {text: 'Monochrome compact', value: 'compact-mono'},
-  {text: 'Foncé', value: 'default-dark'},
-  {text: 'Dragula', value: 'default-dragula'},
+  {text: T('Standard'), value: 'default'},
+  {text: T('Standard compact'), value: 'default-compact'},
+  {text: T('Vert'), value: 'default-green'},
+  {text: T('Vert spécial'), value: 'special-green'},
+  {text: T('Vert arrondi'), value: 'smooth-green'},
+  {text: T('Rose'), value: 'default-pink'},
+  {text: T('Rose compact'), value: 'compact-pink'},
+  {text: T('Monochrome compact'), value: 'compact-mono'},
+  {text: T('Foncé'), value: 'default-dark'},
+  {text: T('Dragula'), value: 'default-dragula'},
 ];
 
 const LocaleMenuConnected = Widget.connect((state, props) => {
@@ -259,7 +261,7 @@ class Desktop extends Widget {
               textTransform="none"
               text={this.props.id.split('@')[1]}
               glyph="light/cube"
-              tooltip="Changer de mandat"
+              tooltip={T('Changer de mandat')}
               kind="task-logo"
               onClick={this.onChangeMandate}
             />
@@ -268,7 +270,7 @@ class Desktop extends Widget {
             <Button
               kind="task-show-footer"
               glyph="solid/chevron-right"
-              tooltip="Montre ou cache la barre de pied de page"
+              tooltip={T('Montre ou cache la barre de pied de page')}
               onClick={() => (this.showFooter = !this.showFooter)}
             />
           </Container>
@@ -282,14 +284,14 @@ class Desktop extends Widget {
                 <LocaleMenuConnected
                   glyph="solid/flag"
                   kind="main-tab-right"
-                  tooltip="Choix de la locale"
+                  tooltip={T('Choix de la locale')}
                   onChange={this.onChangeLocale}
                   desktopId={id}
                 />
                 <MainTabMenu
                   glyph="solid/tint"
                   kind="main-tab-right"
-                  tooltip="Choix du thème"
+                  tooltip={T('Choix du thème')}
                   items={themes}
                   onChange={this.onChangeTheme}
                   currentItemValue={currentTheme}
