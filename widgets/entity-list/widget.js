@@ -8,6 +8,7 @@ import TableCell from 'gadgets/table-cell/widget';
 import Button from 'gadgets/button/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
+import Label from 'gadgets/label/widget';
 import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
@@ -33,7 +34,9 @@ class ListToolbar extends Widget {
     return (
       <div>
         {exporting ? (
-          <div>{T('Export csv en cours...')}</div>
+          <div>
+            <Label text={T('Export csv en cours...')} />
+          </div>
         ) : (
           <Button
             kind="action"
