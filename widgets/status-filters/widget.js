@@ -1,9 +1,12 @@
+//T:2019-02-27
+
 import React from 'react';
 import Widget from 'laboratory/widget';
 
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import CheckButton from 'gadgets/check-button/widget';
+import T from 't';
 
 const managedStatus = ['draft', 'published', 'archived', 'trashed'];
 class StatusFilter extends Widget {
@@ -65,8 +68,8 @@ class StatusFilter extends Widget {
             <CheckButton
               justify="left"
               heightStrategy="compact"
-              text="Brouillons"
-              tooltip="Montre les brouillons"
+              text={T('Brouillons')}
+              tooltip={T('Montre les brouillons')}
               checked={draft}
               onClick={this.changeStatus('draft')}
             />
@@ -76,8 +79,8 @@ class StatusFilter extends Widget {
             <CheckButton
               justify="left"
               heightStrategy="compact"
-              text="Publiés"
-              tooltip="Montre les éléments publiés"
+              text={T('Publiés')}
+              tooltip={T('Montre les éléments publiés')}
               checked={published}
               onClick={this.changeStatus('published')}
             />
@@ -87,8 +90,8 @@ class StatusFilter extends Widget {
             <CheckButton
               justify="left"
               heightStrategy="compact"
-              text="Archivés"
-              tooltip="Montre les éléments archivés"
+              text={T('Archivés')}
+              tooltip={T('Montre les éléments archivés')}
               checked={archived}
               onClick={this.changeStatus('archived')}
             />
@@ -98,8 +101,8 @@ class StatusFilter extends Widget {
             <CheckButton
               justify="left"
               heightStrategy="compact"
-              text="Supprimés"
-              tooltip="Montre les éléments supprimés"
+              text={T('Supprimés')}
+              tooltip={T('Montre les éléments supprimés')}
               checked={trashed}
               onClick={this.changeStatus('trashed')}
             />

@@ -1,10 +1,12 @@
 'use strict';
+//T:2019-02-27
+const T = require('goblin-nabu/widgets/helpers/t.js');
 const {buildWizard} = require('goblin-desktop');
 const crypto = require('xcraft-core-utils/lib/crypto.js');
 
 const config = {
   name: 'password',
-  title: 'Choisir le nouveau mot de passe',
+  title: T('Choisir le nouveau mot de passe'),
   quests: {
     setRandomPassword: function*(quest) {
       const state = quest.goblin.getState();
@@ -21,7 +23,7 @@ const config = {
       buttons: function(quest, buttons) {
         return buttons.set('main', {
           glyph: 'solid/arrow-right',
-          text: 'Valider',
+          text: T('Valider'),
           grow: '2',
         });
       },

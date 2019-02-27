@@ -1,9 +1,12 @@
+//T:2019-02-27
+
 import React from 'react';
 import Widget from 'laboratory/widget';
 
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 import Notification from 'gadgets/notification/widget';
+import T from 't';
 
 /******************************************************************************/
 
@@ -37,7 +40,7 @@ class Notifications extends Widget {
             glyph={
               this.props.dnd === 'true' ? 'light/toggle-on' : 'light/toggle-off'
             }
-            text="Ne pas me déranger"
+            text={T('Ne pas me déranger')}
             kind="button-notification"
             onClick={() => {
               const state = this.getBackendState();
@@ -53,7 +56,7 @@ class Notifications extends Widget {
                 ? 'light/toggle-on'
                 : 'light/toggle-off'
             }
-            text="Seulement les nouvelles"
+            text={T('Seulement les nouvelles')}
             kind="button-notification"
             onClick={() => {
               const state = this.getBackendState();
@@ -64,7 +67,7 @@ class Notifications extends Widget {
           <Label grow="1" />
           <Button
             disabled={this.hasNotifications ? 'false' : 'true'}
-            text="Tout effacer"
+            text={T('Tout effacer')}
             kind="button-notification"
             onClick={() => this.doAs('desktop', 'remove-notifications')}
           />
