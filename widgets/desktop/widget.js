@@ -12,7 +12,7 @@ import MainTabMenu from 'desktop/main-tab-menu/widget';
 import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
-const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
+import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
 
 /******************************************************************************/
 
