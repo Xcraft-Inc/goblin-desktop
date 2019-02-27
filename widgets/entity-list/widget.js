@@ -1,3 +1,5 @@
+//T:2019-02-27
+
 import React from 'react';
 import Widget from 'laboratory/widget';
 import throttle from 'lodash/throttle';
@@ -6,6 +8,7 @@ import TableCell from 'gadgets/table-cell/widget';
 import Button from 'gadgets/button/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
+import T from 't';
 
 const {ListHelpers} = require('goblin-toolbox');
 const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;
@@ -30,14 +33,14 @@ class ListToolbar extends Widget {
     return (
       <div>
         {exporting ? (
-          <div>Export csv en cours...</div>
+          <div>{T('Export csv en cours...')}</div>
         ) : (
           <Button
             kind="action"
             place="1/1"
             width="250px"
             glyph="solid/save"
-            text="Exporter un fichier csv"
+            text={T('Exporter un fichier csv')}
             onClick={this.exportToCsv}
           />
         )}
