@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Widget from 'laboratory/widget';
+import T from 't';
 
 import Container from 'gadgets/container/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
@@ -151,7 +152,7 @@ class Datagrid extends Widget {
             {this.renderTable()}
             <Button
               key={id}
-              text="Close"
+              text={T('Close')}
               kind="action"
               justify="center"
               place="single"
