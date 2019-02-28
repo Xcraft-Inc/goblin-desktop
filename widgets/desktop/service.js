@@ -70,7 +70,7 @@ Goblin.registerQuest(
 
 Goblin.registerQuest(goblinName, 'getCurrentLocale', function*(quest) {
   const toolbarApi = quest.getAPI(getToolbarId(quest.goblin.id));
-  return yield toolbarApi.getSelectedLocaleId();
+  return yield toolbarApi.getSelectedLocale();
 });
 
 Goblin.registerQuest(goblinName, 'create-hinter-for', function*(

@@ -101,11 +101,12 @@ class Desktop extends Widget {
     this.do('change-mandate');
   }
 
-  onChangeLocale(value) {
+  onChangeLocale(localeId, locale) {
     const toolbarId = getToolbarId(this.props.id);
     if (toolbarId) {
       this.doFor(toolbarId, 'set-selected-locale', {
-        localeId: value,
+        localeId,
+        locale,
       });
     }
   }

@@ -41,9 +41,9 @@ class MainTabMenu extends Widget {
     });
   }
 
-  onChange(value) {
+  onChange(value, text) {
     if (this.props.onChange) {
-      this.props.onChange(value);
+      this.props.onChange(value, text);
     }
   }
 
@@ -67,7 +67,7 @@ class MainTabMenu extends Widget {
         return {
           text,
           active: value === this.currentItem,
-          action: () => this.onChange(value),
+          action: () => this.onChange(value, text),
         };
       });
 
