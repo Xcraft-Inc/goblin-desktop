@@ -33,6 +33,7 @@ module.exports = config => {
     gadgets,
     quests,
     initialFormState,
+    hinters,
   } = config;
   const goblinName = `${name}-wizard`;
   const wizardSteps = Object.keys(steps);
@@ -110,6 +111,9 @@ module.exports = config => {
           });
         }
       }
+      if (hinters) {
+        yield quest.me.createHinters();
+      }
 
       quest.goblin.defer(
         quest.sub(`*::${quest.goblin.id}.step`, function*(err, msg) {
@@ -125,6 +129,26 @@ module.exports = config => {
     },
     ['*::*.step']
   );
+
+  Goblin.registerQuest(goblinName, 'create-hinters', function*(quest, next) {
+    const desktopId = quest.goblin.getX('desktopId');
+
+    if (hinters) {
+      Object.keys(hinters).forEach(h => {
+        quest.create(
+          `${h}-hinter`,
+          {
+            id: `${h}-finder@${quest.goblin.id}`,
+            desktopId,
+            workitemId: quest.goblin.id,
+            withDetails: true,
+          },
+          next.parallel()
+        );
+      });
+    }
+    yield next.sync();
+  });
 
   Goblin.registerQuest(goblinName, 'busy', function(quest) {
     quest.do();

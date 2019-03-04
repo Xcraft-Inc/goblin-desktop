@@ -4,6 +4,7 @@ import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import importer from 'laboratory/importer/';
+import PropTypes from 'prop-types';
 
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Separator from 'gadgets/separator/widget';
@@ -26,6 +27,25 @@ class Wizard extends Form {
       title: 'title',
       dialog: 'dialog',
       step: 'step',
+    };
+  }
+
+  getChildContext() {
+    return {
+      readonly: this.props.readonly,
+      id: this.props.id,
+      entityId: this.props.entityId,
+      dragServiceId: this.props.dragServiceId,
+    };
+  }
+
+  static get childContextTypes() {
+    return {
+      readonly: PropTypes.any,
+      id: PropTypes.string,
+
+      entityId: PropTypes.string,
+      dragServiceId: PropTypes.string,
     };
   }
 
