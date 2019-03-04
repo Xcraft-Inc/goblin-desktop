@@ -198,7 +198,7 @@ class Workitem extends Form {
     if (this.props.status === 'draft') {
       return (
         <Container kind="pane-warning" subkind="draft" grow="1">
-          <Label kind="pane-warning" text={T('Brouillon')} />
+          <Label kind="pane-warning" text={'Brouillon'} />
         </Container>
       );
     } else if (this.props.status === 'archived') {
