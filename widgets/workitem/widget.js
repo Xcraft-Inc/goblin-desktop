@@ -23,6 +23,7 @@ class Workitem extends Form {
     this.onTrash = this.onTrash.bind(this);
     this.onArchive = this.onArchive.bind(this);
     this.onPublish = this.onPublish.bind(this);
+    this.copyInfoToClipboard = this.copyInfoToClipboard.bind(this);
   }
 
   getChildContext() {
@@ -189,22 +190,36 @@ class Workitem extends Form {
   }
 
   renderStatusBase() {
-    if (this.props.status === 'draft') {
+    if (this.props.status === 'published') {
+      if (document.queryCommandSupported('copy')) {
+        return this.renderCopyIdTools();
+      }
+      return null;
+    } else if (this.props.status === 'draft') {
       return (
         <Container kind="pane-warning" subkind="draft" grow="1">
           <Label kind="pane-warning" text={T('Brouillon')} />
+          {document.queryCommandSupported('copy')
+            ? this.renderCopyIdTools()
+            : null}
         </Container>
       );
     } else if (this.props.status === 'archived') {
       return (
         <Container kind="pane-warning" subkind="archived" grow="1">
           <Label kind="pane-warning" text={T('Archivé')} />
+          {document.queryCommandSupported('copy')
+            ? this.renderCopyIdTools()
+            : null}
         </Container>
       );
     } else if (this.props.status === 'trashed') {
       return (
         <Container kind="pane-warning" subkind="trashed" grow="1">
           <Label kind="pane-warning" text={T('Détruit')} />
+          {document.queryCommandSupported('copy')
+            ? this.renderCopyIdTools()
+            : null}
         </Container>
       );
     } else {
@@ -222,6 +237,29 @@ class Workitem extends Form {
     } else {
       return null;
     }
+  }
+
+  copyInfoToClipboard() {
+    const textField = document.createElement('textarea');
+    textField.innerText = this.props.entityId;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+  }
+
+  renderCopyIdTools() {
+    return (
+      <Button
+        grow="1"
+        kind="plugin-dark"
+        verticalSpacing="overlap"
+        justify="right"
+        glyph="solid/file-alt"
+        tooltip="Copier l'identifiant"
+        onClick={this.copyInfoToClipboard}
+      />
+    );
   }
 
   renderStatus() {
