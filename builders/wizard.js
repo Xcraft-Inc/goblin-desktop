@@ -255,7 +255,7 @@ module.exports = config => {
   });
 
   Goblin.registerQuest(goblinName, 'change', function*(quest, path, newValue) {
-    if (hinters[path]) {
+    if (hinters && hinters[path]) {
       return;
     }
     quest.do();
