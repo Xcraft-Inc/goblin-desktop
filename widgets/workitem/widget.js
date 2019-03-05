@@ -19,7 +19,7 @@ class Workitem extends Form {
     this.onTrash = this.onTrash.bind(this);
     this.onArchive = this.onArchive.bind(this);
     this.onPublish = this.onPublish.bind(this);
-    this.copyInfoToClipboard = this.copyInfoToClipboard.bind(this);
+    this.onCopyInfoToClipboard = this.onCopyInfoToClipboard.bind(this);
   }
 
   getChildContext() {
@@ -94,6 +94,15 @@ class Workitem extends Form {
       desktopId: this.desktopId,
       contextId: this.contextId,
     });
+  }
+
+  onCopyInfoToClipboard() {
+    const textField = document.createElement('textarea');
+    textField.innerText = this.props.entityId;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
   }
 
   /******************************************************************************/
@@ -186,36 +195,22 @@ class Workitem extends Form {
   }
 
   renderStatusBase() {
-    if (this.props.status === 'published') {
-      if (document.queryCommandSupported('copy')) {
-        return this.renderCopyIdTools();
-      }
-      return null;
-    } else if (this.props.status === 'draft') {
+    if (this.props.status === 'draft') {
       return (
         <Container kind="pane-warning" subkind="draft" grow="1">
-          <Label kind="pane-warning" text={T('Brouillon')} />
-          {document.queryCommandSupported('copy')
-            ? this.renderCopyIdTools()
-            : null}
+          <Label kind="pane-warning" text={'Brouillon'} />
         </Container>
       );
     } else if (this.props.status === 'archived') {
       return (
         <Container kind="pane-warning" subkind="archived" grow="1">
           <Label kind="pane-warning" text={'Archivé'} />
-          {document.queryCommandSupported('copy')
-            ? this.renderCopyIdTools()
-            : null}
         </Container>
       );
     } else if (this.props.status === 'trashed') {
       return (
         <Container kind="pane-warning" subkind="trashed" grow="1">
           <Label kind="pane-warning" text={'Détruit'} />
-          {document.queryCommandSupported('copy')
-            ? this.renderCopyIdTools()
-            : null}
         </Container>
       );
     } else {
@@ -235,27 +230,21 @@ class Workitem extends Form {
     }
   }
 
-  copyInfoToClipboard() {
-    const textField = document.createElement('textarea');
-    textField.innerText = this.props.entityId;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand('copy');
-    textField.remove();
-  }
-
-  renderCopyIdTools() {
-    return (
-      <Button
-        grow="1"
-        kind="plugin-dark"
-        verticalSpacing="overlap"
-        justify="right"
-        glyph="solid/file-alt"
-        tooltip="Copier l'identifiant"
-        onClick={this.copyInfoToClipboard}
-      />
-    );
+  renderStatusCopy() {
+    if (document.queryCommandSupported('copy')) {
+      return (
+        <Container kind="pane-warning-button">
+          <Button
+            kind="pane-warning"
+            glyph="solid/copy"
+            tooltip="Copie l'identifiant"
+            onClick={this.onCopyInfoToClipboard}
+          />
+        </Container>
+      );
+    } else {
+      return null;
+    }
   }
 
   renderStatus() {
@@ -263,6 +252,7 @@ class Workitem extends Form {
       <Container kind="row">
         {this.renderStatusBase()}
         {this.renderStatusBusiness()}
+        {this.renderStatusCopy()}
       </Container>
     );
   }
