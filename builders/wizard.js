@@ -150,6 +150,8 @@ module.exports = config => {
     yield next.sync();
   });
 
+  common.registerHinters(goblinName, hinters);
+
   Goblin.registerQuest(goblinName, 'busy', function(quest) {
     quest.do();
   });
@@ -252,7 +254,10 @@ module.exports = config => {
     quest.evt('done', quest.cancel());
   });
 
-  Goblin.registerQuest(goblinName, 'change', function*(quest) {
+  Goblin.registerQuest(goblinName, 'change', function*(quest, path, newValue) {
+    if (hinters[path]) {
+      return;
+    }
     quest.do();
     yield quest.me.update();
   });
