@@ -11,15 +11,19 @@ module.exports = {
     });
   },
   add: (state, action) => {
+    // Name can be a shredder
     const name = action.get('name');
     const contextId = action.get('contextId');
     const current = state.get('current');
     if (!current) {
       return state
         .set('current', contextId)
-        .set(`contexts.${contextId}`, {contextId, name});
+        .set(`contexts.${contextId}`, {contextId})
+        .set(`contexts.${contextId}.name`, name);
     }
-    return state.set(`contexts.${contextId}`, {contextId, name});
+    return state
+      .set(`contexts.${contextId}`, {contextId})
+      .set(`contexts.${contextId}.name`, name);
   },
   remove: (state, action) => {
     const widgetId = action.get('widgetId');

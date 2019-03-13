@@ -10,12 +10,13 @@ module.exports = {
     });
   },
   add: (state, action) => {
+    // Name can be a shredder
+    const name = action.get('name');
     const tabId = action.get('tabId');
     const contextId = action.get('contextId');
     const current = state.get(`current.${contextId}`, null);
     const tab = {
       id: tabId,
-      name: action.get('name'),
       view: action.get('view'),
       workitemId: action.get('workitemId'),
       entityId: action.get('entityId'),
@@ -25,9 +26,12 @@ module.exports = {
     if (!current) {
       return state
         .set(`current.${contextId}`, action.get('workitemId'))
-        .set(`tabs.${contextId}.${tabId}`, tab);
+        .set(`tabs.${contextId}.${tabId}`, tab)
+        .set(`tabs.${contextId}.${tabId}.name`, name);
     }
-    return state.set(`tabs.${contextId}.${tabId}`, tab);
+    return state
+      .set(`tabs.${contextId}.${tabId}`, tab)
+      .set(`tabs.${contextId}.${tabId}.name`, name);
   },
   'set-current': (state, action) => {
     const wid = action.get('workitemId');
