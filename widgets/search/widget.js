@@ -65,6 +65,9 @@ class _ListItem extends Widget {
               grow="1"
               wrap="no"
             />
+            {this.props.isReadyFlag && this.props.isReadyFlag === 'true' ? (
+              <Label glyph="solid/check" fontSize="70%" />
+            ) : null}
             <Label text={this.props.index + 1} fontSize="70%" />
           </Button>
         ) : null}
@@ -76,10 +79,12 @@ class _ListItem extends Widget {
 const ListItem = Widget.connect((state, props) => {
   const id = state.get(`backend.${props.listId}.list.${props.itemId}`, null);
   const text = state.get(`backend.${id}.meta.summaries.description`);
+  const isReadyFlag = state.get(`backend.${id}.isReady`, null);
   return {
     id,
     exists: state.has(`backend.${id}`),
     text,
+    isReadyFlag,
     height: props.height,
     index: props.index,
     parentId: props.parentId.parentId,
