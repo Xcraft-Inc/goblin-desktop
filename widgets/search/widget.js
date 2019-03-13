@@ -65,6 +65,7 @@ class _ListItem extends Widget {
               grow="1"
               wrap="no"
             />
+            <Label text={this.props.index + 1} fontSize="70%" />
           </Button>
         ) : null}
       </Container>
@@ -80,6 +81,7 @@ const ListItem = Widget.connect((state, props) => {
     exists: state.has(`backend.${id}`),
     text,
     height: props.height,
+    index: props.index,
     parentId: props.parentId.parentId,
     onDrillDown: props.parentId.onDrillDown,
   };
