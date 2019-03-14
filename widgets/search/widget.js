@@ -67,6 +67,10 @@ class _ListItem extends Widget {
               grow="1"
               wrap="no"
             />
+            {this.props.isReadyFlag && this.props.isReadyFlag === 'true' ? (
+              <Label glyph="solid/check" fontSize="70%" />
+            ) : null}
+            <Label text={this.props.index + 1} fontSize="70%" />
           </Button>
         ) : null}
       </Container>
@@ -77,11 +81,14 @@ class _ListItem extends Widget {
 const ListItem = Widget.connect((state, props) => {
   const id = state.get(`backend.${props.listId}.list.${props.itemId}`, null);
   const text = state.get(`backend.${id}.meta.summaries.description`);
+  const isReadyFlag = state.get(`backend.${id}.isReady`, null);
   return {
     id,
     exists: state.has(`backend.${id}`),
     text,
+    isReadyFlag,
     height: props.height,
+    index: props.index,
     parentId: props.parentId.parentId,
     onDrillDown: props.parentId.onDrillDown,
   };
@@ -144,7 +151,7 @@ class Search extends Form {
           <Label text={T('Recherche')} kind="pane-header" />
           <Count />
         </Container>
-        <Container kind="panes" navigationName="search">
+        <Container kind="panes" subkind="no-overlay">
           <Container kind="pane">
             <Container kind="row-pane">
               <Label text={title} grow="1" kind="title" />
@@ -165,6 +172,8 @@ class Search extends Form {
             </Form>
             <StatusFilters id={listId} />
           </Container>
+        </Container>
+        <Container kind="panes" navigationName="search">
           <Container kind="pane">
             <List
               id={listId}
