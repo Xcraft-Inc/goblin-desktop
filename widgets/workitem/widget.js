@@ -23,6 +23,7 @@ class Workitem extends Form {
     this.onTrash = this.onTrash.bind(this);
     this.onArchive = this.onArchive.bind(this);
     this.onPublish = this.onPublish.bind(this);
+    this.onCopyInfoToClipboard = this.onCopyInfoToClipboard.bind(this);
   }
 
   getChildContext() {
@@ -97,6 +98,15 @@ class Workitem extends Form {
       desktopId: this.desktopId,
       contextId: this.contextId,
     });
+  }
+
+  onCopyInfoToClipboard() {
+    const textField = document.createElement('textarea');
+    textField.innerText = this.props.entityId;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
   }
 
   /******************************************************************************/
@@ -224,11 +234,29 @@ class Workitem extends Form {
     }
   }
 
+  renderStatusCopy() {
+    if (document.queryCommandSupported('copy')) {
+      return (
+        <Container kind="pane-warning-button">
+          <Button
+            kind="pane-warning"
+            glyph="solid/copy"
+            tooltip="Copie l'identifiant"
+            onClick={this.onCopyInfoToClipboard}
+          />
+        </Container>
+      );
+    } else {
+      return null;
+    }
+  }
+
   renderStatus() {
     return (
       <Container kind="row">
         {this.renderStatusBase()}
         {this.renderStatusBusiness()}
+        {this.renderStatusCopy()}
       </Container>
     );
   }
