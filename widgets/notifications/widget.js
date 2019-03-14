@@ -4,7 +4,6 @@ import Widget from 'laboratory/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 import Notification from 'gadgets/notification/widget';
-import {shell} from 'electron';
 /******************************************************************************/
 
 class Notifications extends Widget {
@@ -80,9 +79,8 @@ class Notifications extends Widget {
         data={notification}
         status={notification.status}
         onClick={() => {
-          //TODO: handle browser openExternal
-          if (shell && notification.externalUrl) {
-            shell.openExternal(notification.externalUrl);
+          if (notification.externalUrl) {
+            this.cmd('client.open-external', {url: notification.externalUrl});
           }
         }}
         onClickNotification={() =>

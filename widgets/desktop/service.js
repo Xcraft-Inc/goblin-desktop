@@ -578,12 +578,12 @@ Goblin.registerQuest(goblinName, 'remove-notifications', function(quest) {
   quest.dispatch('update-not-read-count');
 });
 
-Goblin.registerQuest(goblinName, 'click-notification', function(
+Goblin.registerQuest(goblinName, 'click-notification', function*(
   quest,
   notification
 ) {
   if (notification.command) {
-    quest.cmd(notification.command, {notification});
+    yield quest.cmd(notification.command, {notification});
   }
 });
 
