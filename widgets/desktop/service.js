@@ -4,6 +4,7 @@ const path = require('path');
 const Goblin = require('xcraft-core-goblin');
 const uuidV4 = require('uuid/v4');
 const goblinName = path.basename(module.parent.filename, '.js');
+const {shell} = require('electron');
 
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
@@ -530,6 +531,7 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
   color,
   message,
   command,
+  externalUrl,
   broadcast
 ) {
   if (!notificationId) {
@@ -545,12 +547,13 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
         color,
         message,
         command,
+        externalUrl,
       }
     );
     return;
   }
 
-  quest.do({notificationId, glyph, color, message, command});
+  quest.do({notificationId, glyph, color, message, command, externalUrl});
   const dnd = quest.goblin.getState().get('dnd');
   if (dnd !== 'true') {
     quest.dispatch('set-notifications', {show: 'true'});
@@ -582,6 +585,9 @@ Goblin.registerQuest(goblinName, 'click-notification', function(
 ) {
   if (notification.command) {
     quest.cmd(notification.command, {notification});
+  }
+  if (notification.externalUrl) {
+    shell.openExternal(notification.externalUrl);
   }
 });
 
