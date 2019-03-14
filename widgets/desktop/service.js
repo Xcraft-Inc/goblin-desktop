@@ -4,7 +4,6 @@ const path = require('path');
 const Goblin = require('xcraft-core-goblin');
 const uuidV4 = require('uuid/v4');
 const goblinName = path.basename(module.parent.filename, '.js');
-const {shell} = require('electron');
 
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
@@ -585,9 +584,6 @@ Goblin.registerQuest(goblinName, 'click-notification', function(
 ) {
   if (notification.command) {
     quest.cmd(notification.command, {notification});
-  }
-  if (notification.externalUrl) {
-    shell.openExternal(notification.externalUrl);
   }
 });
 
