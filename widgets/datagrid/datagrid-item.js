@@ -2,18 +2,44 @@
 
 import React from 'react';
 import Widget from 'laboratory/widget';
-import _ from 'lodash';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 class DatagridItem extends Widget {
   constructor() {
     super(...arguments);
 
     this._height = 40;
+    this.renewTTL = this.renewTTL.bind(this);
+    this._idRequested = null;
+    this._renewInterval = null;
+  }
+
+  renewTTL(id) {
+    if (this._renewInterval) {
+      clearInterval(this._renewInterval);
+    }
+    this._renewInterval = setInterval(
+      this.props.parentId.onDrillDown,
+      15000,
+      id
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._renewInterval);
   }
 
   render() {
-    if (!this.props.message) {
-      return <div>Loading... </div>;
+    const {id, item} = this.props;
+    const loaded = id && item;
+
+    if (!loaded) {
+      if (id && this._idRequested !== id) {
+        setTimeout(this.props.parentId.onDrillDown, 0, id);
+        this.renewTTL(id);
+        this._idRequested = id;
+      }
+      return <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />;
     }
 
     const Item = this.props.renderItem;
