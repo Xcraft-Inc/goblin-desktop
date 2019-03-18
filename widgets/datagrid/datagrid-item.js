@@ -19,21 +19,22 @@ class DatagridItem extends Widget {
     const Item = this.props.renderItem;
     return (
       <Item
-        id={this.props.message.get('id')}
-        index={this.props.index.index}
-        listId={this.props.index.listId}
-        itemId={this.props.index.itemId}
+        id={item.get('id')}
+        index={this.props.index}
+        listId={this.props.listId}
+        itemId={this.props.itemId}
         height={this._height}
-        parentId={this.props.index.parentId}
+        parentId={this.props.parentId}
       />
     );
   }
 }
 
 export default Widget.connect((state, props) => {
-  const listIds = state.get(`backend.${props.index.listId}.list`);
+  const listIds = state.get(`backend.${props.listId}.list`);
 
   return {
-    message: state.get(`backend.${listIds.get(`${props.index.index}`)}`),
+    id: listIds.get(`${props.index}`, null),
+    item: state.get(`backend.${listIds.get(`${props.index}`)}`),
   };
 })(DatagridItem);

@@ -102,10 +102,9 @@ class Datagrid extends Widget {
           onRef={list => {
             this.list = list;
           }}
-          renderItem={index => {
+          renderItem={props => {
             return (
               <DatagridItem
-                index={index}
                 renderItem={props => {
                   return (
                     <DatagridEntity
@@ -117,6 +116,7 @@ class Datagrid extends Widget {
                     />
                   );
                 }}
+                {...props}
               />
             );
           }}
