@@ -251,10 +251,12 @@ Goblin.registerQuest(
       )
     );
 
-    const unsub = quest.sub(`*::${widgetId}.done`, function*() {
-      unsub();
-      yield quest.kill(widgetId);
-    });
+    if (widgetId.endsWith('-wizard')) {
+      const unsub = quest.sub(`*::${widgetId}.done`, function*() {
+        unsub();
+        yield quest.kill(widgetId);
+      });
+    }
 
     if (workitemAPI.waitLoaded) {
       yield workitemAPI.waitLoaded();
