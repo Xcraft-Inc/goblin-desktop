@@ -342,7 +342,11 @@ class Plugin extends Widget {
           </Workitem>
         );
       } else {
-        return <Container busy="true">{T('chargement...')}</Container>;
+        return (
+          <Container busy="true">
+            <Label text={T('chargement...')} />
+          </Container>
+        );
       }
     };
 
