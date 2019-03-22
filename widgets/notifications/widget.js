@@ -82,6 +82,11 @@ class Notifications extends Widget {
         key={index}
         data={notification}
         status={notification.status}
+        onClick={() => {
+          if (notification.externalUrl) {
+            this.cmd('client.open-external', {url: notification.externalUrl});
+          }
+        }}
         onClickNotification={() =>
           this.doAs('desktop', 'click-notification', {notification})
         }
