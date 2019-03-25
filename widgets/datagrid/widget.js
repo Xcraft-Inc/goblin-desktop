@@ -80,7 +80,7 @@ class Datagrid extends Widget {
       <Headers
         entityUI={this.entityUI}
         columnsNo={columnsNo}
-        datagrid={this}
+        datagridId={this.props.id}
         className={this.styles.classNames.entity}
       />
     );
@@ -105,7 +105,7 @@ class Datagrid extends Widget {
                     <DatagridEntity
                       entityUI={this.entityUI}
                       columnsNo={columnsNo}
-                      datagrid={this}
+                      datagridId={this.props.id}
                       className={this.styles.classNames.entity}
                       {...props}
                     />

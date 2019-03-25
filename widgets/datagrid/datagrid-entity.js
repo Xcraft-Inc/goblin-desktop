@@ -26,7 +26,7 @@ class DatagridEntity extends Form {
       return (
         <DatagridCell
           key={`${this.props.id}_${index}`}
-          id={this.props.datagrid.props.id}
+          id={this.props.datagridId}
           index={index}
           cellUI={column => {
             return (
@@ -36,13 +36,13 @@ class DatagridEntity extends Form {
                 index={this.props.index}
                 column={column}
                 theme={this.context.theme}
-                datagrid={this.props.datagrid}
+                datagridId={this.props.datagridId}
                 onDrillDown={this.props.onDrillDown}
                 doAsEntity={(quest, args) =>
                   this.doFor(this.props.id, quest, args)
                 }
                 doAsDatagrid={(quest, args) =>
-                  this.doFor(this.props.datagrid.props.id, quest, args)
+                  this.doFor(this.props.datagridId, quest, args)
                 }
                 contextId={this.context.contextId}
               />

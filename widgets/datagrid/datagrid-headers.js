@@ -45,7 +45,7 @@ class Header extends Widget {
     return (
       <LabelConnected
         tooltips={this.tooltips}
-        id={this.props.datagrid.props.id}
+        id={this.props.datagridId}
         column={this.props.column}
         onClick={() =>
           this.props.doAsDatagrid('toggle-sort', {
@@ -62,7 +62,7 @@ class Header extends Widget {
       id,
       index,
       column,
-      datagrid,
+      datagridId,
       doAsDatagrid,
       component,
       headerCell,
@@ -73,7 +73,7 @@ class Header extends Widget {
 
     return (
       <DatagridCell
-        id={datagrid.props.id}
+        id={datagridId}
         index={index}
         cellUI={column => {
           return (
@@ -83,7 +83,7 @@ class Header extends Widget {
               index={index}
               theme={context.theme}
               column={column}
-              datagrid={datagrid}
+              datagridId={datagridId}
               doAsDatagrid={doAsDatagrid}
               contextId={context.contextId}
             />
@@ -98,7 +98,7 @@ class Header extends Widget {
     const {
       index,
       column,
-      datagrid,
+      datagridId,
       component,
       entityUI,
       id,
@@ -110,7 +110,7 @@ class Header extends Widget {
 
       return (
         <DatagridCell
-          id={datagrid.props.id}
+          id={datagridId}
           index={index}
           column={column}
           margin="0px"
@@ -124,7 +124,7 @@ class Header extends Widget {
                   index={index}
                   theme={this.context.theme}
                   column={column}
-                  datagrid={datagrid}
+                  datagridId={datagridId}
                   doAsDatagrid={doAsDatagrid}
                   contextId={this.context.contextId}
                 />
@@ -136,7 +136,7 @@ class Header extends Widget {
     } else if (column.get('sortable')) {
       return (
         <DatagridCell
-          id={datagrid.props.id}
+          id={datagridId}
           index={index}
           column={column}
           margin="0px"
@@ -167,8 +167,8 @@ class Hinter extends Widget {
     super(...arguments);
   }
 
-  static connectTo(datagrid) {
-    return Widget.Wired(Hinter)(`${datagrid.props.id}`);
+  static connectTo(datagridId) {
+    return Widget.Wired(Hinter)(`${datagridId}`);
   }
 
   static get wiring() {
@@ -178,7 +178,7 @@ class Hinter extends Widget {
   }
 
   render() {
-    const {id, entityUI, component, datagrid} = this.props;
+    const {id, entityUI, component, datagridId} = this.props;
     if (!id) {
       return null;
     }
@@ -191,10 +191,8 @@ class Hinter extends Widget {
         id={id}
         theme={this.context.theme}
         contextId={this.context.contextId}
-        datagrid={datagrid}
-        doAsDatagrid={(quest, args) =>
-          this.doFor(datagrid.props.id, quest, args)
-        }
+        datagridId={datagridId}
+        doAsDatagrid={(quest, args) => this.doFor(datagridId, quest, args)}
       />
     );
   }
@@ -218,7 +216,7 @@ class DatagridHeaders extends Form {
   }
 
   renderHeader(index) {
-    const {entityUI, datagrid, id} = this.props;
+    const {entityUI, datagridId, id} = this.props;
 
     if (entityUI && entityUI.headerCell) {
       return (
@@ -226,10 +224,8 @@ class DatagridHeaders extends Form {
           key={`${id}_${index}`}
           id={id}
           index={index}
-          datagrid={datagrid}
-          doAsDatagrid={(quest, args) =>
-            this.doFor(datagrid.props.id, quest, args)
-          }
+          datagridId={datagridId}
+          doAsDatagrid={(quest, args) => this.doFor(datagridId, quest, args)}
           component={this}
           headerCell={entityUI.headerCell}
           context={this.context}
@@ -240,14 +236,14 @@ class DatagridHeaders extends Form {
   }
 
   render() {
-    const {id, columnsNo, datagrid, entityUI} = this.props;
+    const {id, columnsNo, datagridId, entityUI} = this.props;
     const self = this;
     if (!id) {
       return null;
     }
 
     const Form = this.Form;
-    const DatagridHinter = Hinter.connectTo(datagrid);
+    const DatagridHinter = Hinter.connectTo(datagridId);
 
     return (
       <div>
@@ -261,7 +257,7 @@ class DatagridHeaders extends Form {
         <DatagridHinter
           component={this}
           entityUI={entityUI}
-          datagrid={datagrid}
+          datagridId={datagridId}
           columnsNo={columnsNo}
           className={this.props.className}
         />
