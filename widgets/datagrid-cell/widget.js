@@ -19,10 +19,10 @@ class DatagridCell extends Form {
   }
 
   renderCell() {
-    const {cellUI, column, columns} = this.props;
+    const {cellUI, column} = this.props;
 
     if (cellUI) {
-      return cellUI(column, columns);
+      return cellUI(column);
     }
   }
 
@@ -35,16 +35,8 @@ class DatagridCell extends Form {
 
 export default Widget.connect((state, props) => {
   const column = state.get(`backend.${props.id}.columns[${props.index}]`);
-  const needColumns = state.get(`backend.${props.id}.needColumns`);
-
-  let columns = undefined;
-  const columnName = column.get('name');
-  if (needColumns && needColumns.includes(columnName)) {
-    columns = state.get(`backend.${props.id}.columns`);
-  }
 
   return {
     column,
-    columns,
   };
 })(DatagridCell);
