@@ -39,6 +39,7 @@ class DatagridEntity extends Form {
                 theme={this.context.theme}
                 entity={this}
                 datagrid={this.props.datagrid}
+                onDrillDown={this.props.onDrillDown}
                 doAsEntity={(quest, args) =>
                   this.doFor(this.props.id, quest, args)
                 }

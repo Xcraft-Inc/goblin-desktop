@@ -97,10 +97,6 @@ class Datagrid extends Widget {
         <List
           id={listId}
           type={'uniform'}
-          parentId={{
-            onDrillDown: this.drillDown,
-            onRenewTTL: this.renewTTL,
-          }}
           renderItem={props => {
             return (
               <DatagridItem
@@ -115,6 +111,7 @@ class Datagrid extends Widget {
                     />
                   );
                 }}
+                onDrillDown={this.drillDown}
                 {...props}
               />
             );

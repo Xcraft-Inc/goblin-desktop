@@ -18,11 +18,7 @@ class DatagridItem extends Widget {
     if (this._renewInterval) {
       clearInterval(this._renewInterval);
     }
-    this._renewInterval = setInterval(
-      this.props.parentId.onDrillDown,
-      15000,
-      id
-    );
+    this._renewInterval = setInterval(this.props.onDrillDown, 15000, id);
   }
 
   componentWillUnmount() {
@@ -35,7 +31,7 @@ class DatagridItem extends Widget {
 
     if (!loaded) {
       if (id && this._idRequested !== id) {
-        setTimeout(this.props.parentId.onDrillDown, 0, id);
+        setTimeout(this.props.onDrillDown, 0, id);
         this.renewTTL(id);
         this._idRequested = id;
       }
@@ -50,7 +46,7 @@ class DatagridItem extends Widget {
         listId={this.props.listId}
         itemId={this.props.itemId}
         height={this._height}
-        parentId={this.props.parentId}
+        onDrillDown={this.props.onDrillDown}
       />
     );
   }
