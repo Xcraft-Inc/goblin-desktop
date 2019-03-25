@@ -58,8 +58,8 @@ Goblin.registerQuest(
         `*::*.${
           quest.goblin.id.split('@')[1]
         }.desktop-notification-broadcasted`,
-        (err, msg) => {
-          quest.me.addNotification({...msg.data});
+        function*(err, msg) {
+          yield quest.me.addNotification({...msg.data});
         }
       )
     );
@@ -257,10 +257,12 @@ Goblin.registerQuest(
       )
     );
 
-    const unsub = quest.sub(`*::${widgetId}.done`, function*() {
-      unsub();
-      yield quest.kill(widgetId);
-    });
+    if (widgetId.endsWith('-wizard')) {
+      const unsub = quest.sub(`*::${widgetId}.done`, function*() {
+        unsub();
+        yield quest.kill(widgetId);
+      });
+    }
 
     if (workitemAPI.waitLoaded) {
       yield workitemAPI.waitLoaded();
@@ -536,6 +538,7 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
   color,
   message,
   command,
+  externalUrl,
   broadcast
 ) {
   if (!notificationId) {
@@ -551,12 +554,13 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
         color,
         message,
         command,
+        externalUrl,
       }
     );
     return;
   }
 
-  quest.do({notificationId, glyph, color, message, command});
+  quest.do({notificationId, glyph, color, message, command, externalUrl});
   const dnd = quest.goblin.getState().get('dnd');
   if (dnd !== 'true') {
     quest.dispatch('set-notifications', {show: 'true'});
@@ -582,12 +586,12 @@ Goblin.registerQuest(goblinName, 'remove-notifications', function(quest) {
   quest.dispatch('update-not-read-count');
 });
 
-Goblin.registerQuest(goblinName, 'click-notification', function(
+Goblin.registerQuest(goblinName, 'click-notification', function*(
   quest,
   notification
 ) {
   if (notification.command) {
-    quest.cmd(notification.command, {notification});
+    yield quest.cmd(notification.command, {notification});
   }
 });
 

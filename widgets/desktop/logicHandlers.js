@@ -39,6 +39,7 @@ module.exports = {
       glyph: action.get('glyph'),
       color: action.get('color'),
       message: action.get('message'),
+      externalUrl: action.get('externalUrl'),
     };
     return state.set(`notifications.${notificationId}`, notification);
   },

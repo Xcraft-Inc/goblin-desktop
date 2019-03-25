@@ -164,8 +164,8 @@ class Datagrid extends Widget {
             kind="view"
             width={
               this.props.dialog
-                ? this.props.dialog.get('width') || '800px'
-                : '800px'
+                ? this.props.dialog.get('width') || '100%'
+                : '100%'
             }
             spacing="large"
           >
