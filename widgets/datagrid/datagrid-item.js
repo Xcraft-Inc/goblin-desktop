@@ -3,13 +3,14 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Container from 'gadgets/container/widget';
 
 class DatagridItem extends Widget {
   constructor() {
     super(...arguments);
 
-    this._height = 40;
     this.renewTTL = this.renewTTL.bind(this);
+    this.renderItem = this.renderItem.bind(this);
     this._idRequested = null;
     this._renewInterval = null;
   }
@@ -25,7 +26,7 @@ class DatagridItem extends Widget {
     clearInterval(this._renewInterval);
   }
 
-  render() {
+  renderItem() {
     const {id, item} = this.props;
     const loaded = id && item;
 
@@ -45,9 +46,16 @@ class DatagridItem extends Widget {
         index={this.props.index}
         listId={this.props.listId}
         itemId={this.props.itemId}
-        height={this._height}
         onDrillDown={this.props.onDrillDown}
       />
+    );
+  }
+
+  render() {
+    return (
+      <Container height={this.props.height} grow="1">
+        {this.renderItem()}
+      </Container>
     );
   }
 }

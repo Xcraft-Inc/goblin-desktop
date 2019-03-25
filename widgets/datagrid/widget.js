@@ -89,7 +89,7 @@ class Datagrid extends Widget {
   renderTable() {
     setTimeout(this._fetch, 0);
 
-    const {columnsNo, id, ...others} = this.props;
+    const {id, columnsNo, ...others} = this.props;
     const listId = `list@${id}`;
 
     return (
