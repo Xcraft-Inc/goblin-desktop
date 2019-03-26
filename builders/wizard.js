@@ -86,8 +86,10 @@ module.exports = config => {
     goblinName,
     'create',
     function*(quest, desktopId, form) {
+      const id = quest.goblin.id;
       quest.goblin.setX('desktopId', desktopId);
       const wizardGadgets = {};
+
       if (gadgets) {
         for (const key of Object.keys(gadgets)) {
           const gadget = gadgets[key];
@@ -97,9 +99,15 @@ module.exports = config => {
           if (gadgets[key].onActions) {
             for (const handler of Object.keys(gadgets[key].onActions)) {
               quest.goblin.defer(
-                quest.sub(`${newGadgetId}.${handler}`, function*(err, {msg}) {
-                  const questName = jsify(`${key}-${handler}`);
-                  yield quest.me[questName](msg.data);
+                quest.sub(`${newGadgetId}.${handler}`, function*(
+                  err,
+                  {msg, resp}
+                ) {
+                  const cmdName = `${key}-${handler}`;
+                  yield resp.cmd(
+                    `${goblinName}.${cmdName}`,
+                    Object.assign({id}, msg.data)
+                  );
                 })
               );
             }
@@ -116,9 +124,9 @@ module.exports = config => {
       }
 
       quest.goblin.defer(
-        quest.sub(`*::${quest.goblin.id}.step`, function*(err, {msg}) {
+        quest.sub(`*::${quest.goblin.id}.step`, function*(err, {msg, resp}) {
           const {action, ...other} = msg.data;
-          yield quest.me[action](other);
+          yield resp.cmd(`${goblinName}.${action}`, Object.assign({id}, other));
         })
       );
 
