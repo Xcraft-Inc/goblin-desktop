@@ -97,7 +97,7 @@ module.exports = config => {
           if (gadgets[key].onActions) {
             for (const handler of Object.keys(gadgets[key].onActions)) {
               quest.goblin.defer(
-                quest.sub(`${newGadgetId}.${handler}`, function*(err, msg) {
+                quest.sub(`${newGadgetId}.${handler}`, function*(err, {msg}) {
                   const questName = jsify(`${key}-${handler}`);
                   yield quest.me[questName](msg.data);
                 })
@@ -116,7 +116,7 @@ module.exports = config => {
       }
 
       quest.goblin.defer(
-        quest.sub(`*::${quest.goblin.id}.step`, function*(err, msg) {
+        quest.sub(`*::${quest.goblin.id}.step`, function*(err, {msg}) {
           const {action, ...other} = msg.data;
           yield quest.me[action](other);
         })

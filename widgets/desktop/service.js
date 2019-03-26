@@ -57,7 +57,7 @@ Goblin.registerQuest(
         `*::*.${
           quest.goblin.id.split('@')[1]
         }.desktop-notification-broadcasted`,
-        function*(err, msg) {
+        function*(err, {msg}) {
           yield quest.me.addNotification({...msg.data});
         }
       )
