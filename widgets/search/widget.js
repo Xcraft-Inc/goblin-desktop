@@ -176,7 +176,10 @@ class Search extends Form {
             <List
               id={listId}
               renderItem={ListItem}
-              parentId={{parentId: this.props.id, onDrillDown: this.drillDown}}
+              parentId={{
+                parentId: this.props.id,
+                onDrillDown: this.drillDown,
+              }}
             />
           </Container>
         </Container>
