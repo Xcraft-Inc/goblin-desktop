@@ -149,7 +149,7 @@ class Search extends Form {
           <Label text="Recherche" kind="pane-header" />
           <Count />
         </Container>
-        <Container kind="panes" subkind="no-overlay">
+        <Container kind="panes" subkind="no-overlay" grow="0">
           <Container kind="pane">
             <Container kind="row-pane">
               <Label text={title} grow="1" kind="title" />
