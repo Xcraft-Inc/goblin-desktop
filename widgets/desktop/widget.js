@@ -44,6 +44,36 @@ const LocaleMenuConnected = Widget.connect((state, props) => {
   };
 })(MainTabMenu);
 
+const TeamSelector = Widget.connect((state, props) => {
+  const teamIds = state.get('backend.mandate@main.teamIds');
+  const currentTeam = state.get(
+    `backend.${props.desktopId}.teamId`,
+    teamIds.get(0)
+  );
+  const items = teamIds.reduce((items, id) => {
+    const item = state.get(`backend.${id}`);
+    items.push({text: item.get('name'), value: id});
+    return items;
+  }, []);
+  return {
+    items,
+    currentItemValue: currentTeam,
+  };
+})(MainTabMenu);
+
+const UserInfo = Widget.connect((state, props) => {
+  const teamIds = state.get('backend.mandate@main.teamIds');
+  const currentTeam = state.get(
+    `backend.${props.desktopId}.teamId`,
+    teamIds.get(0)
+  );
+  const team = state.get(`backend.${currentTeam}.alias`, '');
+  return {
+    text: `${props.user} ${team}`,
+    kind: 'main-tab-right',
+  };
+})(Button);
+
 /******************************************************************************/
 
 class Desktop extends Widget {
@@ -57,6 +87,7 @@ class Desktop extends Widget {
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeLocale = this.onChangeLocale.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
+    this.onChangeTeam = this.onChangeTeam.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.onTab = this.onTab.bind(this);
     this.onShiftTab = this.onShiftTab.bind(this);
@@ -111,6 +142,10 @@ class Desktop extends Widget {
   onChangeTheme(name) {
     currentTheme = name;
     this.do('change-theme', {name});
+  }
+
+  onChangeTeam(teamId) {
+    this.do('change-team', {teamId});
   }
 
   onTab(e) {
@@ -278,7 +313,14 @@ class Desktop extends Widget {
             <Container kind="top-bar">
               <TopBar desktopId={id} />
               <Container kind="main-tab-right">
-                <Button text={this.props.username} kind="main-tab-right" />
+                <UserInfo user={this.props.username} desktopId={id} />
+                <TeamSelector
+                  desktopId={id}
+                  glyph="solid/users"
+                  kind="main-tab-right"
+                  tooltip="Team"
+                  onChange={this.onChangeTeam}
+                />
                 <LocaleMenuConnected
                   glyph="solid/flag"
                   kind="main-tab-right"

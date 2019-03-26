@@ -10,6 +10,7 @@ module.exports = {
       onlyNews: 'false',
       notReadCount: 0,
       notifications: {},
+      teamId: null,
       current: {
         workitems: {},
       },
@@ -77,6 +78,9 @@ module.exports = {
   },
   'remove-workitem': (state, action) => {
     return state.del(`workitems.${action.get('widgetId')}`);
+  },
+  'change-team': (state, action) => {
+    return state.set('teamId', action.get('teamId'));
   },
   setCurrentWorkitemByContext: (state, action) => {
     const lastWorkcontext = state.get('current.workcontext');
