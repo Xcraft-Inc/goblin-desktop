@@ -53,7 +53,7 @@ class DatagridItem extends Widget {
 
   render() {
     return (
-      <Container height={this.props.height} grow="1">
+      <Container minHeight={this.props.height} grow="1">
         {this.renderItem()}
       </Container>
     );
