@@ -251,7 +251,8 @@ Goblin.registerQuest(
       )
     );
 
-    if (widgetId.endsWith('-wizard')) {
+    /* FIXME: handle wizard lifetime properly */
+    if (workitem.name.endsWith('-wizard')) {
       const unsub = quest.sub(`*::${widgetId}.done`, function*() {
         unsub();
         yield quest.kill(widgetId);
