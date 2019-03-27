@@ -86,7 +86,10 @@ Goblin.registerQuest(goblinName, 'create', function*(
   quest.goblin.setX('workitemId', workitemId);
   quest.goblin.setX('loaded', {});
   quest.goblin.defer(
-    quest.sub(`${quest.goblin.id}.load-detail-requested`, function*(err, msg) {
+    quest.sub(`${quest.goblin.id}.load-detail-requested`, function*(
+      err,
+      {msg}
+    ) {
       yield quest.me.loadDetail({...msg.data});
     })
   );
