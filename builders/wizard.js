@@ -1,7 +1,6 @@
 'use strict';
 
 const Goblin = require('xcraft-core-goblin');
-const {jsify} = require('xcraft-core-utils').string;
 const common = require('goblin-workshop').common;
 
 const {OrderedMap, fromJS} = require('immutable');
