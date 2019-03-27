@@ -40,7 +40,7 @@ const LocaleMenuConnected = Widget.connect((state, props) => {
 
   return {
     items: locales,
-    itemsTextKey: 'name',
+    itemsTextKey: 'text',
     itemsValueKey: 'id',
     currentItemValue: toolbar ? toolbar.get('selectedLocaleId') : null,
   };
