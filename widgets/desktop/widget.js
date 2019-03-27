@@ -46,6 +46,12 @@ const LocaleMenuConnected = Widget.connect((state, props) => {
 
 const TeamSelector = Widget.connect((state, props) => {
   const teamIds = state.get('backend.mandate@main.teamIds');
+  if (!teamIds) {
+    return {
+      items: [{text: 'non configuré', value: null}],
+      currentItemValue: null,
+    };
+  }
   const currentTeam = state.get(
     `backend.${props.desktopId}.teamId`,
     teamIds.get(0)
@@ -63,6 +69,12 @@ const TeamSelector = Widget.connect((state, props) => {
 
 const UserInfo = Widget.connect((state, props) => {
   const teamIds = state.get('backend.mandate@main.teamIds');
+  if (!teamIds) {
+    return {
+      text: `${props.user}`,
+      kind: 'main-tab-right',
+    };
+  }
   const currentTeam = state.get(
     `backend.${props.desktopId}.teamId`,
     teamIds.get(0)
