@@ -101,12 +101,7 @@ class Workitem extends Form {
   }
 
   onCopyInfoToClipboard() {
-    const textField = document.createElement('textarea');
-    textField.innerText = this.props.entityId;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand('copy');
-    textField.remove();
+    this.copyTextToClipboard(this.props.entityId);
   }
 
   /******************************************************************************/
