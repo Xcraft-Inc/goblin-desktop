@@ -58,7 +58,7 @@ Goblin.registerQuest(
         `*::*.${
           quest.goblin.id.split('@')[1]
         }.desktop-notification-broadcasted`,
-        function*(err, msg) {
+        function*(err, {msg}) {
           yield quest.me.addNotification({...msg.data});
         }
       )
@@ -257,7 +257,8 @@ Goblin.registerQuest(
       )
     );
 
-    if (widgetId.endsWith('-wizard')) {
+    /* FIXME: handle wizard lifetime properly */
+    if (workitem.name.endsWith('-wizard')) {
       const unsub = quest.sub(`*::${widgetId}.done`, function*() {
         unsub();
         yield quest.kill(widgetId);
@@ -441,6 +442,10 @@ Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {
   quest.evt(`change-theme.requested`, {
     name,
   });
+});
+
+Goblin.registerQuest(goblinName, 'change-team', function(quest, teamId) {
+  quest.do();
 });
 
 Goblin.registerQuest(goblinName, 'nav-to-context', function*(quest, contextId) {
