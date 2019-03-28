@@ -358,7 +358,7 @@ class Desktop extends Widget {
                     glyph="solid/plus"
                     kind="main-tab-right"
                     onClick={() => {
-                      window.zoom();
+                      this.doFor('client', 'zoom');
                     }}
                   />
                 ) : null}
@@ -367,7 +367,7 @@ class Desktop extends Widget {
                     glyph="solid/minus"
                     kind="main-tab-right"
                     onClick={() => {
-                      window.unZoom();
+                      this.doFor('client', 'un-zoom');
                     }}
                   />
                 ) : null}
