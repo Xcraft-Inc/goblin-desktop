@@ -7,7 +7,6 @@ import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import DatagridCell from '../datagrid-cell/widget';
 import T from 't';
-import _ from 'lodash';
 
 const LabelConnected = Widget.connect((state, props) => {
   const key = state.get(`backend.${props.id}.sort.key`);
