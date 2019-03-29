@@ -164,7 +164,7 @@ class Datagrid extends Widget {
               kind="action"
               justify="center"
               place="single"
-              onClick={() => this.onClick()}
+              onClick={this.onClick}
             />
           </DialogModal>
         );
