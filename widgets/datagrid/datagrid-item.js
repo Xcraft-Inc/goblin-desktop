@@ -1,6 +1,5 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import _ from 'lodash';
 
 class DatagridItem extends Widget {
   constructor() {
@@ -22,7 +21,7 @@ class DatagridItem extends Widget {
         listId={this.props.index.listId}
         itemId={this.props.index.itemId}
         height={this._height}
-        parentId={this.props.index.parentId}
+        data={this.props.index.data}
       />
     );
   }
