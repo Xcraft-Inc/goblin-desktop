@@ -10,6 +10,9 @@ class DatagridEntity extends Form {
     super(...arguments);
 
     this.renderCell = this.renderCell.bind(this);
+    this.renderCellUI = this.renderCellUI.bind(this);
+    this.doAsEntity = this.doAsEntity.bind(this);
+    this.doAsDatagrid = this.doAsDatagrid.bind(this);
   }
 
   static get wiring() {
@@ -18,35 +21,40 @@ class DatagridEntity extends Form {
     };
   }
 
+  doAsEntity(quest, args) {
+    this.doFor(this.props.id, quest, args);
+  }
+
+  doAsDatagrid(quest, args) {
+    this.doFor(this.props.datagridId, quest, args);
+  }
+
+  renderCellUI(column, index) {
+    const CellUI = this.WithState(this.props.entityUI.rowCell, 'id')('.id');
+    return (
+      <CellUI
+        key={`${this.props.id}_${index}`}
+        id={this.props.id}
+        index={this.props.index}
+        column={column}
+        theme={this.context.theme}
+        datagridId={this.props.datagridId}
+        onDrillDown={this.props.onDrillDown}
+        doAsEntity={this.doAsEntity}
+        doAsDatagrid={this.doAsDatagrid}
+        contextId={this.context.contextId}
+      />
+    );
+  }
+
   renderCell(index) {
     if (this.props.entityUI && this.props.entityUI.rowCell) {
-      const CellUI = this.WithState(this.props.entityUI.rowCell, 'id')('.id');
-
       return (
         <DatagridCell
           key={`${this.props.id}_${index}`}
           id={this.props.datagridId}
           index={index}
-          cellUI={column => {
-            return (
-              <CellUI
-                key={`${this.props.id}_${index}`}
-                id={this.props.id}
-                index={this.props.index}
-                column={column}
-                theme={this.context.theme}
-                datagridId={this.props.datagridId}
-                onDrillDown={this.props.onDrillDown}
-                doAsEntity={(quest, args) =>
-                  this.doFor(this.props.id, quest, args)
-                }
-                doAsDatagrid={(quest, args) =>
-                  this.doFor(this.props.datagridId, quest, args)
-                }
-                contextId={this.context.contextId}
-              />
-            );
-          }}
+          cellUI={this.renderCellUI}
         />
       );
     }

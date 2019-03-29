@@ -39,6 +39,9 @@ class Header extends Widget {
 
     this.renderSortingHeader = this.renderSortingHeader.bind(this);
     this.renderComponent = this.renderComponent.bind(this);
+    this.renderComponentCellUI = this.renderComponentCellUI.bind(this);
+    this.renderCustomSortCellUI = this.renderCustomSortCellUI.bind(this);
+    this.renderSortableCellUI = this.renderSortableCellUI.bind(this);
   }
 
   renderSortingHeader() {
@@ -57,80 +60,85 @@ class Header extends Widget {
     );
   }
 
-  renderComponent() {
+  renderComponentCellUI(column, index) {
     const {
       id,
-      index,
-      column,
       datagridId,
       doAsDatagrid,
+      context,
       component,
       headerCell,
-      context,
     } = this.props;
 
     const CellUI = component.WithState(headerCell, 'id')('.id');
+    return (
+      <CellUI
+        key={`${id}_${index}`}
+        id={id}
+        index={index}
+        theme={context.theme}
+        column={column}
+        datagridId={datagridId}
+        doAsDatagrid={doAsDatagrid}
+        contextId={context.contextId}
+      />
+    );
+  }
+
+  renderComponent() {
+    const {column, index, datagridId} = this.props;
 
     return (
       <DatagridCell
         id={datagridId}
         index={index}
-        cellUI={column => {
-          return (
-            <CellUI
-              key={`${id}_${index}`}
-              id={id}
-              index={index}
-              theme={context.theme}
-              column={column}
-              datagridId={datagridId}
-              doAsDatagrid={doAsDatagrid}
-              contextId={context.contextId}
-            />
-          );
-        }}
+        cellUI={this.renderComponentCellUI}
         column={column}
       />
     );
   }
 
+  renderCustomSortCellUI(column, index) {
+    const {datagridId, component, entityUI, id, doAsDatagrid} = this.props;
+
+    const CellUI = component.WithState(entityUI.sortCell, 'id')('.id');
+    return (
+      <Container kind="row" width={column.get('width')}>
+        {this.renderComponent()}
+        <CellUI
+          key={`${id}_${index}`}
+          id={id}
+          index={index}
+          theme={this.context.theme}
+          column={column}
+          datagridId={datagridId}
+          doAsDatagrid={doAsDatagrid}
+          contextId={this.context.contextId}
+        />
+      </Container>
+    );
+  }
+
+  renderSortableCellUI(column) {
+    return (
+      <Container kind="row" width={column.get('width')}>
+        {this.renderComponent()}
+        {this.renderSortingHeader()}
+      </Container>
+    );
+  }
+
   render() {
-    const {
-      index,
-      column,
-      datagridId,
-      component,
-      entityUI,
-      id,
-      doAsDatagrid,
-    } = this.props;
+    const {index, column, datagridId} = this.props;
 
     if (column.get('customSort')) {
-      const CellUI = component.WithState(entityUI.sortCell, 'id')('.id');
-
       return (
         <DatagridCell
           id={datagridId}
           index={index}
           column={column}
           margin="0px"
-          cellUI={_ => {
-            return (
-              <Container kind="row" width={column.get('width')}>
-                {this.renderComponent()}
-                <CellUI
-                  key={`${id}_${index}`}
-                  id={id}
-                  index={index}
-                  theme={this.context.theme}
-                  column={column}
-                  datagridId={datagridId}
-                  doAsDatagrid={doAsDatagrid}
-                  contextId={this.context.contextId}
-                />
-              </Container>
-            );
-          }}
+          cellUI={this.renderCustomSortCellUI}
         />
       );
     } else if (column.get('sortable')) {
@@ -140,14 +148,7 @@ class Header extends Widget {
           index={index}
           column={column}
           margin="0px"
-          cellUI={_ => {
-            return (
-              <Container kind="row" width={column.get('width')}>
-                {this.renderComponent()}
-                {this.renderSortingHeader()}
-              </Container>
-            );
-          }}
+          cellUI={this.renderSortableCellUI}
         />
       );
     } else {

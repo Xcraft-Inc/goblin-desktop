@@ -18,10 +18,10 @@ class DatagridCell extends Form {
   }
 
   renderCell() {
-    const {cellUI, column} = this.props;
+    const {cellUI, column, index} = this.props;
 
     if (cellUI) {
-      return cellUI(column);
+      return cellUI(column, index);
     }
   }
 
