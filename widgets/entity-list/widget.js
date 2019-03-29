@@ -134,7 +134,7 @@ class EntityList extends Widget {
                 id={listId}
                 type={'uniform'}
                 renderItem={EntityListItem}
-                parentId={{
+                data={{
                   onDrillDown: this.drillDown,
                   onRenewTTL: this.renewTTL,
                   columns: new Shredder(columns),
