@@ -183,10 +183,10 @@ Goblin.registerQuest(goblinName, 'validate-row', function*(
   let payload = {};
   const usePayload = quest.goblin.getX('usePayload');
   if (usePayload) {
-    payload = quest.goblin
-      .getState()
-      .get(`payloads.${index}`, null)
-      .toJS();
+    payload = quest.goblin.getState().get(`payloads.${index}`, null);
+    if (payload) {
+      payload = payload.toJS();
+    }
   }
 
   const type = quest.goblin.getState().get(`type`, null);
