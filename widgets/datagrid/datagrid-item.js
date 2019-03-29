@@ -1,6 +1,5 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import _ from 'lodash';
 
 class DatagridItem extends Widget {
   constructor() {
