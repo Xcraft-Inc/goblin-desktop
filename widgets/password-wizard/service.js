@@ -5,9 +5,6 @@ const crypto = require('xcraft-core-utils/lib/crypto.js');
 const config = {
   name: 'password',
   title: 'Choisir le nouveau mot de passe',
-  initialFormState: {
-    passwordLength: '8',
-  },
   quests: {
     setRandomPassword: function*(quest) {
       const state = quest.goblin.getState();
@@ -31,7 +28,16 @@ const config = {
       form: {
         showPassword: 'true',
       },
-      quest: function(quest) {},
+      quest: function*(quest) {
+        const state = quest.goblin.getState();
+        const passwordLength = state.get('form.passwordLength');
+        if (!passwordLength) {
+          yield quest.me.change({
+            path: 'form.passwordLength',
+            newValue: '8',
+          });
+        }
+      },
     },
     finish: {
       form: {},
