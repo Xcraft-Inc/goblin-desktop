@@ -24,8 +24,11 @@ class Datagrid extends Widget {
     this.onClose = this.onClose.bind(this);
 
     this.initializeEntity = this.initializeEntity.bind(this);
+    this.mapItem = this.mapItem.bind(this);
     this.renderHeaders = this.renderHeaders.bind(this);
     this.renderTable = this.renderTable.bind(this);
+    this.renderListItem = this.renderListItem.bind(this);
+    this.renderDatagridItem = this.renderDatagridItem.bind(this);
 
     this._entityIds = [];
     this._drillDownInternal = this._drillDownInternal.bind(this);
@@ -71,6 +74,35 @@ class Datagrid extends Widget {
     this.entityUI = uiImporter(workitem);
   }
 
+  mapItem(entity) {
+    return {id: entity.get('id')};
+  }
+
+  renderListItem(props) {
+    {
+      return (
+        <DatagridItem
+          renderItem={this.renderDatagridItem}
+          onDrillDown={this.drillDown}
+          {...props}
+        />
+      );
+    }
+  }
+
+  renderDatagridItem(props) {
+    const {columnsNo} = this.props;
+    return (
+      <DatagridEntity
+        entityUI={this.entityUI}
+        columnsNo={columnsNo}
+        datagridId={this.props.id}
+        className={this.styles.classNames.entity}
+        {...props}
+      />
+    );
+  }
+
   renderHeaders() {
     const {columnsNo} = this.props;
 
@@ -89,7 +121,7 @@ class Datagrid extends Widget {
   renderTable() {
     setTimeout(this._fetch, 0);
 
-    const {id, columnsNo, ...others} = this.props;
+    const {id, ...others} = this.props;
     const listId = `list@${id}`;
 
     return (
@@ -97,26 +129,8 @@ class Datagrid extends Widget {
         <List
           id={listId}
           type={'uniform'}
-          renderItem={props => {
-            return (
-              <DatagridItem
-                renderItem={props => {
-                  return (
-                    <DatagridEntity
-                      entityUI={this.entityUI}
-                      columnsNo={columnsNo}
-                      datagridId={this.props.id}
-                      className={this.styles.classNames.entity}
-                      {...props}
-                    />
-                  );
-                }}
-                onDrillDown={this.drillDown}
-                {...props}
-              />
-            );
-          }}
-          mapItem={entity => ({id: entity.get('id')})}
+          renderItem={this.renderListItem}
+          mapItem={this.mapItem}
           {...others}
         />
       </Container>
