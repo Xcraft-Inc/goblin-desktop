@@ -87,8 +87,8 @@ const ListItem = Widget.connect((state, props) => {
     isReadyFlag,
     height: props.height,
     index: props.index,
-    parentId: props.parentId.parentId,
-    onDrillDown: props.parentId.onDrillDown,
+    parentId: props.data.parentId,
+    onDrillDown: props.data.onDrillDown,
   };
 })(_ListItem);
 
@@ -176,7 +176,7 @@ class Search extends Form {
             <List
               id={listId}
               renderItem={ListItem}
-              parentId={{
+              data={{
                 parentId: this.props.id,
                 onDrillDown: this.drillDown,
               }}

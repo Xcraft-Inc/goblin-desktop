@@ -30,8 +30,8 @@ export default Widget.connect((state, props) => {
   return {
     id,
     itemId: props.itemId,
-    columns: props.parentId.columns,
-    onDrillDown: props.parentId.onDrillDown,
+    columns: props.data.columns,
+    onDrillDown: props.data.onDrillDown,
     rowIndex: props.index,
   };
 })(EntityListItem);
