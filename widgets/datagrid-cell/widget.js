@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Form from 'laboratory/form';
-import _ from 'lodash';
 import Widget from 'laboratory/widget';
 
 class DatagridCell extends Form {

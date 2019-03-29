@@ -4,7 +4,6 @@ import React from 'react';
 import Form from 'laboratory/form';
 import Container from 'gadgets/container/widget';
 import DatagridCell from '../datagrid-cell/widget';
-import _ from 'lodash';
 
 class DatagridEntity extends Form {
   constructor() {
