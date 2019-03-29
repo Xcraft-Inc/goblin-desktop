@@ -5,11 +5,11 @@ import Container from 'gadgets/container/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
 import List from 'gadgets/list/widget';
-import DatagridEntity from './datagrid-entity';
-import DatagridHeaders from './datagrid-headers';
-import DatagridItem from './datagrid-item';
+import DatagridEntity from './datagrid-entity.js';
+import DatagridHeaders from './datagrid-headers.js';
+import DatagridItem from './datagrid-item.js';
 
-import importer from 'laboratory/importer/';
+import importer from 'laboratory/importer';
 const uiImporter = importer('ui');
 
 class Datagrid extends Widget {
