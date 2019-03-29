@@ -79,15 +79,13 @@ class Datagrid extends Widget {
   }
 
   renderListItem(props) {
-    {
-      return (
-        <DatagridItem
-          renderItem={this.renderDatagridItem}
-          onDrillDown={this.drillDown}
-          {...props}
-        />
-      );
-    }
+    return (
+      <DatagridItem
+        renderItem={this.renderDatagridItem}
+        onDrillDown={this.drillDown}
+        {...props}
+      />
+    );
   }
 
   renderDatagridItem(props) {
