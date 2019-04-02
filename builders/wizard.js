@@ -50,7 +50,6 @@ module.exports = config => {
         title: title,
         dialog: dialog || {
           width: '500px',
-          height: '400px',
         },
         gadgets: action.get('wizardGadgets'),
         busy: true,
