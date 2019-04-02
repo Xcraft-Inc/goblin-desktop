@@ -112,6 +112,7 @@ class Desktop extends Widget {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
   }

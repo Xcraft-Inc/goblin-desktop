@@ -67,6 +67,7 @@ class _Driller extends Widget {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();
     clearInterval(this._renewInterval);
   }
 
@@ -129,6 +130,7 @@ class EntityRow extends Widget {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();
     clearInterval(this._renewInterval);
   }
 

@@ -137,6 +137,7 @@ class Hinter extends Widget {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();
     MouseTrap.unbind('up');
     MouseTrap.unbind('down');
     MouseTrap.unbind('return');
