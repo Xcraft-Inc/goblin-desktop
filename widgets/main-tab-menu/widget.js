@@ -19,6 +19,7 @@ class MainTabMenu extends Widget {
     };
     this.onChange = this.onChange.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
+    this.close = this.close.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +45,10 @@ class MainTabMenu extends Widget {
     if (this.props.onChange) {
       this.props.onChange(value);
     }
+  }
+
+  close() {
+    this.showMenu = false;
   }
 
   /******************************************************************************/
@@ -77,7 +82,7 @@ class MainTabMenu extends Widget {
           left={(rect.left + rect.right) / 2}
           top={top}
           list={list}
-          close={() => (this.showMenu = false)}
+          close={this.close}
         />
       );
     } else {

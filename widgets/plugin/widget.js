@@ -32,11 +32,14 @@ class Plugin extends Widget {
     };
 
     this.onAction = this.onAction.bind(this);
+    this.onActionAdd = this.onActionAdd.bind(this);
     this.onSwapExtended = this.onSwapExtended.bind(this);
     this.onDeleteEntity = this.onDeleteEntity.bind(this);
     this.onEditEntity = this.onEditEntity.bind(this);
     this.onEntityDragged = this.onEntityDragged.bind(this);
     this.doProxy = this.doProxy.bind(this);
+    this.open = this.open.bind(this);
+    this.close = this.close.bind(this);
   }
 
   get showActionMenu() {
@@ -83,6 +86,10 @@ class Plugin extends Widget {
       default:
         this.doAs(service, 'do-action', {action: actionName});
     }
+  }
+
+  onActionAdd() {
+    this.onAction('add');
   }
 
   onSwapExtended(entityId) {
@@ -161,6 +168,14 @@ class Plugin extends Widget {
     };
   }
 
+  open() {
+    this.showActionMenu = true;
+  }
+
+  close() {
+    this.showActionMenu = false;
+  }
+
   /******************************************************************************/
 
   renderHeaderSearch() {
@@ -193,7 +208,7 @@ class Plugin extends Widget {
           glyph="solid/ellipsis-h"
           spacing="large"
           active={Bool.toString(this.showActionMenu)}
-          onClick={() => (this.showActionMenu = true)}
+          onClick={this.open}
         />
       );
     } else {
@@ -216,7 +231,7 @@ class Plugin extends Widget {
           left={(rect.left + rect.right) / 2}
           top={top}
           list={this.getActionMenuList(numberOfIds)}
-          close={() => (this.showActionMenu = false)}
+          close={this.close}
         />
       );
     } else {
@@ -238,7 +253,7 @@ class Plugin extends Widget {
           text={this.props.addText || 'Ajouter'}
           tooltip={this.props.addTooltip}
           glyphPosition="right"
-          onClick={() => this.onAction('add')}
+          onClick={this.onActionAdd}
         />
       );
     } else {
