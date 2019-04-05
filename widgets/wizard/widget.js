@@ -168,14 +168,17 @@ class Wizard extends Form {
                 spacing="large"
               >
                 <Form
-                  {...this.formConfigWithComponent(() => (
-                    <Step
-                      {...this.props}
-                      theme={this.context.theme}
-                      do={this.doProxy}
-                      setForm={this.setForm}
-                    />
-                  ))}
+                  {...this.formConfigWithComponent(
+                    React.forwardRef((props, ref) => (
+                      <Step
+                        ref={ref}
+                        {...this.props}
+                        theme={this.context.theme}
+                        do={this.doProxy}
+                        setForm={this.setForm}
+                      />
+                    ))
+                  )}
                 />
               </Container>
             );
@@ -193,14 +196,17 @@ class Wizard extends Form {
                 </Container>
                 <Container kind="pane-wizard">
                   <Form
-                    {...this.formConfigWithComponent(() => (
-                      <Step
-                        {...this.props}
-                        theme={this.context.theme}
-                        do={this.doProxy}
-                        setForm={this.setForm}
-                      />
-                    ))}
+                    {...this.formConfigWithComponent(
+                      React.forwardRef((props, ref) => (
+                        <Step
+                          ref={ref}
+                          {...this.props}
+                          theme={this.context.theme}
+                          do={this.doProxy}
+                          setForm={this.setForm}
+                        />
+                      ))
+                    )}
                   />
                 </Container>
                 <WizardButtons
