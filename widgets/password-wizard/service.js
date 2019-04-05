@@ -29,9 +29,17 @@ const config = {
       },
       form: {
         showPassword: 'true',
-        passwordLength: '8',
       },
-      quest: function(quest) {},
+      quest: function*(quest) {
+        const state = quest.goblin.getState();
+        const passwordLength = state.get('form.passwordLength');
+        if (!passwordLength) {
+          yield quest.me.change({
+            path: 'form.passwordLength',
+            newValue: '8',
+          });
+        }
+      },
     },
     finish: {
       form: {},

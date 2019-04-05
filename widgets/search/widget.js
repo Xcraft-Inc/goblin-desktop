@@ -29,6 +29,7 @@ class _ListItem extends Widget {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();
     clearInterval(this._renewInterval);
   }
 

@@ -53,13 +53,14 @@ Goblin.registerQuest(
     quest.do({id: quest.goblin.id, routes});
 
     quest.log.info(`Desktop ${quest.goblin.id} created!`);
+    const id = quest.goblin.id;
     quest.goblin.defer(
       quest.sub(
         `*::*.${
           quest.goblin.id.split('@')[1]
         }.desktop-notification-broadcasted`,
-        function*(err, {msg}) {
-          yield quest.me.addNotification({...msg.data});
+        function*(err, {msg, resp}) {
+          yield resp.cmd(`${goblinName}.add-notification`, {id, ...msg.data});
         }
       )
     );

@@ -114,6 +114,7 @@ class Desktop extends Widget {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
   }
@@ -360,7 +361,7 @@ class Desktop extends Widget {
                     glyph="solid/plus"
                     kind="main-tab-right"
                     onClick={() => {
-                      this.doFor('client', 'zoom');
+                      this.doFor(this.context.labId, 'zoom');
                     }}
                   />
                 ) : null}
@@ -369,7 +370,7 @@ class Desktop extends Widget {
                     glyph="solid/minus"
                     kind="main-tab-right"
                     onClick={() => {
-                      this.doFor('client', 'un-zoom');
+                      this.doFor(this.context.labId, 'un-zoom');
                     }}
                   />
                 ) : null}
