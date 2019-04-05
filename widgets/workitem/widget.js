@@ -101,7 +101,7 @@ class Workitem extends Form {
   }
 
   onCopyInfoToClipboard() {
-    this.copyTextToClipboard(this.props.entityId);
+    Form.copyTextToClipboard(this.props.entityId);
   }
 
   /******************************************************************************/
