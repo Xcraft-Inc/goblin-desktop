@@ -330,9 +330,8 @@ class Workitem extends Form {
     const formClass = this.styles.classNames.form;
     return (
       <Form
-        component={props => {
-          return <div className={formClass}>{this.props.children}</div>;
-        }}
+        component={FormComponent}
+        formClass={formClass}
         validateOn="submit"
         model={`backend.${this.props.entityId}`}
       >
@@ -346,9 +345,8 @@ class Workitem extends Form {
     const boardClass = this.styles.classNames.board;
     return (
       <Form
-        component={props => {
-          return <div className={boardClass}>{this.props.children}</div>;
-        }}
+        component={FormComponent}
+        formClass={boardClass}
         validateOn="submit"
         model={`backend.${this.props.entityId}`}
       >
@@ -362,9 +360,8 @@ class Workitem extends Form {
     const roadbookClass = this.styles.classNames.roadbook;
     return (
       <Form
-        component={props => {
-          return <div className={roadbookClass}>{this.props.children}</div>;
-        }}
+        component={FormComponent}
+        formClass={roadbookClass}
         validateOn="submit"
         model={`backend.${this.props.entityId}`}
       >
@@ -378,9 +375,8 @@ class Workitem extends Form {
     const deskClass = this.styles.classNames.desk;
     return (
       <Form
-        component={props => {
-          return <div className={deskClass}>{this.props.children}</div>;
-        }}
+        component={FormComponent}
+        formClass={deskClass}
         validateOn="submit"
         model={`backend.${this.props.entityId}`}
       >
@@ -435,3 +431,10 @@ export default Widget.connect((state, props) => {
     };
   }
 })(Workitem);
+
+class FormComponent extends React.PureComponent {
+  render() {
+    const {formClass} = this.props;
+    return <div className={formClass}>{this.props.children}</div>;
+  }
+}
