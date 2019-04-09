@@ -1,4 +1,4 @@
-//T:2019-02-27
+//T:2019-04-09
 import T from 't';
 import React from 'react';
 import Form from 'laboratory/form';
@@ -139,7 +139,19 @@ class Search extends Form {
 
     const Count = this.mapWidgetToFormPlugin(
       p => (
-        <Container busy={p.count === undefined}>{p.count} documents</Container>
+        <Container busy={p.count === undefined}>
+          <Label
+            text={T(
+              `{count, plural,
+                 =0 {aucun document}
+                 one {1 document}
+                 other {{count} documents}
+              }`,
+              null,
+              {count: p.count}
+            )}
+          />
+        </Container>
       ),
       'count',
       'list',
