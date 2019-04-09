@@ -18,6 +18,7 @@ class MainTabMenu extends Widget {
       showMenu: false,
     };
     this.onChange = this.onChange.bind(this);
+    this.onClick = this.onClick.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
     this.close = this.close.bind(this);
   }
@@ -45,6 +46,10 @@ class MainTabMenu extends Widget {
     if (this.props.onChange) {
       this.props.onChange(value);
     }
+  }
+
+  onClick() {
+    this.showMenu = true;
   }
 
   close() {
@@ -99,7 +104,7 @@ class MainTabMenu extends Widget {
         <Button
           ref={x => (this.comboButton = x)}
           active={this.showMenu}
-          onClick={() => (this.showMenu = true)}
+          onClick={this.onClick}
           {...other}
         />
         <div className={contentClass}>{this.renderMenu()}</div>
