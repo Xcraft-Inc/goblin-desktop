@@ -1,3 +1,4 @@
+//T:2019-02-27
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Widget from 'laboratory/widget';
@@ -42,9 +43,9 @@ class MainTabMenu extends Widget {
     });
   }
 
-  onChange(value) {
+  onChange(value, text) {
     if (this.props.onChange) {
-      this.props.onChange(value);
+      this.props.onChange(value, text);
     }
   }
 
@@ -76,7 +77,7 @@ class MainTabMenu extends Widget {
         return {
           text,
           active: value === this.currentItem,
-          action: () => this.onChange(value),
+          action: () => this.onChange(value, text),
         };
       });
 
@@ -96,7 +97,14 @@ class MainTabMenu extends Widget {
   }
 
   render() {
-    const {items, onChange, currentItemValue, ...other} = this.props;
+    const {
+      items,
+      onChange,
+      currentItemValue,
+      itemsTextKey,
+      itemsValueKey,
+      ...other
+    } = this.props;
     const contentClass = this.styles.classNames.content;
 
     return (

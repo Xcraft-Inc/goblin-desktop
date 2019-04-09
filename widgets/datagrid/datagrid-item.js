@@ -1,36 +1,70 @@
+//T:2019-02-27
+
 import React from 'react';
 import Widget from 'laboratory/widget';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import Container from 'gadgets/container/widget';
 
 class DatagridItem extends Widget {
   constructor() {
     super(...arguments);
 
-    this._height = 40;
+    this.renewTTL = this.renewTTL.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+    this._idRequested = null;
+    this._renewInterval = null;
   }
 
-  render() {
-    if (!this.props.message) {
-      return <div>Loading... </div>;
+  renewTTL(id) {
+    if (this._renewInterval) {
+      clearInterval(this._renewInterval);
+    }
+    this._renewInterval = setInterval(this.props.onDrillDown, 15000, id);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._renewInterval);
+  }
+
+  renderItem() {
+    const {id, item} = this.props;
+    const loaded = id && item;
+
+    if (!loaded) {
+      if (id && this._idRequested !== id) {
+        setTimeout(this.props.onDrillDown, 0, id);
+        this.renewTTL(id);
+        this._idRequested = id;
+      }
+      return <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />;
     }
 
     const Item = this.props.renderItem;
     return (
       <Item
-        id={this.props.message.get('id')}
-        index={this.props.index.index}
-        listId={this.props.index.listId}
-        itemId={this.props.index.itemId}
-        height={this._height}
-        data={this.props.index.data}
+        id={item.get('id')}
+        index={this.props.index}
+        listId={this.props.listId}
+        itemId={this.props.itemId}
+        onDrillDown={this.props.onDrillDown}
       />
+    );
+  }
+
+  render() {
+    return (
+      <Container height={`${this.props.height}px`} grow="1">
+        {this.renderItem()}
+      </Container>
     );
   }
 }
 
 export default Widget.connect((state, props) => {
-  const listIds = state.get(`backend.${props.index.listId}.list`);
+  const listIds = state.get(`backend.${props.listId}.list`);
 
   return {
-    message: state.get(`backend.${listIds.get(`${props.index.index}`)}`),
+    id: listIds.get(`${props.index}`, null),
+    item: state.get(`backend.${listIds.get(`${props.index}`)}`),
   };
 })(DatagridItem);

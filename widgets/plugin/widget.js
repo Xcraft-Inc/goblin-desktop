@@ -1,3 +1,5 @@
+//T:2019-02-27
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
@@ -14,6 +16,7 @@ import DragCab from 'gadgets/drag-cab/widget';
 import Combo from 'gadgets/combo/widget';
 
 import importer from 'laboratory/importer/';
+import T from 't';
 
 const uiImporter = importer('ui');
 
@@ -151,7 +154,7 @@ class Plugin extends Widget {
       }
       list.push({
         glyph: 'solid/trash',
-        text: 'Tout supprimer',
+        text: T('Tout supprimer'),
         action: () => this.onAction('clear'),
       });
     }
@@ -186,8 +189,10 @@ class Plugin extends Widget {
           labelGlyph="solid/search"
           labelWidth="24px"
           fieldWidth="180px"
-          hintText="Ajouter existant"
-          tooltip="Ajouter un élément existant en le choisissant dans une liste"
+          hintText={T('Ajouter existant')}
+          tooltip={T(
+            'Ajouter un élément existant en le choisissant dans une liste'
+          )}
           kind="hinter"
           requiredHinter="no"
           hinter={this.props.searchHinter}
@@ -250,7 +255,7 @@ class Plugin extends Widget {
       return (
         <Button
           glyph="solid/plus"
-          text={this.props.addText || 'Ajouter'}
+          text={this.props.addText || T('Ajouter')}
           tooltip={this.props.addTooltip}
           glyphPosition="right"
           onClick={this.onActionAdd}
@@ -352,7 +357,11 @@ class Plugin extends Widget {
           </Workitem>
         );
       } else {
-        return <Container busy="true">chargement...</Container>;
+        return (
+          <Container busy="true">
+            <Label text={T('chargement...')} />
+          </Container>
+        );
       }
     };
 
@@ -403,7 +412,7 @@ class Plugin extends Widget {
             kind={kind}
             glyph="solid/angle-up"
             glyphSize="180%"
-            tooltip="Replier"
+            tooltip={T('Replier')}
             active="false"
             activeColor={
               this.context.theme.palette.recurrenceExtendedBoxBackground
@@ -414,7 +423,7 @@ class Plugin extends Widget {
             width="32px"
             kind={kind}
             glyph="solid/pencil"
-            tooltip="Editer"
+            tooltip={T('Editer')}
             onClick={() => this.onEditEntity(entityId)}
           />
           {canDelete ? (
@@ -422,7 +431,7 @@ class Plugin extends Widget {
               width="32px"
               kind={kind}
               glyph="solid/trash"
-              tooltip="Supprimer"
+              tooltip={T('Supprimer')}
               onClick={() => this.onDeleteEntity(entityId)}
             />
           ) : null}
@@ -450,7 +459,7 @@ class Plugin extends Widget {
               width="32px"
               kind={kind}
               glyph="solid/pencil"
-              tooltip="Editer"
+              tooltip={T('Editer')}
               onClick={() => this.onEditEntity(entityId)}
             />
           ) : null}
@@ -459,7 +468,7 @@ class Plugin extends Widget {
             kind={kind}
             glyph="solid/angle-down"
             glyphSize="180%"
-            tooltip="Etendre"
+            tooltip={T('Etendre')}
             active="false"
             activeColor={
               this.context.theme.palette.recurrenceExtendedBoxBackground

@@ -1,6 +1,10 @@
+//T:2019-02-27
+
 import React from 'react';
 import Widget from 'laboratory/widget';
+import T from 't';
 
+import throttle from 'lodash/throttle';
 import Container from 'gadgets/container/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
@@ -16,16 +20,20 @@ class Datagrid extends Widget {
   constructor() {
     super(...arguments);
 
-    this.scrollTo = this.scrollTo.bind(this);
-    this.scrollAround = this.scrollAround.bind(this);
-    this.getVisibleRange = this.getVisibleRange.bind(this);
-
     this.onClick = this.onClick.bind(this);
     this.onClose = this.onClose.bind(this);
 
     this.initializeEntity = this.initializeEntity.bind(this);
+    this.mapItem = this.mapItem.bind(this);
     this.renderHeaders = this.renderHeaders.bind(this);
     this.renderTable = this.renderTable.bind(this);
+    this.renderListItem = this.renderListItem.bind(this);
+    this.renderDatagridItem = this.renderDatagridItem.bind(this);
+
+    this._entityIds = [];
+    this._drillDownInternal = this._drillDownInternal.bind(this);
+    this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
+    this.drillDown = this.drillDown.bind(this);
   }
 
   static get wiring() {
@@ -37,6 +45,19 @@ class Datagrid extends Widget {
     };
   }
 
+  _drillDownInternal() {
+    const service = this.props.id.split('@')[0];
+    this.doAs(service, 'drill-down', {
+      entityIds: this._entityIds,
+    });
+    this._entityIds = [];
+  }
+
+  drillDown(entityId) {
+    this._entityIds.push(entityId);
+    this._drillDown();
+  }
+
   onClose(kind, desktopId, contextId) {
     const service = this.props.id.split('@')[0];
     this.doAs(service, 'close', {kind, desktopId, contextId});
@@ -46,27 +67,38 @@ class Datagrid extends Widget {
     this.onClose(this.props.kind, this.desktopId, this.contextId);
   }
 
-  scrollTo(index) {
-    if (this.list && this.list.scrollTo) {
-      this.list.scrollTo(index);
-    }
-  }
-  scrollAround(index) {
-    if (this.list && this.list.scrollAround) {
-      this.list.scrollAround(index);
-    }
-  }
-  getVisibleRange() {
-    if (this.list && this.list.getVisibleRange) {
-      return this.list.getVisibleRange();
-    }
-  }
-
   initializeEntity() {
     const {id} = this.props;
 
     const workitem = id.split('@')[0];
     this.entityUI = uiImporter(workitem);
+  }
+
+  mapItem(entity) {
+    return {id: entity.get('id')};
+  }
+
+  renderListItem(props) {
+    return (
+      <DatagridItem
+        renderItem={this.renderDatagridItem}
+        onDrillDown={this.drillDown}
+        {...props}
+      />
+    );
+  }
+
+  renderDatagridItem(props) {
+    const {columnsNo} = this.props;
+    return (
+      <DatagridEntity
+        entityUI={this.entityUI}
+        columnsNo={columnsNo}
+        datagridId={this.props.id}
+        className={this.styles.classNames.entity}
+        {...props}
+      />
+    );
   }
 
   renderHeaders() {
@@ -78,7 +110,7 @@ class Datagrid extends Widget {
       <Headers
         entityUI={this.entityUI}
         columnsNo={columnsNo}
-        datagrid={this}
+        datagridId={this.props.id}
         className={this.styles.classNames.entity}
       />
     );
@@ -87,7 +119,7 @@ class Datagrid extends Widget {
   renderTable() {
     setTimeout(this._fetch, 0);
 
-    const {columnsNo, id, ...others} = this.props;
+    const {id, ...others} = this.props;
     const listId = `list@${id}`;
 
     return (
@@ -95,29 +127,8 @@ class Datagrid extends Widget {
         <List
           id={listId}
           type={'uniform'}
-          do={(command, args) => this.do(command, args)}
-          onRef={list => {
-            this.list = list;
-          }}
-          renderItem={index => {
-            return (
-              <DatagridItem
-                index={index}
-                renderItem={props => {
-                  return (
-                    <DatagridEntity
-                      entityUI={this.entityUI}
-                      columnsNo={columnsNo}
-                      datagrid={this}
-                      className={this.styles.classNames.entity}
-                      {...props}
-                    />
-                  );
-                }}
-              />
-            );
-          }}
-          mapItem={entity => ({id: entity.get('id')})}
+          renderItem={this.renderListItem}
+          mapItem={this.mapItem}
           {...others}
         />
       </Container>
@@ -149,11 +160,11 @@ class Datagrid extends Widget {
             {this.renderTable()}
             <Button
               key={id}
-              text="Close"
+              text={T('Close')}
               kind="action"
               justify="center"
               place="single"
-              onClick={() => this.onClick()}
+              onClick={this.onClick}
             />
           </DialogModal>
         );

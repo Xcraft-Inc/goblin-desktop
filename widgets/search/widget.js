@@ -1,3 +1,5 @@
+//T:2019-02-27
+import T from 't';
 import React from 'react';
 import Form from 'laboratory/form';
 import Widget from 'laboratory/widget';
@@ -37,7 +39,7 @@ class _ListItem extends Widget {
 
   render() {
     const containerProps = {};
-    const text = this.props.text ? this.props.text : '...';
+    const text = this.props.text ? this.props.text : '…';
     if ((!this.props.exists || !this.props.text) && this.props.height) {
       containerProps.height = `${this.props.height}px`;
     }
@@ -147,7 +149,7 @@ class Search extends Form {
     return (
       <Container kind="view" width="400px" spacing="large">
         <Container kind="pane-header">
-          <Label text="Recherche" kind="pane-header" />
+          <Label text={T('Recherche')} kind="pane-header" />
           <Count />
         </Container>
         <Container kind="panes" subkind="no-overlay" grow="0">

@@ -1,3 +1,5 @@
+//T:2019-02-28
+
 import React from 'react';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'laboratory/widget';
@@ -5,6 +7,7 @@ import MouseTrap from 'mousetrap';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
+import T from 't';
 
 class _Row extends React.PureComponent {
   constructor() {
@@ -261,7 +264,11 @@ class Hinter extends Widget {
               kind="action"
               place="1/1"
               glyph="solid/plus"
-              text={newButtonTitle ? newButtonTitle : `Nouveau ${title}`}
+              text={
+                newButtonTitle
+                  ? newButtonTitle
+                  : T(`Nouveau {title}`, '', {title})
+              }
               width="0px"
               grow="1"
               onClick={this.onNew}

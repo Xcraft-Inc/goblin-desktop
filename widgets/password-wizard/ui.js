@@ -1,3 +1,5 @@
+//T:2019-02-27
+import T from 't';
 import React from 'react';
 import Container from 'gadgets/container/widget';
 import Field from 'gadgets/field/widget';
@@ -15,19 +17,19 @@ function renderMain(props) {
         kind="field"
         labelWidth="30px"
         labelGlyph="solid/lock"
-        hintText="Mot de passe"
+        hintText={T('Mot de passe')}
         model=".form.password"
         grow="1"
         {...type}
       />
       <Field
         kind="bool"
-        labelText="Afficher le mot de passe"
+        labelText={T('Afficher le mot de passe')}
         model=".form.showPassword"
       />
       <Field
         kind="number"
-        labelText="Longueur du mot de passe aléatoire"
+        labelText={T('Longueur du mot de passe aléatoire')}
         labelWidth="275px"
         width="325px"
         model=".form.passwordLength"
@@ -38,7 +40,7 @@ function renderMain(props) {
         place="1/1"
         width="495px"
         glyph="solid/user-secret"
-        text="Générer un mot de passe aléatoire"
+        text={T('Générer un mot de passe aléatoire')}
         disabled={disableRandomPasswordButton}
         onClick={() => props.do('setRandomPassword')}
       />

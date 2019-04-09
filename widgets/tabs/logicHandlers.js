@@ -15,8 +15,8 @@ module.exports = {
     const current = state.get(`current.${contextId}`, null);
     const tab = {
       id: tabId,
-      name: action.get('name'),
       view: action.get('view'),
+      name: action.get('name'),
       workitemId: action.get('workitemId'),
       entityId: action.get('entityId'),
       closable: action.get('closable'),

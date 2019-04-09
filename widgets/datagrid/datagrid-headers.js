@@ -1,3 +1,5 @@
+//T:2019-02-27
+
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Form from 'laboratory/form';
@@ -5,7 +7,6 @@ import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import DatagridCell from '../datagrid-cell/widget';
 import T from 't';
-import _ from 'lodash';
 
 const LabelConnected = Widget.connect((state, props) => {
   const key = state.get(`backend.${props.id}.sort.key`);
@@ -37,13 +38,16 @@ class Header extends Widget {
 
     this.renderSortingHeader = this.renderSortingHeader.bind(this);
     this.renderComponent = this.renderComponent.bind(this);
+    this.renderComponentCellUI = this.renderComponentCellUI.bind(this);
+    this.renderCustomSortCellUI = this.renderCustomSortCellUI.bind(this);
+    this.renderSortableCellUI = this.renderSortableCellUI.bind(this);
   }
 
   renderSortingHeader() {
     return (
       <LabelConnected
         tooltips={this.tooltips}
-        id={this.props.datagrid.props.id}
+        id={this.props.datagridId}
         column={this.props.column}
         onClick={() =>
           this.props.doAsDatagrid('toggle-sort', {
@@ -55,97 +59,95 @@ class Header extends Widget {
     );
   }
 
-  renderComponent() {
+  renderComponentCellUI(column, index) {
     const {
       id,
-      index,
-      column,
-      datagrid,
+      datagridId,
       doAsDatagrid,
+      context,
       component,
       headerCell,
-      context,
     } = this.props;
 
     const CellUI = component.WithState(headerCell, 'id')('.id');
+    return (
+      <CellUI
+        key={`${id}_${index}`}
+        id={id}
+        index={index}
+        theme={context.theme}
+        column={column}
+        datagridId={datagridId}
+        doAsDatagrid={doAsDatagrid}
+        contextId={context.contextId}
+      />
+    );
+  }
+
+  renderComponent() {
+    const {column, index, datagridId} = this.props;
 
     return (
       <DatagridCell
-        id={datagrid.props.id}
+        id={datagridId}
         index={index}
-        cellUI={column => {
-          return (
-            <CellUI
-              key={`${id}_${index}`}
-              id={id}
-              index={index}
-              theme={context.theme}
-              column={column}
-              datagrid={datagrid}
-              doAsDatagrid={doAsDatagrid}
-              contextId={context.contextId}
-            />
-          );
-        }}
+        cellUI={this.renderComponentCellUI}
         column={column}
       />
     );
   }
 
+  renderCustomSortCellUI(column, index) {
+    const {datagridId, component, entityUI, id, doAsDatagrid} = this.props;
+
+    const CellUI = component.WithState(entityUI.sortCell, 'id')('.id');
+    return (
+      <Container kind="row" width={column.get('width')}>
+        {this.renderComponent()}
+        <CellUI
+          key={`${id}_${index}`}
+          id={id}
+          index={index}
+          theme={this.context.theme}
+          column={column}
+          datagridId={datagridId}
+          doAsDatagrid={doAsDatagrid}
+          contextId={this.context.contextId}
+        />
+      </Container>
+    );
+  }
+
+  renderSortableCellUI(column) {
+    return (
+      <Container kind="row" width={column.get('width')}>
+        {this.renderComponent()}
+        {this.renderSortingHeader()}
+      </Container>
+    );
+  }
+
   render() {
-    const {
-      index,
-      column,
-      datagrid,
-      component,
-      entityUI,
-      id,
-      doAsDatagrid,
-    } = this.props;
+    const {index, column, datagridId} = this.props;
 
     if (column.get('customSort')) {
-      const CellUI = component.WithState(entityUI.sortCell, 'id')('.id');
-
       return (
         <DatagridCell
-          id={datagrid.props.id}
+          id={datagridId}
           index={index}
           column={column}
           margin="0px"
-          cellUI={_ => {
-            return (
-              <Container kind="row" width={column.get('width')}>
-                {this.renderComponent()}
-                <CellUI
-                  key={`${id}_${index}`}
-                  id={id}
-                  index={index}
-                  theme={this.context.theme}
-                  column={column}
-                  datagrid={datagrid}
-                  doAsDatagrid={doAsDatagrid}
-                  contextId={this.context.contextId}
-                />
-              </Container>
-            );
-          }}
+          cellUI={this.renderCustomSortCellUI}
         />
       );
     } else if (column.get('sortable')) {
       return (
         <DatagridCell
-          id={datagrid.props.id}
+          id={datagridId}
           index={index}
           column={column}
           margin="0px"
-          cellUI={_ => {
-            return (
-              <Container kind="row" width={column.get('width')}>
-                {this.renderComponent()}
-                {this.renderSortingHeader()}
-              </Container>
-            );
-          }}
+          cellUI={this.renderSortableCellUI}
         />
       );
     } else {
@@ -165,8 +167,8 @@ class Hinter extends Widget {
     super(...arguments);
   }
 
-  static connectTo(datagrid) {
-    return Widget.Wired(Hinter)(`${datagrid.props.id}`);
+  static connectTo(datagridId) {
+    return Widget.Wired(Hinter)(`${datagridId}`);
   }
 
   static get wiring() {
@@ -176,7 +178,7 @@ class Hinter extends Widget {
   }
 
   render() {
-    const {id, entityUI, component, datagrid} = this.props;
+    const {id, entityUI, component, datagridId} = this.props;
     if (!id) {
       return null;
     }
@@ -189,10 +191,8 @@ class Hinter extends Widget {
         id={id}
         theme={this.context.theme}
         contextId={this.context.contextId}
-        datagrid={datagrid}
-        doAsDatagrid={(quest, args) =>
-          this.doFor(datagrid.props.id, quest, args)
-        }
+        datagridId={datagridId}
+        doAsDatagrid={(quest, args) => this.doFor(datagridId, quest, args)}
       />
     );
   }
@@ -216,7 +216,7 @@ class DatagridHeaders extends Form {
   }
 
   renderHeader(index) {
-    const {entityUI, datagrid, id} = this.props;
+    const {entityUI, datagridId, id} = this.props;
 
     if (entityUI && entityUI.headerCell) {
       return (
@@ -224,10 +224,8 @@ class DatagridHeaders extends Form {
           key={`${id}_${index}`}
           id={id}
           index={index}
-          datagrid={datagrid}
-          doAsDatagrid={(quest, args) =>
-            this.doFor(datagrid.props.id, quest, args)
-          }
+          datagridId={datagridId}
+          doAsDatagrid={(quest, args) => this.doFor(datagridId, quest, args)}
           component={this}
           headerCell={entityUI.headerCell}
           context={this.context}
@@ -238,14 +236,14 @@ class DatagridHeaders extends Form {
   }
 
   render() {
-    const {id, columnsNo, datagrid, entityUI} = this.props;
+    const {id, columnsNo, datagridId, entityUI} = this.props;
     const self = this;
     if (!id) {
       return null;
     }
 
     const Form = this.Form;
-    const DatagridHinter = Hinter.connectTo(datagrid);
+    const DatagridHinter = Hinter.connectTo(datagridId);
 
     return (
       <div>
@@ -259,7 +257,7 @@ class DatagridHeaders extends Form {
         <DatagridHinter
           component={this}
           entityUI={entityUI}
-          datagrid={datagrid}
+          datagridId={datagridId}
           columnsNo={columnsNo}
           className={this.props.className}
         />
