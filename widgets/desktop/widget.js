@@ -105,6 +105,7 @@ class Desktop extends Widget {
     this.renderFooter = this.renderFooter.bind(this);
     this.onTab = this.onTab.bind(this);
     this.onShiftTab = this.onShiftTab.bind(this);
+    this.togglePrompt = this.togglePrompt.bind(this);
   }
 
   componentDidMount() {
@@ -181,8 +182,18 @@ class Desktop extends Widget {
     return <WiredNotifications />;
   }
 
+  togglePrompt(e) {
+    if (e) {
+      if (e.key === 'Enter') {
+        this.dispatch({type: 'TOGGLEPROMPT'});
+      }
+    } else {
+      this.dispatch({type: 'TOGGLEPROMPT'});
+    }
+  }
+
   connectCommandsPrompt() {
-    MouseTrap.bind('ctrl+p', () => this.dispatch({type: 'TOGGLEPROMPT'}));
+    MouseTrap.bind('ctrl+p', this.togglePrompt);
     return this.mapWidget(
       props => {
         return (
@@ -208,11 +219,7 @@ class Desktop extends Widget {
                 type="text"
                 list="commands"
                 autoFocus={true}
-                onKeyPress={e => {
-                  if (e.key === 'Enter') {
-                    this.dispatch({type: 'TOGGLEPROMPT'});
-                  }
-                }}
+                onKeyPress={this.togglePrompt}
               />
             ) : null}
             <datalist id="commands" style={{zIndex: 100}}>
