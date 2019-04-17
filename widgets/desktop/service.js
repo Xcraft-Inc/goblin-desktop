@@ -6,6 +6,8 @@ const Goblin = require('xcraft-core-goblin');
 const uuidV4 = require('uuid/v4');
 const goblinName = path.basename(module.parent.filename, '.js');
 const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
+const StringBuilder = require('goblin-nabu/lib/string-builder.js');
+
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
 const defaultRoutes = {
@@ -550,6 +552,8 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
   if (!notificationId) {
     notificationId = uuidV4();
   }
+
+  message = StringBuilder.combine(message);
 
   if (broadcast) {
     quest.evt(
