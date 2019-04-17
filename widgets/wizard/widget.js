@@ -88,7 +88,8 @@ class Wizard extends Form {
     const wizard = this.props.id.split('@')[0];
     const wizardUI = uiImporter(wizard);
 
-    if (!wizardUI[this.props.step]) {
+    const hasStep = !!wizardUI[this.props.step];
+    if (!hasStep) {
       Step = props => {
         return null;
       };
@@ -169,15 +170,17 @@ class Wizard extends Form {
               >
                 <Form
                   {...this.formConfigWithComponent(
-                    React.forwardRef((props, ref) => (
-                      <Step
-                        ref={ref}
-                        {...this.props}
-                        theme={this.context.theme}
-                        do={this.doProxy}
-                        setForm={this.setForm}
-                      />
-                    ))
+                    hasStep
+                      ? React.forwardRef((props, ref) => (
+                          <Step
+                            ref={ref}
+                            {...this.props}
+                            theme={this.context.theme}
+                            do={this.doProxy}
+                            setForm={this.setForm}
+                          />
+                        ))
+                      : () => null
                   )}
                 />
               </Container>
@@ -197,15 +200,17 @@ class Wizard extends Form {
                 <Container kind="pane-wizard">
                   <Form
                     {...this.formConfigWithComponent(
-                      React.forwardRef((props, ref) => (
-                        <Step
-                          ref={ref}
-                          {...this.props}
-                          theme={this.context.theme}
-                          do={this.doProxy}
-                          setForm={this.setForm}
-                        />
-                      ))
+                      hasStep
+                        ? React.forwardRef((props, ref) => (
+                            <Step
+                              ref={ref}
+                              {...this.props}
+                              theme={this.context.theme}
+                              do={this.doProxy}
+                              setForm={this.setForm}
+                            />
+                          ))
+                        : () => null
                     )}
                   />
                 </Container>
