@@ -5,6 +5,7 @@ import Widget from 'laboratory/widget';
 import throttle from 'lodash/throttle';
 import List from 'gadgets/list/widget';
 import TableCell from 'gadgets/table-cell/widget';
+import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import EntityListItem from 'desktop/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
@@ -20,14 +21,21 @@ class ListToolbar extends Widget {
   constructor() {
     super(...arguments);
     this.exportToCsv = this.exportToCsv.bind(this);
+    this.selectQuery = this.selectQuery.bind(this);
   }
 
   exportToCsv() {
     this.doAs(`${this.props.type}-list`, 'export-to-csv', {});
   }
 
+  selectQuery(event) {
+    this.doAs(`${this.props.type}-list`, 'select-query', {
+      value: event.target.value,
+    });
+  }
+
   render() {
-    const {id, exporting} = this.props;
+    const {id, exporting, query, queriesPreset} = this.props;
     if (!id) {
       return null;
     }
@@ -38,14 +46,33 @@ class ListToolbar extends Widget {
             <Label text={T('Export csv en cours...')} />
           </div>
         ) : (
-          <Button
-            kind="action"
-            place="1/1"
-            width="250px"
-            glyph="solid/save"
-            text={T('Exporter un fichier csv')}
-            onClick={this.exportToCsv}
-          />
+          <Container kind="row">
+            <Button
+              kind="action"
+              place="1/1"
+              width="250px"
+              glyph="solid/save"
+              text={T('Exporter un fichier csv')}
+              onClick={this.exportToCsv}
+            />
+
+            {queriesPreset.map((p, index) => {
+              return (
+                <div key={index}>
+                  <label>
+                    <input
+                      type="radio"
+                      name={p}
+                      value={p}
+                      checked={p === query}
+                      onChange={this.selectQuery}
+                    />
+                    {p}
+                  </label>
+                </div>
+              );
+            })}
+          </Container>
         )}
       </div>
     );
@@ -56,6 +83,8 @@ const Toolbar = Widget.connect((state, props) => {
   return {
     exporting: state.get(`backend.${props.id}.exporting`, false),
     type: state.get(`backend.${props.id}.type`),
+    queriesPreset: state.get(`backend.${props.id}.queriesPreset`),
+    query: state.get(`backend.${props.id}.query`),
   };
 })(ListToolbar);
 
