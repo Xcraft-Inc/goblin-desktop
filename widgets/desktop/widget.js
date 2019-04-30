@@ -60,7 +60,9 @@ const TeamSelector = Widget.connect((state, props) => {
   );
   const items = teamIds.reduce((items, id) => {
     const item = state.get(`backend.${id}`);
-    items.push({text: item.get('name'), value: id});
+    if (item) {
+      items.push({text: item.get('name'), value: id});
+    }
     return items;
   }, []);
   return {
