@@ -70,13 +70,14 @@ Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
       return;
     }
     const wiAPI = quest.getAPI(workitemId);
-    yield wiAPI.changeEntity({entityId});
+    yield wiAPI.changeEntity({entityId, _goblinFeed: quest.goblin.feed});
   } else {
     yield quest.create(workitemId, {
       id: workitemId,
       desktopId,
       entityId: entityId,
       mode: 'readonly',
+      _goblinFeed: quest.goblin.feed,
     });
   }
   quest.do({widgetId: workitemId, entityId});
