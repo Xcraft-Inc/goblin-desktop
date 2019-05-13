@@ -16,7 +16,7 @@
   "dependencies": {
     "goblin-toolbox": "^0.0.1",
     "xcraft-core-goblin": "^2.0.0",
-    "xcraft-core-utils": "^1.1.0"
+    "xcraft-core-utils": "^2.0.0"
   },
   "devDependencies": {
     "xcraft-dev-rules": "^0.4.0",
