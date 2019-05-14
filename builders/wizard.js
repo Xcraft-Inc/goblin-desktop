@@ -154,8 +154,8 @@ module.exports = config => {
           next.parallel()
         );
       });
+      yield next.sync();
     }
-    yield next.sync();
   });
 
   common.registerHinters(goblinName, hinters);
