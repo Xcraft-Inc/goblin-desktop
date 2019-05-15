@@ -18,7 +18,7 @@ class StatusFilter extends Widget {
   static get wiring() {
     return {
       id: 'id',
-      contentIndex: 'contentIndex',
+      contentIndex: 'options.contentIndex',
     };
   }
 
