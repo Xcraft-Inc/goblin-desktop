@@ -87,12 +87,12 @@ class Detail extends Widget {
       }
       return (
         <Container
-          kind={kind ? kind : 'view-right'}
+          kind="view-right"
           width={width ? width : '700px'}
           busy={this.props.loading}
         >
           <Detail
-            kind="detail"
+            kind={kind ? kind : 'detail'}
             id={workitemId}
             entityId={entityId}
             title={() => {
