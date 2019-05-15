@@ -9,7 +9,7 @@ import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 import ScrollableContainer from 'gadgets/scrollable-container/widget';
-
+import Separator from 'gadgets/separator/widget';
 import T from 't';
 
 /******************************************************************************/
@@ -280,7 +280,7 @@ class Workitem extends Form {
         {this.renderStatus()}
         <ScrollableContainer kind="panes" id={scrollableId}>
           <Form
-            component="div"
+            component={FormComponent}
             validateOn="submit"
             model={`backend.${this.props.entityId}`}
           >
@@ -312,13 +312,40 @@ class Workitem extends Form {
         {this.renderStatus()}
         <ScrollableContainer kind="panes" id={scrollableId}>
           <Form
-            component="div"
+            component={FormComponent}
             validateOn="submit"
             model={`backend.${this.props.entityId}`}
           >
             {this.props.children}
           </Form>
         </ScrollableContainer>
+        {this.renderActionButtons()}
+      </Container>
+    );
+  }
+
+  renderDocument() {
+    const Form = this.Form;
+    const Title = this.mapWidget(
+      Label,
+      'text',
+      `backend.${this.props.entityId}.meta.summaries.info`
+    );
+    return (
+      <Container kind="column-full">
+        <Container kind="pane-header">
+          <Title kind="pane-header" singleLine="true" wrap="no" />
+        </Container>
+        {this.renderStatus()}
+        <Separator kind="space" height="30px" />
+        <Form
+          component={FormFragmentComponent}
+          validateOn="submit"
+          model={`backend.${this.props.entityId}`}
+        >
+          {this.props.children}
+        </Form>
+
         {this.renderActionButtons()}
       </Container>
     );
@@ -407,6 +434,8 @@ class Workitem extends Form {
         return this.renderRoadbook();
       case 'desk':
         return this.renderDesk();
+      case 'document':
+        return this.renderDocument();
       default:
         console.error(`Workitem does not support kind='${kind}'`);
         return null;
@@ -435,5 +464,11 @@ class FormComponent extends React.PureComponent {
   render() {
     const {formClass} = this.props;
     return <div className={formClass}>{this.props.children}</div>;
+  }
+}
+
+class FormFragmentComponent extends React.PureComponent {
+  render() {
+    return <React.Fragment>{this.props.children}</React.Fragment>;
   }
 }
