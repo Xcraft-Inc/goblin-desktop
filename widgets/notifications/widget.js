@@ -104,15 +104,17 @@ class Notifications extends Widget {
     // The most recent notification first (on top).
     const nn = Widget.shred(notifications);
     let index = 0;
-    return nn.linq
-      .where(
-        n => this.props.onlyNews === 'false' || n.get('status') === 'not-read'
-      )
-      .orderByDescending(n => n.get('order'))
-      .select(n => {
+    return nn
+      .map(n => {
+        if (this.props.onlyNews === 'false' || n.get('status') === 'not-read') {
+          return n;
+        }
+      })
+      .sort((a, b) => b.get('order') - a.get('order'))
+      .map(n => {
         return this.renderNotification(n.toJS(), index++);
       })
-      .toList();
+      .toArray();
   }
 
   render() {
