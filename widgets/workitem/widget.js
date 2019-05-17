@@ -248,7 +248,7 @@ class Workitem extends Form {
 
   renderStatus() {
     return (
-      <Container kind="row">
+      <Container kind="row" minHeight="40px">
         {this.renderStatusBase()}
         {this.renderStatusBusiness()}
         {this.renderStatusCopy()}
@@ -337,7 +337,6 @@ class Workitem extends Form {
           <Title kind="pane-header" singleLine="true" wrap="no" />
         </Container>
         {this.renderStatus()}
-        <Separator kind="space" height="30px" />
         <Form
           component={FormFragmentComponent}
           validateOn="submit"
