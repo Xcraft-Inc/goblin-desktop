@@ -6,7 +6,7 @@ const goblinName = 'tabs';
 const logicState = {};
 
 // Define logic handlers according rc.json
-const logicHandlers = require('./logicHandlers');
+const logicHandlers = require('./logic-handlers.js');
 
 // Register quest's according rc.json
 

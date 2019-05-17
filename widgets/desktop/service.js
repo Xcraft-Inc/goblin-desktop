@@ -22,7 +22,7 @@ const defaultRoutes = {
 const logicState = {};
 
 // Define logic handlers according rc.json
-const logicHandlers = require('./logicHandlers.js');
+const logicHandlers = require('./logic-handlers.js');
 
 // Register quest's according rc.json
 Goblin.registerQuest(

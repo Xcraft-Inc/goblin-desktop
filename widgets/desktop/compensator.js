@@ -1,5 +1,5 @@
 //T:2019-02-27
-const logicHandlers = require('./logicHandlers.js');
+const logicHandlers = require('./logic-handlers.js');
 
 export default (state, action = {}) => {
   if (logicHandlers[action.type]) {

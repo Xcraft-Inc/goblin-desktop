@@ -1,4 +1,4 @@
-const logicHandlers = require('./logicHandlers.js');
+const logicHandlers = require('./logic-handlers.js');
 
 export default (state, action = {}) => {
   if (logicHandlers[action.type]) {
