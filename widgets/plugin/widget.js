@@ -367,13 +367,7 @@ class Plugin extends Widget {
 
     const LoadedWorkitem = this.mapWidget(
       Loader,
-      wid => {
-        if (!wid) {
-          return {loaded: false};
-        } else {
-          return {loaded: true};
-        }
-      },
+      wid => ({loaded: !!wid}),
       `backend.${workitemId}.id`
     );
 
