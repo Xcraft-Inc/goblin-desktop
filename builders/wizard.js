@@ -69,7 +69,7 @@ module.exports = config => {
       return state.set(action.get('path'), action.get('newValue'));
     },
     apply: (state, action) => {
-      return state.merge(action.get('path', ''), action.get('patch'));
+      return state.mergeDeep(action.get('path', ''), action.get('patch'));
     },
     next: (state, action) => {
       return state.set('step', action.get('step'));
@@ -316,12 +316,12 @@ module.exports = config => {
     const step = steps[stepName];
     logicHandlers[`init-${stepName}`] = state => {
       if (step.form) {
-        return state.merge('form', step.form);
+        return state.mergeDeep('form', step.form);
       }
       return state;
     };
     logicHandlers[stepName] = (state, action) => {
-      return state.merge('form', action.get('form'));
+      return state.mergeDeep('form', action.get('form'));
     };
 
     if (step.quest) {
