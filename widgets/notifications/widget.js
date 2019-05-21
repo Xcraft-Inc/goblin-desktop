@@ -77,22 +77,26 @@ class Notifications extends Widget {
   }
 
   renderNotification(notification, index) {
+    const props = {};
+
+    if (notification.externalUrl) {
+      props.onClick = () => {
+        this.cmd('client.open-external', {url: notification.externalUrl});
+      };
+    }
+
     return (
       <Notification
         key={index}
         data={notification}
         status={notification.status}
-        onClick={() => {
-          if (notification.externalUrl) {
-            this.cmd('client.open-external', {url: notification.externalUrl});
-          }
-        }}
         onClickNotification={() =>
           this.doAs('desktop', 'click-notification', {notification})
         }
         onDeleteNotification={() =>
           this.doAs('desktop', 'remove-notification', {notification})
         }
+        {...props}
       />
     );
   }
