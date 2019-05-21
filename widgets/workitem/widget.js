@@ -278,7 +278,11 @@ class Workitem extends Form {
           {this.props.version}
         </Container>
         {this.renderStatus()}
-        <ScrollableContainer kind="panes" id={scrollableId}>
+        <ScrollableContainer
+          kind="panes"
+          id={scrollableId}
+          restoreScroll={true}
+        >
           <Form
             component={FormComponent}
             validateOn="submit"
@@ -310,7 +314,11 @@ class Workitem extends Form {
           <Title kind="pane-header" singleLine="true" wrap="no" />
         </Container>
         {this.renderStatus()}
-        <ScrollableContainer kind="panes" id={scrollableId}>
+        <ScrollableContainer
+          kind="panes"
+          id={scrollableId}
+          restoreScroll={true}
+        >
           <Form
             component={FormComponent}
             validateOn="submit"
