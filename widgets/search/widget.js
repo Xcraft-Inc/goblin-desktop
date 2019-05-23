@@ -40,9 +40,11 @@ class _ListItem extends Widget {
   render() {
     const containerProps = {};
     const text = this.props.text ? this.props.text : '…';
+
     if ((!this.props.exists || !this.props.text) && this.props.height) {
       containerProps.height = `${this.props.height}px`;
     }
+
     if (
       this.props.onDrillDown &&
       this.props.id &&
@@ -52,6 +54,7 @@ class _ListItem extends Widget {
       this.renewTTL(this.props.id);
       this._requestedId = this.props.id;
     }
+
     return (
       <Container
         {...containerProps}
