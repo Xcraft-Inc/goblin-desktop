@@ -81,11 +81,13 @@ class _ListItem extends Widget {
 
 const ListItem = Widget.connect((state, props) => {
   const id = state.get(`backend.${props.listId}.list.${props.itemId}`, null);
-  const text = state.get(`backend.${id}.meta.summaries.description`);
-  const isReadyFlag = state.get(`backend.${id}.isReady`, null);
+  const text = state.get(
+    `backend.entity-view@${id}.meta.summaries.description`
+  );
+  const isReadyFlag = state.get(`backend.entity-view@${id}.isReady`, null);
   return {
     id,
-    exists: state.has(`backend.${id}`),
+    exists: state.has(`backend.entity-view@${id}`),
     text,
     isReadyFlag,
     height: props.height,
@@ -119,6 +121,7 @@ class Search extends Form {
     const name = this.props.name || `${this.props.type}-search`;
     this.doAs(name, 'drill-down', {
       entityIds: this._entityIds,
+      view: ['isReady', {meta: {summaries: ['description']}}],
     });
     this._entityIds = [];
   }
