@@ -26,7 +26,7 @@ import {
 
 function getColumnText(c, entity) {
   const columnPath = getColumnPath(c);
-  const text = entity.get(columnPath, null);
+  const text = columnPath && entity.get(columnPath, null);
   switch (getColumnType(c)) {
     case 'date':
       if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
@@ -73,6 +73,12 @@ class _Driller extends Widget {
   }
 
   render() {
+    if (this._loadRequested === false) {
+      setTimeout(this.props.onDrillDown, 0, this.props.entityId);
+      this.renewTTL(this.props.entityId);
+      this._loadRequested = true;
+    }
+
     if (this.props.loaded) {
       return (
         <TableCell
@@ -83,11 +89,6 @@ class _Driller extends Widget {
         />
       );
     } else {
-      if (this._loadRequested === false) {
-        setTimeout(this.props.onDrillDown, 0, this.props.entityId);
-        this.renewTTL(this.props.entityId);
-        this._loadRequested = true;
-      }
       return (
         <TableCell
           isLast="false"
@@ -136,7 +137,7 @@ class EntityRow extends Widget {
   }
 
   render() {
-    const {id, rowIndex, entity, columns} = this.props;
+    const {id, rowIndex, entity, columns, onDrillDown} = this.props;
     const loaded = id && entity;
 
     const style =
@@ -144,12 +145,13 @@ class EntityRow extends Widget {
         ? this.styles.classNames.even
         : this.styles.classNames.odd;
 
+    if (onDrillDown && id && this._idRequested !== id) {
+      setTimeout(onDrillDown, 0, id);
+      this.renewTTL(id);
+      this._idRequested = id;
+    }
+
     if (!loaded) {
-      if (id && this._idRequested !== id) {
-        setTimeout(this.props.onDrillDown, 0, id);
-        this.renewTTL(id);
-        this._idRequested = id;
-      }
       return (
         <div className={style}>
           <TableCell

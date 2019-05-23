@@ -27,15 +27,16 @@ class DatagridItem extends Widget {
   }
 
   renderItem() {
-    const {id, item} = this.props;
+    const {id, item, onDrillDown} = this.props;
     const loaded = id && item;
 
+    if (onDrillDown && id && this._idRequested !== id) {
+      setTimeout(onDrillDown, 0, id);
+      this.renewTTL(id);
+      this._idRequested = id;
+    }
+
     if (!loaded) {
-      if (id && this._idRequested !== id) {
-        setTimeout(this.props.onDrillDown, 0, id);
-        this.renewTTL(id);
-        this._idRequested = id;
-      }
       return <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />;
     }
 
