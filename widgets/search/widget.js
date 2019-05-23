@@ -48,7 +48,7 @@ class _ListItem extends Widget {
     if (
       this.props.onDrillDown &&
       this.props.id &&
-      !this._requestedId !== this.props.id
+      this._requestedId !== this.props.id
     ) {
       setTimeout(this.props.onDrillDown, 0, this.props.id);
       this.renewTTL(this.props.id);
