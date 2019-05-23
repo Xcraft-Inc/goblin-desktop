@@ -26,7 +26,7 @@ import {
 
 function getColumnText(c, entity) {
   const columnPath = getColumnPath(c);
-  const text = entity.get(columnPath, null);
+  const text = columnPath && entity.get(columnPath, null);
   switch (getColumnType(c)) {
     case 'date':
       if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
