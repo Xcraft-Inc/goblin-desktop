@@ -61,25 +61,24 @@ Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
   yield setMutex.lock(quest.goblin.id);
   quest.defer(() => setMutex.unlock(quest.goblin.id));
   const desktopId = quest.goblin.getX('desktopId');
-  const type = entityId.split('@')[0];
-  const workitemId = `${type}-workitem@readonly@${desktopId}`;
   const existing = quest.goblin.getState().get('detailWidgetId');
   if (existing) {
     if (entityId === quest.goblin.getState().get('entityId')) {
-      quest.do({widgetId: workitemId, entityId});
+      quest.do({widgetId: existing, entityId});
       return;
     }
-    const wiAPI = quest.getAPI(workitemId);
-    yield wiAPI.changeEntity({entityId, _goblinFeed: quest.goblin.feed});
-  } else {
-    yield quest.create(workitemId, {
-      id: workitemId,
-      desktopId,
-      entityId: entityId,
-      mode: 'readonly',
-      _goblinFeed: quest.goblin.feed,
-    });
+    yield quest.kill([existing]);
   }
+  const type = entityId.split('@')[0];
+  const workitemId = `${type}-workitem@readonly@${desktopId}@${quest.uuidV4()}`;
+  yield quest.create(workitemId, {
+    id: workitemId,
+    desktopId,
+    entityId: entityId,
+    mode: 'readonly',
+    _goblinFeed: quest.goblin.feed,
+  });
+
   quest.do({widgetId: workitemId, entityId});
 });
 

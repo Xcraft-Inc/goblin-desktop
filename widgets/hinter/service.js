@@ -98,12 +98,12 @@ Goblin.registerQuest(goblinName, 'create', function*(
   return quest.goblin.id;
 });
 
-Goblin.registerQuest(goblinName, 'set-current-detail-entity', function(
+Goblin.registerQuest(goblinName, 'set-current-detail-entity', function*(
   quest,
   entityId
 ) {
   const detail = quest.getAPI(quest.goblin.getX('detailId'), detail);
-  detail.setEntity({entityId});
+  yield detail.setEntity({entityId});
 });
 
 Goblin.registerQuest(goblinName, 'create-new', function*(quest, value) {
