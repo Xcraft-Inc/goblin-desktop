@@ -93,9 +93,10 @@ class _Driller extends Widget {
         <TableCell
           isLast="false"
           isHeader="false"
-          text={<FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />}
           {...getColumnProps(this.props.column)}
-        />
+        >
+          <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
+        </TableCell>
       );
     }
   }
@@ -154,14 +155,9 @@ class EntityRow extends Widget {
     if (!loaded) {
       return (
         <div className={style}>
-          <TableCell
-            grow="1"
-            isLast="false"
-            isHeader="false"
-            text={
-              <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
-            }
-          />
+          <TableCell grow="1" isLast="false" isHeader="false">
+            <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
+          </TableCell>
         </div>
       );
     }
