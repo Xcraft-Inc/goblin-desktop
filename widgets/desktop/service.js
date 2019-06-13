@@ -262,9 +262,19 @@ Goblin.registerQuest(
 
     /* FIXME: handle wizard lifetime properly */
     if (workitem.name.endsWith('-wizard')) {
-      const unsub = quest.sub(`*::${widgetId}.done`, function*() {
+      const unsub = quest.sub(`*::${widgetId}.done`, function*(_, {resp}) {
         unsub();
         yield quest.kill(widgetId);
+        if (workitem.kind === 'tab') {
+          yield resp.cmd(`desktop.remove-tab`, {
+            id: desktopId,
+            contextId: workitem.contextId,
+            workitemId: widgetId,
+            tabId: widgetId,
+            navToLastWorkitem: true,
+            close: false,
+          });
+        }
       });
     }
 
@@ -276,7 +286,7 @@ Goblin.registerQuest(
       default:
         break;
       case 'tab': {
-        const tabId = yield desk.addTab({
+        yield desk.addTab({
           workitemId: widgetId,
           entityId: workitem.payload.entityId,
           view: workitem.view,
@@ -286,7 +296,7 @@ Goblin.registerQuest(
           closable: true,
           navigate: !!navigate,
         });
-        quest.do({widgetId, tabId});
+        quest.do({widgetId, tabId: widgetId});
         break;
       }
       case 'dialog': {

@@ -26,16 +26,7 @@ Goblin.registerQuest(goblinName, 'set-current', function(
   quest.do({contextId, workitemId});
 });
 
-Goblin.registerQuest(goblinName, 'add', function(
-  quest,
-  contextId,
-  name,
-  view,
-  workitemId,
-  entityId,
-  closable,
-  glyph
-) {
+Goblin.registerQuest(goblinName, 'add', function(quest, workitemId) {
   quest.do({
     tabId: workitemId,
   });
