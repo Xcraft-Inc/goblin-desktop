@@ -158,13 +158,15 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function*(
 
   // Remove the tab
   const tabId = quest.goblin.getState().get(`workitems.${widgetId}.tabId`);
-  yield desk.removeTab({
-    workitemId: widgetId,
-    contextId: workitem.contextId,
-    tabId,
-    navToLastWorkitem: true,
-    close,
-  });
+  if (tabId) {
+    yield desk.removeTab({
+      workitemId: widgetId,
+      contextId: workitem.contextId,
+      tabId,
+      navToLastWorkitem: true,
+      close,
+    });
+  }
 
   quest.do({widgetId});
 
