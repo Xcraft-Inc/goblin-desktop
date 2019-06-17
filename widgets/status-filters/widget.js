@@ -5,7 +5,7 @@ import Widget from 'laboratory/widget';
 
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
-import CheckButton from 'gadgets/check-button/widget';
+import Checkbox from 'gadgets/checkbox/widget';
 import T from 't';
 
 const managedStatus = ['draft', 'published', 'archived', 'trashed'];
@@ -65,46 +65,46 @@ class StatusFilter extends Widget {
         <Container kind="column" grow="1">
           <Container kind="row">
             <Label width="30px" />
-            <CheckButton
+            <Checkbox
               justify="left"
               heightStrategy="compact"
               text={T('Brouillons')}
               tooltip={T('Montre les brouillons')}
               checked={draft}
-              onClick={this.changeStatus('draft')}
+              onChange={this.changeStatus('draft')}
             />
           </Container>
           <Container kind="row">
             <Label width="30px" />
-            <CheckButton
+            <Checkbox
               justify="left"
               heightStrategy="compact"
               text={T('Publiés')}
               tooltip={T('Montre les éléments publiés')}
               checked={published}
-              onClick={this.changeStatus('published')}
+              onChange={this.changeStatus('published')}
             />
           </Container>
           <Container kind="row">
             <Label width="30px" />
-            <CheckButton
+            <Checkbox
               justify="left"
               heightStrategy="compact"
               text={T('Archivés')}
               tooltip={T('Montre les éléments archivés')}
               checked={archived}
-              onClick={this.changeStatus('archived')}
+              onChange={this.changeStatus('archived')}
             />
           </Container>
           <Container kind="row">
             <Label width="30px" />
-            <CheckButton
+            <Checkbox
               justify="left"
               heightStrategy="compact"
               text={T('Supprimés')}
               tooltip={T('Montre les éléments supprimés')}
               checked={trashed}
-              onClick={this.changeStatus('trashed')}
+              onChange={this.changeStatus('trashed')}
             />
           </Container>
         </Container>
