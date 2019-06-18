@@ -2,7 +2,7 @@
 
 /******************************************************************************/
 
-export default function styles(theme, props) {
+export default function styles(theme) {
   const content = {
     position: 'relative',
     display: 'flex',

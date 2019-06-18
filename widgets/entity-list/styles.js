@@ -1,8 +1,6 @@
-import {defaultProps} from 'recompose';
-
 /******************************************************************************/
 
-export default function styles(theme, props) {
+export default function styles() {
   const full = {
     margin: '0px',
     padding: '0px',

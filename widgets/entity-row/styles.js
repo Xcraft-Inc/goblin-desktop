@@ -1,8 +1,12 @@
 /******************************************************************************/
 
+export const propNames = ['height'];
+
 export default function styles(theme, props) {
+  const {height} = props;
+
   const even = {
-    height: props.height,
+    height: height,
     display: 'flex',
     flexDirection: 'row',
     padding: '5px 20px',
