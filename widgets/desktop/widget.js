@@ -377,7 +377,7 @@ class Desktop extends Widget {
                 ) : null}
                 {window.zoomable ? (
                   <Button
-                    glyph="solid/smile"
+                    text="1"
                     kind="main-tab-right"
                     tooltip={T('Remet le zoom 100%')}
                     onClick={() => {
