@@ -369,6 +369,7 @@ class Desktop extends Widget {
                   <Button
                     glyph="solid/plus"
                     kind="main-tab-right"
+                    tooltip={T('Augmente le zoom')}
                     onClick={() => {
                       this.doFor(this.context.labId, 'zoom');
                     }}
@@ -376,8 +377,19 @@ class Desktop extends Widget {
                 ) : null}
                 {window.zoomable ? (
                   <Button
+                    glyph="solid/smile"
+                    kind="main-tab-right"
+                    tooltip={T('Remet le zoom 100%')}
+                    onClick={() => {
+                      this.doFor(this.context.labId, 'default-zoom');
+                    }}
+                  />
+                ) : null}
+                {window.zoomable ? (
+                  <Button
                     glyph="solid/minus"
                     kind="main-tab-right"
+                    tooltip={T('Diminue le zoom')}
                     onClick={() => {
                       this.doFor(this.context.labId, 'un-zoom');
                     }}
