@@ -65,7 +65,7 @@ export default Widget.connect((state, props) => {
   const listIds = state.get(`backend.${props.listId}.list`);
 
   return {
-    id: listIds.get(`${props.index}`, null),
-    item: state.get(`backend.${listIds.get(`${props.index}`)}`),
+    id: listIds.get(`${props.index}-item`, null),
+    item: state.get(`backend.${listIds.get(`${props.index}-item`)}`),
   };
 })(DatagridItem);
