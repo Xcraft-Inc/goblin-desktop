@@ -116,6 +116,7 @@ class Hinter extends Widget {
     this.prevRow = this.prevRow.bind(this);
     this.nextRow = this.nextRow.bind(this);
     this.initHinter = this.initHinter.bind(this);
+    this.handleOutsideClick = this.handleOutsideClick.bind(this);
   }
 
   static get wiring() {
@@ -132,6 +133,11 @@ class Hinter extends Widget {
     };
   }
 
+  componentDidMount() {
+    super.componentDidMount();
+    this.addOutsideClickListener();
+  }
+
   componentWillMount() {
     MouseTrap.bind('up', this.onKeyUp, 'keydown');
     MouseTrap.bind('down', this.onKeyDown, 'keydown');
@@ -145,6 +151,24 @@ class Hinter extends Widget {
     MouseTrap.unbind('down');
     MouseTrap.unbind('return');
     MouseTrap.unbind('tab');
+    this.removeOutsideClickListener();
+  }
+
+  addOutsideClickListener() {
+    document.addEventListener('click', this.handleOutsideClick);
+  }
+
+  removeOutsideClickListener() {
+    document.removeEventListener('click', this.handleOutsideClick);
+  }
+
+  handleOutsideClick(e) {
+    const target = e.target;
+    const containers = [...document.getElementsByClassName('hinter-container')];
+    if (!containers.some(container => container.contains(target))) {
+      this.hideHinter();
+      this.removeOutsideClickListener();
+    }
   }
 
   onKeyUp() {
