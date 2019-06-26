@@ -7,10 +7,10 @@ import throttle from 'lodash/throttle';
 
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
-import LabelTextField from 'gadgets/label-text-field/widget';
 import Button from 'gadgets/button/widget';
 import StatusFilters from 'desktop/status-filters/widget';
 import List from 'gadgets/list/widget';
+import HinterField from 'goblin-gadgets/widgets/hinter-field/widget';
 
 class _ListItem extends Widget {
   constructor() {
@@ -165,7 +165,12 @@ class Search extends Form {
     );
 
     return (
-      <Container kind="view" width="400px" spacing="large">
+      <Container
+        kind="view"
+        width="400px"
+        spacing="large"
+        addClassName="hinter-container"
+      >
         <Container kind="pane-header">
           <Label text={T('Recherche')} kind="pane-header" />
           <Count />
@@ -178,14 +183,16 @@ class Search extends Form {
             <Form {...this.formConfig}>
               <Container kind="row-pane">
                 <Container kind="column" grow="1">
-                  <LabelTextField
-                    id={`${this.props.id}$hinter`}
-                    defaultFocus="true"
-                    hinter={type}
-                    labelGlyph="solid/search"
-                    hintText={hintText}
-                    grow="1"
-                  />
+                  <Container kind="row">
+                    <Label glyph="solid/search" />
+                    <HinterField
+                      hinter={type}
+                      hintText={hintText}
+                      grow="1"
+                      autoFocus={true}
+                      hideAddButton={true}
+                    />
+                  </Container>
                 </Container>
               </Container>
             </Form>
