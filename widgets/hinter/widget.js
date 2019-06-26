@@ -243,7 +243,12 @@ class Hinter extends Widget {
     }
 
     return (
-      <Container kind="view" grow="1" maxWidth="500px">
+      <Container
+        kind="view"
+        grow="1"
+        maxWidth="500px"
+        addClassName="hinter-container"
+      >
         <Container kind="pane-header-light">
           <Label kind="title" glyph={glyph} text={title} />
         </Container>
