@@ -11,6 +11,8 @@ import Button from 'gadgets/button/widget';
 import StatusFilters from 'desktop/status-filters/widget';
 import List from 'gadgets/list/widget';
 import HinterField from 'goblin-gadgets/widgets/hinter-field/widget';
+import C from 'goblin-laboratory/widgets/connect-helpers/c';
+import TextFieldNew from 'goblin-gadgets/widgets/text-field-new/widget';
 
 class _ListItem extends Widget {
   constructor() {
@@ -108,6 +110,8 @@ class Search extends Form {
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
+
+    this.filter = this.filter.bind(this);
   }
 
   static get wiring() {
@@ -132,6 +136,12 @@ class Search extends Form {
   drillDown(entityId) {
     this._entityIds.push(entityId);
     this._drillDown();
+  }
+
+  filter(value) {
+    this.doFor(`list@${this.props.id}`, 'set-filter-value', {
+      filterValue: value,
+    });
   }
 
   render() {
@@ -197,8 +207,16 @@ class Search extends Form {
               </Container>
             </Form>
             <StatusFilters id={listId} />
+            <Form {...this.formConfig}>
+              <TextFieldNew
+                value={C('.value')}
+                changeMode="throttled"
+                onChange={this.filter}
+              />
+            </Form>
           </Container>
         </Container>
+
         <Container kind="panes" navigationName="search">
           <Container kind="pane">
             <List

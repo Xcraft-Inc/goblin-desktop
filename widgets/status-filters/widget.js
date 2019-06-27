@@ -4,6 +4,7 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 
 import Container from 'gadgets/container/widget';
+import FacetFilter from 'goblin-desktop/widgets/facet-filter/widget';
 import Label from 'gadgets/label/widget';
 import Checkbox from 'gadgets/checkbox/widget';
 import T from 't';
@@ -19,6 +20,7 @@ class StatusFilter extends Widget {
     return {
       id: 'id',
       filter: 'options.filter',
+      facets: 'facets',
     };
   }
 
@@ -56,6 +58,24 @@ class StatusFilter extends Widget {
   }
 
   render() {
+    const {id, facets, filter} = this.props;
+    if (!id) {
+      return null;
+    }
+
+    return (
+      <Container kind="row-pane">
+        <FacetFilter
+          id={this.props.id}
+          name="customers"
+          facets={facets.get('customers')}
+          filter={filter}
+        />
+      </Container>
+    );
+  }
+
+  /*render() {
     const {id, filter} = this.props;
     if (!id || !filter) {
       return null;
@@ -112,7 +132,7 @@ class StatusFilter extends Widget {
         </Container>
       </Container>
     );
-  }
+  }*/
 }
 
 export default Widget.Wired(StatusFilter)();
