@@ -6,6 +6,7 @@ import Widget from 'laboratory/widget';
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Checkbox from 'gadgets/checkbox/widget';
+import ScrollableContainer from 'gadgets/scrollable-container/widget';
 import T from 't';
 
 class FacetFilter extends Widget {
@@ -54,8 +55,8 @@ class FacetFilter extends Widget {
   render() {
     const flags = this.buildValueFlag();
     return (
-      <Container kind="row-pane">
-        <Container kind="column" grow="1">
+      <ScrollableContainer kind="panes" id={this.props.id} restoreScroll={true}>
+        <Container kind="pane">
           {Object.entries(flags).map(([key, flag], index) => {
             return (
               <Container kind="row" key={index}>
@@ -72,7 +73,7 @@ class FacetFilter extends Widget {
             );
           })}
         </Container>
-      </Container>
+      </ScrollableContainer>
     );
   }
 }

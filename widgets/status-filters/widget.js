@@ -64,14 +64,12 @@ class StatusFilter extends Widget {
     }
 
     return (
-      <Container kind="row-pane">
-        <FacetFilter
-          id={this.props.id}
-          name="customers"
-          facets={facets.get('customers')}
-          filter={filter}
-        />
-      </Container>
+      <FacetFilter
+        id={this.props.id}
+        name="customers"
+        facets={facets.get('customers')}
+        filter={filter}
+      />
     );
   }
 

@@ -175,58 +175,40 @@ class Search extends Form {
     );
 
     return (
-      <Container
-        kind="view"
-        width="400px"
-        spacing="large"
-        addClassName="hinter-container"
-      >
-        <Container kind="pane-header">
-          <Label text={T('Recherche')} kind="pane-header" />
-          <Count />
-        </Container>
-        <Container kind="panes" subkind="no-overlay" grow="0">
+      <Container kind="views">
+        <Container kind="view" width="600px">
           <Container kind="pane">
             <Container kind="row-pane">
-              <Label text={title} grow="1" kind="title" />
+              <Label text={title} grow="1" kind="title" /> <Count />
             </Container>
-            <Form {...this.formConfig}>
-              <Container kind="row-pane">
-                <Container kind="column" grow="1">
-                  <Container kind="row">
-                    <Label glyph="solid/search" />
-                    <HinterField
-                      hinter={type}
-                      hintText={hintText}
-                      grow="1"
-                      autoFocus={true}
-                      hideAddButton={true}
-                    />
-                  </Container>
-                </Container>
-              </Container>
-            </Form>
-            <StatusFilters id={listId} />
-            <Form {...this.formConfig}>
-              <TextFieldNew
-                value={C('.value')}
-                changeMode="throttled"
-                onChange={this.filter}
-              />
-            </Form>
           </Container>
+
+          <StatusFilters id={listId} />
         </Container>
 
-        <Container kind="panes" navigationName="search">
-          <Container kind="pane">
-            <List
-              id={listId}
-              renderItem={ListItem}
-              data={{
-                parentId: this.props.id,
-                onDrillDown: this.drillDown,
-              }}
-            />
+        <Container kind="view" width="400px">
+          <Container kind="panes" subkind="no-overlay" grow="0">
+            <Container kind="pane">
+              <Form {...this.formConfig}>
+                <TextFieldNew
+                  value={C('.value')}
+                  changeMode="throttled"
+                  onChange={this.filter}
+                />
+              </Form>
+            </Container>
+          </Container>
+          <Container kind="panes" navigationName="search">
+            <Container kind="pane">
+              <List
+                id={listId}
+                renderItem={ListItem}
+                data={{
+                  parentId: this.props.id,
+                  onDrillDown: this.drillDown,
+                }}
+              />
+            </Container>
           </Container>
         </Container>
       </Container>
