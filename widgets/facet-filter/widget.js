@@ -16,19 +16,20 @@ class FacetFilter extends Widget {
   }
 
   _changeFacet(changed, newState) {
-    const newValueList = this.props.facets.keys().reduce((state, value) => {
-      if (changed === value) {
+    const newValueList = [];
+    for (const value of this.props.facets.values()) {
+      const filter = value.get('key');
+      if (changed === filter) {
         if (newState) {
-          state.push(value);
+          newValueList.push(filter);
         }
       } else {
-        const isInList = this.props.filter.get('value').contains(value);
+        const isInList = this.props.filter.get('value').contains(filter);
         if (isInList) {
-          state.push(value);
+          newValueList.push(filter);
         }
       }
-      return state;
-    }, []);
+    }
     this.doAs('list', 'customize-visualization', {
       filter: {
         name: this.props.filter.get('name'),
@@ -49,10 +50,15 @@ class FacetFilter extends Widget {
   }
 
   changeFacet(facet) {
-    return () => this._changeFacet(facet, !this.buildValueFlag()[facet]);
+    return () =>
+      this._changeFacet(facet, !this.buildValueFlag()[facet].checked);
   }
 
   render() {
+    const {filter} = this.props;
+    if (!filter) {
+      return null;
+    }
     const flags = this.buildValueFlag();
     return (
       <ScrollableContainer kind="panes" id={this.props.id} restoreScroll={true}>
