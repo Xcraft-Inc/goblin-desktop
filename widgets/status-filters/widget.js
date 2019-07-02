@@ -19,7 +19,7 @@ class StatusFilter extends Widget {
   static get wiring() {
     return {
       id: 'id',
-      filter: 'options.filter',
+      filters: 'options.filters',
       facets: 'facets',
     };
   }
@@ -58,18 +58,26 @@ class StatusFilter extends Widget {
   }
 
   render() {
-    const {id, facets, filter} = this.props;
+    const {id, facets, filters} = this.props;
     if (!id) {
       return null;
     }
 
     return (
-      <FacetFilter
-        id={this.props.id}
-        name="customers"
-        facets={facets.get('customers')}
-        filter={filter}
-      />
+      <React.Fragment>
+        <FacetFilter
+          id={this.props.id}
+          name="status"
+          facets={facets.get('status')}
+          filter={filters.get('status')}
+        />
+        <FacetFilter
+          id={this.props.id}
+          name="customer"
+          facets={facets.get('customer')}
+          filter={filters.get('customer')}
+        />
+      </React.Fragment>
     );
   }
 

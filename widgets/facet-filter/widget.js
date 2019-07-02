@@ -71,7 +71,7 @@ class FacetFilter extends Widget {
                   justify="left"
                   heightStrategy="compact"
                   text={key}
-                  checked={flag.checked}
+                  checked={!flag.checked}
                   onChange={this.changeFacet(key)}
                 />
                 {flag.count}
