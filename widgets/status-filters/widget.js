@@ -67,9 +67,9 @@ class StatusFilter extends Widget {
       <React.Fragment>
         <FacetFilter
           id={this.props.id}
-          name="status"
-          facets={facets.get('status')}
-          filter={filters.get('status')}
+          name="docStatus"
+          facets={facets.get('docStatus')}
+          filter={filters.get('docStatus')}
         />
         <FacetFilter
           id={this.props.id}
