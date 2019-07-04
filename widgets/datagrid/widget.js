@@ -179,7 +179,7 @@ class Datagrid extends Widget {
                 ? this.props.dialog.get('width') || '100%'
                 : '100%'
             }
-            spacing="large"
+            horizontalSpacing="large"
           >
             {this.renderHeaders()}
             {this.renderTable()}

@@ -271,7 +271,7 @@ class Workitem extends Form {
       <Container
         kind="view"
         width={this.props.width || '700px'}
-        spacing="large"
+        horizontalSpacing="large"
       >
         <Container kind="pane-header">
           <Title kind="pane-header" singleLine="true" wrap="no" />

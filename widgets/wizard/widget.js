@@ -166,7 +166,7 @@ class Wizard extends Form {
               <Container
                 kind="view"
                 width={this.props.dialog.get('containerWidth') || '800px'}
-                spacing="large"
+                horizontalSpacing="large"
               >
                 <Form
                   {...this.formConfigWithComponent(
@@ -192,7 +192,7 @@ class Wizard extends Form {
               <Container
                 kind="view"
                 width={this.props.dialog.get('containerWidth') || '800px'}
-                spacing="large"
+                horizontalSpacing="large"
               >
                 <Container kind="pane-header">
                   <Label text={title} kind="pane-header" />

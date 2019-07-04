@@ -168,7 +168,7 @@ class Search extends Form {
       <Container
         kind="view"
         width="400px"
-        spacing="large"
+        horizontalSpacing="large"
         addClassName="hinter-container"
       >
         <Container kind="pane-header">

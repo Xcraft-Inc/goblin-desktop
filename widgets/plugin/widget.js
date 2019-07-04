@@ -196,7 +196,7 @@ class Plugin extends Widget {
           kind="hinter"
           requiredHinter="no"
           hinter={this.props.searchHinter}
-          spacing="large"
+          horizontalSpacing="large"
         />
       );
     } else {
@@ -211,7 +211,7 @@ class Plugin extends Widget {
         <Button
           ref={x => (this.comboButton = x)}
           glyph="solid/ellipsis-h"
-          spacing="large"
+          horizontalSpacing="large"
           active={Bool.toString(this.showActionMenu)}
           onClick={this.open}
         />
