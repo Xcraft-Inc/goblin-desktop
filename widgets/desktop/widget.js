@@ -9,6 +9,7 @@ import Button from 'gadgets/button/widget';
 import Separator from 'gadgets/separator/widget';
 import NabuToolbar from 'nabu/nabu-toolbar/widget';
 import Monitor from 'desktop/monitor/widget';
+import WidgetDocCaller from 'desktop/widget-doc-caller/widget';
 import Notifications from 'desktop/notifications/widget';
 import MainTabMenu from 'desktop/main-tab-menu/widget';
 import IMG_GOBLIN from './goblin.png';
@@ -250,6 +251,7 @@ class Desktop extends Widget {
       <div className={footerClass}>
         <Toolbar desktopId={this.props.id} />
         <Monitor id={this.props.id + '$monitor'} />
+        <WidgetDocCaller id={this.props.id + '$widget-doc-caller'} />
         <CommandsPrompt />
       </div>
     );
