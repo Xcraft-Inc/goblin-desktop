@@ -251,7 +251,10 @@ class Desktop extends Widget {
       <div className={footerClass}>
         <Toolbar desktopId={this.props.id} />
         <Monitor id={this.props.id + '$monitor'} />
-        <WidgetDocCaller id={this.props.id + '$widget-doc-caller'} />
+        <WidgetDocCaller
+          desktopId={this.props.id}
+          id={this.props.id + '$widget-doc-caller'}
+        />
         <CommandsPrompt />
       </div>
     );

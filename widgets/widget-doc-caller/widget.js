@@ -20,7 +20,7 @@ class WidgetDocCaller extends Widget {
     return (
       <div className={this.styles.classNames.fullScreen}>
         <WidgetDoc
-          widgetId={`${this.context.desktopId}$widget-doc`}
+          widgetId={`${this.props.desktopId}$widget-doc`}
           onClose={this.toggleEnabled}
         />
       </div>
