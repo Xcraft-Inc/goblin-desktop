@@ -54,7 +54,7 @@ class Header extends Widget {
             field: this.props.column.get('field'),
           })
         }
-        spacing="overlap"
+        horizontalSpacing="overlap"
       />
     );
   }

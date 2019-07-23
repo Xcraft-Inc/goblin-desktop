@@ -1,18 +1,18 @@
 //T:2019-04-09
-import T from 't';
-import React from 'react';
-import Form from 'laboratory/form';
-import Widget from 'laboratory/widget';
-import throttle from 'lodash/throttle';
+import T from "t";
+import React from "react";
+import Form from "laboratory/form";
+import Widget from "laboratory/widget";
+import throttle from "lodash/throttle";
 
-import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
-import Button from 'gadgets/button/widget';
-import StatusFilters from 'desktop/status-filters/widget';
-import List from 'gadgets/list/widget';
-import HinterField from 'goblin-gadgets/widgets/hinter-field/widget';
-import C from 'goblin-laboratory/widgets/connect-helpers/c';
-import TextFieldNew from 'goblin-gadgets/widgets/text-field-new/widget';
+import Container from "gadgets/container/widget";
+import Label from "gadgets/label/widget";
+import Button from "gadgets/button/widget";
+import StatusFilters from "desktop/status-filters/widget";
+import List from "gadgets/list/widget";
+import HinterField from "goblin-gadgets/widgets/hinter-field/widget";
+import C from "goblin-laboratory/widgets/connect-helpers/c";
+import TextFieldNew from "goblin-gadgets/widgets/text-field-new/widget";
 
 class _ListItem extends Widget {
   constructor() {
@@ -41,7 +41,7 @@ class _ListItem extends Widget {
 
   render() {
     const containerProps = {};
-    const text = this.props.text ? this.props.text : '…';
+    const text = this.props.text ? this.props.text : "…";
 
     if ((!this.props.exists || !this.props.text) && this.props.height) {
       containerProps.height = `${this.props.height}px`;
@@ -73,7 +73,7 @@ class _ListItem extends Widget {
               grow="1"
               wrap="no"
             />
-            {this.props.isReadyFlag && this.props.isReadyFlag === 'true' ? (
+            {this.props.isReadyFlag && this.props.isReadyFlag === "true" ? (
               <Label glyph="solid/check" fontSize="70%" />
             ) : null}
             <Label text={this.props.index + 1} fontSize="70%" />
@@ -98,7 +98,7 @@ const ListItem = Widget.connect((state, props) => {
     height: props.height,
     index: props.index,
     parentId: props.data.parentId,
-    onDrillDown: props.data.onDrillDown,
+    onDrillDown: props.data.onDrillDown
   };
 })(_ListItem);
 
@@ -116,19 +116,19 @@ class Search extends Form {
 
   static get wiring() {
     return {
-      id: 'id',
-      name: 'name',
-      title: 'title',
-      type: 'type',
-      hintText: 'hintText',
+      id: "id",
+      name: "name",
+      title: "title",
+      type: "type",
+      hintText: "hintText"
     };
   }
 
   _drillDownInternal() {
     const name = this.props.name || `${this.props.type}-search`;
-    this.doAs(name, 'drill-down', {
+    this.doAs(name, "drill-down", {
       entityIds: this._entityIds,
-      view: ['isReady', {meta: {summaries: ['description']}}],
+      view: ["isReady", { meta: { summaries: ["description"] } }]
     });
     this._entityIds = [];
   }
@@ -139,13 +139,13 @@ class Search extends Form {
   }
 
   filter(value) {
-    this.doFor(`list@${this.props.id}`, 'set-filter-value', {
-      filterValue: value,
+    this.doFor(`list@${this.props.id}`, "set-filter-value", {
+      filterValue: value
     });
   }
 
   render() {
-    const {id, title, hintText, type} = this.props;
+    const { id, title, hintText, type } = this.props;
     if (!id) {
       return null;
     }
@@ -164,14 +164,14 @@ class Search extends Form {
                  other {{count} documents}
               }`,
               null,
-              {count: p.count}
+              { count: p.count }
             )}
           />
         </Container>
       ),
-      'count',
-      'list',
-      '.count'
+      "count",
+      "list",
+      ".count"
     );
 
     return (
@@ -191,7 +191,7 @@ class Search extends Form {
             <Container kind="pane">
               <Form {...this.formConfig}>
                 <TextFieldNew
-                  value={C('.value')}
+                  value={C(".value")}
                   changeMode="throttled"
                   onChange={this.filter}
                 />
@@ -205,7 +205,7 @@ class Search extends Form {
                 renderItem={ListItem}
                 data={{
                   parentId: this.props.id,
-                  onDrillDown: this.drillDown,
+                  onDrillDown: this.drillDown
                 }}
               />
             </Container>
