@@ -76,7 +76,6 @@ Goblin.registerQuest(goblinName, 'set-entity', function*(quest, entityId) {
     desktopId,
     entityId: entityId,
     mode: 'readonly',
-    _goblinFeed: quest.goblin.feed,
   });
 
   quest.do({widgetId: workitemId, entityId});
