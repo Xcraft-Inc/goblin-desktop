@@ -32,7 +32,8 @@ class WidgetDocCaller extends Widget {
     return (
       <Container kind="row">
         <Button
-          kind="button-footer"
+          kind={this.props.kind === 'minimal' ? null : 'button-footer'}
+          border={this.props.kind === 'minimal' ? 'none' : null}
           text="WidgetDoc"
           onClick={this.toggleEnabled}
         />
