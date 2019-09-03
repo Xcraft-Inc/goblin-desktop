@@ -29,13 +29,8 @@ Goblin.registerQuest(
   goblinName,
   'create',
   function*(quest, labId, username, configuration, routes) {
-    if (!labId) {
-      throw new Error('Missing labId');
-    }
-
     quest.goblin.setX('labId', labId);
     quest.goblin.setX('configuration', configuration);
-
     // CREATE DEFAULT CONTEXT MANAGER
     yield quest.create('contexts', {
       id: `contexts@${quest.goblin.id}`,
@@ -318,13 +313,13 @@ Goblin.registerQuest(
   ['*::*.done']
 );
 
-Goblin.registerQuest(goblinName, 'add-context', function(
+Goblin.registerQuest(goblinName, 'add-context', function*(
   quest,
   contextId,
   name
 ) {
   const contexts = quest.getAPI(`contexts@${quest.goblin.id}`);
-  contexts.add({
+  yield contexts.add({
     contextId,
     name,
   });
@@ -461,6 +456,10 @@ Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {
 
 Goblin.registerQuest(goblinName, 'change-team', function(quest, teamId) {
   quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'get-current-context', function(quest) {
+  return quest.goblin.getState().get('current.workcontext');
 });
 
 Goblin.registerQuest(goblinName, 'nav-to-context', function*(quest, contextId) {
