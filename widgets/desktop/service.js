@@ -1,13 +1,13 @@
 'use strict';
 //T:2019-02-27
-
+const watt = require('gigawatts');
 const path = require('path');
 const Goblin = require('xcraft-core-goblin');
 const uuidV4 = require('uuid/v4');
 const goblinName = path.basename(module.parent.filename, '.js');
 const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
-
+const T = require('goblin-nabu/widgets/helpers/t.js');
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
 const defaultRoutes = {
@@ -657,6 +657,45 @@ Goblin.registerQuest(goblinName, 'get-workitems', function(quest) {
   const state = quest.goblin.getState();
   const wks = state.get('workitems');
   return wks ? wks.toJS() : {};
+});
+
+Goblin.registerQuest(goblinName, 'close', function*(quest, closeIn) {
+  quest.log.info('Closing desktop...');
+  let count = closeIn ? closeIn : 0;
+  const message = T(
+    'Un administrateur à demandé la fermeture de votre session dans {count}sec',
+    '',
+    {count}
+  );
+  yield quest.me.addNotification({
+    notificationId: quest.goblin.id,
+    color: 'red',
+    glyph: 'solid/exclamation-triangle',
+    message,
+  });
+  const countdown = setInterval(
+    watt(function*() {
+      count--;
+      const message = T(
+        'Un administrateur à demandé la fermeture de votre session dans {count}sec',
+        '',
+        {
+          count,
+        }
+      );
+      yield quest.me.addNotification({
+        notificationId: quest.goblin.id,
+        color: 'red',
+        glyph: 'solid/exclamation-triangle',
+        message,
+      });
+    }),
+    1000
+  );
+  setTimeout(() => {
+    clearInterval(countdown);
+    quest.evt(`session.closed`);
+  }, 1000 * count);
 });
 
 Goblin.registerQuest(goblinName, 'delete', function(quest) {
