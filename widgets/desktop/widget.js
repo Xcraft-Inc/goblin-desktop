@@ -16,7 +16,7 @@ import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
 import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
-
+const NabuToolbarConnected = Widget.Wired(NabuToolbar)();
 /******************************************************************************/
 
 let currentTheme = 'default';
@@ -242,14 +242,16 @@ class Desktop extends Widget {
 
   renderFooter() {
     const CommandsPrompt = this.connectCommandsPrompt();
-    const Toolbar = NabuToolbar.connectTo(this);
     const footerClass = this.showFooter
       ? this.styles.classNames.footer
       : this.styles.classNames.footerHidden;
 
     return (
       <div className={footerClass}>
-        <Toolbar desktopId={this.props.id} />
+        <NabuToolbarConnected
+          id={getToolbarId(this.props.id)}
+          desktopId={this.props.id}
+        />
         <Monitor id={this.props.id + '$monitor'} />
         <WidgetDocCaller
           desktopId={this.props.id}
