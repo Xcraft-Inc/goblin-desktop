@@ -28,7 +28,7 @@ const logicHandlers = require('./logic-handlers.js');
 Goblin.registerQuest(
   goblinName,
   'create',
-  function*(quest, labId, username, configuration, routes) {
+  function*(quest, labId, username, session, configuration, routes) {
     quest.goblin.setX('labId', labId);
     quest.goblin.setX('configuration', configuration);
     // CREATE DEFAULT CONTEXT MANAGER
@@ -47,7 +47,7 @@ Goblin.registerQuest(
       routes = defaultRoutes;
     }
 
-    quest.do({id: quest.goblin.id, routes});
+    quest.do({id: quest.goblin.id, routes, username, session});
 
     quest.log.info(`Desktop ${quest.goblin.id} created!`);
     const id = quest.goblin.id;
@@ -65,6 +65,11 @@ Goblin.registerQuest(
   },
   ['*::*.desktop-notification-broadcasted']
 );
+
+Goblin.registerQuest(goblinName, 'setCurrentLocale', function*(quest, locale) {
+  const toolbarApi = quest.getAPI(getToolbarId(quest.goblin.id));
+  return yield toolbarApi.setLocaleFromName({name: locale});
+});
 
 Goblin.registerQuest(goblinName, 'getCurrentLocale', function*(quest) {
   const toolbarApi = quest.getAPI(getToolbarId(quest.goblin.id));
