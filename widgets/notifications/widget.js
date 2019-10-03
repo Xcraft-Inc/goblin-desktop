@@ -81,7 +81,14 @@ class Notifications extends Widget {
 
     if (notification.externalUrl) {
       props.onClick = () => {
-        this.cmd('client.open-external', {url: notification.externalUrl});
+        if (notification.isDownload) {
+          this.doAs('desktop', 'download-file', {
+            filePath: notification.externalUrl,
+            openFile: true,
+          });
+        } else {
+          this.cmd('client.open-external', {url: notification.externalUrl});
+        }
       };
     }
 

@@ -7,6 +7,8 @@ const uuidV4 = require('uuid/v4');
 const goblinName = path.basename(module.parent.filename, '.js');
 const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
+const xUtils = require('xcraft-core-utils');
+const {getFileFilter} = xUtils.files;
 const T = require('goblin-nabu/widgets/helpers/t.js');
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
@@ -563,6 +565,7 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
   message,
   command,
   externalUrl,
+  isDownload,
   broadcast
 ) {
   if (!notificationId) {
@@ -581,12 +584,21 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
         message,
         command,
         externalUrl,
+        isDownload,
       }
     );
     return;
   }
 
-  quest.do({notificationId, glyph, color, message, command, externalUrl});
+  quest.do({
+    notificationId,
+    glyph,
+    color,
+    message,
+    command,
+    externalUrl,
+    isDownload,
+  });
   const dnd = quest.goblin.getState().get('dnd');
   if (dnd !== 'true') {
     quest.dispatch('set-notifications', {show: 'true'});
@@ -635,6 +647,27 @@ Goblin.registerQuest(goblinName, 'set-notifications', function(quest, show) {
     quest.dispatch('read-all');
   }
   quest.dispatch('update-not-read-count');
+});
+
+Goblin.registerQuest(goblinName, 'download-file', function(
+  quest,
+  filePath,
+  openFile
+) {
+  const labId = quest.goblin.getX('labId');
+  const fs = require('fs');
+  const stream = fs.createReadStream;
+  const {appId} = require('xcraft-core-host');
+  if (fs.existsSync(filePath)) {
+    let file = stream(filePath);
+    quest.evt(`${labId}.download-file-requested`, {
+      xcraftStream: file,
+      appId,
+      fileFilter: getFileFilter(filePath),
+      defaultPath: path.basename(filePath),
+      openFile,
+    });
+  }
 });
 
 Goblin.registerQuest(goblinName, 'change-mandate', function(quest) {

@@ -1,6 +1,6 @@
 //T:2019-02-27
 module.exports = {
-  create: (state, action) => {
+  'create': (state, action) => {
     const id = action.get('id');
     return state.set('', {
       id: id,
@@ -41,6 +41,7 @@ module.exports = {
       color: action.get('color'),
       message: action.get('message'),
       externalUrl: action.get('externalUrl'),
+      isDownload: action.get('isDownload'),
     };
     return state.set(`notifications.${notificationId}`, notification);
   },
@@ -83,7 +84,7 @@ module.exports = {
   'change-team': (state, action) => {
     return state.set('teamId', action.get('teamId'));
   },
-  setCurrentWorkitemByContext: (state, action) => {
+  'setCurrentWorkitemByContext': (state, action) => {
     const lastWorkcontext = state.get('current.workcontext');
     const lastWorkitem = state.get(`current.workitems.${lastWorkcontext}`);
     const lastView = state.get(`current.views.${lastWorkcontext}`);
