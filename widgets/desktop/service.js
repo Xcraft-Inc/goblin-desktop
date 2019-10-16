@@ -9,6 +9,7 @@ const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
 const xUtils = require('xcraft-core-utils');
 const {getFileFilter} = xUtils.files;
+const nabuConfig = require('xcraft-core-etc')().load('goblin-nabu');
 const T = require('goblin-nabu/widgets/helpers/t.js');
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
@@ -39,6 +40,17 @@ Goblin.registerQuest(
       desktopId: quest.goblin.id,
     });
 
+    // CREATE NABU TOOLBAR IF NEEDED
+    if (nabuConfig.storageAvailable) {
+      const toolbarId = `nabu-toolbar@${quest.goblin.id}`;
+      yield quest.create('nabu-toolbar', {
+        id: toolbarId,
+        desktopId: quest.goblin.id,
+        enabled: false,
+        show: true,
+        localeId: null,
+      });
+    }
     // CREATE DEFAULT TABS MANAGER
     yield quest.create('tabs', {
       id: `tabs@${quest.goblin.id}`,
