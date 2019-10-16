@@ -7,7 +7,7 @@ import importer from 'laboratory/importer/';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Separator from 'gadgets/separator/widget';
-import NabuToolbar from 'nabu/nabu-toolbar/widget';
+import NabuToolbar from 'desktop/nabu-toolbar/widget';
 import Monitor from 'desktop/monitor/widget';
 import WidgetDocCaller from 'desktop/widget-doc-caller/widget';
 import Notifications from 'desktop/notifications/widget';
