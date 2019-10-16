@@ -75,6 +75,16 @@ Goblin.registerQuest(
         }
       )
     );
+
+    quest.goblin.defer(
+      quest.sub(`*::*.${quest.goblin.id}.add-workitem-requested`, function*(
+        err,
+        {msg, resp}
+      ) {
+        yield resp.cmd(`${goblinName}.add-workitem`, {id, ...msg.data});
+      })
+    );
+
     return quest.goblin.id;
   },
   ['*::*.desktop-notification-broadcasted']
