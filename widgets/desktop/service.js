@@ -720,8 +720,8 @@ Goblin.registerQuest(goblinName, 'get-workitems', function(quest) {
 });
 
 Goblin.registerQuest(goblinName, 'close', function*(quest, closeIn) {
-  quest.log.info('Closing desktop...');
   let count = closeIn ? closeIn : 0;
+  quest.log.info(`Closing desktop in ${count}sec...`);
   const message = T(
     'Un administrateur à demandé la fermeture de votre session dans {count}sec',
     '',
