@@ -11,6 +11,7 @@ import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
 export default class NabuToolbar extends Widget {
   constructor() {
     super(...arguments);
+    this.openSession = this.openSession.bind(this);
     this.openLocaleSearch = this.openLocaleSearch.bind(this);
     this.toggleEnabled = this.toggleEnabled.bind(this);
     this.toggleMarks = this.toggleMarks.bind(this);
@@ -35,6 +36,10 @@ export default class NabuToolbar extends Widget {
 
   static connectTo(instance) {
     return Widget.Wired(NabuToolbar)(getToolbarId(instance.props.id));
+  }
+
+  openSession() {
+    this.do('open-session', {});
   }
 
   openLocaleSearch() {
@@ -134,6 +139,11 @@ export default class NabuToolbar extends Widget {
             kind="button-footer"
             text={T(`Pack all messages`)}
             onClick={this.pack}
+          />
+          <Button
+            kind="button-footer"
+            text={T(`Open a Nabu Session`)}
+            onClick={this.openSession}
           />
         </Container>
       );

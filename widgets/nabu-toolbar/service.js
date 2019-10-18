@@ -23,16 +23,16 @@ const logicState = {
 
 // Define logic handlers according rc.json
 const logicHandlers = {
-  create: (state, action) => {
+  'create': (state, action) => {
     return state
       .set('id', action.get('id'))
       .set('show', action.get('show'))
       .set('selectedLocaleId', action.get('localeId'));
   },
-  enable: state => {
+  'enable': state => {
     return state.set('enabled', true);
   },
-  disable: state => {
+  'disable': state => {
     return state.set('enabled', false);
   },
 
@@ -108,6 +108,11 @@ Goblin.registerQuest(goblinName, 'open-locale-search', function*(quest, next) {
   };
 
   yield desk.addWorkitem({workitem, navigate: true}, next);
+});
+
+Goblin.registerQuest(goblinName, 'open-session', function*(quest) {
+  const client = quest.getAPI('client');
+  yield client.openSession({});
 });
 
 Goblin.registerQuest(goblinName, 'open-datagrid', function*(quest, next) {
