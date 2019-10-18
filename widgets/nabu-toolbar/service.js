@@ -112,7 +112,15 @@ Goblin.registerQuest(goblinName, 'open-locale-search', function*(quest, next) {
 
 Goblin.registerQuest(goblinName, 'open-session', function*(quest) {
   const client = quest.getAPI('client');
-  yield client.openSession({});
+  const nabuAPI = quest.getAPI('nabu');
+  const configuration = yield nabuAPI.getConfiguration();
+  yield client.openSession({
+    desktopId: `desktop@${configuration.mandate}@nabu`,
+    session: `desktop@${configuration.mandate}@nabu`,
+    username: 'nabu',
+    rootWidget: 'desktop',
+    configuration,
+  });
 });
 
 Goblin.registerQuest(goblinName, 'open-datagrid', function*(quest, next) {
