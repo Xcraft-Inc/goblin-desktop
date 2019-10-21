@@ -24,10 +24,7 @@ const logicState = {
 // Define logic handlers according rc.json
 const logicHandlers = {
   'create': (state, action) => {
-    return state
-      .set('id', action.get('id'))
-      .set('show', action.get('show'))
-      .set('selectedLocaleId', action.get('localeId'));
+    return state.set('id', action.get('id')).set('show', action.get('show'));
   },
   'enable': state => {
     return state.set('enabled', true);
@@ -68,14 +65,6 @@ const logicHandlers = {
 
 Goblin.registerQuest(goblinName, 'get', function(quest) {
   return quest.goblin.getState();
-});
-
-Goblin.registerQuest(goblinName, 'getSelectedLocale', function*(quest) {
-  const selectedLocaleId = quest.goblin.getState().get('selectedLocaleId');
-  const nabuApi = quest.getAPI('nabu');
-  const locales = yield nabuApi.getLocales();
-
-  return locales.find(locale => locale.get('id') === selectedLocaleId);
 });
 
 Goblin.registerQuest(goblinName, 'create', function*(
