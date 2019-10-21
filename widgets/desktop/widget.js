@@ -36,14 +36,13 @@ const themes = [
 
 const LocaleMenuConnected = Widget.connect((state, props) => {
   const locales = state.get(`backend.nabu.locales`);
-  const toolbarId = getToolbarId(props.desktopId);
-  const toolbar = toolbarId ? state.get(`backend.${toolbarId}`) : null;
 
+  const localeId = state.get(`backend.client.locale`);
   return {
     items: locales,
     itemsTextKey: 'text',
-    itemsValueKey: 'id',
-    currentItemValue: toolbar ? toolbar.get('selectedLocaleId') : null,
+    itemsValueKey: 'name',
+    currentItemValue: localeId,
   };
 })(MainTabMenu);
 
@@ -149,13 +148,8 @@ class Desktop extends Widget {
     this.do('change-mandate');
   }
 
-  onChangeLocale(localeId) {
-    const toolbarId = getToolbarId(this.props.id);
-    if (toolbarId) {
-      this.doFor(toolbarId, 'set-selected-locale', {
-        localeId,
-      });
-    }
+  onChangeLocale(locale) {
+    this.do('change-locale', {locale});
   }
 
   onChangeTheme(name) {
