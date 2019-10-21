@@ -48,7 +48,6 @@ Goblin.registerQuest(
         desktopId: quest.goblin.id,
         enabled: false,
         show: true,
-        localeId: null,
       });
     }
     // CREATE DEFAULT TABS MANAGER
@@ -90,14 +89,8 @@ Goblin.registerQuest(
   ['*::*.desktop-notification-broadcasted']
 );
 
-Goblin.registerQuest(goblinName, 'setCurrentLocale', function*(quest, locale) {
-  const toolbarApi = quest.getAPI(getToolbarId(quest.goblin.id));
-  return yield toolbarApi.setLocaleFromName({name: locale});
-});
-
-Goblin.registerQuest(goblinName, 'getCurrentLocale', function*(quest) {
-  const toolbarApi = quest.getAPI(getToolbarId(quest.goblin.id));
-  return yield toolbarApi.getSelectedLocale();
+Goblin.registerQuest(goblinName, 'change-locale', function(quest, locale) {
+  quest.evt('user-locale-changed', {locale});
 });
 
 Goblin.registerQuest(goblinName, 'create-hinter-for', function*(
