@@ -61,16 +61,13 @@ const config = {
   afterCreate: function*(quest, next) {
     // Setting correct selected locales
     const nabuApi = quest.getAPI('nabu');
-    const toolbarApi = quest.getAPI(getToolbarId(quest.me.id));
     const locales = (yield nabuApi.get()).get('locales');
-    const currentLocale = yield toolbarApi.getSelectedLocale();
 
+    //FIXME: find current user locale in ctx
     var firstLocale = locales.size > 0 ? `${locales.first().get('name')}` : '';
     var secondLocale = locales.size > 1 ? `${locales.get(1).get('name')}` : '';
 
-    var firstColumn = currentLocale
-      ? `${currentLocale.get('name')}`
-      : firstLocale;
+    var firstColumn = firstLocale;
 
     var secondColumn = firstColumn === firstLocale ? secondLocale : firstLocale;
 
