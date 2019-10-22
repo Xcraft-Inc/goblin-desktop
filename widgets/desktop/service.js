@@ -9,7 +9,6 @@ const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
 const xUtils = require('xcraft-core-utils');
 const {getFileFilter} = xUtils.files;
-const nabuConfig = require('xcraft-core-etc')().load('goblin-nabu');
 const T = require('goblin-nabu/widgets/helpers/t.js');
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
@@ -31,7 +30,7 @@ const logicHandlers = require('./logic-handlers.js');
 Goblin.registerQuest(
   goblinName,
   'create',
-  function*(quest, labId, username, session, configuration, routes) {
+  function*(quest, labId, username, session, configuration, useNabu, routes) {
     quest.goblin.setX('labId', labId);
     quest.goblin.setX('configuration', configuration);
     // CREATE DEFAULT CONTEXT MANAGER
@@ -41,7 +40,7 @@ Goblin.registerQuest(
     });
 
     // CREATE NABU TOOLBAR IF NEEDED
-    if (nabuConfig.storageAvailable) {
+    if (useNabu) {
       const toolbarId = `nabu-toolbar@${quest.goblin.id}`;
       yield quest.create('nabu-toolbar', {
         id: toolbarId,
