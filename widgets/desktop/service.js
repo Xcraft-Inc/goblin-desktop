@@ -93,64 +93,6 @@ Goblin.registerQuest(goblinName, 'change-locale', function(quest, locale) {
   quest.evt('user-locale-changed', {locale});
 });
 
-Goblin.registerQuest(goblinName, 'create-hinter-for', function*(
-  quest,
-  workitemId,
-  detailWidget,
-  detailKind,
-  detailWidth,
-  newButtonTitle,
-  newWorkitem,
-  usePayload,
-  withDetails,
-  name,
-  type,
-  title,
-  glyph,
-  kind
-) {
-  const serviceName = name ? name : type;
-  const widgetId = workitemId ? `${serviceName}-hinter@${workitemId}` : null;
-
-  if (!type) {
-    throw new Error('Hinter type required');
-  }
-
-  if (!kind) {
-    kind = 'list';
-  }
-
-  if (!title) {
-    title = type;
-  }
-
-  let goblinName = Goblin.getGoblinName(workitemId);
-
-  const hinter = yield quest.createFor(
-    goblinName,
-    workitemId,
-    `hinter@${widgetId}`,
-    {
-      id: widgetId,
-      name,
-      type,
-      desktopId: quest.goblin.id,
-      title,
-      glyph,
-      kind,
-      detailWidget,
-      detailKind,
-      detailWidth,
-      newButtonTitle,
-      newWorkitem,
-      usePayload,
-      withDetails,
-    }
-  );
-
-  return hinter.id;
-});
-
 Goblin.registerQuest(goblinName, 'clean-workitem', function(quest, workitemId) {
   quest.dispatch('remove-workitem', {widgetId: workitemId});
 });
