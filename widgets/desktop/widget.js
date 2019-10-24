@@ -36,9 +36,8 @@ const themes = [
 
 const LocaleMenuConnected = Widget.connect((state, props) => {
   const locales = state.get(`backend.nabu.locales`);
-  const localeId = state.get(
-    `backend.${state.get(`backend.${window.labId}.clientSessionId`)}.locale`
-  );
+  const localeId = Widget.getUserSession(state).get('locale');
+
   return {
     items: locales,
     itemsTextKey: 'text',
