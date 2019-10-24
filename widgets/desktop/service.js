@@ -83,6 +83,15 @@ Goblin.registerQuest(
       })
     );
 
+    quest.goblin.defer(
+      quest.sub(`*::*.${quest.goblin.id}.remove-workitem-requested`, function*(
+        err,
+        {msg, resp}
+      ) {
+        yield resp.cmd(`${goblinName}.remove-workitem`, {id, ...msg.data});
+      })
+    );
+
     return quest.goblin.id;
   },
   ['*::*.desktop-notification-broadcasted']
