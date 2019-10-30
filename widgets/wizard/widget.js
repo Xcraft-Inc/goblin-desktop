@@ -170,8 +170,9 @@ class Wizard extends Form {
               >
                 <Form
                   {...this.formConfigWithComponent(
-                    hasStep
-                      ? React.forwardRef((props, ref) => (
+                    React.forwardRef(
+                      (props, ref) =>
+                        hasStep && (
                           <Step
                             ref={ref}
                             {...this.props}
@@ -179,8 +180,8 @@ class Wizard extends Form {
                             do={this.doProxy}
                             setForm={this.setForm}
                           />
-                        ))
-                      : () => null
+                        )
+                    )
                   )}
                 />
               </Container>
@@ -200,8 +201,9 @@ class Wizard extends Form {
                 <Container kind="pane-wizard">
                   <Form
                     {...this.formConfigWithComponent(
-                      hasStep
-                        ? React.forwardRef((props, ref) => (
+                      React.forwardRef(
+                        (props, ref) =>
+                          hasStep && (
                             <Step
                               ref={ref}
                               {...this.props}
@@ -209,8 +211,8 @@ class Wizard extends Form {
                               do={this.doProxy}
                               setForm={this.setForm}
                             />
-                          ))
-                        : () => null
+                          )
+                      )
                     )}
                   />
                 </Container>
