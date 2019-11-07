@@ -625,7 +625,7 @@ Goblin.registerQuest(goblinName, 'download-file', function(
   const {appId} = require('xcraft-core-host');
   if (fs.existsSync(filePath)) {
     let file = stream(filePath);
-    quest.evt(`${labId}.download-file-requested`, {
+    quest.evt(`wm@${labId}.download-file-requested`, {
       xcraftStream: file,
       appId,
       fileFilter: getFileFilter(filePath),
