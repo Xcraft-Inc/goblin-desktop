@@ -21,11 +21,16 @@ class ListToolbar extends Widget {
   constructor() {
     super(...arguments);
     this.exportToCsv = this.exportToCsv.bind(this);
+    this.exportToJSON = this.exportToJSON.bind(this);
     this.selectQuery = this.selectQuery.bind(this);
   }
 
   exportToCsv() {
     this.doAs(`${this.props.type}-list`, 'export-to-csv', {});
+  }
+
+  exportToJSON() {
+    this.doAs(`${this.props.type}-list`, 'export-to-json', {});
   }
 
   selectQuery(event) {
@@ -49,11 +54,20 @@ class ListToolbar extends Widget {
           <Container kind="row">
             <Button
               kind="action"
-              place="1/1"
+              place="1/2"
               width="250px"
               glyph="solid/save"
               text={T('Exporter un fichier csv')}
               onClick={this.exportToCsv}
+            />
+
+            <Button
+              kind="action"
+              place="2/2"
+              width="250px"
+              glyph="solid/save"
+              text={T('Exporter un fichier JSON')}
+              onClick={this.exportToJSON}
             />
 
             {queriesPreset.map((p, index) => {
