@@ -93,6 +93,7 @@ const config = {
         const desktop = quest.getAPI(desktopId).noThrow();
         const r = quest.getStorage(entityStorage);
         const tables = form.selectedTables.join(', ');
+        const tablesNumber = form.selectedTables.length;
         yield desktop.addNotification({
           notificationId: `notification@${quest.uuidV4()}`,
           color: 'blue',
@@ -100,7 +101,7 @@ const config = {
             `Recupération des entités {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
             null,
             {
-              length: tables.length,
+              length: tablesNumber,
               tables,
             }
           ),
@@ -169,7 +170,7 @@ const config = {
             `Début de l'hydratation {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
             null,
             {
-              length: tables.length,
+              length: tablesNumber,
               tables,
             }
           ),
@@ -217,7 +218,7 @@ const config = {
             `🍻 100 %  {length, plural, one {de la table hydratée !} other {des tables hydratées !}}`,
             null,
             {
-              length: tables.length,
+              length: tablesNumber,
             }
           ),
         });
