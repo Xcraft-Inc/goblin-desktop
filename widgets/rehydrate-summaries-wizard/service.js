@@ -92,6 +92,19 @@ const config = {
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
         const r = quest.getStorage(entityStorage);
+        const tables = form.selectedTables.join(', ');
+        yield desktop.addNotification({
+          notificationId: `notification@${quest.uuidV4()}`,
+          color: 'blue',
+          message: T(
+            `Recupération des entités {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
+            null,
+            {
+              length: tables.length,
+              tables,
+            }
+          ),
+        });
         for (const table of form.selectedTables) {
           const getInfo = (r, table, onlyPublished) => {
             let q = r.table(table);
@@ -135,50 +148,44 @@ const config = {
           },
           {0: []}
         );
+        let totalLength = 0;
         const orderedHydratation = Object.keys(hydrateClassifier).reduce(
           (order, index) => {
             const entities = hydrateClassifier[index];
+            totalLength += entities.length;
             order.push(entities);
             return order;
           },
           []
         );
         const reverseHydratation = orderedHydratation.reverse();
-        for (const entities of reverseHydratation) {
+        let count = 1;
+        const batchSize = 100;
+        const progressNotificationId = `notification@${quest.uuidV4()}`;
+        yield desktop.addNotification({
+          notificationId: `notification@${quest.uuidV4()}`,
+          color: 'blue',
+          message: T(
+            `Début de l'hydratation {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
+            null,
+            {
+              length: tables.length,
+              tables,
+            }
+          ),
+        });
+        for (const [key, entities] of reverseHydratation.entries()) {
+          const cur = key + 1;
+          const tot = reverseHydratation.length;
           if (entities.length > 0) {
-            const table = entities[0].type;
-            yield desktop.addNotification({
-              color: 'blue',
-              message: T(
-                'Récupération {length, plural, one {du {table}} other {des {table}s}}',
-                null,
-                {length: entities.length, table}
-              ),
-            });
-            const fetched = yield r.getAll({
-              table,
-              documents: entities.map(e => e.id),
-            });
-            yield desktop.addNotification({
-              color: 'blue',
-              message: T(
-                'Hydratation {length, plural, one {du {table}} other {des {table}s}}',
-                null,
-                {length: entities.length, table}
-              ),
-            });
-
-            let count = 0;
-            const batchSize = 100;
-            for (const entity of fetched) {
-              count++;
+            for (const entity of entities) {
               const requestId = quest.uuidV4();
               quest.evt('hydrate-entity-requested', {
                 desktopId: quest.getDesktop(),
                 requestId,
                 entityId: entity.id,
-                rootAggregateId: entity.meta.rootAggregateId,
-                rootAggregatePath: entity.meta.rootAggregatePath,
+                rootAggregateId: entity.root,
+                rootAggregatePath: entity.path,
                 muteChanged: true,
                 muteHydrated: form.emitHydrated === 'false',
                 notify: false,
@@ -191,21 +198,29 @@ const config = {
               });
               if (count % batchSize === 0) {
                 yield quest.sub.wait(`*::*.${requestId}-hydrate.done`);
-                const progress = (count / fetched.length) * 100;
+                const progress = (count / totalLength) * 100;
                 yield desktop.addNotification({
-                  notificationId: table,
+                  notificationId: progressNotificationId,
                   color: 'blue',
-                  message: `${progress.toFixed(0)} % de ${table}`,
+                  message: `(${cur}/${tot}) ${progress.toFixed(0)} %`,
                 });
               }
+              count++;
             }
-            yield desktop.addNotification({
-              notificationId: table,
-              color: 'blue',
-              message: `100 % de ${table}`,
-            });
           }
         }
+
+        yield desktop.addNotification({
+          notificationId: progressNotificationId,
+          color: 'blue',
+          message: T(
+            `🍻 100 %  {length, plural, one {de la table hydratée !} other {des tables hydratées !}}`,
+            null,
+            {
+              length: tables.length,
+            }
+          ),
+        });
 
         yield quest.me.next();
       },
