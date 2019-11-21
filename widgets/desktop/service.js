@@ -30,7 +30,21 @@ const logicHandlers = require('./logic-handlers.js');
 Goblin.registerQuest(
   goblinName,
   'create',
-  function*(quest, labId, username, session, configuration, useNabu, routes) {
+  function*(
+    quest,
+    clientSessionId,
+    labId,
+    username,
+    session,
+    configuration,
+    useNabu,
+    routes
+  ) {
+    if (clientSessionId) {
+      quest.goblin.setX('clientSessionId', clientSessionId);
+    } else {
+      quest.log.warn('no clientSessionId provided to the new desktop');
+    }
     quest.goblin.setX('labId', labId);
     quest.goblin.setX('configuration', configuration);
     // CREATE DEFAULT CONTEXT MANAGER
@@ -97,8 +111,10 @@ Goblin.registerQuest(
   ['*::*.desktop-notification-broadcasted']
 );
 
-Goblin.registerQuest(goblinName, 'change-locale', function(quest, locale) {
-  quest.evt('user-locale-changed', {locale});
+Goblin.registerQuest(goblinName, 'change-locale', function*(quest, locale) {
+  const labAPI = quest.getAPI(quest.goblin.getX('labId'));
+  const clientSessionId = yield labAPI.getClientSessionId();
+  quest.evt(`${clientSessionId}.user-locale-changed`, {locale});
 });
 
 Goblin.registerQuest(goblinName, 'clean-workitem', function(quest, workitemId) {
@@ -654,6 +670,10 @@ Goblin.registerQuest(goblinName, 'get-user-info', function(quest) {
 
 Goblin.registerQuest(goblinName, 'get-lab-id', function(quest) {
   return quest.goblin.getX('labId');
+});
+
+Goblin.registerQuest(goblinName, 'get-client-session-id', function(quest) {
+  return quest.goblin.getX('clientSessionId');
 });
 
 Goblin.registerQuest(goblinName, 'get-workitems', function(quest) {
