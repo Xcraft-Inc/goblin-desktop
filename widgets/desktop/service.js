@@ -111,9 +111,8 @@ Goblin.registerQuest(
   ['*::*.desktop-notification-broadcasted']
 );
 
-Goblin.registerQuest(goblinName, 'change-locale', function*(quest, locale) {
-  const labAPI = quest.getAPI(quest.goblin.getX('labId'));
-  const clientSessionId = yield labAPI.getClientSessionId();
+Goblin.registerQuest(goblinName, 'change-locale', function(quest, locale) {
+  const clientSessionId = quest.goblin.getX('clientSessionId');
   quest.evt(`${clientSessionId}.user-locale-changed`, {locale});
 });
 
