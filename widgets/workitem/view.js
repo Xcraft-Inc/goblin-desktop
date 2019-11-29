@@ -7,7 +7,7 @@ import Datagrid from 'desktop/datagrid/widget';
 import WorkitemDialog from 'desktop/workitem-dialog/widget';
 
 import View from 'laboratory/view';
-import importer from 'goblin/importer';
+import importer from 'goblin_importer';
 import T from 't';
 
 const viewImporter = importer('view');

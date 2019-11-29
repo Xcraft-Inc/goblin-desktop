@@ -1,6 +1,6 @@
 //T:2019-02-27
 import React from 'react';
-import importer from 'goblin/importer';
+import importer from 'goblin_importer';
 import Widget from 'laboratory/widget';
 
 import Container from 'gadgets/container/widget';

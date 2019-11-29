@@ -15,7 +15,7 @@ import Field from 'gadgets/field/widget';
 import DragCab from 'gadgets/drag-cab/widget';
 import Combo from 'gadgets/combo/widget';
 
-import importer from 'goblin/importer';
+import importer from 'goblin_importer';
 import T from 't';
 
 const uiImporter = importer('ui');
