@@ -3,7 +3,7 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 import T from 't';
 import MouseTrap from 'mousetrap';
-import importer from 'laboratory/importer/';
+import importer from 'goblin/importer';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Separator from 'gadgets/separator/widget';

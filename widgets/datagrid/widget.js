@@ -13,7 +13,7 @@ import DatagridEntity from './datagrid-entity.js';
 import DatagridHeaders from './datagrid-headers.js';
 import DatagridItem from './datagrid-item.js';
 
-import importer from 'laboratory/importer';
+import importer from 'goblin/importer';
 const uiImporter = importer('ui');
 
 class Datagrid extends Widget {

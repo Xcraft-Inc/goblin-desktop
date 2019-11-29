@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Widget from 'laboratory/widget';
-import importer from 'laboratory/importer/';
+import importer from 'goblin/importer';
 
 import Container from 'gadgets/container/widget';
 import Workitem from 'desktop/workitem/widget';

@@ -6,7 +6,7 @@ import Widget from 'laboratory/widget';
 import DialogModal from 'gadgets/dialog-modal/widget';
 import Button from 'gadgets/button/widget';
 
-import importer from 'laboratory/importer/';
+import importer from 'goblin/importer';
 const uiImporter = importer('ui');
 
 class WorkitemDialog extends Widget {
