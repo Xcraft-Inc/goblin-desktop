@@ -62,9 +62,6 @@ module.exports = config => {
     buttons: (state, action) => {
       return state.set('buttons', action.get('buttons'));
     },
-    submit: (state, action) => {
-      return state.applyForm(action.get('value'));
-    },
     change: (state, action) => {
       return state.set(action.get('path'), action.get('newValue'));
     },

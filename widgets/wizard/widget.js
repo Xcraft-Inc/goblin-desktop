@@ -51,7 +51,6 @@ class Wizard extends Form {
 
   onNext() {
     const service = this.props.id.split('@')[0];
-    this.submitAs(service);
     this.doAs(service, 'next');
   }
 

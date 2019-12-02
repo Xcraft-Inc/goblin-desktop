@@ -6,7 +6,6 @@ import React from 'react';
 import Container from 'gadgets/container/widget';
 import Button from 'gadgets/button/widget';
 import Field from 'gadgets/field/widget';
-import LocalForm from 'laboratory/localform';
 import T from 't';
 
 class Monitor extends Widget {
