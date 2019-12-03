@@ -1,10 +1,10 @@
 //T:2019-02-27
 
 import React from 'react';
-import Widget from 'laboratory/widget';
-import Form from 'laboratory/form';
-import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Form from 'goblin-laboratory/widgets/form';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import DatagridCell from '../datagrid-cell/widget';
 import T from 't';
 

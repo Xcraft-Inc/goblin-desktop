@@ -1,7 +1,7 @@
 //T:2019-02-27
 import React from 'react';
-import Widget from 'laboratory/widget';
-import TableCell from 'gadgets/table-cell/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
+import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
 import {ListHelpers} from 'goblin-toolbox';

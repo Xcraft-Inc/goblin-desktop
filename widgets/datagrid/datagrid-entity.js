@@ -1,8 +1,8 @@
 //T:2019-02-27
 
 import React from 'react';
-import Form from 'laboratory/form';
-import Container from 'gadgets/container/widget';
+import Form from 'goblin-laboratory/widgets/form';
+import Container from 'goblin-gadgets/widgets/container/widget';
 import DatagridCell from '../datagrid-cell/widget';
 
 class DatagridEntity extends Form {

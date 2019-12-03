@@ -1,9 +1,9 @@
 //T:2019-02-27
 import React from 'react';
-import View from 'laboratory/view';
-import Container from 'gadgets/container/widget';
-import Board from 'desktop/board/widget';
-import Wizard from 'desktop/wizard/widget';
+import View from 'goblin-laboratory/widgets/view';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Board from 'goblin-desktop/widgets/board/widget';
+import Wizard from 'goblin-desktop/widgets/wizard/widget';
 
 class BoardView extends View {
   render() {

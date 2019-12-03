@@ -1,13 +1,13 @@
 import React from 'react';
-import Form from 'laboratory/form';
-import Widget from 'laboratory/widget';
-import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
+import Form from 'goblin-laboratory/widgets/form';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import importer from 'goblin_importer';
 import PropTypes from 'prop-types';
 
-import DialogModal from 'gadgets/dialog-modal/widget';
-import Separator from 'gadgets/separator/widget';
+import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
+import Separator from 'goblin-gadgets/widgets/separator/widget';
 import WizardButtons from '../wizard-buttons/widget';
 
 const uiImporter = importer('ui');

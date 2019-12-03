@@ -3,17 +3,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import {Unit} from 'electrum-theme';
 import * as Bool from 'gadgets/helpers/bool-helpers';
 
-import Workitem from 'desktop/workitem/widget';
-import Container from 'gadgets/container/widget';
-import Button from 'gadgets/button/widget';
-import Label from 'gadgets/label/widget';
-import Field from 'gadgets/field/widget';
-import DragCab from 'gadgets/drag-cab/widget';
-import Combo from 'gadgets/combo/widget';
+import Workitem from 'goblin-desktop/widgets/workitem/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
+import Field from 'goblin-gadgets/widgets/field/widget';
+import DragCab from 'goblin-gadgets/widgets/drag-cab/widget';
+import Combo from 'goblin-gadgets/widgets/combo/widget';
 
 import importer from 'goblin_importer';
 import T from 't';

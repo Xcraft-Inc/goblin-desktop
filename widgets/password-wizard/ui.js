@@ -1,9 +1,9 @@
 //T:2019-02-27
 import T from 't';
 import React from 'react';
-import Container from 'gadgets/container/widget';
-import Field from 'gadgets/field/widget';
-import Button from 'gadgets/button/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Field from 'goblin-gadgets/widgets/field/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
 
 function renderMain(props) {
   const type = props.showPassword === 'true' ? {} : {type: 'password'};

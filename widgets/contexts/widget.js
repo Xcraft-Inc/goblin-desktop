@@ -1,8 +1,8 @@
 //T:2019-02-27
 import React from 'react';
-import Button from 'gadgets/button/widget';
-import Widget from 'laboratory/widget';
-import Container from 'gadgets/container/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
 
 export default class Contexts extends Widget {
   constructor() {

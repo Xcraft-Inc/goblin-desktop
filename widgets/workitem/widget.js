@@ -1,15 +1,15 @@
 //T:2019-02-27
 
 import React from 'react';
-import Widget from 'laboratory/widget';
-import Form from 'laboratory/form';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Form from 'goblin-laboratory/widgets/form';
 import PropTypes from 'prop-types';
 
-import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
-import Button from 'gadgets/button/widget';
-import ScrollableContainer from 'gadgets/scrollable-container/widget';
-import Separator from 'gadgets/separator/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import ScrollableContainer from 'goblin-gadgets/widgets/scrollable-container/widget';
+import Separator from 'goblin-gadgets/widgets/separator/widget';
 import T from 't';
 
 /******************************************************************************/

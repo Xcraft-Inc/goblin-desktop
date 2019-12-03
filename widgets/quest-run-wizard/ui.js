@@ -1,9 +1,9 @@
 //T:2019-02-27
 import React from 'react';
 import T from 't';
-import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
-import Field from 'gadgets/field/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
+import Field from 'goblin-gadgets/widgets/field/widget';
 
 function prepare(props) {
   return (

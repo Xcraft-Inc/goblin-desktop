@@ -1,8 +1,8 @@
 //T:2019-02-27
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import importer from 'goblin_importer';
-import Workitem from 'desktop/workitem/widget';
+import Workitem from 'goblin-desktop/widgets/workitem/widget';
 
 const uiImporter = importer('ui');
 

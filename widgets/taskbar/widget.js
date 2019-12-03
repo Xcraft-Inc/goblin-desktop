@@ -1,11 +1,11 @@
 //T:2019-02-27
 import React from 'react';
 import importer from 'goblin_importer';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 
-import Container from 'gadgets/container/widget';
-import Button from 'gadgets/button/widget';
-import Separator from 'gadgets/separator/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import Separator from 'goblin-gadgets/widgets/separator/widget';
 
 const tasksImporter = importer('tasks');
 class Taskbar extends Widget {

@@ -2,11 +2,11 @@
 
 import React from 'react';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import MouseTrap from 'mousetrap';
-import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
-import Button from 'gadgets/button/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
 import T from 't';
 
 class _Row extends React.PureComponent {

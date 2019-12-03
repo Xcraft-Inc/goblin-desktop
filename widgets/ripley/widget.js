@@ -1,13 +1,13 @@
 //T:2019-02-27
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import {fromJS} from 'immutable';
 import Shredder from 'xcraft-core-shredder';
 import {date as DateConverters} from 'xcraft-core-converters';
 
-import Container from 'gadgets/container/widget';
-import Calendar from 'gadgets/calendar/widget';
-import Tree from 'gadgets/tree/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Calendar from 'goblin-gadgets/widgets/calendar/widget';
+import Tree from 'goblin-gadgets/widgets/tree/widget';
 
 class RipleyTree extends Widget {
   static get wiring() {
