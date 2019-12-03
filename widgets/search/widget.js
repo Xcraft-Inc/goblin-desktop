@@ -116,6 +116,7 @@ class Search extends Form {
       name: 'name',
       title: 'title',
       type: 'type',
+      hinter: 'hinter',
       hintText: 'hintText',
     };
   }
@@ -135,7 +136,7 @@ class Search extends Form {
   }
 
   render() {
-    const {id, title, hintText, type} = this.props;
+    const {id, title, hintText, type, hinter} = this.props;
     if (!id) {
       return null;
     }
@@ -186,7 +187,7 @@ class Search extends Form {
                   <Container kind="row">
                     <Label glyph="solid/search" />
                     <HinterField
-                      hinter={type}
+                      hinter={hinter}
                       hintText={hintText}
                       grow="1"
                       autoFocus={true}
