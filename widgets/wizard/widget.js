@@ -1,13 +1,13 @@
 import React from 'react';
-import Form from 'laboratory/form';
-import Widget from 'laboratory/widget';
-import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
-import importer from 'laboratory/importer/';
+import Form from 'goblin-laboratory/widgets/form';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
+import importer from 'goblin_importer';
 import PropTypes from 'prop-types';
 
-import DialogModal from 'gadgets/dialog-modal/widget';
-import Separator from 'gadgets/separator/widget';
+import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
+import Separator from 'goblin-gadgets/widgets/separator/widget';
 import WizardButtons from '../wizard-buttons/widget';
 
 const uiImporter = importer('ui');
@@ -51,7 +51,6 @@ class Wizard extends Form {
 
   onNext() {
     const service = this.props.id.split('@')[0];
-    this.submitAs(service);
     this.doAs(service, 'next');
   }
 
@@ -170,8 +169,9 @@ class Wizard extends Form {
               >
                 <Form
                   {...this.formConfigWithComponent(
-                    hasStep
-                      ? React.forwardRef((props, ref) => (
+                    React.forwardRef(
+                      (props, ref) =>
+                        hasStep && (
                           <Step
                             ref={ref}
                             {...this.props}
@@ -179,8 +179,8 @@ class Wizard extends Form {
                             do={this.doProxy}
                             setForm={this.setForm}
                           />
-                        ))
-                      : () => null
+                        )
+                    )
                   )}
                 />
               </Container>
@@ -200,8 +200,9 @@ class Wizard extends Form {
                 <Container kind="pane-wizard">
                   <Form
                     {...this.formConfigWithComponent(
-                      hasStep
-                        ? React.forwardRef((props, ref) => (
+                      React.forwardRef(
+                        (props, ref) =>
+                          hasStep && (
                             <Step
                               ref={ref}
                               {...this.props}
@@ -209,8 +210,8 @@ class Wizard extends Form {
                               do={this.doProxy}
                               setForm={this.setForm}
                             />
-                          ))
-                        : () => null
+                          )
+                      )
                     )}
                   />
                 </Container>

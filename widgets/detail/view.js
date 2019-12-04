@@ -1,9 +1,9 @@
 //T:2019-02-27
 
 import React from 'react';
-import View from 'laboratory/view';
-import Widget from 'laboratory/widget';
-import Detail from 'desktop/detail/widget';
+import View from 'goblin-laboratory/widgets/view';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Detail from 'goblin-desktop/widgets/detail/widget';
 
 class DetailView extends View {
   constructor() {

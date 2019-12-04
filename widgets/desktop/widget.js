@@ -1,22 +1,22 @@
 //T:2019-02-27
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import T from 't';
 import MouseTrap from 'mousetrap';
-import importer from 'laboratory/importer/';
-import Container from 'gadgets/container/widget';
-import Button from 'gadgets/button/widget';
-import Separator from 'gadgets/separator/widget';
-import NabuToolbar from 'nabu/nabu-toolbar/widget';
-import Monitor from 'desktop/monitor/widget';
-import WidgetDocCaller from 'desktop/widget-doc-caller/widget';
-import Notifications from 'desktop/notifications/widget';
-import MainTabMenu from 'desktop/main-tab-menu/widget';
+import importer from 'goblin_importer';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import Separator from 'goblin-gadgets/widgets/separator/widget';
+import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
+import Monitor from 'goblin-desktop/widgets/monitor/widget';
+import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
+import Notifications from 'goblin-desktop/widgets/notifications/widget';
+import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
 import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
-
+const NabuToolbarConnected = Widget.Wired(NabuToolbar)();
 /******************************************************************************/
 
 let currentTheme = 'default';
@@ -36,14 +36,13 @@ const themes = [
 
 const LocaleMenuConnected = Widget.connect((state, props) => {
   const locales = state.get(`backend.nabu.locales`);
-  const toolbarId = getToolbarId(props.desktopId);
-  const toolbar = toolbarId ? state.get(`backend.${toolbarId}`) : null;
+  const localeId = Widget.getUserSession(state).get('locale');
 
   return {
     items: locales,
     itemsTextKey: 'text',
-    itemsValueKey: 'id',
-    currentItemValue: toolbar ? toolbar.get('selectedLocaleId') : null,
+    itemsValueKey: 'name',
+    currentItemValue: localeId,
   };
 })(MainTabMenu);
 
@@ -149,13 +148,8 @@ class Desktop extends Widget {
     this.do('change-mandate');
   }
 
-  onChangeLocale(localeId) {
-    const toolbarId = getToolbarId(this.props.id);
-    if (toolbarId) {
-      this.doFor(toolbarId, 'set-selected-locale', {
-        localeId,
-      });
-    }
+  onChangeLocale(locale) {
+    this.do('change-locale', {locale});
   }
 
   onChangeTheme(name) {
@@ -242,14 +236,16 @@ class Desktop extends Widget {
 
   renderFooter() {
     const CommandsPrompt = this.connectCommandsPrompt();
-    const Toolbar = NabuToolbar.connectTo(this);
     const footerClass = this.showFooter
       ? this.styles.classNames.footer
       : this.styles.classNames.footerHidden;
 
     return (
       <div className={footerClass}>
-        <Toolbar desktopId={this.props.id} />
+        <NabuToolbarConnected
+          id={getToolbarId(this.props.id)}
+          desktopId={this.props.id}
+        />
         <Monitor id={this.props.id + '$monitor'} />
         <WidgetDocCaller
           desktopId={this.props.id}

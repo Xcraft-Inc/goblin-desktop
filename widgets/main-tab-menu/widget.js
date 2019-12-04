@@ -1,11 +1,11 @@
 //T:2019-02-27
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 
 import {Unit} from 'electrum-theme';
-import Button from 'gadgets/button/widget';
-import Combo from 'gadgets/combo/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import Combo from 'goblin-gadgets/widgets/combo/widget';
 
 /******************************************************************************/
 

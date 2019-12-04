@@ -1,11 +1,11 @@
 //T:2019-02-27
 
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 
-import Label from 'gadgets/label/widget';
-import Button from 'gadgets/button/widget';
-import Notification from 'gadgets/notification/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import Notification from 'goblin-gadgets/widgets/notification/widget';
 import T from 't';
 
 /******************************************************************************/
@@ -81,7 +81,14 @@ class Notifications extends Widget {
 
     if (notification.externalUrl) {
       props.onClick = () => {
-        this.cmd('client.open-external', {url: notification.externalUrl});
+        if (notification.isDownload) {
+          this.doAs('desktop', 'download-file', {
+            filePath: notification.externalUrl,
+            openFile: true,
+          });
+        } else {
+          this.cmd('client.open-external', {url: notification.externalUrl});
+        }
       };
     }
 

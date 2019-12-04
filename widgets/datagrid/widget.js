@@ -1,19 +1,19 @@
 //T:2019-02-27
 
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import T from 't';
 
 import throttle from 'lodash/throttle';
-import Container from 'gadgets/container/widget';
-import DialogModal from 'gadgets/dialog-modal/widget';
-import Button from 'gadgets/button/widget';
-import List from 'gadgets/list/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import List from 'goblin-gadgets/widgets/list/widget';
 import DatagridEntity from './datagrid-entity.js';
 import DatagridHeaders from './datagrid-headers.js';
 import DatagridItem from './datagrid-item.js';
 
-import importer from 'laboratory/importer';
+import importer from 'goblin_importer';
 const uiImporter = importer('ui');
 
 class Datagrid extends Widget {

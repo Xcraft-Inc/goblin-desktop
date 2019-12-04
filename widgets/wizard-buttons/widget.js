@@ -1,13 +1,45 @@
 //T:2019-02-27
 
 import React from 'react';
-import Widget from 'laboratory/widget';
-import Container from 'gadgets/container/widget';
-import Button from 'gadgets/button/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import KeyTrap from 'goblin-gadgets/widgets/key-trap.js';
+
+/******************************************************************************/
 
 class WizardButtons extends Widget {
   constructor() {
     super(...arguments);
+
+    this.handleKeyEnter = this.handleKeyEnter.bind(this);
+    this.handleKeyEscape = this.handleKeyEscape.bind(this);
+  }
+
+  componentWillMount() {
+    KeyTrap.bind('Enter', this.handleKeyEnter);
+    KeyTrap.bind('Escape', this.handleKeyEscape);
+  }
+
+  componentWillUnmount() {
+    KeyTrap.unbind('Enter', this.handleKeyEnter);
+    KeyTrap.unbind('Escape', this.handleKeyEscape);
+  }
+
+  handleKeyEnter() {
+    const button = this.props.buttons.get('main');
+    if (button && !button.get('disabled')) {
+      const {questService, quest, questParams} = button.toJS();
+      this.handleButtonClick('main', questService, quest, questParams);
+    }
+  }
+
+  handleKeyEscape() {
+    const button = this.props.buttons.get('cancel');
+    if (button && !button.get('disabled')) {
+      const {questService, quest, questParams} = button.toJS();
+      this.handleButtonClick('cancel', questService, quest, questParams);
+    }
   }
 
   handleButtonClick(id, questService, quest, questParams) {
@@ -30,6 +62,8 @@ class WizardButtons extends Widget {
       }
     }
   }
+
+  /******************************************************************************/
 
   renderButton(button, id, index, size) {
     button = button.toJS();
@@ -69,6 +103,8 @@ class WizardButtons extends Widget {
     );
   }
 }
+
+/******************************************************************************/
 
 export default Widget.connectBackend({
   busy: 'busy',

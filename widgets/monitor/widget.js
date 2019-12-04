@@ -1,12 +1,11 @@
 'use strict';
 //T:2019-02-27
 
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import React from 'react';
-import Container from 'gadgets/container/widget';
-import Button from 'gadgets/button/widget';
-import Field from 'gadgets/field/widget';
-import LocalForm from 'laboratory/localform';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import Field from 'goblin-gadgets/widgets/field/widget';
 import T from 't';
 
 class Monitor extends Widget {

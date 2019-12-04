@@ -1,9 +1,9 @@
 import React from 'react';
-import Widget from 'laboratory/widget';
-import View from 'laboratory/view';
-import Container from 'gadgets/container/widget';
-import Map from 'desktop/map/widget';
-import Wizard from 'desktop/wizard/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
+import View from 'goblin-laboratory/widgets/view';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Map from 'goblin-desktop/widgets/map/widget';
+import Wizard from 'goblin-desktop/widgets/wizard/widget';
 
 class MapView extends View {
   render() {

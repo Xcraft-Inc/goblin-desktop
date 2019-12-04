@@ -1,8 +1,8 @@
 //T:2019-02-27
 
 import React from 'react';
-import Form from 'laboratory/form';
-import Widget from 'laboratory/widget';
+import Form from 'goblin-laboratory/widgets/form';
+import Widget from 'goblin-laboratory/widgets/widget';
 
 class DatagridCell extends Form {
   constructor() {

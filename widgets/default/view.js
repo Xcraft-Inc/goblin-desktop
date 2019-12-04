@@ -1,14 +1,14 @@
 //T:2019-02-27
 
 import React from 'react';
-import importer from 'laboratory/importer';
-import View from 'laboratory/view';
-import Container from 'gadgets/container/widget';
-import Editor from 'desktop/editor/widget';
-import Search from 'desktop/search/widget';
-import Datagrid from 'desktop/datagrid/widget';
-import Wizard from 'desktop/wizard/widget';
-import WorkitemDialog from 'desktop/workitem-dialog/widget';
+import importer from 'goblin_importer';
+import View from 'goblin-laboratory/widgets/view';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Editor from 'goblin-desktop/widgets/editor/widget';
+import Search from 'goblin-desktop/widgets/search/widget';
+import Datagrid from 'goblin-desktop/widgets/datagrid/widget';
+import Wizard from 'goblin-desktop/widgets/wizard/widget';
+import WorkitemDialog from 'goblin-desktop/widgets/workitem-dialog/widget';
 
 const viewImporter = importer('view');
 

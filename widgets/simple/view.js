@@ -1,10 +1,10 @@
 //T:2019-02-27
 
 import React from 'react';
-import importer from 'laboratory/importer';
-import Widget from 'laboratory/widget';
-import View from 'laboratory/view';
-import Container from 'gadgets/container/widget';
+import importer from 'goblin_importer';
+import Widget from 'goblin-laboratory/widgets/widget';
+import View from 'goblin-laboratory/widgets/view';
+import Container from 'goblin-gadgets/widgets/container/widget';
 
 const widgetImporter = importer('widget');
 

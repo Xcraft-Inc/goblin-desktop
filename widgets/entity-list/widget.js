@@ -1,15 +1,15 @@
 //T:2019-02-27
 
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import throttle from 'lodash/throttle';
-import List from 'gadgets/list/widget';
-import TableCell from 'gadgets/table-cell/widget';
-import Container from 'gadgets/container/widget';
-import Button from 'gadgets/button/widget';
-import EntityListItem from 'desktop/entity-list-item/widget';
+import List from 'goblin-gadgets/widgets/list/widget';
+import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import EntityListItem from 'goblin-desktop/widgets/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
-import Label from 'gadgets/label/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
@@ -21,11 +21,16 @@ class ListToolbar extends Widget {
   constructor() {
     super(...arguments);
     this.exportToCsv = this.exportToCsv.bind(this);
+    this.exportToJSON = this.exportToJSON.bind(this);
     this.selectQuery = this.selectQuery.bind(this);
   }
 
   exportToCsv() {
     this.doAs(`${this.props.type}-list`, 'export-to-csv', {});
+  }
+
+  exportToJSON() {
+    this.doAs(`${this.props.type}-list`, 'export-to-json', {});
   }
 
   selectQuery(event) {
@@ -49,11 +54,20 @@ class ListToolbar extends Widget {
           <Container kind="row">
             <Button
               kind="action"
-              place="1/1"
+              place="1/2"
               width="250px"
               glyph="solid/save"
               text={T('Exporter un fichier csv')}
               onClick={this.exportToCsv}
+            />
+
+            <Button
+              kind="action"
+              place="2/2"
+              width="250px"
+              glyph="solid/save"
+              text={T('Exporter un fichier JSON')}
+              onClick={this.exportToJSON}
             />
 
             {queriesPreset.map((p, index) => {

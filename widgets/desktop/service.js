@@ -1,13 +1,15 @@
 'use strict';
 //T:2019-02-27
-
+const watt = require('gigawatts');
 const path = require('path');
 const Goblin = require('xcraft-core-goblin');
 const uuidV4 = require('uuid/v4');
 const goblinName = path.basename(module.parent.filename, '.js');
 const {getToolbarId} = require('goblin-nabu/lib/helpers.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
-
+const xUtils = require('xcraft-core-utils');
+const {getFileFilter} = xUtils.files;
+const T = require('goblin-nabu/widgets/helpers/t.js');
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
 const defaultRoutes = {
@@ -28,20 +30,39 @@ const logicHandlers = require('./logic-handlers.js');
 Goblin.registerQuest(
   goblinName,
   'create',
-  function*(quest, labId, username, configuration, routes) {
-    if (!labId) {
-      throw new Error('Missing labId');
+  function*(
+    quest,
+    clientSessionId,
+    labId,
+    username,
+    session,
+    configuration,
+    useNabu,
+    routes
+  ) {
+    if (clientSessionId) {
+      quest.goblin.setX('clientSessionId', clientSessionId);
+    } else {
+      quest.log.warn('no clientSessionId provided to the new desktop');
     }
-
     quest.goblin.setX('labId', labId);
     quest.goblin.setX('configuration', configuration);
-
     // CREATE DEFAULT CONTEXT MANAGER
     yield quest.create('contexts', {
       id: `contexts@${quest.goblin.id}`,
       desktopId: quest.goblin.id,
     });
 
+    // CREATE NABU TOOLBAR IF NEEDED
+    if (useNabu) {
+      const toolbarId = `nabu-toolbar@${quest.goblin.id}`;
+      yield quest.create('nabu-toolbar', {
+        id: toolbarId,
+        desktopId: quest.goblin.id,
+        enabled: false,
+        show: true,
+      });
+    }
     // CREATE DEFAULT TABS MANAGER
     yield quest.create('tabs', {
       id: `tabs@${quest.goblin.id}`,
@@ -52,7 +73,7 @@ Goblin.registerQuest(
       routes = defaultRoutes;
     }
 
-    quest.do({id: quest.goblin.id, routes});
+    quest.do({id: quest.goblin.id, routes, username, session});
 
     quest.log.info(`Desktop ${quest.goblin.id} created!`);
     const id = quest.goblin.id;
@@ -66,72 +87,33 @@ Goblin.registerQuest(
         }
       )
     );
+
+    quest.goblin.defer(
+      quest.sub(`*::*.${quest.goblin.id}.add-workitem-requested`, function*(
+        err,
+        {msg, resp}
+      ) {
+        yield resp.cmd(`${goblinName}.add-workitem`, {id, ...msg.data});
+      })
+    );
+
+    quest.goblin.defer(
+      quest.sub(`*::*.${quest.goblin.id}.remove-workitem-requested`, function*(
+        err,
+        {msg, resp}
+      ) {
+        yield resp.cmd(`${goblinName}.remove-workitem`, {id, ...msg.data});
+      })
+    );
+
     return quest.goblin.id;
   },
   ['*::*.desktop-notification-broadcasted']
 );
 
-Goblin.registerQuest(goblinName, 'getCurrentLocale', function*(quest) {
-  const toolbarApi = quest.getAPI(getToolbarId(quest.goblin.id));
-  return yield toolbarApi.getSelectedLocale();
-});
-
-Goblin.registerQuest(goblinName, 'create-hinter-for', function*(
-  quest,
-  workitemId,
-  detailWidget,
-  detailKind,
-  detailWidth,
-  newButtonTitle,
-  newWorkitem,
-  usePayload,
-  withDetails,
-  name,
-  type,
-  title,
-  glyph,
-  kind
-) {
-  const serviceName = name ? name : type;
-  const widgetId = workitemId ? `${serviceName}-hinter@${workitemId}` : null;
-
-  if (!type) {
-    throw new Error('Hinter type required');
-  }
-
-  if (!kind) {
-    kind = 'list';
-  }
-
-  if (!title) {
-    title = type;
-  }
-
-  let goblinName = Goblin.getGoblinName(workitemId);
-
-  const hinter = yield quest.createFor(
-    goblinName,
-    workitemId,
-    `hinter@${widgetId}`,
-    {
-      id: widgetId,
-      name,
-      type,
-      desktopId: quest.goblin.id,
-      title,
-      glyph,
-      kind,
-      detailWidget,
-      detailKind,
-      detailWidth,
-      newButtonTitle,
-      newWorkitem,
-      usePayload,
-      withDetails,
-    }
-  );
-
-  return hinter.id;
+Goblin.registerQuest(goblinName, 'change-locale', function(quest, locale) {
+  const clientSessionId = quest.goblin.getX('clientSessionId');
+  quest.evt(`${clientSessionId}.user-locale-changed`, {locale});
 });
 
 Goblin.registerQuest(goblinName, 'clean-workitem', function(quest, workitemId) {
@@ -318,13 +300,13 @@ Goblin.registerQuest(
   ['*::*.done']
 );
 
-Goblin.registerQuest(goblinName, 'add-context', function(
+Goblin.registerQuest(goblinName, 'add-context', function*(
   quest,
   contextId,
   name
 ) {
   const contexts = quest.getAPI(`contexts@${quest.goblin.id}`);
-  contexts.add({
+  yield contexts.add({
     contextId,
     name,
   });
@@ -463,6 +445,10 @@ Goblin.registerQuest(goblinName, 'change-team', function(quest, teamId) {
   quest.do();
 });
 
+Goblin.registerQuest(goblinName, 'get-current-context', function(quest) {
+  return quest.goblin.getState().get('current.workcontext');
+});
+
 Goblin.registerQuest(goblinName, 'nav-to-context', function*(quest, contextId) {
   const state = quest.goblin.getState();
   const view = state.get(`current.views.${contextId}`, null);
@@ -559,6 +545,7 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
   message,
   command,
   externalUrl,
+  isDownload,
   broadcast
 ) {
   if (!notificationId) {
@@ -577,12 +564,21 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
         message,
         command,
         externalUrl,
+        isDownload,
       }
     );
     return;
   }
 
-  quest.do({notificationId, glyph, color, message, command, externalUrl});
+  quest.do({
+    notificationId,
+    glyph,
+    color,
+    message,
+    command,
+    externalUrl,
+    isDownload,
+  });
   const dnd = quest.goblin.getState().get('dnd');
   if (dnd !== 'true') {
     quest.dispatch('set-notifications', {show: 'true'});
@@ -633,6 +629,27 @@ Goblin.registerQuest(goblinName, 'set-notifications', function(quest, show) {
   quest.dispatch('update-not-read-count');
 });
 
+Goblin.registerQuest(goblinName, 'download-file', function(
+  quest,
+  filePath,
+  openFile
+) {
+  const labId = quest.goblin.getX('labId');
+  const fs = require('fs');
+  const stream = fs.createReadStream;
+  const {appId} = require('xcraft-core-host');
+  if (fs.existsSync(filePath)) {
+    let file = stream(filePath);
+    quest.evt(`wm@${labId}.download-file-requested`, {
+      xcraftStream: file,
+      appId,
+      fileFilter: getFileFilter(filePath),
+      defaultPath: path.basename(filePath),
+      openFile,
+    });
+  }
+});
+
 Goblin.registerQuest(goblinName, 'change-mandate', function(quest) {
   quest.evt(`mandate.changed`);
 });
@@ -654,10 +671,53 @@ Goblin.registerQuest(goblinName, 'get-lab-id', function(quest) {
   return quest.goblin.getX('labId');
 });
 
+Goblin.registerQuest(goblinName, 'get-client-session-id', function(quest) {
+  return quest.goblin.getX('clientSessionId');
+});
+
 Goblin.registerQuest(goblinName, 'get-workitems', function(quest) {
   const state = quest.goblin.getState();
   const wks = state.get('workitems');
   return wks ? wks.toJS() : {};
+});
+
+Goblin.registerQuest(goblinName, 'close', function*(quest, closeIn) {
+  let count = closeIn ? closeIn : 0;
+  quest.log.info(`Closing desktop in ${count}sec...`);
+  const message = T(
+    'Un administrateur à demandé la fermeture de votre session dans {count}sec',
+    '',
+    {count}
+  );
+  yield quest.me.addNotification({
+    notificationId: quest.goblin.id,
+    color: 'red',
+    glyph: 'solid/exclamation-triangle',
+    message,
+  });
+  const countdown = setInterval(
+    watt(function*() {
+      count--;
+      const message = T(
+        'Un administrateur à demandé la fermeture de votre session dans {count}sec',
+        '',
+        {
+          count,
+        }
+      );
+      yield quest.me.addNotification({
+        notificationId: quest.goblin.id,
+        color: 'red',
+        glyph: 'solid/exclamation-triangle',
+        message,
+      });
+    }),
+    1000
+  );
+  setTimeout(() => {
+    clearInterval(countdown);
+    quest.evt(`session.closed`);
+  }, 1000 * count);
 });
 
 Goblin.registerQuest(goblinName, 'delete', function(quest) {

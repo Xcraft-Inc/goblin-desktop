@@ -1,4 +1,5 @@
 //T:2019-04-09
+<<<<<<< HEAD
 import T from "t";
 import React from "react";
 import Form from "laboratory/form";
@@ -13,6 +14,20 @@ import List from "gadgets/list/widget";
 import HinterField from "goblin-gadgets/widgets/hinter-field/widget";
 import C from "goblin-laboratory/widgets/connect-helpers/c";
 import TextFieldNew from "goblin-gadgets/widgets/text-field-new/widget";
+=======
+import T from 't';
+import React from 'react';
+import Form from 'goblin-laboratory/widgets/form';
+import Widget from 'goblin-laboratory/widgets/widget';
+import throttle from 'lodash/throttle';
+
+import Container from 'goblin-gadgets/widgets/container/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import StatusFilters from 'goblin-desktop/widgets/status-filters/widget';
+import List from 'goblin-gadgets/widgets/list/widget';
+import HinterField from 'goblin-gadgets/widgets/hinter-field/widget';
+>>>>>>> master
 
 class _ListItem extends Widget {
   constructor() {
@@ -116,11 +131,12 @@ class Search extends Form {
 
   static get wiring() {
     return {
-      id: "id",
-      name: "name",
-      title: "title",
-      type: "type",
-      hintText: "hintText"
+      id: 'id',
+      name: 'name',
+      title: 'title',
+      type: 'type',
+      hinter: 'hinter',
+      hintText: 'hintText',
     };
   }
 
@@ -145,7 +161,7 @@ class Search extends Form {
   }
 
   render() {
-    const { id, title, hintText, type } = this.props;
+    const {id, title, hintText, type, hinter} = this.props;
     if (!id) {
       return null;
     }

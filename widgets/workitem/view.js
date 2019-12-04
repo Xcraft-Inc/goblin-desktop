@@ -2,12 +2,12 @@
 
 import React from 'react';
 
-import Wizard from 'desktop/wizard/widget';
-import Datagrid from 'desktop/datagrid/widget';
-import WorkitemDialog from 'desktop/workitem-dialog/widget';
+import Wizard from 'goblin-desktop/widgets/wizard/widget';
+import Datagrid from 'goblin-desktop/widgets/datagrid/widget';
+import WorkitemDialog from 'goblin-desktop/widgets/workitem-dialog/widget';
 
-import View from 'laboratory/view';
-import importer from 'laboratory/importer/';
+import View from 'goblin-laboratory/widgets/view';
+import importer from 'goblin_importer';
 import T from 't';
 
 const viewImporter = importer('view');

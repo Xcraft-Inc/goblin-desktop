@@ -1,13 +1,8 @@
 //T:2019-02-27
 
 import React from 'react';
-import Widget from 'laboratory/widget';
-
-import Container from 'gadgets/container/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import FacetFilter from 'goblin-desktop/widgets/facet-filter/widget';
-import Label from 'gadgets/label/widget';
-import Checkbox from 'gadgets/checkbox/widget';
-import T from 't';
 
 const managedStatus = ['draft', 'published', 'archived', 'trashed'];
 class StatusFilter extends Widget {

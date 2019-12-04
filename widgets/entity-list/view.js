@@ -1,9 +1,9 @@
 import React from 'react';
-import View from 'laboratory/view';
-import Container from 'gadgets/container/widget';
-import EntityList from 'desktop/entity-list/widget';
-import Wizard from 'desktop/wizard/widget';
-import Datagrid from 'desktop/datagrid/widget';
+import View from 'goblin-laboratory/widgets/view';
+import Container from 'goblin-gadgets/widgets/container/widget';
+import EntityList from 'goblin-desktop/widgets/entity-list/widget';
+import Wizard from 'goblin-desktop/widgets/wizard/widget';
+import Datagrid from 'goblin-desktop/widgets/datagrid/widget';
 
 export default class EntityListView extends View {
   render() {

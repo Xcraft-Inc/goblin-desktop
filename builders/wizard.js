@@ -62,9 +62,6 @@ module.exports = config => {
     buttons: (state, action) => {
       return state.set('buttons', action.get('buttons'));
     },
-    submit: (state, action) => {
-      return state.applyForm(action.get('value'));
-    },
     change: (state, action) => {
       return state.set(action.get('path'), action.get('newValue'));
     },
@@ -115,6 +112,7 @@ module.exports = config => {
 
           yield quest.create(`${gadget.type}-gadget`, {
             id: newGadgetId,
+            desktopId,
             options: gadget.options || null,
           });
         }
@@ -143,16 +141,18 @@ module.exports = config => {
 
     if (hinters) {
       Object.keys(hinters).forEach(h => {
-        quest.create(
-          `${h}-hinter`,
-          {
-            id: `${h}-finder@${quest.goblin.id}`,
-            desktopId,
-            workitemId: quest.goblin.id,
-            withDetails: true,
-          },
-          next.parallel()
-        );
+        if (quest.hasAPI(`${h}-hinter`)) {
+          quest.create(
+            `${h}-hinter`,
+            {
+              id: `${h}-finder@${quest.goblin.id}`,
+              desktopId,
+              workitemId: quest.goblin.id,
+              withDetails: true,
+            },
+            next.parallel()
+          );
+        }
       });
       yield next.sync();
     }
@@ -220,6 +220,17 @@ module.exports = config => {
     const nextStep = wizardFlow[nIndex];
     quest.evt('step', {action: 'goto', step: nextStep});
     return result;
+  });
+
+  Goblin.registerQuest(goblinName, 'back', function(quest) {
+    const c = quest.goblin.getState().get('step');
+    const cIndex = wizardFlow.indexOf(c);
+    if (cIndex === 0) {
+      return;
+    }
+    const nIndex = cIndex - 1;
+    const nextStep = wizardFlow[nIndex];
+    quest.evt('step', {action: 'goto', step: nextStep});
   });
 
   Goblin.registerQuest(goblinName, 'goto', function*(quest, step) {

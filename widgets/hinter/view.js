@@ -1,6 +1,6 @@
 import React from 'react';
-import Widget from 'laboratory/widget';
-import Hinter from 'desktop/hinter/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Hinter from 'goblin-desktop/widgets/hinter/widget';
 
 class HinterView extends Widget {
   constructor() {

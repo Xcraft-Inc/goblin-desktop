@@ -1,7 +1,7 @@
 //T:2019-02-27
 import React from 'react';
-import Widget from 'laboratory/widget';
-import Tabs from 'desktop/tabs/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
+import Tabs from 'goblin-desktop/widgets/tabs/widget';
 
 class TabsView extends Widget {
   constructor() {
