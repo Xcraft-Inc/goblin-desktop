@@ -34,7 +34,7 @@ class _ListItem extends Widget {
   }
 
   listNav() {
-    this.navToDetail(this.props.parentId, this.props.id);
+    this.navToDetail(this.props.parentId, this.props.id, this.props.hinter);
   }
 
   render() {
@@ -97,6 +97,7 @@ const ListItem = Widget.connect((state, props) => {
     index: props.index,
     parentId: props.data.parentId,
     onDrillDown: props.data.onDrillDown,
+    hinter: props.data.hinter,
   };
 })(_ListItem);
 
@@ -207,6 +208,7 @@ class Search extends Form {
               renderItem={ListItem}
               data={{
                 parentId: this.props.id,
+                hinter: this.props.hinter,
                 onDrillDown: this.drillDown,
               }}
             />
