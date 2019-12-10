@@ -187,6 +187,29 @@ class Wizard extends Form {
             );
           }
 
+          case 'full': {
+            return (
+              <Container kind="views">
+                <Form
+                  {...this.formConfigWithComponent(
+                    React.forwardRef(
+                      (props, ref) =>
+                        hasStep && (
+                          <Step
+                            ref={ref}
+                            {...this.props}
+                            theme={this.context.theme}
+                            do={this.doProxy}
+                            setForm={this.setForm}
+                          />
+                        )
+                    )
+                  )}
+                />
+              </Container>
+            );
+          }
+
           default: {
             return (
               <Container

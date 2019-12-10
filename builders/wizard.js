@@ -141,13 +141,21 @@ module.exports = config => {
 
     if (hinters) {
       Object.keys(hinters).forEach(h => {
-        if (quest.hasAPI(`${h}-hinter`)) {
+        let detailWidget = null;
+        let hName = h;
+        if (hinters[h].hinter) {
+          hName = hinters[h].hinter;
+          detailWidget = `${hName}-workitem`;
+        }
+        if (quest.hasAPI(`${hName}-hinter`)) {
           quest.create(
-            `${h}-hinter`,
+            `${hName}-hinter`,
             {
               id: `${h}-finder@${quest.goblin.id}`,
               desktopId,
+              hinterName: h,
               workitemId: quest.goblin.id,
+              detailWidget,
               withDetails: true,
             },
             next.parallel()
