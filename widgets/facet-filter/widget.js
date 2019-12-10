@@ -1,13 +1,11 @@
-//T:2019-02-27
-
+//
+import T from 't';
 import React from 'react';
 import Widget from 'laboratory/widget';
 
 import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Checkbox from 'gadgets/checkbox/widget';
-import ScrollableContainer from 'gadgets/scrollable-container/widget';
-import T from 't';
 
 class FacetFilter extends Widget {
   constructor() {
@@ -55,31 +53,29 @@ class FacetFilter extends Widget {
   }
 
   render() {
-    const {filter} = this.props;
-    if (!filter) {
+    const {name, filter, facets} = this.props;
+    if (!filter || !facets) {
       return null;
     }
     const flags = this.buildValueFlag();
     return (
-      <ScrollableContainer kind="panes" id={this.props.id} restoreScroll={true}>
-        <Container kind="pane">
-          {Object.entries(flags).map(([key, flag], index) => {
-            return (
-              <Container kind="row" key={index}>
-                <Label width="30px" />
-                <Checkbox
-                  justify="left"
-                  heightStrategy="compact"
-                  text={key}
-                  checked={!flag.checked}
-                  onChange={this.changeFacet(key)}
-                />
-                {flag.count}
-              </Container>
-            );
-          })}
-        </Container>
-      </ScrollableContainer>
+      <Container kind="pane">
+        <Label kind="title" text={name} />
+        {Object.entries(flags).map(([key, flag], index) => {
+          return (
+            <Container kind="row" key={index}>
+              <Checkbox
+                justify="left"
+                heightStrategy="compact"
+                text={key}
+                checked={!flag.checked}
+                onChange={this.changeFacet(key)}
+              />
+              {flag.count}
+            </Container>
+          );
+        })}
+      </Container>
     );
   }
 }

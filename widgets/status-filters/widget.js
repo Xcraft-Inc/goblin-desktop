@@ -26,7 +26,7 @@ class StatusFilter extends Widget {
           state.push(status);
         }
       } else {
-        const isInList = this.props.filter.get('value').contains(status);
+        const isInList = this.props.filter.get('value').has(status);
         if (isInList) {
           state.push(status);
         }
@@ -43,7 +43,7 @@ class StatusFilter extends Widget {
 
   buildStatusFlag() {
     return managedStatus.reduce((state, status) => {
-      state[status] = this.props.filter.get('value').contains(status);
+      state[status] = this.props.filter.get('value').has(status);
       return state;
     }, {});
   }
@@ -53,25 +53,23 @@ class StatusFilter extends Widget {
   }
 
   render() {
-    const {id, facets, filters} = this.props;
-    if (!id) {
+    let {id, facets, filters} = this.props;
+    if (!id || !facets) {
       return null;
     }
-
     return (
       <React.Fragment>
-        <FacetFilter
-          id={this.props.id}
-          name="docStatus"
-          facets={facets.get('docStatus')}
-          filter={filters.get('docStatus')}
-        />
-        <FacetFilter
-          id={this.props.id}
-          name="customer"
-          facets={facets.get('customer')}
-          filter={filters.get('customer')}
-        />
+        {Array.from(facets.entries()).map(([k, v], i) => {
+          return (
+            <FacetFilter
+              id={this.props.id}
+              key={i}
+              name={k}
+              facets={v}
+              filter={filters.get(k)}
+            />
+          );
+        })}
       </React.Fragment>
     );
   }
