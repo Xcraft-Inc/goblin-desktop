@@ -3,6 +3,7 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Form from 'goblin-laboratory/widgets/form';
+import WorkitemFields from '../workitem-fields/widget.js';
 import PropTypes from 'prop-types';
 
 import Container from 'goblin-gadgets/widgets/container/widget';
@@ -24,6 +25,7 @@ class Workitem extends Form {
     this.onArchive = this.onArchive.bind(this);
     this.onPublish = this.onPublish.bind(this);
     this.onCopyInfoToClipboard = this.onCopyInfoToClipboard.bind(this);
+    this.editSettings = this.editSettings.bind(this);
   }
 
   getChildContext() {
@@ -102,6 +104,12 @@ class Workitem extends Form {
 
   onCopyInfoToClipboard() {
     Form.copyTextToClipboard(this.props.entityId);
+  }
+
+  editSettings() {
+    this.doAs(this.service, 'open-entity-workitem', {
+      entityId: `workitem@${this.props.id.split('@')[0]}`,
+    });
   }
 
   /******************************************************************************/
@@ -236,13 +244,28 @@ class Workitem extends Form {
           <Button
             kind="pane-warning"
             glyph="solid/copy"
-            tooltip="Copie l'identifiant"
+            tooltip={T("Copie l'identifiant")}
             onClick={this.onCopyInfoToClipboard}
+          />
+          <Button
+            kind="pane-warning"
+            glyph="solid/edit"
+            tooltip={T('Editer')}
+            onClick={this.editSettings}
           />
         </Container>
       );
     } else {
-      return null;
+      return (
+        <Container kind="pane-warning-button">
+          <Button
+            kind="pane-warning"
+            glyph="solid/edit"
+            tooltip={T('Editer')}
+            onClick={this.editSettings}
+          />
+        </Container>
+      );
     }
   }
 
@@ -289,6 +312,11 @@ class Workitem extends Form {
             model={`backend.${this.props.entityId}`}
           >
             {this.props.children}
+            <WorkitemFields
+              id={`workitem@${this.props.id.split('@')[0]}`}
+              workitemId={this.props.id}
+              readonly="false"
+            />
           </Form>
         </ScrollableContainer>
         {this.renderActionButtons()}
@@ -325,6 +353,11 @@ class Workitem extends Form {
             model={`backend.${this.props.entityId}`}
           >
             {this.props.children}
+            <WorkitemFields
+              id={`workitem@${this.props.id.split('@')[0]}`}
+              workitemId={this.props.id}
+              readonly="true"
+            />
           </Form>
         </ScrollableContainer>
         {this.renderActionButtons()}
