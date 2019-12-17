@@ -103,6 +103,59 @@ const ListItem = Widget.connect((state, props) => {
   };
 })(_ListItem);
 
+class HinterNewButton extends Widget {
+  constructor() {
+    super(...arguments);
+    this.onNew = this.onNew.bind(this);
+  }
+
+  static get wiring() {
+    return {
+      id: 'id',
+      type: 'type',
+      kind: 'kind',
+      title: 'title',
+      glyph: 'glyph',
+      status: 'status',
+      onNew: 'onNew',
+      withDetails: 'withDetails',
+      newButtonTitle: 'newButtonTitle',
+    };
+  }
+
+  onNew() {
+    const model = this.getRouting()
+      .get('location.hash')
+      .substring(1);
+    const value = this.getModelValue(model, true);
+    this.doAs('hinter', 'create-new', {value});
+  }
+
+  render() {
+    const {id, onNew, title, newButtonTitle} = this.props;
+
+    if (!id) {
+      return null;
+    }
+    return (
+      <React.Fragment>
+        {onNew ? (
+          <Button
+            glyph="solid/plus"
+            text={
+              newButtonTitle
+                ? newButtonTitle
+                : T(`Nouveau {title}`, '', {title})
+            }
+            grow="1"
+            onClick={this.onNew}
+          />
+        ) : null}
+      </React.Fragment>
+    );
+  }
+}
+const NewEntityButton = Widget.Wired(HinterNewButton)();
 class Search extends Form {
   constructor() {
     super(...arguments);
@@ -122,6 +175,7 @@ class Search extends Form {
       title: 'title',
       type: 'type',
       hinter: 'hinter',
+      hinterId: 'hinterId',
       hintText: 'hintText',
     };
   }
@@ -147,7 +201,7 @@ class Search extends Form {
   }
 
   render() {
-    const {id, title, hintText, type, hinter} = this.props;
+    const {id, title, hintText, type, hinter, hinterId} = this.props;
     if (!id) {
       return null;
     }
@@ -198,6 +252,7 @@ class Search extends Form {
                   onChange={this.filter}
                 />
               </Form>
+              <NewEntityButton id={hinterId} />
             </Container>
           </Container>
           <Container kind="panes" navigationName="search">
