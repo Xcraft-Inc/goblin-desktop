@@ -21,6 +21,7 @@ class EntityListItem extends Widget {
           rowIndex={this.props.rowIndex}
           onDrillDown={this.props.onDrillDown}
           onSelect={this.props.onSelect}
+          useView={this.props.useView}
         />
       </Container>
     );
@@ -36,5 +37,6 @@ export default Widget.connect((state, props) => {
     onDrillDown: props.data.onDrillDown,
     onSelect: props.data.onSelect,
     rowIndex: props.index,
+    useView: props.data.useView,
   };
 })(EntityListItem);

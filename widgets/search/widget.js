@@ -254,6 +254,7 @@ class Search extends Form {
           disableToolbar="true"
           type={type}
           columns={new Shredder([{text: 'info', path: 'meta.summaries.info'}])}
+          view={[{meta: {summaries: ['info']}}]}
         ></EntityList>
       </Container>
     );

@@ -126,8 +126,13 @@ class EntityList extends Widget {
   }
 
   _drillDownInternal() {
+    let view = null;
+    if (this.props.view) {
+      view = {view: this.props.view};
+    }
     this.doFor(this.props.id, 'drill-down', {
       entityIds: this._entityIds,
+      ...view,
     });
     this._entityIds = [];
   }
@@ -195,6 +200,7 @@ class EntityList extends Widget {
                   onRenewTTL: this.renewTTL,
                   columns: new Shredder(columns),
                   onSelect: this.select,
+                  useView: this.props.view ? true : false,
                 }}
               />
             </div>

@@ -221,8 +221,9 @@ class EntityRow extends Widget {
 /******************************************************************************/
 
 export default Widget.connect((state, props) => {
+  const entityId = props.useView ? `entity-view@${props.id}` : props.id;
   return {
     id: props.id,
-    entity: state.get(`backend.${props.id}`),
+    entity: state.get(`backend.${entityId}`),
   };
 })(EntityRow);
