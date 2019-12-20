@@ -14,6 +14,9 @@ import List from 'goblin-gadgets/widgets/list/widget';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import TextFieldNew from 'goblin-gadgets/widgets/text-field-new/widget';
 
+import EntityList from 'goblin-desktop/widgets/entity-list/widget';
+import Shredder from 'xcraft-core-shredder';
+
 class _ListItem extends Widget {
   constructor() {
     super(...arguments);
@@ -132,7 +135,7 @@ class HinterNewButton extends Widget {
   }
 
   render() {
-    const {id, onNew, title, newButtonTitle} = this.props;
+    const {id, onNew, title} = this.props;
 
     if (!id) {
       return null;
@@ -142,11 +145,7 @@ class HinterNewButton extends Widget {
         {onNew ? (
           <Button
             glyph="solid/plus"
-            text={
-              newButtonTitle
-                ? newButtonTitle
-                : T(`Nouveau {title}`, '', {title})
-            }
+            text={title}
             grow="1"
             onClick={this.onNew}
           />
@@ -236,15 +235,6 @@ class Search extends Form {
           <Container kind="pane">
             <Container kind="row-pane">
               <Label text={title} grow="1" kind="title" /> <Count />
-            </Container>
-          </Container>
-
-          <StatusFilters id={listId} />
-        </Container>
-
-        <Container kind="view" width="400px">
-          <Container kind="panes" subkind="no-overlay" grow="0">
-            <Container kind="pane">
               <Form {...this.formConfig}>
                 <TextFieldNew
                   value={C('.value')}
@@ -255,20 +245,16 @@ class Search extends Form {
               <NewEntityButton id={hinterId} />
             </Container>
           </Container>
-          <Container kind="panes" navigationName="search">
-            <Container kind="pane">
-              <List
-                id={listId}
-                renderItem={ListItem}
-                data={{
-                  parentId: this.props.id,
-                  hinter: this.props.hinter,
-                  onDrillDown: this.drillDown,
-                }}
-              />
-            </Container>
-          </Container>
+
+          <StatusFilters id={listId} />
         </Container>
+        <EntityList
+          id={this.props.id}
+          hinter={hinter}
+          disableToolbar="true"
+          type={type}
+          columns={new Shredder([{text: 'info', path: 'meta.summaries.info'}])}
+        ></EntityList>
       </Container>
     );
   }

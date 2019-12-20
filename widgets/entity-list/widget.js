@@ -112,10 +112,21 @@ class EntityList extends Widget {
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
+    this.select = this.select.bind(this);
+  }
+
+  select(rowId) {
+    console.log(rowId);
+    const state = new Shredder(this.getState().backend);
+    const entityId = state.get(`list@${this.props.id}.list.${rowId}-item`);
+    if (this.props.hinter) {
+      this.navToDetail(this.props.id, entityId, this.props.hinter);
+    }
+    console.log(entityId);
   }
 
   _drillDownInternal() {
-    this.doAs(`${this.props.type}-list`, 'drill-down', {
+    this.doFor(this.props.id, 'drill-down', {
       entityIds: this._entityIds,
     });
     this._entityIds = [];
@@ -135,7 +146,7 @@ class EntityList extends Widget {
   }
 
   render() {
-    const {id, columns} = this.props;
+    const {id, columns, disableToolbar} = this.props;
     if (!id || !columns) {
       return null;
     }
@@ -148,9 +159,11 @@ class EntityList extends Widget {
 
     return (
       <div className={this.styles.classNames.full}>
-        <div className={this.styles.classNames.toolbar}>
-          <Toolbar id={id} />
-        </div>
+        {disableToolbar ? null : (
+          <div className={this.styles.classNames.toolbar}>
+            <Toolbar id={id} />
+          </div>
+        )}
         <div className={this.styles.classNames.list}>
           <div className={this.styles.classNames.content} style={widthStyle}>
             <div className={this.styles.classNames.header}>
@@ -181,6 +194,7 @@ class EntityList extends Widget {
                   onDrillDown: this.drillDown,
                   onRenewTTL: this.renewTTL,
                   columns: new Shredder(columns),
+                  onSelect: this.select,
                 }}
               />
             </div>

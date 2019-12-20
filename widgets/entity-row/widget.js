@@ -82,15 +82,18 @@ class _Driller extends Widget {
     if (this.props.loaded) {
       return (
         <TableCell
+          rowId={this.props.rowId}
           isLast="false"
           isHeader="false"
           text={this.props.text}
           {...getColumnProps(this.props.column)}
+          selectionChanged={this.props.onSelect}
         />
       );
     } else {
       return (
         <TableCell
+          rowId={this.props.rowId}
           isLast="false"
           isHeader="false"
           {...getColumnProps(this.props.column)}
@@ -187,23 +190,25 @@ class EntityRow extends Widget {
             return (
               <Driller
                 entityId={text}
-                rowId={i}
+                rowId={rowIndex}
                 key={i}
                 column={c}
                 onDrillDown={this.props.onDrillDown}
+                onSelect={this.props.onSelect}
                 path={columnSubPath}
               />
             );
           } else {
             return (
               <TableCell
-                rowId={i}
+                rowId={rowIndex}
                 key={i}
                 index={i}
                 isLast="false"
                 isHeader="false"
                 {...getColumnProps(c)}
                 text={text}
+                selectionChanged={this.props.onSelect}
               />
             );
           }
