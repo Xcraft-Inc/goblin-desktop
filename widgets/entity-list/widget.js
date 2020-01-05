@@ -146,7 +146,6 @@ class EntityList extends Widget {
     return {
       id: 'id',
       type: 'type',
-      columns: 'columns',
     };
   }
 
@@ -157,60 +156,75 @@ class EntityList extends Widget {
     }
     const listId = `list@${id}`;
 
-    const width = getEstimatedWidth(columns);
-    const widthStyle = {
-      minWidth: width,
-    };
-
-    return (
-      <div className={this.styles.classNames.full}>
-        {disableToolbar ? null : (
-          <div className={this.styles.classNames.toolbar}>
-            <Toolbar id={id} />
-          </div>
-        )}
-        <div className={this.styles.classNames.list}>
-          <div className={this.styles.classNames.content} style={widthStyle}>
-            <div className={this.styles.classNames.header}>
-              <TableCell
-                isLast="false"
-                isHeader="true"
-                width="50px"
-                text="n°"
-              />
-              {columns.map(c => {
-                return (
+    return this.buildCollectionLoader(
+      columns.toArray(),
+      ({collection}) => {
+        const columns = collection;
+        const width = getEstimatedWidth(columns);
+        const widthStyle = {
+          minWidth: width,
+        };
+        return (
+          <div className={this.styles.classNames.full}>
+            {disableToolbar ? null : (
+              <div className={this.styles.classNames.toolbar}>
+                <Toolbar id={id} />
+              </div>
+            )}
+            <div className={this.styles.classNames.list}>
+              <div
+                className={this.styles.classNames.content}
+                style={widthStyle}
+              >
+                <div className={this.styles.classNames.header}>
                   <TableCell
-                    key={c}
                     isLast="false"
                     isHeader="true"
-                    {...getColumnProps(c)}
-                    text={getColumnText(c)}
+                    width="50px"
+                    text="n°"
                   />
-                );
-              })}
-            </div>
-            <div className={this.styles.classNames.rows}>
-              <List
-                id={listId}
-                type={'uniform'}
-                renderItem={EntityListItem}
-                data={{
-                  onDrillDown: this.drillDown,
-                  onRenewTTL: this.renewTTL,
-                  columns: new Shredder(columns),
-                  onSelect: this.select,
-                  useView: this.props.view ? true : false,
-                }}
-              />
+                  {columns.map(c => {
+                    return (
+                      <TableCell
+                        key={c}
+                        isLast="false"
+                        isHeader="true"
+                        {...getColumnProps(c)}
+                        text={getColumnText(c)}
+                      />
+                    );
+                  })}
+                </div>
+                <div className={this.styles.classNames.rows}>
+                  <List
+                    id={listId}
+                    type={'uniform'}
+                    renderItem={EntityListItem}
+                    data={{
+                      onDrillDown: this.drillDown,
+                      onRenewTTL: this.renewTTL,
+                      columns: new Shredder(columns),
+                      onSelect: this.select,
+                      useView: this.props.view ? true : false,
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        );
+      },
+      null
     );
   }
 }
-
+const EntityListWithColumn = Widget.connect((state, prop) => {
+  if (!prop.type) {
+    return {};
+  }
+  const view = state.get(`backend.view@${prop.type}`);
+  return {columns: view.get('columns')};
+})(EntityList);
 /******************************************************************************/
 
-export default Widget.Wired(EntityList)();
+export default Widget.Wired(EntityListWithColumn)();
