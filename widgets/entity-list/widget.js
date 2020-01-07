@@ -207,7 +207,7 @@ class EntityList extends Widget {
                     data={{
                       onDrillDown: this.drillDown,
                       onRenewTTL: this.renewTTL,
-                      columns: new Shredder(columns),
+                      columns: columns,
                       onSelect: this.select,
                       useView: this.props.view ? true : false,
                     }}
@@ -227,7 +227,7 @@ const EntityListWithColumn = Widget.connect((state, prop) => {
     return {};
   }
   const view = state.get(`backend.view@${prop.type}`);
-  return {columns: view.get('columns')};
+  return {columns: view.get('columns'), view: view.get('query')};
 })(EntityList);
 /******************************************************************************/
 
