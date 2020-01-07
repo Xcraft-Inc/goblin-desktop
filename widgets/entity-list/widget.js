@@ -128,7 +128,11 @@ class EntityList extends Widget {
   _drillDownInternal() {
     let view = null;
     if (this.props.view) {
-      view = {view: this.props.view};
+      if (this.props.view.toJS) {
+        view = {view: this.props.view.toJS()};
+      } else {
+        view = {view: this.props.view};
+      }
     }
     this.doFor(this.props.id, 'drill-down', {
       entityIds: this._entityIds,
