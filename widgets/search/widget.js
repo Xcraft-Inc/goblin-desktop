@@ -240,6 +240,10 @@ class Search extends Form {
                   value={C('.value')}
                   changeMode="throttled"
                   onChange={this.filter}
+                  autoFocus={true}
+                  selectAllOnFocus={true}
+                  onFocus={this.focus}
+                  onBlur={this.blur}
                 />
               </Form>
               <NewEntityButton id={hinterId} />
@@ -253,8 +257,6 @@ class Search extends Form {
           hinter={hinter}
           disableToolbar="true"
           type={type}
-          columns={new Shredder([{text: 'info', path: 'meta.summaries.info'}])}
-          view={[{meta: {summaries: ['info']}}]}
         ></EntityList>
       </Container>
     );
