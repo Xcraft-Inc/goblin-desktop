@@ -10,12 +10,10 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import StatusFilters from 'goblin-desktop/widgets/status-filters/widget';
-import List from 'goblin-gadgets/widgets/list/widget';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import TextFieldNew from 'goblin-gadgets/widgets/text-field-new/widget';
 
-import EntityList from 'goblin-desktop/widgets/entity-list/widget';
-import Shredder from 'xcraft-core-shredder';
+import EntityView from 'goblin-desktop/widgets/entity-view/widget';
 
 class _ListItem extends Widget {
   constructor() {
@@ -252,12 +250,12 @@ class Search extends Form {
 
           <StatusFilters id={listId} />
         </Container>
-        <EntityList
+        <EntityView
           id={this.props.id}
           hinter={hinter}
           disableToolbar="true"
           type={type}
-        ></EntityList>
+        />
       </Container>
     );
   }
