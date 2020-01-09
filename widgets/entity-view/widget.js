@@ -104,7 +104,7 @@ const Toolbar = Widget.connect((state, props) => {
 
 /******************************************************************************/
 
-class EntityList extends Widget {
+class EntityView extends Widget {
   constructor() {
     super(...arguments);
 
@@ -112,11 +112,31 @@ class EntityList extends Widget {
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
+    this.select = this.select.bind(this);
+  }
+
+  select(rowId) {
+    console.log(rowId);
+    const state = new Shredder(this.getState().backend);
+    const entityId = state.get(`list@${this.props.id}.list.${rowId}-item`);
+    if (this.props.hinter) {
+      this.navToDetail(this.props.id, entityId, this.props.hinter);
+    }
+    console.log(entityId);
   }
 
   _drillDownInternal() {
-    this.doAs(`${this.props.type}-list`, 'drill-down', {
+    let view = null;
+    if (this.props.view) {
+      if (this.props.view.toJS) {
+        view = {view: this.props.view.toJS()};
+      } else {
+        view = {view: this.props.view};
+      }
+    }
+    this.doFor(this.props.id, 'drill-down', {
       entityIds: this._entityIds,
+      ...view,
     });
     this._entityIds = [];
   }
@@ -134,66 +154,81 @@ class EntityList extends Widget {
   }
 
   render() {
-    const {id, columns} = this.props;
+    const {id, columns, disableToolbar} = this.props;
     if (!id || !columns) {
       return null;
     }
     const listId = `list@${id}`;
 
-    const width = getEstimatedWidth(columns);
-    const widthStyle = {
-      minWidth: width,
-    };
-
-    return (
-      <div className={this.styles.classNames.full}>
-        <div className={this.styles.classNames.toolbar}>
-          <Toolbar id={id} />
-        </div>
-        <div className={this.styles.classNames.list}>
-          <div className={this.styles.classNames.content} style={widthStyle}>
-            <div className={this.styles.classNames.header}>
-              <TableCell
-                isLast="false"
-                isHeader="true"
-                width="50px"
-                text="n°"
-              />
-              {columns.map(c => {
-                return (
+    return this.buildCollectionLoader(
+      columns.toArray(),
+      ({collection}) => {
+        const columns = collection;
+        const width = getEstimatedWidth(columns);
+        const widthStyle = {
+          minWidth: width,
+        };
+        return (
+          <div className={this.styles.classNames.full}>
+            {disableToolbar ? null : (
+              <div className={this.styles.classNames.toolbar}>
+                <Toolbar id={id} />
+              </div>
+            )}
+            <div className={this.styles.classNames.list}>
+              <div
+                className={this.styles.classNames.content}
+                style={widthStyle}
+              >
+                <div className={this.styles.classNames.header}>
                   <TableCell
-                    key={c}
                     isLast="false"
                     isHeader="true"
-                    {...getColumnProps(c)}
-                    text={getColumnText(c)}
+                    width="50px"
+                    text="n°"
                   />
-                );
-              })}
-            </div>
-            <div className={this.styles.classNames.rows}>
-              <List
-                id={listId}
-                type={'uniform'}
-                renderItem={EntityListItem}
-                data={{
-                  onDrillDown: this.drillDown,
-                  onRenewTTL: this.renewTTL,
-                  columns: new Shredder(columns),
-                }}
-              />
+                  {columns.map((c, i) => {
+                    return (
+                      <TableCell
+                        key={i}
+                        isLast="false"
+                        isHeader="true"
+                        {...getColumnProps(c)}
+                        text={getColumnText(c)}
+                      />
+                    );
+                  })}
+                </div>
+                <div className={this.styles.classNames.rows}>
+                  <List
+                    id={listId}
+                    type={'uniform'}
+                    renderItem={EntityListItem}
+                    data={{
+                      onDrillDown: this.drillDown,
+                      onRenewTTL: this.renewTTL,
+                      columns: columns,
+                      onSelect: this.select,
+                      useView: this.props.view ? true : false,
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        );
+      },
+      null
     );
   }
 }
-
-const ConnectedEntityList = Widget.connect((state, props) => {
-  return {columns: state.get(`backend.list@${props.id}.columns`)};
-})(EntityList);
-
+const ConnectedEntityView = Widget.connect((state, prop) => {
+  if (!prop.type) {
+    return {};
+  }
+  const view = state.get(`backend.view@${prop.type}`);
+  return {columns: view.get('columns'), view: view.get('query')};
+})(EntityView);
 /******************************************************************************/
 
-export default Widget.Wired(ConnectedEntityList)();
+export default Widget.Wired(ConnectedEntityView)();
