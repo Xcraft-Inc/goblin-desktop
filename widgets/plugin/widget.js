@@ -78,7 +78,7 @@ class Plugin extends Widget {
   }
 
   onAction(actionName) {
-    const service = this.props.id.split('@')[0];
+    const service = this.props.namespace;
     switch (actionName) {
       case 'add':
         this.doAs(service, actionName);
@@ -101,17 +101,17 @@ class Plugin extends Widget {
   }
 
   onDeleteEntity(entityId) {
-    const service = this.props.id.split('@')[0];
+    const service = this.props.namespace;
     this.doAs(service, 'remove', {entityId});
   }
 
   onEditEntity(entityId) {
-    const service = this.props.id.split('@')[0];
+    const service = this.props.namespace;
     this.doAs(service, 'edit', {entityId});
   }
 
   onEntityDragged(selectedIds, toId, ownerId, ownerKind) {
-    const service = this.props.id.split('@')[0];
+    const service = this.props.namespace;
     if (ownerId === this.props.id) {
       this.doAs(service, 'drag', {
         fromId: selectedIds[0],
@@ -628,6 +628,7 @@ export default Widget.connect((state, props) => {
     arity: plugin('arity'),
     mode: plugin('mode'),
     entityIds: entity(plugin('entityPath')),
+    namespace: `${plugin('type')}-plugin`,
     extendedId: widget('extendedId'),
   };
 })(Plugin);
