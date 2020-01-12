@@ -173,7 +173,7 @@ class EntityRow extends Widget {
           index={rowIndex}
           isLast="false"
           isHeader="false"
-          width="50px"
+          width="20px"
           wrap="no-end"
           text={
             new Shredder({
@@ -183,6 +183,10 @@ class EntityRow extends Widget {
           }
         />
         {columns.map((c, i) => {
+          let defaultProps = {grow: '1', width: '100px'};
+          if (i === 0) {
+            defaultProps = {grow: '4', width: '550px', wrap: 'no'};
+          }
           const targetPath = getColumnTargetPath(c);
           const columnSubPath = getColumnSubPath(c);
           const text = getColumnText(c, entity);
@@ -206,6 +210,7 @@ class EntityRow extends Widget {
                 index={i}
                 isLast="false"
                 isHeader="false"
+                {...defaultProps}
                 {...getColumnProps(c)}
                 text={text}
                 selectionChanged={this.props.onSelect}

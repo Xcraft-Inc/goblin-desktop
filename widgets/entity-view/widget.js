@@ -184,15 +184,20 @@ class EntityView extends Widget {
                   <TableCell
                     isLast="false"
                     isHeader="true"
-                    width="50px"
+                    width="20px"
                     text="n°"
                   />
                   {columns.map((c, i) => {
+                    let defaultProps = {grow: '1', width: '100px'};
+                    if (i === 0) {
+                      defaultProps = {grow: '4', width: '550px', wrap: 'no'};
+                    }
                     return (
                       <TableCell
                         key={i}
                         isLast="false"
                         isHeader="true"
+                        {...defaultProps}
                         {...getColumnProps(c)}
                         text={getColumnText(c)}
                       />

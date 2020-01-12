@@ -229,23 +229,21 @@ class Search extends Form {
 
     return (
       <Container kind="views">
-        <Container kind="view" width="600px">
+        <Container kind="view" width="300px">
           <Container kind="pane">
-            <Container kind="row-pane">
-              <Label text={title} grow="1" kind="title" /> <Count />
-              <Form {...this.formConfig}>
-                <TextFieldNew
-                  value={C('.value')}
-                  changeMode="throttled"
-                  onChange={this.filter}
-                  autoFocus={true}
-                  selectAllOnFocus={true}
-                  onFocus={this.focus}
-                  onBlur={this.blur}
-                />
-              </Form>
-              <NewEntityButton id={hinterId} />
-            </Container>
+            <Label text={title} grow="1" kind="title" /> <Count />
+            <Form {...this.formConfig}>
+              <TextFieldNew
+                value={C('.value')}
+                changeMode="throttled"
+                onChange={this.filter}
+                autoFocus={true}
+                selectAllOnFocus={true}
+                onFocus={this.focus}
+                onBlur={this.blur}
+              />
+            </Form>
+            <NewEntityButton id={hinterId} />
           </Container>
 
           <StatusFilters id={listId} />
