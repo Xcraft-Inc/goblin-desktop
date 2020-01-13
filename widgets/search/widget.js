@@ -2,8 +2,9 @@
 
 import T from 't';
 import React from 'react';
-import Form from 'goblin-laboratory/widgets/form';
+import FrontendForm from 'goblin-laboratory/widgets/frontend-form/widget';
 import Widget from 'goblin-laboratory/widgets/widget';
+import WithModel from 'goblin-laboratory/widgets/with-model/widget.js';
 import throttle from 'lodash/throttle';
 
 import Container from 'goblin-gadgets/widgets/container/widget';
@@ -153,7 +154,32 @@ class HinterNewButton extends Widget {
   }
 }
 const NewEntityButton = Widget.Wired(HinterNewButton)();
-class Search extends Form {
+
+class CountNC extends Widget {
+  render() {
+    const p = this.props;
+    return (
+      <Container busy={p.count === undefined}>
+        <Label
+          text={T(
+            `{count, plural,
+       =0 {aucun document}
+       one {1 document}
+       other {{count} documents}
+    }`,
+            null,
+            {count: p.count}
+          )}
+        />
+      </Container>
+    );
+  }
+}
+const Count = Widget.connect((state, props) => {
+  return {count: state.get(`backend.${props.id}.count`, 0)};
+})(CountNC);
+
+class Search extends Widget {
   constructor() {
     super(...arguments);
 
@@ -161,7 +187,6 @@ class Search extends Form {
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
-
     this.filter = this.filter.bind(this);
   }
 
@@ -192,6 +217,11 @@ class Search extends Form {
   }
 
   filter(value) {
+    this.dispatchTo(
+      this.props.id,
+      {type: 'CHANGE', path: 'value', newValue: value},
+      'frontend-form'
+    );
     this.doFor(`list@${this.props.id}`, 'set-filter-value', {
       filterValue: value,
     });
@@ -202,47 +232,23 @@ class Search extends Form {
     if (!id) {
       return null;
     }
-
-    const Form = this.Form;
     const listId = `list@${id}`;
-
-    const Count = this.mapWidgetToFormPlugin(
-      p => (
-        <Container busy={p.count === undefined}>
-          <Label
-            text={T(
-              `{count, plural,
-                 =0 {aucun document}
-                 one {1 document}
-                 other {{count} documents}
-              }`,
-              null,
-              {count: p.count}
-            )}
-          />
-        </Container>
-      ),
-      'count',
-      'list',
-      '.count'
-    );
 
     return (
       <Container kind="views">
         <Container kind="view" width="300px">
           <Container kind="pane">
-            <Label text={title} grow="1" kind="title" /> <Count />
-            <Form {...this.formConfig}>
+            <Label text={title} grow="1" kind="title" /> <Count id={listId} />
+            <FrontendForm widgetId={id} initialState={{value: ''}}>
               <TextFieldNew
+                hintText={hintText}
                 value={C('.value')}
                 changeMode="throttled"
                 onChange={this.filter}
                 autoFocus={true}
                 selectAllOnFocus={true}
-                onFocus={this.focus}
-                onBlur={this.blur}
               />
-            </Form>
+            </FrontendForm>
             <NewEntityButton id={hinterId} />
           </Container>
 
