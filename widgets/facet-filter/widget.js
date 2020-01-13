@@ -37,7 +37,18 @@ class FacetFilter extends Widget {
         }
       }
     }
+    const searchId = this.props.id
+      .split('@')
+      .splice(1)
+      .join('@');
+
+    const value = this.getState()
+      .widgets.get(searchId)
+      .get('value');
+
+    console.log(value);
     this.doAs('list', 'customize-visualization', {
+      value,
       filter: {
         name: this.props.filter.get('name'),
         value: newValueList,
