@@ -4,7 +4,6 @@ import T from 't';
 import React from 'react';
 import FrontendForm from 'goblin-laboratory/widgets/frontend-form/widget';
 import Widget from 'goblin-laboratory/widgets/widget';
-import WithModel from 'goblin-laboratory/widgets/with-model/widget.js';
 import throttle from 'lodash/throttle';
 
 import Container from 'goblin-gadgets/widgets/container/widget';
@@ -15,6 +14,8 @@ import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import TextFieldNew from 'goblin-gadgets/widgets/text-field-new/widget';
 
 import EntityView from 'goblin-desktop/widgets/entity-view/widget';
+
+/******************************************************************************/
 
 class _ListItem extends Widget {
   constructor() {
@@ -105,6 +106,8 @@ const ListItem = Widget.connect((state, props) => {
   };
 })(_ListItem);
 
+/******************************************************************************/
+
 class HinterNewButton extends Widget {
   constructor() {
     super(...arguments);
@@ -143,6 +146,8 @@ class HinterNewButton extends Widget {
       <React.Fragment>
         {onNew ? (
           <Button
+            kind="action"
+            place="1/1"
             glyph="solid/plus"
             text={title}
             grow="1"
@@ -155,6 +160,8 @@ class HinterNewButton extends Widget {
 }
 const NewEntityButton = Widget.Wired(HinterNewButton)();
 
+/******************************************************************************/
+
 class CountNC extends Widget {
   render() {
     const p = this.props;
@@ -163,9 +170,9 @@ class CountNC extends Widget {
         <Label
           text={T(
             `{count, plural,
-       =0 {aucun document}
-       one {1 document}
-       other {{count} documents}
+       =0 {Aucun élément}
+       one {1 élément}
+       other {{count} éléments}
     }`,
             null,
             {count: p.count}
@@ -178,6 +185,8 @@ class CountNC extends Widget {
 const Count = Widget.connect((state, props) => {
   return {count: state.get(`backend.${props.id}.count`, 0)};
 })(CountNC);
+
+/******************************************************************************/
 
 class Search extends Widget {
   constructor() {
@@ -227,42 +236,66 @@ class Search extends Widget {
     });
   }
 
-  render() {
-    const {id, title, hintText, type, hinter, hinterId} = this.props;
-    if (!id) {
-      return null;
-    }
-    const listId = `list@${id}`;
+  renderParams() {
+    const listId = `list@${this.props.id}`;
 
     return (
-      <Container kind="views">
-        <Container kind="view" width="300px">
-          <Container kind="pane">
-            <Label text={title} grow="1" kind="title" /> <Count id={listId} />
-            <FrontendForm widgetId={id} initialState={{value: ''}}>
-              <TextFieldNew
-                hintText={hintText}
-                value={C('.value')}
-                changeMode="throttled"
-                onChange={this.filter}
-                autoFocus={true}
-                selectAllOnFocus={true}
-              />
-            </FrontendForm>
-            <NewEntityButton id={hinterId} />
-          </Container>
+      <div className={this.styles.classNames.params}>
+        <div className={this.styles.classNames.pane}>
+          <Label text={this.props.title} grow="1" kind="title" />
+          <div className={this.styles.classNames.separator} />
+          <FrontendForm widgetId={this.props.id} initialState={{value: ''}}>
+            <TextFieldNew
+              hintText={this.props.hintText}
+              value={C('.value')}
+              changeMode="throttled"
+              onChange={this.filter}
+              autoFocus={true}
+              selectAllOnFocus={true}
+            />
+          </FrontendForm>
+        </div>
 
+        <div className={this.styles.classNames.pane}>
           <StatusFilters id={listId} />
-        </Container>
-        <EntityView
-          id={this.props.id}
-          hinter={hinter}
-          disableToolbar="true"
-          type={type}
-        />
-      </Container>
+        </div>
+
+        <div className={this.styles.classNames.sajex} />
+
+        <div className={this.styles.classNames.lastPane}>
+          <Count id={listId} />
+          <div className={this.styles.classNames.separator} />
+          <NewEntityButton id={this.props.hinterId} />
+        </div>
+      </div>
+    );
+  }
+
+  renderList() {
+    return (
+      <EntityView
+        id={this.props.id}
+        hinter={this.props.hinter}
+        disableToolbar="true"
+        type={this.props.type}
+      />
+    );
+  }
+
+  render() {
+    if (!this.props.id) {
+      return null;
+    }
+
+    return (
+      <div className={this.styles.classNames.search}>
+        {this.renderParams()}
+        {this.renderList()}
+      </div>
     );
   }
 }
+
+/******************************************************************************/
 
 export default Widget.Wired(Search)();

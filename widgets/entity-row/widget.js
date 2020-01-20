@@ -173,7 +173,7 @@ class EntityRow extends Widget {
           index={rowIndex}
           isLast="false"
           isHeader="false"
-          width="20px"
+          width="40px"
           wrap="no-end"
           text={
             new Shredder({

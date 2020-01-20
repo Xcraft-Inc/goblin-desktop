@@ -1,22 +1,30 @@
 /******************************************************************************/
 
-export const propNames = ['height'];
+export const propNames = ['height', 'selected'];
 
 export default function styles(theme, props) {
-  const {height} = props;
+  const {height, selected} = props;
 
   const even = {
-    height: height,
-    display: 'flex',
-    flexDirection: 'row',
-    padding: '5px 20px',
-    backgroundColor: 'white',
-    cursor: 'default',
+    'height': height,
+    'display': 'flex',
+    'flexDirection': 'row',
+    'alignItems': 'center',
+    'padding': '0px 20px',
+    'color': selected ? theme.palette.tableSelectedText : null,
+    'backgroundColor': selected
+      ? theme.palette.tableSelectedBackground
+      : theme.palette.tableCellBackground,
+    'borderBottom': `1px solid ${theme.palette.viewBackground}`,
+    'cursor': 'default',
+    ':hover': {
+      backgroundColor: theme.palette.tableHoverBackground,
+    },
   };
 
   const odd = {
     ...even,
-    backgroundColor: '#eee',
+    //- backgroundColor: '#eee',
   };
 
   return {

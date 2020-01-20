@@ -1,15 +1,15 @@
 /******************************************************************************/
 
-export default function styles() {
-  const full = {
+export default function styles(theme) {
+  const entityView = {
     margin: '0px',
-    padding: '0px',
+    padding: '20px 0px 0px 0px',
     overflowX: 'hidden',
     overflowY: 'hidden',
     flexGrow: '1',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'white',
+    backgroundColor: theme.palette.paneBackground,
   };
 
   const toolbar = {
@@ -54,7 +54,7 @@ export default function styles() {
   };
 
   return {
-    full,
+    entityView,
     toolbar,
     list,
     content,
