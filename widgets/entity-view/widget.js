@@ -5,12 +5,8 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import throttle from 'lodash/throttle';
 import List from 'goblin-gadgets/widgets/list/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
-import Container from 'goblin-gadgets/widgets/container/widget';
-import Button from 'goblin-gadgets/widgets/button/widget';
 import EntityListItem from 'goblin-desktop/widgets/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
-import Label from 'goblin-gadgets/widgets/label/widget';
-import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
 const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;

@@ -15,6 +15,7 @@ export default function styles(theme) {
 
   const params = {
     width: '300px',
+    minWidth: '300px',
     margin: '0px 5px 0px 0px',
     display: 'flex',
     flexDirection: 'column',

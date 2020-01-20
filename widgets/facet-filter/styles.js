@@ -16,7 +16,7 @@ export default function styles(theme) {
     padding: '20px 30px 20px 30px',
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: theme.palette.paneHeaderBackground,
+    backgroundColor: theme.palette.tableSelectedBackground,
   };
 
   const dialogButtons = {
