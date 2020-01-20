@@ -17,93 +17,6 @@ const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;
 
 /******************************************************************************/
 
-class ListToolbar extends Widget {
-  constructor() {
-    super(...arguments);
-    this.exportToCsv = this.exportToCsv.bind(this);
-    this.exportToJSON = this.exportToJSON.bind(this);
-    this.selectQuery = this.selectQuery.bind(this);
-  }
-
-  exportToCsv() {
-    this.doAs(`${this.props.type}-list`, 'export-to-csv', {});
-  }
-
-  exportToJSON() {
-    this.doAs(`${this.props.type}-list`, 'export-to-json', {});
-  }
-
-  selectQuery(event) {
-    this.doAs(`${this.props.type}-list`, 'select-query', {
-      value: event.target.value,
-    });
-  }
-
-  render() {
-    const {id, exporting, query, queriesPreset} = this.props;
-    if (!id) {
-      return null;
-    }
-    return (
-      <div>
-        {exporting ? (
-          <div>
-            <Label text={T('Export csv en cours...')} />
-          </div>
-        ) : (
-          <Container kind="row">
-            <Button
-              kind="action"
-              place="1/2"
-              width="250px"
-              glyph="solid/save"
-              text={T('Exporter un fichier csv')}
-              onClick={this.exportToCsv}
-            />
-
-            <Button
-              kind="action"
-              place="2/2"
-              width="250px"
-              glyph="solid/save"
-              text={T('Exporter un fichier JSON')}
-              onClick={this.exportToJSON}
-            />
-
-            {queriesPreset.map((p, index) => {
-              return (
-                <div key={index}>
-                  <label>
-                    <input
-                      type="radio"
-                      name={p}
-                      value={p}
-                      checked={p === query}
-                      onChange={this.selectQuery}
-                    />
-                    {p}
-                  </label>
-                </div>
-              );
-            })}
-          </Container>
-        )}
-      </div>
-    );
-  }
-}
-
-const Toolbar = Widget.connect((state, props) => {
-  return {
-    exporting: state.get(`backend.${props.id}.exporting`, false),
-    type: state.get(`backend.${props.id}.type`),
-    queriesPreset: state.get(`backend.${props.id}.queriesPreset`),
-    query: state.get(`backend.${props.id}.query`),
-  };
-})(ListToolbar);
-
-/******************************************************************************/
-
 class EntityView extends Widget {
   constructor() {
     super(...arguments);
@@ -112,17 +25,32 @@ class EntityView extends Widget {
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
-    this.select = this.select.bind(this);
+    this.selectRow = this.selectRow.bind(this);
+    this.prevRow = this.prevRow.bind(this);
+    this.nextRow = this.nextRow.bind(this);
   }
 
-  select(rowId) {
+  selectRow(rowId) {
     console.log(rowId);
+    this.dispatch({type: 'select-row', rowId});
     const state = new Shredder(this.getState().backend);
     const entityId = state.get(`list@${this.props.id}.list.${rowId}-item`);
     if (this.props.hinter) {
       this.navToDetail(this.props.id, entityId, this.props.hinter);
     }
     console.log(entityId);
+  }
+
+  get selectedIndex() {
+    return this.getBackendValue(`backend.${this.props.id}.selectedIndex`);
+  }
+
+  prevRow() {
+    //
+  }
+
+  nextRow() {
+    //
   }
 
   _drillDownInternal() {
@@ -154,7 +82,7 @@ class EntityView extends Widget {
   }
 
   render() {
-    const {id, columns, disableToolbar} = this.props;
+    const {id, columns} = this.props;
     if (!id || !columns) {
       return null;
     }
@@ -170,11 +98,6 @@ class EntityView extends Widget {
         };
         return (
           <div className={this.styles.classNames.entityView}>
-            {disableToolbar ? null : (
-              <div className={this.styles.classNames.toolbar}>
-                <Toolbar id={id} />
-              </div>
-            )}
             <div className={this.styles.classNames.list}>
               <div
                 className={this.styles.classNames.content}
@@ -213,8 +136,9 @@ class EntityView extends Widget {
                       onDrillDown: this.drillDown,
                       onRenewTTL: this.renewTTL,
                       columns: columns,
-                      onSelect: this.select,
+                      onSelect: this.selectRow,
                       useView: this.props.view ? true : false,
+                      serviceId: this.props.id,
                     }}
                   />
                 </div>
