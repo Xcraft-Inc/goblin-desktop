@@ -6,6 +6,7 @@ import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Container from 'gadgets/container/widget';
 import Checkbox from 'gadgets/checkbox/widget';
 import Label from 'gadgets/label/widget';
+import FacetFilterButton from 'goblin-desktop/widgets/facet-filter-button/widget';
 
 export default class FacetFilter extends Widget {
   constructor() {
@@ -209,20 +210,16 @@ export default class FacetFilter extends Widget {
       }
     }
 
-    const text = `${name} (${totalInList}/${total})`;
+    const range = `${totalInList}/${total}`;
 
     return (
       <React.Fragment>
-        <Button
-          kind="calendar-title"
-          justify="between"
-          glyphPosition="right"
+        <FacetFilterButton
+          text={name}
+          range={range}
           glyph={toggleGlyph}
-          onClick={this.toggle}
-          grow="1"
-          text={text}
-          focusable={true}
           active={this.state.opened ? true : false}
+          onClick={this.toggle}
         />
         {this.state.opened ? this.renderDialog() : null}
       </React.Fragment>

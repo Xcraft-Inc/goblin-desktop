@@ -1,6 +1,6 @@
 /******************************************************************************/
 
-export default function styles() {
+export default function styles(theme) {
   const entityView = {
     margin: '0px',
     padding: '20px 0px 0px 0px',
@@ -9,7 +9,7 @@ export default function styles() {
     flexGrow: '1',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: 'white',
+    backgroundColor: theme.palette.paneBackground,
   };
 
   const toolbar = {
