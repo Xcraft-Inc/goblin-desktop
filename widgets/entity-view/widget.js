@@ -184,7 +184,7 @@ class EntityView extends Widget {
                   <TableCell
                     isLast="false"
                     isHeader="true"
-                    width="20px"
+                    width="40px"
                     text="n°"
                   />
                   {columns.map((c, i) => {
