@@ -22,7 +22,10 @@ class DefaultView extends View {
 
     return (
       <Container kind="row" grow="1">
-        <HinterView desktopId={this.props.desktopId} context={context} />
+        <HinterView
+          desktopId={this.props.desktopId}
+          context={this.props.context}
+        />
       </Container>
     );
   }
