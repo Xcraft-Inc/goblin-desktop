@@ -1,9 +1,9 @@
 /******************************************************************************/
 
 export default function styles() {
-  const full = {
+  const entityView = {
     margin: '0px',
-    padding: '0px',
+    padding: '20px 0px 0px 0px',
     overflowX: 'hidden',
     overflowY: 'hidden',
     flexGrow: '1',
@@ -54,7 +54,7 @@ export default function styles() {
   };
 
   return {
-    full,
+    entityView,
     toolbar,
     list,
     content,

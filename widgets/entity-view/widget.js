@@ -169,7 +169,7 @@ class EntityView extends Widget {
           minWidth: width,
         };
         return (
-          <div className={this.styles.classNames.full}>
+          <div className={this.styles.classNames.entityView}>
             {disableToolbar ? null : (
               <div className={this.styles.classNames.toolbar}>
                 <Toolbar id={id} />
