@@ -136,7 +136,7 @@ export default class FacetFilter extends Widget {
       <DialogModal minWidth="600px" minHeight="400px">
         <div className={this.styles.classNames.dialogContent}>
           <div className={this.styles.classNames.dialogHeader}>
-            <Label kind="title" text={this.props.name} />
+            <Label kind="pane-header" text={this.props.name} />
           </div>
           <div className={this.styles.classNames.dialogButtons}>
             {columns.map((nodes, index) => {
