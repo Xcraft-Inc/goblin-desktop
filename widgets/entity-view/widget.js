@@ -154,6 +154,7 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
   const view = state.get(`backend.view@${prop.type}`);
   return {columns: view.get('columns'), view: view.get('query')};
 })(EntityView);
+
 /******************************************************************************/
 
 export default Widget.Wired(ConnectedEntityView)();

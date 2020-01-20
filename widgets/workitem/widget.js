@@ -244,7 +244,7 @@ class Workitem extends Form {
           <Button
             kind="pane-warning"
             glyph="solid/copy"
-            tooltip={T("Copie l'identifiant")}
+            tooltip={T("Copier l'identifiant")}
             onClick={this.onCopyInfoToClipboard}
           />
           <Button
