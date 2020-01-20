@@ -2,7 +2,6 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import EntityRow from 'goblin-desktop/widgets/entity-row/widget';
-import Container from 'goblin-gadgets/widgets/container/widget';
 
 class EntityListItem extends Widget {
   constructor() {
