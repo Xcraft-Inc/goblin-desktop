@@ -1,14 +1,13 @@
-//
 import T from 't';
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Container from 'gadgets/container/widget';
-import Label from 'gadgets/label/widget';
 import Checkbox from 'gadgets/checkbox/widget';
+import Label from 'gadgets/label/widget';
 
-class FacetFilter extends Widget {
+export default class FacetFilter extends Widget {
   constructor() {
     super(...arguments);
     this.changeFacet = this.changeFacet.bind(this);
@@ -118,6 +117,7 @@ class FacetFilter extends Widget {
       },
       []
     );
+
     let toggleGlyph;
     let toggleText;
     switch (this.state.mode) {
@@ -131,45 +131,50 @@ class FacetFilter extends Widget {
         toggleText = T('Tout décocher');
         break;
     }
+
     return (
-      <DialogModal>
-        <Container kind="row">
-          <Button
-            glyph={toggleGlyph}
-            text={toggleText}
-            kind="action"
-            place="1/1"
-            onClick={this.toggleAllFacets}
-          />
-        </Container>
-        <Container kind="row">
-          {columns.map((nodes, index) => {
-            return (
-              <Container kind="column" key={index}>
-                {nodes.map((props, key) => {
-                  return (
-                    <Container kind="row" key={key}>
-                      <Checkbox
-                        justify="left"
-                        heightStrategy="compact"
-                        {...props}
-                      />
-                    </Container>
-                  );
-                })}
-              </Container>
-            );
-          })}
-        </Container>
-        <Container kind="row">
-          <Button
-            glyph="solid/check"
-            text={T('Fermer', 'dialogue')}
-            kind="action"
-            place="1/1"
-            onClick={this.toggle}
-          />
-        </Container>
+      <DialogModal minWidth="600px" minHeight="400px">
+        <div className={this.styles.classNames.dialogContent}>
+          <div className={this.styles.classNames.dialogHeader}>
+            <Label kind="title" text={this.props.name} />
+          </div>
+          <div className={this.styles.classNames.dialogButtons}>
+            {columns.map((nodes, index) => {
+              return (
+                <Container kind="column" key={index}>
+                  {nodes.map((props, key) => {
+                    return (
+                      <Container kind="row" key={key}>
+                        <Checkbox
+                          justify="left"
+                          heightStrategy="compact"
+                          {...props}
+                        />
+                      </Container>
+                    );
+                  })}
+                </Container>
+              );
+            })}
+          </div>
+          <div className={this.styles.classNames.dialogFooter}>
+            <Button
+              border="none"
+              glyph={toggleGlyph}
+              text={toggleText}
+              onClick={this.toggleAllFacets}
+            />
+            <div className={this.styles.classNames.sajex} />
+            <Button
+              glyph="solid/times"
+              text={T('Fermer', 'dialogue')}
+              kind="action"
+              place="1/1"
+              width="150px"
+              onClick={this.toggle}
+            />
+          </div>
+        </div>
       </DialogModal>
     );
   }
@@ -183,7 +188,7 @@ class FacetFilter extends Widget {
     let toggleGlyph;
     switch (this.state.mode) {
       case 'all':
-        toggleGlyph = 'solid/check-square';
+        toggleGlyph = 'solid/square';
         break;
       case 'custom':
         toggleGlyph = 'solid/circle';
@@ -192,31 +197,35 @@ class FacetFilter extends Widget {
         toggleGlyph = 'regular/square';
         break;
     }
+
     let total = 0;
+    let totalInList = 0;
     for (const value of this.props.facets.values()) {
       const filter = value.get('key');
       const isInList = this.props.filter.get('value').contains(filter);
+      total = total + value.get('doc_count');
       if (!isInList) {
-        total = total + value.get('doc_count');
+        totalInList = totalInList + value.get('doc_count');
       }
     }
+
+    const text = `${name} (${totalInList}/${total})`;
+
     return (
       <React.Fragment>
         <Button
+          kind="calendar-title"
           justify="between"
           glyphPosition="right"
           glyph={toggleGlyph}
           onClick={this.toggle}
-          width="200px"
-          active={false}
-          text={`${name} (${total})`}
+          grow="1"
+          text={text}
           focusable={true}
-          kind="calendar-title"
-          busy={this.state.opened ? true : false}
+          active={this.state.opened ? true : false}
         />
         {this.state.opened ? this.renderDialog() : null}
       </React.Fragment>
     );
   }
 }
-export default FacetFilter;
