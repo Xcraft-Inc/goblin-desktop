@@ -267,7 +267,7 @@ class Workitem extends Form {
           <Button
             kind="pane-warning"
             glyph="solid/edit"
-            tooltip={T('Editer')}
+            tooltip={T('Editer les champs additionnels')}
             onClick={this.editSettings}
           />
         </div>
