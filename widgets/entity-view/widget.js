@@ -77,12 +77,57 @@ class EntityView extends Widget {
     };
   }
 
+  renderHeader(columns) {
+    return (
+      <div className={this.styles.classNames.header}>
+        <TableCell isLast="false" isHeader="true" width="40px" text="N°" />
+        {columns.map((c, i) => {
+          let defaultProps = {width: '100px', wrap: 'no'};
+          if (i === 0) {
+            defaultProps = {grow: '1', wrap: 'no'};
+          }
+          return (
+            <TableCell
+              key={i}
+              isLast="false"
+              isHeader="true"
+              {...defaultProps}
+              {...getColumnProps(c)}
+              text={getColumnText(c)}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  renderRows(columns) {
+    const listId = `list@${this.props.id}`;
+
+    return (
+      <div className={this.styles.classNames.rows}>
+        <List
+          id={listId}
+          type={'uniform'}
+          renderItem={EntityListItem}
+          data={{
+            onDrillDown: this.drillDown,
+            onRenewTTL: this.renewTTL,
+            columns: columns,
+            onSelect: this.selectRow,
+            useView: this.props.view ? true : false,
+            serviceId: this.props.id,
+          }}
+        />
+      </div>
+    );
+  }
+
   render() {
     const {id, columns} = this.props;
     if (!id || !columns) {
       return null;
     }
-    const listId = `list@${id}`;
 
     return this.buildCollectionLoader(
       columns.toArray(),
@@ -92,6 +137,7 @@ class EntityView extends Widget {
         const widthStyle = {
           minWidth: width,
         };
+
         return (
           <div className={this.styles.classNames.entityView}>
             <div className={this.styles.classNames.list}>
@@ -99,45 +145,8 @@ class EntityView extends Widget {
                 className={this.styles.classNames.content}
                 style={widthStyle}
               >
-                <div className={this.styles.classNames.header}>
-                  <TableCell
-                    isLast="false"
-                    isHeader="true"
-                    width="40px"
-                    text="n°"
-                  />
-                  {columns.map((c, i) => {
-                    let defaultProps = {grow: '1', width: '100px'};
-                    if (i === 0) {
-                      defaultProps = {grow: '4', width: '550px', wrap: 'no'};
-                    }
-                    return (
-                      <TableCell
-                        key={i}
-                        isLast="false"
-                        isHeader="true"
-                        {...defaultProps}
-                        {...getColumnProps(c)}
-                        text={getColumnText(c)}
-                      />
-                    );
-                  })}
-                </div>
-                <div className={this.styles.classNames.rows}>
-                  <List
-                    id={listId}
-                    type={'uniform'}
-                    renderItem={EntityListItem}
-                    data={{
-                      onDrillDown: this.drillDown,
-                      onRenewTTL: this.renewTTL,
-                      columns: columns,
-                      onSelect: this.selectRow,
-                      useView: this.props.view ? true : false,
-                      serviceId: this.props.id,
-                    }}
-                  />
-                </div>
+                {this.renderHeader(columns)}
+                {this.renderRows(columns)}
               </div>
             </div>
           </div>

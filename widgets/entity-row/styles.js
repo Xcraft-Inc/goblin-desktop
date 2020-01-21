@@ -5,7 +5,7 @@ export const propNames = ['height', 'selected'];
 export default function styles(theme, props) {
   const {height, selected} = props;
 
-  const even = {
+  const entityRow = {
     'height': height,
     'display': 'flex',
     'flexDirection': 'row',
@@ -22,14 +22,8 @@ export default function styles(theme, props) {
     },
   };
 
-  const odd = {
-    ...even,
-    //- backgroundColor: '#eee',
-  };
-
   return {
-    even,
-    odd,
+    entityRow,
   };
 }
 

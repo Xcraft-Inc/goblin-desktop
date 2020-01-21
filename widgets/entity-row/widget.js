@@ -144,11 +144,6 @@ class EntityRow extends Widget {
     const {id, rowIndex, entity, columns, onDrillDown} = this.props;
     const loaded = id && entity;
 
-    const style =
-      rowIndex % 2 === 0
-        ? this.styles.classNames.even
-        : this.styles.classNames.odd;
-
     if (onDrillDown && id && this._idRequested !== id) {
       setTimeout(onDrillDown, 0, id);
       this.renewTTL(id);
@@ -157,7 +152,7 @@ class EntityRow extends Widget {
 
     if (!loaded) {
       return (
-        <div className={style}>
+        <div className={this.styles.classNames.entityRow}>
           <TableCell grow="1" isLast="false" isHeader="false">
             <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
           </TableCell>
@@ -166,7 +161,7 @@ class EntityRow extends Widget {
     }
 
     return (
-      <div className={style}>
+      <div className={this.styles.classNames.entityRow}>
         <TableCell
           rowId={rowIndex}
           key={rowIndex}
@@ -183,9 +178,9 @@ class EntityRow extends Widget {
           }
         />
         {columns.map((c, i) => {
-          let defaultProps = {grow: '1', width: '100px'};
+          let defaultProps = {width: '100px', wrap: 'no'};
           if (i === 0) {
-            defaultProps = {grow: '4', width: '550px', wrap: 'no'};
+            defaultProps = {grow: '1', wrap: 'no'};
           }
           const targetPath = getColumnTargetPath(c);
           const columnSubPath = getColumnSubPath(c);

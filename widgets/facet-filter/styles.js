@@ -16,6 +16,7 @@ export default function styles(theme) {
     padding: '20px 30px 20px 30px',
     display: 'flex',
     flexDirection: 'row',
+    borderRadius: '3px 3px 0px 0px',
     backgroundColor: theme.palette.tableSelectedBackground,
   };
 
@@ -34,6 +35,7 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: '0px 0px 3px 3px',
     backgroundColor: theme.palette.paneBackground,
     boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 50px',
   };
