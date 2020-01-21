@@ -62,6 +62,20 @@ export default function styles(theme) {
     backgroundColor: theme.palette.paneHeaderBackground,
   };
 
+  const topButtons = {
+    zIndex: 1,
+    position: 'absolute',
+    left: '0px',
+    right: '0px',
+    top: '-40px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: '0px',
+    marginTop: Unit.multiply(Unit.add('50px', m), -1),
+    backgroundColor: 'transparent',
+  };
+
   const bottomButtons = {
     position: 'absolute',
     left: '0px',
@@ -71,7 +85,7 @@ export default function styles(theme) {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     padding: '0px',
-    margin: Unit.multiply(m, -1) + ' 0px 0px 0px',
+    marginTop: Unit.multiply(m, -1),
     backgroundColor: 'transparent',
   };
 
@@ -88,6 +102,7 @@ export default function styles(theme) {
     warningTrashed,
     warningBusiness,
     warningDefault,
+    topButtons,
     bottomButtons,
   };
 }

@@ -10,7 +10,6 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import ScrollableContainer from 'goblin-gadgets/widgets/scrollable-container/widget';
-import Separator from 'goblin-gadgets/widgets/separator/widget';
 import T from 't';
 
 /******************************************************************************/
@@ -20,6 +19,7 @@ class Workitem extends Form {
     super(...arguments);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCancel = this.onCancel.bind(this);
+    this.onClose = this.onClose.bind(this);
     this.onEdit = this.onEdit.bind(this);
     this.onTrash = this.onTrash.bind(this);
     this.onArchive = this.onArchive.bind(this);
@@ -69,6 +69,10 @@ class Workitem extends Form {
   onCancel() {
     this.doAs(this.service, 'restore-entity');
     this.hideHinter();
+  }
+
+  onClose() {
+    // TODO
   }
 
   onEdit() {
@@ -237,6 +241,19 @@ class Workitem extends Form {
     }
   }
 
+  renderStatusTopButtons() {
+    return (
+      <div className={this.styles.classNames.topButtons}>
+        <Button
+          kind="pane-warning"
+          glyph="solid/times"
+          tooltip={T('Fermer')}
+          onClick={this.onClose}
+        />
+      </div>
+    );
+  }
+
   renderStatusBottomButtons() {
     if (document.queryCommandSupported('copy')) {
       return (
@@ -274,6 +291,7 @@ class Workitem extends Form {
       <Container kind="row" minHeight="40px">
         {this.renderStatusBase()}
         {this.renderStatusBusiness()}
+        {this.renderStatusTopButtons()}
         {this.renderStatusBottomButtons()}
       </Container>
     );
