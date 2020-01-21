@@ -5,7 +5,6 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Container from 'gadgets/container/widget';
 import Checkbox from 'gadgets/checkbox/widget';
-import Label from 'gadgets/label/widget';
 import FacetFilterButton from 'goblin-desktop/widgets/facet-filter-button/widget';
 
 export default class FacetFilter extends Widget {
@@ -101,8 +100,9 @@ export default class FacetFilter extends Widget {
   renderDialog() {
     const flags = this.buildValueFlag();
     this.flags = flags;
-    const count = this.props.facets.size;
-    const numberOfColumns = Math.round(count / (count * 0.33));
+    // const count = this.props.facets.size;
+    // const numberOfColumns = Math.round(count / (count * 0.33));
+    const numberOfColumns = 1;
     const columns = Object.entries(flags).reduce(
       (columns, [key, flag], index) => {
         const colNumber = index % numberOfColumns;
@@ -145,23 +145,28 @@ export default class FacetFilter extends Widget {
       >
         <div className={this.styles.classNames.dialogContent}>
           <div className={this.styles.classNames.dialogButtons}>
-            {columns.map((nodes, index) => {
-              return (
-                <Container kind="column" key={index}>
-                  {nodes.map((props, key) => {
-                    return (
-                      <Container kind="row" key={key}>
-                        <Checkbox
-                          justify="left"
-                          heightStrategy="compact"
-                          {...props}
-                        />
-                      </Container>
-                    );
-                  })}
-                </Container>
-              );
-            })}
+            <div className={this.styles.classNames.dialogScrollable}>
+              {columns.map((nodes, index) => {
+                return (
+                  <Container kind="column" key={index}>
+                    {nodes.map((props, key) => {
+                      return (
+                        <div
+                          key={key}
+                          className={this.styles.classNames.dialogButton}
+                        >
+                          <Checkbox
+                            justify="left"
+                            heightStrategy="compact"
+                            {...props}
+                          />
+                        </div>
+                      );
+                    })}
+                  </Container>
+                );
+              })}
+            </div>
           </div>
           <div className={this.styles.classNames.dialogFooter}>
             <Button

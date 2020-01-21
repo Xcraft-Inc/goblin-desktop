@@ -282,11 +282,13 @@ class Search extends Widget {
           <StatusFilters id={listId} />
         </div>
 
+        <div className={this.styles.classNames.pane}>
+          <Count id={listId} />
+        </div>
+
         <div className={this.styles.classNames.sajex} />
 
         <div className={this.styles.classNames.lastPane}>
-          <Count id={listId} />
-          <div className={this.styles.classNames.separator} />
           <NewEntityButton id={this.props.hinterId} />
         </div>
       </div>
