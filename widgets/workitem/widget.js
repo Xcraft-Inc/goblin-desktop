@@ -254,10 +254,10 @@ class Workitem extends Form {
     );
   }
 
-  renderStatusBottomButtons() {
+  renderStatusButtons() {
     if (document.queryCommandSupported('copy')) {
       return (
-        <div className={this.styles.classNames.bottomButtons}>
+        <div className={this.styles.classNames.warningButtons}>
           <Button
             kind="pane-warning"
             glyph="solid/copy"
@@ -274,7 +274,7 @@ class Workitem extends Form {
       );
     } else {
       return (
-        <div className={this.styles.classNames.bottomButtons}>
+        <div className={this.styles.classNames.warningButtons}>
           <Button
             kind="pane-warning"
             glyph="solid/edit"
@@ -289,10 +289,10 @@ class Workitem extends Form {
   renderStatus() {
     return (
       <Container kind="row" minHeight="40px">
+        {this.renderStatusTopButtons()}
         {this.renderStatusBase()}
         {this.renderStatusBusiness()}
-        {this.renderStatusTopButtons()}
-        {this.renderStatusBottomButtons()}
+        {this.renderStatusButtons()}
       </Container>
     );
   }

@@ -34,6 +34,20 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
+  const topButtons = {
+    zIndex: 1,
+    position: 'absolute',
+    left: '0px',
+    right: '0px',
+    top: '-40px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: '0px',
+    marginTop: Unit.multiply(Unit.add('50px', m), -1),
+    backgroundColor: 'transparent',
+  };
+
   const _warning = {
     height: '20px',
     flexDirection: 'row',
@@ -62,31 +76,12 @@ export default function styles(theme) {
     backgroundColor: theme.palette.paneHeaderBackground,
   };
 
-  const topButtons = {
-    zIndex: 1,
-    position: 'absolute',
-    left: '0px',
-    right: '0px',
-    top: '-40px',
+  const warningButtons = {
+    height: '40px',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: '0px',
-    marginTop: Unit.multiply(Unit.add('50px', m), -1),
-    backgroundColor: 'transparent',
-  };
-
-  const bottomButtons = {
-    position: 'absolute',
-    left: '0px',
-    right: '0px',
-    top: '-40px',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: '0px',
-    marginTop: Unit.multiply(m, -1),
-    backgroundColor: 'transparent',
+    margin: Unit.multiply(m, -1) + ' 0px ' + m + ' 0px',
+    backgroundColor: theme.palette.rootBackground,
   };
 
   /******************************************************************************/
@@ -97,13 +92,13 @@ export default function styles(theme) {
     board,
     roadbook,
     desk,
+    topButtons,
     warningDraft,
     warningArchived,
     warningTrashed,
     warningBusiness,
     warningDefault,
-    topButtons,
-    bottomButtons,
+    warningButtons,
   };
 }
 
