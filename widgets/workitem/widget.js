@@ -208,19 +208,19 @@ class Workitem extends Form {
   renderStatusBase() {
     if (this.props.status === 'draft') {
       return (
-        <div className={this.styles.classNames.warningDraft}>
+        <div className={this.styles.classNames.statusDraft}>
           <Label kind="pane-warning" text={T('Brouillon')} />
         </div>
       );
     } else if (this.props.status === 'archived') {
       return (
-        <div className={this.styles.classNames.warningArchived}>
+        <div className={this.styles.classNames.statusArchived}>
           <Label kind="pane-warning" text={T('Archivé')} />
         </div>
       );
     } else if (this.props.status === 'trashed') {
       return (
-        <div className={this.styles.classNames.warningTrashed}>
+        <div className={this.styles.classNames.statusTrashed}>
           <Label kind="pane-warning" text={T('Détruit')} />
         </div>
       );
@@ -232,7 +232,7 @@ class Workitem extends Form {
   renderStatusBusiness() {
     if (this.props.businessStatus) {
       return (
-        <div className={this.styles.classNames.warningBusiness}>
+        <div className={this.styles.classNames.statusBusiness}>
           <Label kind="pane-warning" text={this.props.businessStatus} />
         </div>
       );
@@ -257,7 +257,7 @@ class Workitem extends Form {
   renderStatusButtons() {
     if (document.queryCommandSupported('copy')) {
       return (
-        <div className={this.styles.classNames.warningButtons}>
+        <div className={this.styles.classNames.statusButtons}>
           <Button
             kind="pane-warning"
             glyph="solid/copy"
@@ -274,7 +274,7 @@ class Workitem extends Form {
       );
     } else {
       return (
-        <div className={this.styles.classNames.warningButtons}>
+        <div className={this.styles.classNames.statusButtons}>
           <Button
             kind="pane-warning"
             glyph="solid/edit"
@@ -288,12 +288,12 @@ class Workitem extends Form {
 
   renderStatus() {
     return (
-      <Container kind="row" minHeight="40px">
+      <div className={this.styles.classNames.status}>
         {this.renderStatusTopButtons()}
         {this.renderStatusBase()}
         {this.renderStatusBusiness()}
         {this.renderStatusButtons()}
-      </Container>
+      </div>
     );
   }
 

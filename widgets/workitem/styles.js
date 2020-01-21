@@ -4,6 +4,7 @@ import {Unit} from 'electrum-theme';
 
 export default function styles(theme) {
   const m = theme.shapes.containerMargin;
+  const mm = Unit.multiply(m, 2);
 
   const form = {
     height: '100%',
@@ -34,53 +35,66 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
+  /******************************************************************************/
+
+  const status = {
+    position: 'relative',
+    margin: Unit.multiply(m, -1) + ' 0px ' + m + ' 0px',
+    height: '40px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    backgroundColor: theme.palette.rootBackground,
+  };
+
   const topButtons = {
     zIndex: 1,
     position: 'absolute',
     left: '0px',
     right: '0px',
-    top: '-40px',
+    top: Unit.multiply(Unit.add('50px', mm), -1),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     padding: '0px',
-    marginTop: Unit.multiply(Unit.add('50px', m), -1),
     backgroundColor: 'transparent',
   };
 
-  const _warning = {
+  const _status = {
     height: '20px',
     flexDirection: 'row',
     flexGrow: 1,
     padding: Unit.multiply(m, 0.5) + ' ' + m,
-    margin: Unit.multiply(m, -1) + ' 0px ' + m + ' 0px',
   };
-  const warningDraft = {
-    ..._warning,
+  const statusDraft = {
+    ..._status,
     backgroundColor: theme.palette.markSuccess,
   };
-  const warningArchived = {
-    ..._warning,
+  const statusArchived = {
+    ..._status,
     backgroundColor: theme.palette.markSecondary,
   };
-  const warningTrashed = {
-    ..._warning,
+  const statusTrashed = {
+    ..._status,
     backgroundColor: theme.palette.markPrimary,
   };
-  const warningBusiness = {
-    ..._warning,
+  const statusBusiness = {
+    ..._status,
     backgroundColor: theme.palette.markBase,
   };
-  const warningDefault = {
-    ..._warning,
+  const statusDefault = {
+    ..._status,
     backgroundColor: theme.palette.paneHeaderBackground,
   };
+  const statusEmpty = {
+    ..._status,
+    backgroundColor: theme.palette.rootBackground,
+  };
 
-  const warningButtons = {
+  const statusButtons = {
     height: '40px',
     display: 'flex',
     flexDirection: 'row',
-    margin: Unit.multiply(m, -1) + ' 0px ' + m + ' 0px',
     backgroundColor: theme.palette.rootBackground,
   };
 
@@ -92,13 +106,16 @@ export default function styles(theme) {
     board,
     roadbook,
     desk,
+
+    status,
     topButtons,
-    warningDraft,
-    warningArchived,
-    warningTrashed,
-    warningBusiness,
-    warningDefault,
-    warningButtons,
+    statusDraft,
+    statusArchived,
+    statusTrashed,
+    statusBusiness,
+    statusDefault,
+    statusEmpty,
+    statusButtons,
   };
 }
 
