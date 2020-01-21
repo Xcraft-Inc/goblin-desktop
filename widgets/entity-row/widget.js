@@ -2,7 +2,7 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
-import Button from 'goblin-gadgets/widgets/button/widget';
+import EntityRowButton from 'goblin-desktop/widgets/entity-row-button/widget';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import T from 't';
 
@@ -154,15 +154,15 @@ class EntityRow extends Widget {
 
   renderButtons() {
     return (
-      <div className={this.styles.classNames.buttons}>
-        <Button
-          kind="pane-warning"
+      <div className={`buttons-hover ${this.styles.classNames.buttons}`}>
+        <EntityRowButton
+          place="left"
           glyph="solid/eye"
           tooltip={T('Voir')}
           onClick={this.onDetails}
         />
-        <Button
-          kind="pane-warning"
+        <EntityRowButton
+          place="right"
           glyph="solid/pencil"
           tooltip={T('Editer')}
           onClick={this.onEdit}

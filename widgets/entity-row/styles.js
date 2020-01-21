@@ -11,6 +11,7 @@ export default function styles(theme, props) {
     'display': 'flex',
     'flexDirection': 'row',
     'alignItems': 'center',
+    'marginRight': '14px',
     'padding': '0px 20px',
     'color': selected ? theme.palette.tableSelectedText : null,
     'backgroundColor': selected
@@ -21,13 +22,21 @@ export default function styles(theme, props) {
     ':hover': {
       backgroundColor: theme.palette.tableHoverBackground,
     },
+    ':hover .buttons-hover': {
+      transition: '0.2s ease-out', // delay for showing
+      right: '-14px',
+    },
   };
 
   const buttons = {
     position: 'absolute',
-    right: '0px',
+    height: '100%',
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
+    // Animated:
+    transition: '0.1s ease-out', // delay for hidden
+    right: '-85px',
   };
 
   return {
