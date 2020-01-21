@@ -52,7 +52,7 @@ export default function styles(theme) {
 
   const button = {
     position: 'absolute',
-    top: '0px',
+    top: '14px',
     right: '0px',
   };
 
