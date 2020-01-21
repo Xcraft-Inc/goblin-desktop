@@ -194,7 +194,7 @@ class Plugin extends Widget {
             'Ajouter un élément existant en le choisissant dans une liste'
           )}
           kind="hinter"
-          requiredHinter="no"
+          required={false}
           hinter={this.props.searchHinter}
           horizontalSpacing="large"
         />
