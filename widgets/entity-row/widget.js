@@ -2,7 +2,9 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
 const {
@@ -124,6 +126,8 @@ class EntityRow extends Widget {
   constructor() {
     super(...arguments);
     this.renewTTL = this.renewTTL.bind(this);
+    this.onDetails = this.onDetails.bind(this);
+    this.onEdit = this.onEdit.bind(this);
     this._idRequested = null;
     this._renewInterval = null;
   }
@@ -135,9 +139,36 @@ class EntityRow extends Widget {
     this._renewInterval = setInterval(this.props.onDrillDown, 15000, id);
   }
 
+  onDetails() {
+    //
+  }
+
+  onEdit() {
+    //
+  }
+
   componentWillUnmount() {
     super.componentWillUnmount();
     clearInterval(this._renewInterval);
+  }
+
+  renderButtons() {
+    return (
+      <div className={this.styles.classNames.buttons}>
+        <Button
+          kind="pane-warning"
+          glyph="solid/eye"
+          tooltip={T('Voir')}
+          onClick={this.onDetails}
+        />
+        <Button
+          kind="pane-warning"
+          glyph="solid/pencil"
+          tooltip={T('Editer')}
+          onClick={this.onEdit}
+        />
+      </div>
+    );
   }
 
   render() {
@@ -213,6 +244,7 @@ class EntityRow extends Widget {
             );
           }
         })}
+        {this.renderButtons()}
       </div>
     );
   }

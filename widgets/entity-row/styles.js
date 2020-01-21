@@ -6,6 +6,7 @@ export default function styles(theme, props) {
   const {height, selected} = props;
 
   const entityRow = {
+    'position': 'relative',
     'height': height,
     'display': 'flex',
     'flexDirection': 'row',
@@ -22,8 +23,16 @@ export default function styles(theme, props) {
     },
   };
 
+  const buttons = {
+    position: 'absolute',
+    right: '0px',
+    display: 'flex',
+    flexDirection: 'row',
+  };
+
   return {
     entityRow,
+    buttons,
   };
 }
 
