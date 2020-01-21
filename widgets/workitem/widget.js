@@ -72,7 +72,7 @@ class Workitem extends Form {
   }
 
   onClose() {
-    // TODO
+    this.navGoBack();
   }
 
   onEdit() {
