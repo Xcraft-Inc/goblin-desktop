@@ -204,21 +204,21 @@ class Workitem extends Form {
   renderStatusBase() {
     if (this.props.status === 'draft') {
       return (
-        <Container kind="pane-warning" subkind="draft" grow="1">
+        <div className={this.styles.classNames.warningDraft}>
           <Label kind="pane-warning" text={T('Brouillon')} />
-        </Container>
+        </div>
       );
     } else if (this.props.status === 'archived') {
       return (
-        <Container kind="pane-warning" subkind="archived" grow="1">
+        <div className={this.styles.classNames.warningArchived}>
           <Label kind="pane-warning" text={T('Archivé')} />
-        </Container>
+        </div>
       );
     } else if (this.props.status === 'trashed') {
       return (
-        <Container kind="pane-warning" subkind="trashed" grow="1">
+        <div className={this.styles.classNames.warningTrashed}>
           <Label kind="pane-warning" text={T('Détruit')} />
-        </Container>
+        </div>
       );
     } else {
       return null;
@@ -228,19 +228,19 @@ class Workitem extends Form {
   renderStatusBusiness() {
     if (this.props.businessStatus) {
       return (
-        <Container kind="pane-warning" subkind="business" grow="1">
+        <div className={this.styles.classNames.warningBusiness}>
           <Label kind="pane-warning" text={this.props.businessStatus} />
-        </Container>
+        </div>
       );
     } else {
       return null;
     }
   }
 
-  renderStatusCopy() {
+  renderStatusBottomButtons() {
     if (document.queryCommandSupported('copy')) {
       return (
-        <Container kind="pane-warning-button">
+        <div className={this.styles.classNames.bottomButtons}>
           <Button
             kind="pane-warning"
             glyph="solid/copy"
@@ -253,18 +253,18 @@ class Workitem extends Form {
             tooltip={T('Editer')}
             onClick={this.editSettings}
           />
-        </Container>
+        </div>
       );
     } else {
       return (
-        <Container kind="pane-warning-button">
+        <div className={this.styles.classNames.bottomButtons}>
           <Button
             kind="pane-warning"
             glyph="solid/edit"
             tooltip={T('Editer')}
             onClick={this.editSettings}
           />
-        </Container>
+        </div>
       );
     }
   }
@@ -274,7 +274,7 @@ class Workitem extends Form {
       <Container kind="row" minHeight="40px">
         {this.renderStatusBase()}
         {this.renderStatusBusiness()}
-        {this.renderStatusCopy()}
+        {this.renderStatusBottomButtons()}
       </Container>
     );
   }
