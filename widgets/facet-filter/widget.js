@@ -133,12 +133,17 @@ export default class FacetFilter extends Widget {
         break;
     }
 
+    const r = this.buttonNode.getBoundingClientRect();
+
     return (
-      <DialogModal minWidth="600px" minHeight="400px">
+      <DialogModal
+        minWidth="300px"
+        minHeight="400px"
+        left={r.right + 40}
+        center={r.top + r.height / 2}
+        close={this.toggle}
+      >
         <div className={this.styles.classNames.dialogContent}>
-          <div className={this.styles.classNames.dialogHeader}>
-            <Label kind="pane-header" text={this.props.name} />
-          </div>
           <div className={this.styles.classNames.dialogButtons}>
             {columns.map((nodes, index) => {
               return (
@@ -165,13 +170,14 @@ export default class FacetFilter extends Widget {
               text={toggleText}
               onClick={this.toggleAllFacets}
             />
-            <div className={this.styles.classNames.sajex} />
+          </div>
+          <div className={this.styles.classNames.closeButton}>
             <Button
+              border="none"
               glyph="solid/times"
-              text={T('Fermer', 'dialogue')}
-              kind="action"
-              place="1/1"
-              width="150px"
+              glyphSize="120%"
+              height="32px"
+              width="32px"
               onClick={this.toggle}
             />
           </div>
@@ -211,7 +217,7 @@ export default class FacetFilter extends Widget {
     }
 
     return (
-      <React.Fragment>
+      <div ref={node => (this.buttonNode = node)}>
         <FacetFilterButton
           text={name}
           count={totalInList}
@@ -221,7 +227,7 @@ export default class FacetFilter extends Widget {
           onClick={this.toggle}
         />
         {this.state.opened ? this.renderDialog() : null}
-      </React.Fragment>
+      </div>
     );
   }
 }

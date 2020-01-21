@@ -11,45 +11,35 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
-  const dialogHeader = {
-    height: '50px',
-    padding: '20px 30px 20px 30px',
-    display: 'flex',
-    flexDirection: 'row',
-    borderRadius: '3px 3px 0px 0px',
-    backgroundColor: theme.palette.tableSelectedBackground,
-  };
-
   const dialogButtons = {
     padding: '20px 30px 20px 30px',
     flexGrow: 1,
     display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    backgroundColor: theme.palette.viewBackground,
+    flexDirection: 'column',
+    backgroundColor: theme.palette.paneBackground,
   };
 
   const dialogFooter = {
     height: '50px',
-    padding: '20px 30px 20px 30px',
+    padding: '0px 30px 10px 30px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: '0px 0px 3px 3px',
     backgroundColor: theme.palette.paneBackground,
-    boxShadow: 'rgba(0, 0, 0, 0.2) 0px 0px 50px',
   };
 
-  const sajex = {
-    flexGrow: 1,
+  const closeButton = {
+    position: 'absolute',
+    top: '0px',
+    right: '0px',
   };
 
   return {
     dialogContent,
-    dialogHeader,
     dialogButtons,
     dialogFooter,
-    sajex,
+    closeButton,
   };
 }
 
