@@ -7,6 +7,8 @@ import List from 'goblin-gadgets/widgets/list/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
 import EntityListItem from 'goblin-desktop/widgets/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
 const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;
@@ -24,6 +26,7 @@ class EntityView extends Widget {
     this.selectRow = this.selectRow.bind(this);
     this.prevRow = this.prevRow.bind(this);
     this.nextRow = this.nextRow.bind(this);
+    this.onEditColumns = this.onEditColumns.bind(this);
   }
 
   selectRow(rowId) {
@@ -46,6 +49,10 @@ class EntityView extends Widget {
   }
 
   nextRow() {
+    //
+  }
+
+  onEditColumns() {
     //
   }
 
@@ -123,6 +130,21 @@ class EntityView extends Widget {
     );
   }
 
+  renderButton() {
+    return (
+      <div className={this.styles.classNames.button}>
+        <Button
+          width="30px"
+          height="30px"
+          border="none"
+          glyph="solid/columns"
+          tooltip={T('Choisir les colonnes')}
+          onClick={this.onEditColumns}
+        />
+      </div>
+    );
+  }
+
   render() {
     const {id, columns} = this.props;
     if (!id || !columns) {
@@ -149,6 +171,7 @@ class EntityView extends Widget {
                 {this.renderRows(columns)}
               </div>
             </div>
+            {this.renderButton(columns)}
           </div>
         );
       },

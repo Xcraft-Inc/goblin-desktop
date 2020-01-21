@@ -2,6 +2,7 @@
 
 export default function styles(theme) {
   const entityView = {
+    position: 'relative',
     margin: '0px',
     padding: '20px 0px 0px 0px',
     overflowX: 'hidden',
@@ -10,10 +11,6 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: theme.palette.paneBackground,
-  };
-
-  const toolbar = {
-    margin: '20px',
   };
 
   const list = {
@@ -53,13 +50,19 @@ export default function styles(theme) {
     flexGrow: '1',
   };
 
+  const button = {
+    position: 'absolute',
+    top: '0px',
+    right: '0px',
+  };
+
   return {
     entityView,
-    toolbar,
     list,
     content,
     header,
     rows,
+    button,
   };
 }
 
