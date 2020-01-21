@@ -126,8 +126,8 @@ class EntityRow extends Widget {
   constructor() {
     super(...arguments);
     this.renewTTL = this.renewTTL.bind(this);
-    this.onDetails = this.onDetails.bind(this);
-    this.onEdit = this.onEdit.bind(this);
+    this.onEditInStash = this.onEditInStash.bind(this);
+    this.onEditAndOpen = this.onEditAndOpen.bind(this);
     this._idRequested = null;
     this._renewInterval = null;
   }
@@ -139,11 +139,11 @@ class EntityRow extends Widget {
     this._renewInterval = setInterval(this.props.onDrillDown, 15000, id);
   }
 
-  onDetails() {
+  onEditInStash() {
     //
   }
 
-  onEdit() {
+  onEditAndOpen() {
     //
   }
 
@@ -157,15 +157,15 @@ class EntityRow extends Widget {
       <div className={`buttons-hover ${this.styles.classNames.buttons}`}>
         <EntityRowButton
           place="left"
-          glyph="solid/eye"
-          tooltip={T('Voir')}
-          onClick={this.onDetails}
+          glyph="solid/external-link"
+          tooltip={T('Editer plus tard')}
+          onClick={this.onEditInStash}
         />
         <EntityRowButton
           place="right"
           glyph="solid/pencil"
-          tooltip={T('Editer')}
-          onClick={this.onEdit}
+          tooltip={T('Editer immédiatement')}
+          onClick={this.onEditAndOpen}
         />
       </div>
     );
