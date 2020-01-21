@@ -140,11 +140,11 @@ class EntityRow extends Widget {
   }
 
   onEditInStash() {
-    //
+    this.props.onEdit(this.props.rowIndex, false);
   }
 
   onEditAndOpen() {
-    //
+    this.props.onEdit(this.props.rowIndex, true);
   }
 
   componentWillUnmount() {

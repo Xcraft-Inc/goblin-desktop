@@ -24,6 +24,7 @@ class EntityView extends Widget {
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
     this.selectRow = this.selectRow.bind(this);
+    this.editRow = this.editRow.bind(this);
     this.prevRow = this.prevRow.bind(this);
     this.nextRow = this.nextRow.bind(this);
     this.onEditColumns = this.onEditColumns.bind(this);
@@ -34,9 +35,12 @@ class EntityView extends Widget {
     return state.get(`list@${this.props.id}.list.${rowId}-item`);
   }
 
-  editRow(rowId) {
+  editRow(rowId, navigate) {
     const entityId = this.getEntityId(rowId);
-    this.do('edit', {entityId});
+    this.doFor(this.props.id, 'open-entity-workitem', {
+      entityId,
+      navigate,
+    });
   }
 
   selectRow(rowId) {

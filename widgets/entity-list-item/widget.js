@@ -20,6 +20,7 @@ class EntityListItem extends Widget {
         selected={this.props.selected}
         onDrillDown={this.props.onDrillDown}
         onSelect={this.props.onSelect}
+        onEdit={this.props.onEdit}
         useView={this.props.useView}
       />
     );
@@ -40,6 +41,7 @@ export default Widget.connect((state, props) => {
     columns: props.data.columns,
     onDrillDown: props.data.onDrillDown,
     onSelect: props.data.onSelect,
+    onEdit: props.data.onEdit,
     rowIndex: props.index,
     useView: props.data.useView,
     selected: `${selectedRowId}-item` === props.itemId,
