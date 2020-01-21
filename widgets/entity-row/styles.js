@@ -23,7 +23,7 @@ export default function styles(theme, props) {
       backgroundColor: theme.palette.tableHoverBackground,
     },
     ':hover .buttons-hover': {
-      transition: '0.2s ease-out', // delay for showing
+      transition: '0.4s ease-out', // delay for showing
       right: '-14px',
     },
   };
@@ -35,7 +35,7 @@ export default function styles(theme, props) {
     flexDirection: 'row',
     alignItems: 'center',
     // Animated:
-    transition: '0.1s ease-out', // delay for hidden
+    transition: '1.0s ease-out', // delay for hidden
     right: '-85px',
   };
 
