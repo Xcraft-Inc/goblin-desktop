@@ -20,6 +20,7 @@ import EntityView from 'goblin-desktop/widgets/entity-view/widget';
 class _ListItem extends Widget {
   constructor() {
     super(...arguments);
+
     this._requestedId = null;
     this.listNav = this.listNav.bind(this);
     this.renewTTL = this.renewTTL.bind(this);
@@ -192,6 +193,11 @@ class Search extends Widget {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      showParams: true,
+    };
+
+    this.onToggleParams = this.onToggleParams.bind(this);
     this._entityIds = [];
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
@@ -209,6 +215,22 @@ class Search extends Widget {
       hinterId: 'hinterId',
       hintText: 'hintText',
     };
+  }
+
+  //#region get/set
+  get showParams() {
+    return this.state.showParams;
+  }
+
+  set showParams(value) {
+    this.setState({
+      showParams: value,
+    });
+  }
+  //#endregion
+
+  onToggleParams() {
+    this.showParams = !this.showParams;
   }
 
   _drillDownInternal() {
@@ -282,15 +304,37 @@ class Search extends Widget {
     );
   }
 
+  renderButton() {
+    const style = this.showParams
+      ? this.styles.classNames.button
+      : this.styles.classNames.buttonWithoutParams;
+
+    return (
+      <div className={style}>
+        <Button
+          width="24px"
+          height="24px"
+          glyph={this.showParams ? 'solid/chevron-left' : 'solid/chevron-right'}
+          onClick={this.onToggleParams}
+        />
+      </div>
+    );
+  }
+
   render() {
     if (!this.props.id) {
       return null;
     }
 
+    const style = this.showParams
+      ? this.styles.classNames.search
+      : this.styles.classNames.searchWithoutParams;
+
     return (
-      <div className={this.styles.classNames.search}>
+      <div className={style}>
         {this.renderParams()}
         {this.renderList()}
+        {this.renderButton()}
       </div>
     );
   }
