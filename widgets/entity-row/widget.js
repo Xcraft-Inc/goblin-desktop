@@ -225,6 +225,7 @@ class EntityRow extends Widget {
                 column={c}
                 onDrillDown={this.props.onDrillDown}
                 onSelect={this.props.onSelect}
+                onEdit={this.props.onEdit}
                 path={columnSubPath}
               />
             );

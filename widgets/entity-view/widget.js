@@ -29,15 +29,22 @@ class EntityView extends Widget {
     this.onEditColumns = this.onEditColumns.bind(this);
   }
 
-  selectRow(rowId) {
-    console.log(rowId);
-    this.dispatch({type: 'select-row', rowId});
+  getEntityId(rowId) {
     const state = new Shredder(this.getState().backend);
-    const entityId = state.get(`list@${this.props.id}.list.${rowId}-item`);
+    return state.get(`list@${this.props.id}.list.${rowId}-item`);
+  }
+
+  editRow(rowId) {
+    const entityId = this.getEntityId(rowId);
+    this.do('edit', {entityId});
+  }
+
+  selectRow(rowId) {
+    this.dispatch({type: 'select-row', rowId});
+    const entityId = this.getEntityId(rowId);
     if (this.props.hinter) {
       this.navToDetail(this.props.id, entityId, this.props.hinter);
     }
-    console.log(entityId);
   }
 
   get selectedIndex() {
@@ -53,7 +60,9 @@ class EntityView extends Widget {
   }
 
   onEditColumns() {
-    //
+    this.doFor(this.props.id, 'open-entity-workitem', {
+      entityId: `view@${this.props.type}`,
+    });
   }
 
   _drillDownInternal() {
@@ -122,6 +131,7 @@ class EntityView extends Widget {
             onRenewTTL: this.renewTTL,
             columns: columns,
             onSelect: this.selectRow,
+            onEdit: this.editRow,
             useView: this.props.view ? true : false,
             serviceId: this.props.id,
           }}
