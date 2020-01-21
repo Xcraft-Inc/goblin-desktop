@@ -37,6 +37,7 @@ export default class EntityRowButton extends Widget {
     return (
       <TranslatableDiv
         className={this.styles.classNames.entityRowButton}
+        workitemId={this.context.desktopId || this.getNearestId()}
         title={this.props.tooltip}
         onClick={this.props.onClick}
       >

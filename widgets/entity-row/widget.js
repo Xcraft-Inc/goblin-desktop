@@ -140,11 +140,11 @@ class EntityRow extends Widget {
   }
 
   onEditInStash() {
-    //
+    this.props.onEdit(this.props.rowIndex, false);
   }
 
   onEditAndOpen() {
-    //
+    this.props.onEdit(this.props.rowIndex, true);
   }
 
   componentWillUnmount() {
@@ -225,6 +225,7 @@ class EntityRow extends Widget {
                 column={c}
                 onDrillDown={this.props.onDrillDown}
                 onSelect={this.props.onSelect}
+                onEdit={this.props.onEdit}
                 path={columnSubPath}
               />
             );
