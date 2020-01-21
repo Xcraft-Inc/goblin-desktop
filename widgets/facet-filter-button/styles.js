@@ -27,6 +27,7 @@ export default function styles(theme, props) {
   };
 
   const range = {
+    marginRight: '10px',
     color: theme.palette.facetRange,
     fontSize: '80%',
   };

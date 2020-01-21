@@ -210,13 +210,12 @@ export default class FacetFilter extends Widget {
       }
     }
 
-    const range = `${totalInList}/${total}`;
-
     return (
       <React.Fragment>
         <FacetFilterButton
           text={name}
-          range={range}
+          count={totalInList}
+          total={total}
           glyph={toggleGlyph}
           active={this.state.opened ? true : false}
           onClick={this.toggle}

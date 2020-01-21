@@ -1,16 +1,21 @@
-import {Unit} from 'electrum-theme';
-
 /******************************************************************************/
 
 export default function styles(theme) {
   const m = theme.shapes.containerMargin;
-  const d = Unit.multiply(m, 0.5);
 
   const search = {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'row',
     flexGrow: 1,
     overflowX: 'auto',
+    marginLeft: '0px',
+    transition: '0.5s ease-out',
+  };
+
+  const searchWithoutParams = {
+    ...search,
+    marginLeft: '-305px',
   };
 
   const params = {
@@ -43,13 +48,28 @@ export default function styles(theme) {
     flexGrow: 1,
   };
 
+  const button = {
+    position: 'absolute',
+    left: '-1px',
+    top: '-1px',
+    transition: '0.5s ease-out',
+  };
+
+  const buttonWithoutParams = {
+    ...button,
+    left: '304px',
+  };
+
   return {
     search,
+    searchWithoutParams,
     params,
     pane,
     lastPane,
     separator,
     sajex,
+    button,
+    buttonWithoutParams,
   };
 }
 
