@@ -174,11 +174,6 @@ class EntityRow extends Widget {
   }
 
   renderCell(cell, index) {
-    let defaultProps = {width: '100px', wrap: 'no'};
-    if (index === 0) {
-      defaultProps = {grow: '1', wrap: 'no'};
-    }
-
     const targetPath = getColumnTargetPath(cell);
     const columnSubPath = getColumnSubPath(cell);
     const text = getColumnText(cell, this.props.entity);
@@ -197,6 +192,8 @@ class EntityRow extends Widget {
         />
       );
     } else {
+      const props = getColumnProps(cell, index === 0);
+
       return (
         <TableCell
           rowId={this.props.rowIndex}
@@ -204,8 +201,7 @@ class EntityRow extends Widget {
           index={index}
           isLast="false"
           isHeader="false"
-          {...defaultProps}
-          {...getColumnProps(cell)}
+          {...props}
           text={text}
           selectionChanged={this.props.onSelect}
         />

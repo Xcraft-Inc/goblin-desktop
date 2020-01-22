@@ -102,17 +102,12 @@ class EntityView extends Widget {
       <div className={this.styles.classNames.header}>
         <TableCell isLast="false" isHeader="true" width="60px" text="N°" />
         {columns.map((c, i) => {
-          let defaultProps = {width: '100px', wrap: 'no'};
-          if (i === 0) {
-            defaultProps = {grow: '1', wrap: 'no'};
-          }
           return (
             <TableCell
               key={i}
               isLast="false"
               isHeader="true"
-              {...defaultProps}
-              {...getColumnProps(c)}
+              {...getColumnProps(c, i === 0)}
               text={getColumnText(c)}
             />
           );
