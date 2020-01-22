@@ -159,12 +159,14 @@ export default class FacetFilter extends Widget {
             onClick={this.setAllFacets}
           />
         ) : null}
-        <Button
-          border="none"
-          glyph={'solid/sync'}
-          text={T('Tout inverser')}
-          onClick={this.toggleAllFacets}
-        />
+        {enableClearAll && enableSetAll ? (
+          <Button
+            border="none"
+            glyph={'solid/sync'}
+            text={T('Tout inverser')}
+            onClick={this.toggleAllFacets}
+          />
+        ) : null}
       </div>
     );
   }
