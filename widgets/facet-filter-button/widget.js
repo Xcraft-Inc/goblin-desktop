@@ -3,35 +3,66 @@ import Widget from 'laboratory/widget';
 import Gauge from 'gadgets/gauge/widget';
 import T from 'nabu/t/widget';
 
+/******************************************************************************/
+
 export default class FacetFilterButton extends Widget {
   constructor() {
     super(...arguments);
   }
 
-  render() {
-    let range = null;
-    if (this.props.count !== this.props.total) {
-      range = this.props.count;
+  get full() {
+    return this.props.count === this.props.total;
+  }
+
+  /******************************************************************************/
+
+  renderText() {
+    return (
+      <T msgid={this.props.text} className={this.styles.classNames.text} />
+    );
+  }
+
+  renderCount() {
+    if (this.full) {
+      return null;
+    }
+
+    return (
+      <T msgid={this.props.count} className={this.styles.classNames.range} />
+    );
+  }
+
+  renderGauge() {
+    if (this.full) {
+      return null;
     }
 
     const value = (this.props.count * 100) / this.props.total;
 
     return (
+      <Gauge
+        kind="rounded"
+        gradient="red-yellow-green"
+        direction="horizontal"
+        height="12px"
+        width="50px"
+        value={value}
+      />
+    );
+  }
+
+  render() {
+    return (
       <div
         className={this.styles.classNames.facetFilterButton}
         onClick={this.props.onClick}
       >
-        <T msgid={this.props.text} className={this.styles.classNames.text} />
-        <T msgid={range} className={this.styles.classNames.range} />
-        <Gauge
-          kind="rounded"
-          gradient="red-yellow-green"
-          direction="horizontal"
-          height="12px"
-          width="50px"
-          value={value}
-        />
+        {this.renderText()}
+        {this.renderCount()}
+        {this.renderGauge()}
       </div>
     );
   }
 }
+
+/******************************************************************************/
