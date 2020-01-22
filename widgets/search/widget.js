@@ -173,10 +173,10 @@ class CountNC extends Widget {
             `{count, plural,
        =0 {Aucun élément}
        one {1 élément}
-       other {{count} éléments}
+       other {{count} éléments sur {initialCount}}
     }`,
             null,
-            {count: p.count}
+            {count: p.count, initialCount: p.initialCount}
           )}
         />
       </Container>
@@ -184,7 +184,10 @@ class CountNC extends Widget {
   }
 }
 const Count = Widget.connect((state, props) => {
-  return {count: state.get(`backend.${props.id}.count`, 0)};
+  return {
+    count: state.get(`backend.${props.id}.count`, 0),
+    initialCount: state.get(`backend.${props.id}.initialCount`, 0),
+  };
 })(CountNC);
 
 /******************************************************************************/
