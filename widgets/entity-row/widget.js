@@ -171,6 +171,46 @@ class EntityRow extends Widget {
     );
   }
 
+  renderCell(c, i) {
+    let defaultProps = {width: '100px', wrap: 'no'};
+    if (i === 0) {
+      defaultProps = {grow: '1', wrap: 'no'};
+    }
+
+    const targetPath = getColumnTargetPath(c);
+    const columnSubPath = getColumnSubPath(c);
+    const text = getColumnText(c, this.props.entity);
+
+    if (isTargetingValueOrRef(this.props.entity, targetPath) && text !== null) {
+      return (
+        <Driller
+          entityId={text}
+          rowId={this.props.rowIndex}
+          key={i}
+          column={c}
+          onDrillDown={this.props.onDrillDown}
+          onSelect={this.props.onSelect}
+          onEdit={this.props.onEdit}
+          path={columnSubPath}
+        />
+      );
+    } else {
+      return (
+        <TableCell
+          rowId={this.props.rowIndex}
+          key={i}
+          index={i}
+          isLast="false"
+          isHeader="false"
+          {...defaultProps}
+          {...getColumnProps(c)}
+          text={text}
+          selectionChanged={this.props.onSelect}
+        />
+      );
+    }
+  }
+
   render() {
     const {id, rowIndex, entity, columns, onDrillDown} = this.props;
     const loaded = id && entity;
@@ -191,6 +231,11 @@ class EntityRow extends Widget {
       );
     }
 
+    const n = new Shredder({
+      text: rowIndex + 1,
+      weight: 'bold',
+    });
+
     return (
       <div className={this.styles.classNames.entityRow}>
         <TableCell
@@ -201,50 +246,9 @@ class EntityRow extends Widget {
           isHeader="false"
           width="60px"
           wrap="no-end"
-          text={
-            new Shredder({
-              text: rowIndex + 1,
-              weight: 'bold',
-            })
-          }
+          text={n}
         />
-        {columns.map((c, i) => {
-          let defaultProps = {width: '100px', wrap: 'no'};
-          if (i === 0) {
-            defaultProps = {grow: '1', wrap: 'no'};
-          }
-          const targetPath = getColumnTargetPath(c);
-          const columnSubPath = getColumnSubPath(c);
-          const text = getColumnText(c, entity);
-          if (isTargetingValueOrRef(entity, targetPath) && text !== null) {
-            return (
-              <Driller
-                entityId={text}
-                rowId={rowIndex}
-                key={i}
-                column={c}
-                onDrillDown={this.props.onDrillDown}
-                onSelect={this.props.onSelect}
-                onEdit={this.props.onEdit}
-                path={columnSubPath}
-              />
-            );
-          } else {
-            return (
-              <TableCell
-                rowId={rowIndex}
-                key={i}
-                index={i}
-                isLast="false"
-                isHeader="false"
-                {...defaultProps}
-                {...getColumnProps(c)}
-                text={text}
-                selectionChanged={this.props.onSelect}
-              />
-            );
-          }
-        })}
+        {columns.map((c, i) => this.renderCell(c, i))}
         {this.renderButtons()}
       </div>
     );
