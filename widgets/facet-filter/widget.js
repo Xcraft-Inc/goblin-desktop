@@ -101,11 +101,11 @@ export default class FacetFilter extends Widget {
 
   /******************************************************************************/
 
-  renderDialogButton(key, props) {
+  renderDialogButton(props, index) {
     const glyph = props.checked ? 'solid/check-square' : 'regular/square';
 
     return (
-      <div key={key} className={this.styles.classNames.dialogButton}>
+      <div key={index} className={this.styles.classNames.dialogButton}>
         <Button
           grow="1"
           height="20px"
@@ -125,25 +125,15 @@ export default class FacetFilter extends Widget {
     const flags = this.buildValueFlag();
     this.flags = flags;
 
-    const count = this.props.facets.size;
-    // const numberOfColumns = Math.round(count / (count * 0.33));
-    const numberOfColumns = 1;
-    const columns = Object.entries(flags).reduce(
-      (columns, [key, flag], index) => {
-        const colNumber = index % numberOfColumns;
-        if (!columns[colNumber]) {
-          columns[colNumber] = [];
-        }
-        columns[colNumber].push({
-          text: key,
-          count: flag.count,
-          checked: !flag.checked,
-          onChange: this.changeFacet(key),
-        });
-        return columns;
-      },
-      []
-    );
+    const rows = [];
+    for (const [key, flag] of Object.entries(flags)) {
+      rows.push({
+        text: key,
+        count: flag.count,
+        checked: !flag.checked,
+        onChange: this.changeFacet(key),
+      });
+    }
 
     let toggleGlyph;
     let toggleText;
@@ -161,6 +151,7 @@ export default class FacetFilter extends Widget {
 
     const windowHeight = window.innerHeight;
     const r = this.buttonNode.getBoundingClientRect();
+    const count = this.props.facets.size;
     const height = Math.min(count * 20 + 100, windowHeight - 20);
     let centerY = r.top + r.height / 2;
 
@@ -188,15 +179,9 @@ export default class FacetFilter extends Widget {
         <div className={this.styles.classNames.dialogContent}>
           <div className={this.styles.classNames.dialogButtons}>
             <div className={this.styles.classNames.dialogScrollable}>
-              {columns.map((nodes, index) => {
-                return (
-                  <Container kind="column" key={index}>
-                    {nodes.map((props, key) =>
-                      this.renderDialogButton(key, props)
-                    )}
-                  </Container>
-                );
-              })}
+              {rows.map((props, index) =>
+                this.renderDialogButton(props, index)
+              )}
             </div>
           </div>
           <div className={this.styles.classNames.dialogFooter}>
