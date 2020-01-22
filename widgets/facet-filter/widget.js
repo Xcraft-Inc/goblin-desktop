@@ -4,7 +4,7 @@ import Widget from 'laboratory/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Container from 'gadgets/container/widget';
-import Checkbox from 'gadgets/checkbox/widget';
+import Label from 'gadgets/label/widget';
 import FacetFilterButton from 'goblin-desktop/widgets/facet-filter-button/widget';
 
 /******************************************************************************/
@@ -101,6 +101,26 @@ export default class FacetFilter extends Widget {
 
   /******************************************************************************/
 
+  renderDialogCheck(key, props) {
+    const glyph = props.checked ? 'solid/check-square' : 'regular/square';
+
+    return (
+      <div key={key} className={this.styles.classNames.dialogButton}>
+        <Button
+          grow="1"
+          height="20px"
+          border="none"
+          justify="left"
+          heightStrategy="compact"
+          text={props.text}
+          glyph={glyph}
+          onClick={props.onChange}
+        />
+        <Label text={props.count} />
+      </div>
+    );
+  }
+
   renderDialog() {
     const flags = this.buildValueFlag();
     this.flags = flags;
@@ -115,7 +135,8 @@ export default class FacetFilter extends Widget {
           columns[colNumber] = [];
         }
         columns[colNumber].push({
-          text: `${key} (${flag.count})`,
+          text: key,
+          count: flag.count,
           checked: !flag.checked,
           onChange: this.changeFacet(key),
         });
@@ -157,7 +178,7 @@ export default class FacetFilter extends Widget {
 
     return (
       <DialogModal
-        width="300px"
+        width="400px"
         height={height + 'px'}
         left={r.right + 40 + 'px'}
         center={centerY + 'px'}
@@ -170,20 +191,9 @@ export default class FacetFilter extends Widget {
               {columns.map((nodes, index) => {
                 return (
                   <Container kind="column" key={index}>
-                    {nodes.map((props, key) => {
-                      return (
-                        <div
-                          key={key}
-                          className={this.styles.classNames.dialogButton}
-                        >
-                          <Checkbox
-                            justify="left"
-                            heightStrategy="compact"
-                            {...props}
-                          />
-                        </div>
-                      );
-                    })}
+                    {nodes.map((props, key) =>
+                      this.renderDialogCheck(key, props)
+                    )}
                   </Container>
                 );
               })}

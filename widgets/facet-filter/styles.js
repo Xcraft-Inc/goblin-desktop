@@ -12,7 +12,7 @@ export default function styles(theme) {
   };
 
   const dialogButtons = {
-    padding: '20px 0px 0px 30px',
+    padding: '20px 30px 0px 30px',
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -26,6 +26,8 @@ export default function styles(theme) {
 
   const dialogButton = {
     minHeight: '20px',
+    display: 'flex',
+    flexDirection: 'row',
   };
 
   const dialogFooter = {
