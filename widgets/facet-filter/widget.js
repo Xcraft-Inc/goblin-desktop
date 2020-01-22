@@ -138,15 +138,30 @@ export default class FacetFilter extends Widget {
         break;
     }
 
+    const windowHeight = window.innerHeight;
     const r = this.buttonNode.getBoundingClientRect();
-    const height = Math.min(count * 20 + 100, 400);
+    const height = Math.min(count * 20 + 100, windowHeight - 20);
+    let centerY = r.top + r.height / 2;
+
+    let shiftY = 0;
+    if (centerY - height / 2 < 10) {
+      const offset = height / 2 - centerY + 10;
+      centerY += offset;
+      shiftY = -offset;
+    }
+    if (centerY + height / 2 > windowHeight - 10) {
+      const offset = centerY + height / 2 - (windowHeight - 10);
+      centerY -= offset;
+      shiftY = offset;
+    }
 
     return (
       <DialogModal
         width="300px"
         height={height + 'px'}
-        left={r.right + 40}
-        center={r.top + r.height / 2}
+        left={r.right + 40 + 'px'}
+        center={centerY + 'px'}
+        triangleShift={shiftY + 'px'}
         close={this.toggle}
       >
         <div className={this.styles.classNames.dialogContent}>
