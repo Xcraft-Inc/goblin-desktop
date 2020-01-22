@@ -210,7 +210,7 @@ export default class FacetFilter extends Widget {
 
     return (
       <DialogModal
-        width="450px"
+        width="480px"
         height={height + 'px'}
         left={r.right + 40 + 'px'}
         center={centerY + 'px'}

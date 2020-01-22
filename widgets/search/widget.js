@@ -172,8 +172,8 @@ class CountNC extends Widget {
           text={T(
             `{count, plural,
        =0 {Aucun élément}
-       one {1 élément}
-       other {{count} éléments sur {initialCount}}
+       one {1/{initialCount} élément}
+       other {{count}/{initialCount} éléments}
     }`,
             null,
             {count: p.count, initialCount: p.initialCount}
