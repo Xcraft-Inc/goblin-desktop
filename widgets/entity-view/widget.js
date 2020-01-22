@@ -100,7 +100,7 @@ class EntityView extends Widget {
   renderHeader(columns) {
     return (
       <div className={this.styles.classNames.header}>
-        <TableCell isLast="false" isHeader="true" width="40px" text="N°" />
+        <TableCell isLast="false" isHeader="true" width="60px" text="N°" />
         {columns.map((c, i) => {
           let defaultProps = {width: '100px', wrap: 'no'};
           if (i === 0) {
