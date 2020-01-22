@@ -106,18 +106,19 @@ export default class FacetFilter extends Widget {
   /******************************************************************************/
 
   renderDialogClose() {
-    return (
-      <div className={this.styles.classNames.closeButton}>
-        <Button
-          border="none"
-          glyph="solid/times"
-          glyphSize="120%"
-          height="32px"
-          width="32px"
-          onClick={this.toggle}
-        />
-      </div>
-    );
+    return null;
+    //- return (
+    //-   <div className={this.styles.classNames.closeButton}>
+    //-     <Button
+    //-       border="none"
+    //-       glyph="solid/times"
+    //-       glyphSize="120%"
+    //-       height="32px"
+    //-       width="32px"
+    //-       onClick={this.toggle}
+    //-     />
+    //-   </div>
+    //- );
   }
 
   renderDialogButton(props, index) {
