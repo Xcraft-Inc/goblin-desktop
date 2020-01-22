@@ -24,6 +24,17 @@ class _Row extends React.PureComponent {
   }
 
   render() {
+    const rowClick = () => {
+      this.props.onRowClick
+        ? this.props.onRowClick(this.props.rowIndex, this.props.text)
+        : null;
+    };
+
+    const rowDbClick = () => {
+      this.props.onRowDbClick
+        ? this.props.onRowDbClick(this.props.rowIndex, this.props.text)
+        : null;
+    };
     return (
       <div
         ref={node => {
@@ -34,16 +45,8 @@ class _Row extends React.PureComponent {
             ? this.props.styles.boxActive
             : this.props.styles.box
         }
-        onClick={() =>
-          this.props.onRowClick
-            ? this.props.onRowClick(this.props.rowIndex, this.props.text)
-            : null
-        }
-        onDoubleClick={() =>
-          this.props.onRowDbClick
-            ? this.props.onRowDbClick(this.props.rowIndex, this.props.text)
-            : null
-        }
+        onClick={rowClick}
+        onDoubleClick={rowDbClick}
       >
         {this.props.glyph ? (
           <Label glyph={this.props.glyph} glyphPosition="center" />
