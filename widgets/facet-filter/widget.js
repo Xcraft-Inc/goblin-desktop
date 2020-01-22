@@ -101,7 +101,7 @@ export default class FacetFilter extends Widget {
 
   /******************************************************************************/
 
-  renderDialogCheck(key, props) {
+  renderDialogButton(key, props) {
     const glyph = props.checked ? 'solid/check-square' : 'regular/square';
 
     return (
@@ -192,7 +192,7 @@ export default class FacetFilter extends Widget {
                 return (
                   <Container kind="column" key={index}>
                     {nodes.map((props, key) =>
-                      this.renderDialogCheck(key, props)
+                      this.renderDialogButton(key, props)
                     )}
                   </Container>
                 );
