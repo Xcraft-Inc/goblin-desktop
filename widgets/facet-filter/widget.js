@@ -16,6 +16,7 @@ export default class FacetFilter extends Widget {
     this.toggle = this.toggle.bind(this);
     this.clearAllFacets = this.clearAllFacets.bind(this);
     this.setAllFacets = this.setAllFacets.bind(this);
+    this.toggleAllFacets = this.toggleAllFacets.bind(this);
     this.state = {opened: false};
   }
 
@@ -71,6 +72,15 @@ export default class FacetFilter extends Widget {
       filter: {
         name: this.props.filter.get('name'),
         value: [],
+      },
+    });
+  }
+
+  toggleAllFacets() {
+    this.doAs('list', 'customize-visualization', {
+      filter: {
+        name: this.props.filter.get('name'),
+        value: [], // <--- COMMENT FAIRE ?
       },
     });
   }
@@ -149,6 +159,12 @@ export default class FacetFilter extends Widget {
             onClick={this.setAllFacets}
           />
         ) : null}
+        <Button
+          border="none"
+          glyph={'solid/sync'}
+          text={T('Tout inverser')}
+          onClick={this.toggleAllFacets}
+        />
       </div>
     );
   }
@@ -194,7 +210,7 @@ export default class FacetFilter extends Widget {
 
     return (
       <DialogModal
-        width="400px"
+        width="450px"
         height={height + 'px'}
         left={r.right + 40 + 'px'}
         center={centerY + 'px'}
