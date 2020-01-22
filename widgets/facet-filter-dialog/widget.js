@@ -103,7 +103,7 @@ export default class FacetFilterDialog extends Widget {
 
   /******************************************************************************/
 
-  renderDialogClose() {
+  renderClose() {
     return null;
     //- return (
     //-   <div className={this.styles.classNames.closeButton}>
@@ -119,11 +119,11 @@ export default class FacetFilterDialog extends Widget {
     //- );
   }
 
-  renderDialogButton(props, index) {
+  renderButton(props, index) {
     const glyph = props.checked ? 'solid/check-square' : 'regular/square';
 
     return (
-      <div key={index} className={this.styles.classNames.dialogButton}>
+      <div key={index} className={this.styles.classNames.button}>
         <Button
           grow="1"
           height="20px"
@@ -139,9 +139,9 @@ export default class FacetFilterDialog extends Widget {
     );
   }
 
-  renderDialogFooter(enableClearAll, enableSetAll) {
+  renderFooter(enableClearAll, enableSetAll) {
     return (
-      <div className={this.styles.classNames.dialogFooter}>
+      <div className={this.styles.classNames.footer}>
         {enableClearAll ? (
           <Button
             border="none"
@@ -218,16 +218,14 @@ export default class FacetFilterDialog extends Widget {
         triangleShift={shiftY + 'px'}
         close={this.onClose}
       >
-        <div className={this.styles.classNames.dialogContent}>
-          <div className={this.styles.classNames.dialogButtons}>
-            <div className={this.styles.classNames.dialogScrollable}>
-              {rows.map((props, index) =>
-                this.renderDialogButton(props, index)
-              )}
+        <div className={this.styles.classNames.facetFilterDialog}>
+          <div className={this.styles.classNames.buttons}>
+            <div className={this.styles.classNames.scrollable}>
+              {rows.map((props, index) => this.renderButton(props, index))}
             </div>
           </div>
-          {this.renderDialogFooter(enableClearAll, enableSetAll)}
-          {this.renderDialogClose()}
+          {this.renderFooter(enableClearAll, enableSetAll)}
+          {this.renderClose()}
         </div>
       </DialogModal>
     );

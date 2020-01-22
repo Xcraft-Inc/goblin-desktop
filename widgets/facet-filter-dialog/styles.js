@@ -1,7 +1,7 @@
 /******************************************************************************/
 
 export default function styles(theme) {
-  const dialogContent = {
+  const facetFilterDialog = {
     position: 'absolute',
     top: '0px',
     bottom: '0px',
@@ -11,7 +11,7 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
-  const dialogButtons = {
+  const buttons = {
     padding: '20px 30px 0px 30px',
     flexGrow: 1,
     display: 'flex',
@@ -20,17 +20,17 @@ export default function styles(theme) {
     backgroundColor: theme.palette.paneBackground,
   };
 
-  const dialogScrollable = {
+  const scrollable = {
     overflowY: 'auto',
   };
 
-  const dialogButton = {
+  const button = {
     minHeight: '20px',
     display: 'flex',
     flexDirection: 'row',
   };
 
-  const dialogFooter = {
+  const footer = {
     height: '50px',
     minHeight: '50px',
     padding: '0px 30px 10px 30px',
@@ -48,11 +48,11 @@ export default function styles(theme) {
   };
 
   return {
-    dialogContent,
-    dialogButtons,
-    dialogScrollable,
-    dialogButton,
-    dialogFooter,
+    facetFilterDialog,
+    buttons,
+    scrollable,
+    button,
+    footer,
     closeButton,
   };
 }
