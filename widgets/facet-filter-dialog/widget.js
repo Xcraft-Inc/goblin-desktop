@@ -109,10 +109,17 @@ export default class FacetFilterDialog extends Widget {
   }
 
   toggleAllFacets() {
+    const newValueList = [];
+    for (const value of this.props.facets.values()) {
+      const filter = value.get('key');
+      if (!this.props.filter.get('value').contains(filter)) {
+        newValueList.push(filter);
+      }
+    }
     this.doAs('list', 'customize-visualization', {
       filter: {
         name: this.props.filter.get('name'),
-        value: [], // <--- COMMENT FAIRE ?
+        value: newValueList,
       },
     });
   }
