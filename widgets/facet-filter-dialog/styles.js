@@ -17,7 +17,6 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-    backgroundColor: theme.palette.paneBackground,
   };
 
   const scrollable = {
@@ -30,6 +29,11 @@ export default function styles(theme) {
     flexDirection: 'row',
   };
 
+  const letter = {
+    margin: '20px 0px 5px 0px',
+    borderBottom: `1px solid ${theme.palette.textColor}`,
+  };
+
   const footer = {
     height: '50px',
     minHeight: '50px',
@@ -38,7 +42,6 @@ export default function styles(theme) {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: '0px 0px 3px 3px',
-    backgroundColor: theme.palette.paneBackground,
   };
 
   const closeButton = {
@@ -52,6 +55,7 @@ export default function styles(theme) {
     buttons,
     scrollable,
     button,
+    letter,
     footer,
     closeButton,
   };

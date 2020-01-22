@@ -7,6 +7,22 @@ import Label from 'gadgets/label/widget';
 
 /******************************************************************************/
 
+function extractFirstLetter(text) {
+  if (text && typeof text === 'string' && text.length > 0) {
+    const letter = text[0];
+    if (letter === ' ' || letter === '\t') {
+      return '?';
+    }
+    return letter;
+  }
+
+  // TODO: If Nabu?
+
+  return '?';
+}
+
+/******************************************************************************/
+
 export default class FacetFilterDialog extends Widget {
   constructor() {
     super(...arguments);
@@ -119,8 +135,16 @@ export default class FacetFilterDialog extends Widget {
     //- );
   }
 
-  renderButton(props, index) {
-    const glyph = props.checked ? 'solid/check-square' : 'regular/square';
+  renderLetter(letter, index) {
+    return (
+      <div key={index} className={this.styles.classNames.letter}>
+        <Label fontSize="300%" disabled={true} text={letter} />
+      </div>
+    );
+  }
+
+  renderButton(row, index) {
+    const glyph = row.checked ? 'solid/check-square' : 'regular/square';
 
     return (
       <div key={index} className={this.styles.classNames.button}>
@@ -130,13 +154,37 @@ export default class FacetFilterDialog extends Widget {
           border="none"
           justify="left"
           heightStrategy="compact"
-          text={props.text}
+          text={row.text}
           glyph={glyph}
-          onClick={props.onChange}
+          onClick={row.onChange}
         />
-        <Label text={props.count} />
+        <Label text={row.count} />
       </div>
     );
+  }
+
+  renderButtons(rows) {
+    const result = [];
+    let index = 0;
+
+    if (rows.length < 20) {
+      for (const row of rows) {
+        result.push(this.renderButton(row, index++));
+      }
+    } else {
+      let lastLetter = null;
+      for (const row of rows) {
+        const letter = extractFirstLetter(row.text);
+        if (lastLetter !== letter) {
+          lastLetter = letter;
+          result.push(this.renderLetter(letter, index++));
+        }
+
+        result.push(this.renderButton(row, index++));
+      }
+    }
+
+    return result;
   }
 
   renderFooter(enableClearAll, enableSetAll) {
@@ -221,7 +269,7 @@ export default class FacetFilterDialog extends Widget {
         <div className={this.styles.classNames.facetFilterDialog}>
           <div className={this.styles.classNames.buttons}>
             <div className={this.styles.classNames.scrollable}>
-              {rows.map((props, index) => this.renderButton(props, index))}
+              {this.renderButtons(rows)}
             </div>
           </div>
           {this.renderFooter(enableClearAll, enableSetAll)}
