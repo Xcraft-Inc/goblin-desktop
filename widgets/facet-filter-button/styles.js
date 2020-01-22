@@ -26,7 +26,7 @@ export default function styles(theme, props) {
     flexGrow: 1,
   };
 
-  const range = {
+  const count = {
     marginRight: '10px',
     color: theme.palette.facetRange,
     fontSize: '80%',
@@ -35,7 +35,7 @@ export default function styles(theme, props) {
   return {
     facetFilterButton,
     text,
-    range,
+    count,
   };
 }
 

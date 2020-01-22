@@ -1,7 +1,8 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Gauge from 'gadgets/gauge/widget';
-import T from 'nabu/t/widget';
+import T from 't';
+import TT from 'nabu/t/widget';
 
 /******************************************************************************/
 
@@ -18,18 +19,19 @@ export default class FacetFilterButton extends Widget {
 
   renderText() {
     return (
-      <T msgid={this.props.text} className={this.styles.classNames.text} />
+      <TT msgid={this.props.text} className={this.styles.classNames.text} />
     );
   }
 
   renderCount() {
+    let count;
     if (this.full) {
-      return null;
+      count = T('Tout');
+    } else {
+      count = this.props.count;
     }
 
-    return (
-      <T msgid={this.props.count} className={this.styles.classNames.range} />
-    );
+    return <TT msgid={count} className={this.styles.classNames.count} />;
   }
 
   renderGauge() {
