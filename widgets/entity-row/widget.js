@@ -152,6 +152,8 @@ class EntityRow extends Widget {
     clearInterval(this._renewInterval);
   }
 
+  /******************************************************************************/
+
   renderButtons() {
     return (
       <div className={`buttons-hover ${this.styles.classNames.buttons}`}>
@@ -171,23 +173,23 @@ class EntityRow extends Widget {
     );
   }
 
-  renderCell(c, i) {
+  renderCell(cell, index) {
     let defaultProps = {width: '100px', wrap: 'no'};
-    if (i === 0) {
+    if (index === 0) {
       defaultProps = {grow: '1', wrap: 'no'};
     }
 
-    const targetPath = getColumnTargetPath(c);
-    const columnSubPath = getColumnSubPath(c);
-    const text = getColumnText(c, this.props.entity);
+    const targetPath = getColumnTargetPath(cell);
+    const columnSubPath = getColumnSubPath(cell);
+    const text = getColumnText(cell, this.props.entity);
 
     if (isTargetingValueOrRef(this.props.entity, targetPath) && text !== null) {
       return (
         <Driller
           entityId={text}
           rowId={this.props.rowIndex}
-          key={i}
-          column={c}
+          key={index}
+          column={cell}
           onDrillDown={this.props.onDrillDown}
           onSelect={this.props.onSelect}
           onEdit={this.props.onEdit}
@@ -198,12 +200,12 @@ class EntityRow extends Widget {
       return (
         <TableCell
           rowId={this.props.rowIndex}
-          key={i}
-          index={i}
+          key={index}
+          index={index}
           isLast="false"
           isHeader="false"
           {...defaultProps}
-          {...getColumnProps(c)}
+          {...getColumnProps(cell)}
           text={text}
           selectionChanged={this.props.onSelect}
         />
