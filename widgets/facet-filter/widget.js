@@ -7,6 +7,8 @@ import Container from 'gadgets/container/widget';
 import Checkbox from 'gadgets/checkbox/widget';
 import FacetFilterButton from 'goblin-desktop/widgets/facet-filter-button/widget';
 
+/******************************************************************************/
+
 export default class FacetFilter extends Widget {
   constructor() {
     super(...arguments);
@@ -97,10 +99,13 @@ export default class FacetFilter extends Widget {
     };
   }
 
+  /******************************************************************************/
+
   renderDialog() {
     const flags = this.buildValueFlag();
     this.flags = flags;
-    // const count = this.props.facets.size;
+
+    const count = this.props.facets.size;
     // const numberOfColumns = Math.round(count / (count * 0.33));
     const numberOfColumns = 1;
     const columns = Object.entries(flags).reduce(
@@ -134,11 +139,12 @@ export default class FacetFilter extends Widget {
     }
 
     const r = this.buttonNode.getBoundingClientRect();
+    const height = Math.min(count * 20 + 100, 400);
 
     return (
       <DialogModal
-        minWidth="300px"
-        minHeight="400px"
+        width="300px"
+        height={height + 'px'}
         left={r.right + 40}
         center={r.top + r.height / 2}
         close={this.toggle}
@@ -236,3 +242,5 @@ export default class FacetFilter extends Widget {
     );
   }
 }
+
+/******************************************************************************/
