@@ -14,8 +14,9 @@ export default class FacetFilter extends Widget {
     super(...arguments);
     this.changeFacet = this.changeFacet.bind(this);
     this.toggle = this.toggle.bind(this);
-    this.toggleAllFacets = this.toggleAllFacets.bind(this);
-    this.state = {opened: false, mode: 'all'};
+    this.clearAllFacets = this.clearAllFacets.bind(this);
+    this.setAllFacets = this.setAllFacets.bind(this);
+    this.state = {opened: false};
   }
 
   toggle() {
@@ -23,7 +24,6 @@ export default class FacetFilter extends Widget {
   }
 
   _changeFacet(changed, newState) {
-    this.setState({mode: 'custom'});
     const newValueList = [];
     for (const value of this.props.facets.values()) {
       const filter = value.get('key');
@@ -57,28 +57,22 @@ export default class FacetFilter extends Widget {
     });
   }
 
-  toggleAllFacets() {
-    switch (this.state.mode) {
-      case 'none':
-        this.setState({mode: 'all'});
-        this.doAs('list', 'customize-visualization', {
-          filter: {
-            name: this.props.filter.get('name'),
-            value: [],
-          },
-        });
-        break;
-      case 'custom':
-      case 'all':
-        this.setState({mode: 'none'});
-        this.doAs('list', 'customize-visualization', {
-          filter: {
-            name: this.props.filter.get('name'),
-            value: this.props.facets.map(f => f.get('key')).toArray(),
-          },
-        });
-        break;
-    }
+  clearAllFacets() {
+    this.doAs('list', 'customize-visualization', {
+      filter: {
+        name: this.props.filter.get('name'),
+        value: this.props.facets.map(f => f.get('key')).toArray(),
+      },
+    });
+  }
+
+  setAllFacets() {
+    this.doAs('list', 'customize-visualization', {
+      filter: {
+        name: this.props.filter.get('name'),
+        value: [],
+      },
+    });
   }
 
   buildValueFlag() {
@@ -101,6 +95,21 @@ export default class FacetFilter extends Widget {
 
   /******************************************************************************/
 
+  renderDialogClose() {
+    return (
+      <div className={this.styles.classNames.closeButton}>
+        <Button
+          border="none"
+          glyph="solid/times"
+          glyphSize="120%"
+          height="32px"
+          width="32px"
+          onClick={this.toggle}
+        />
+      </div>
+    );
+  }
+
   renderDialogButton(props, index) {
     const glyph = props.checked ? 'solid/check-square' : 'regular/square';
 
@@ -121,11 +130,36 @@ export default class FacetFilter extends Widget {
     );
   }
 
+  renderDialogFooter(enableClearAll, enableSetAll) {
+    return (
+      <div className={this.styles.classNames.dialogFooter}>
+        {enableClearAll ? (
+          <Button
+            border="none"
+            glyph={'regular/square'}
+            text={T('Tout décocher')}
+            onClick={this.clearAllFacets}
+          />
+        ) : null}
+        {enableSetAll ? (
+          <Button
+            border="none"
+            glyph={'solid/check-square'}
+            text={T('Tout cocher')}
+            onClick={this.setAllFacets}
+          />
+        ) : null}
+      </div>
+    );
+  }
+
   renderDialog() {
     const flags = this.buildValueFlag();
     this.flags = flags;
 
     const rows = [];
+    let enableClearAll = false;
+    let enableSetAll = false;
     for (const [key, flag] of Object.entries(flags)) {
       rows.push({
         text: key,
@@ -133,20 +167,11 @@ export default class FacetFilter extends Widget {
         checked: !flag.checked,
         onChange: this.changeFacet(key),
       });
-    }
-
-    let toggleGlyph;
-    let toggleText;
-    switch (this.state.mode) {
-      case 'none':
-        toggleGlyph = 'solid/check-square';
-        toggleText = T('Tout cocher');
-        break;
-      case 'custom':
-      case 'all':
-        toggleGlyph = 'regular/square';
-        toggleText = T('Tout décocher');
-        break;
+      if (flag.checked) {
+        enableSetAll = true;
+      } else {
+        enableClearAll = true;
+      }
     }
 
     const windowHeight = window.innerHeight;
@@ -184,24 +209,8 @@ export default class FacetFilter extends Widget {
               )}
             </div>
           </div>
-          <div className={this.styles.classNames.dialogFooter}>
-            <Button
-              border="none"
-              glyph={toggleGlyph}
-              text={toggleText}
-              onClick={this.toggleAllFacets}
-            />
-          </div>
-          <div className={this.styles.classNames.closeButton}>
-            <Button
-              border="none"
-              glyph="solid/times"
-              glyphSize="120%"
-              height="32px"
-              width="32px"
-              onClick={this.toggle}
-            />
-          </div>
+          {this.renderDialogFooter(enableClearAll, enableSetAll)}
+          {this.renderDialogClose()}
         </div>
       </DialogModal>
     );
@@ -211,19 +220,6 @@ export default class FacetFilter extends Widget {
     const {name, filter, facets} = this.props;
     if (!filter || !facets) {
       return null;
-    }
-
-    let toggleGlyph;
-    switch (this.state.mode) {
-      case 'all':
-        toggleGlyph = 'solid/square';
-        break;
-      case 'custom':
-        toggleGlyph = 'solid/circle';
-        break;
-      case 'none':
-        toggleGlyph = 'regular/square';
-        break;
     }
 
     let total = 0;
@@ -243,7 +239,6 @@ export default class FacetFilter extends Widget {
           text={name}
           count={totalInList}
           total={total}
-          glyph={toggleGlyph}
           active={this.state.opened ? true : false}
           onClick={this.toggle}
         />
