@@ -154,7 +154,6 @@ class Datagrid extends Widget {
             }
             height={this.props.dialog ? this.props.dialog.get('height') : null}
             zIndex={this.props.dialog ? this.props.dialog.get('zIndex') : null}
-            onBackgroundClick={this.onBackgroundClick}
           >
             {this.renderHeaders()}
             {this.renderTable()}

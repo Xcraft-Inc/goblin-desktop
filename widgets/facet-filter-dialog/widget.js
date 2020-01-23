@@ -31,7 +31,12 @@ export default class FacetFilterDialog extends Widget {
     this.clearAllFacets = this.clearAllFacets.bind(this);
     this.setAllFacets = this.setAllFacets.bind(this);
     this.toggleAllFacets = this.toggleAllFacets.bind(this);
+    this.onBackgroundClick = this.onBackgroundClick.bind(this);
     this.onClose = this.onClose.bind(this);
+  }
+
+  onBackgroundClick() {
+    // Do nothing (don't close le dialog).
   }
 
   onClose() {
@@ -258,6 +263,7 @@ export default class FacetFilterDialog extends Widget {
         left={r.right + 40 + 'px'}
         center={centerY + 'px'}
         triangleShift={shiftY + 'px'}
+        onBackgroundClick={this.onBackgroundClick}
         close={this.onClose}
       >
         <div className={this.styles.classNames.facetFilterDialog}>

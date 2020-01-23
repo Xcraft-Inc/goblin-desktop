@@ -65,7 +65,6 @@ class WorkitemDialog extends Widget {
         width={this.props.dialog ? this.props.dialog.get('width') : '1000px'}
         height={this.props.dialog ? this.props.dialog.get('height') : null}
         zIndex={this.props.dialog ? this.props.dialog.get('zIndex') : null}
-        onBackgroundClick={this.onBackgroundClick}
       >
         <div>
           <DialogUI />
