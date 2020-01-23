@@ -191,9 +191,7 @@ class Search extends Widget {
 
         <div className={this.styles.classNames.pane}>
           <StatusFilters id={listId} />
-        </div>
-
-        <div className={this.styles.classNames.pane}>
+          <div className={this.styles.classNames.separator} />
           <Count id={listId} />
         </div>
 
