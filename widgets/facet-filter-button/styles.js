@@ -6,24 +6,34 @@ export default function styles(theme, props) {
   const {active} = props;
 
   const facetFilterButton = {
-    'height': '32px',
+    'margin': '2px 0px',
     'padding': '0px 10px',
     'flexGrow': 1,
     'display': 'flex',
-    'flexDirection': 'row',
-    'alignItems': 'center',
+    'flexDirection': 'column',
+    'borderRadius': '2px',
+    'border': `1px solid ${theme.palette.textFieldBorderColor}`,
     'backgroundColor': active
       ? theme.palette.facetBackgroundActive
       : theme.palette.facetBackground,
-    'borderRadius': '16px',
     ':hover': {
       backgroundColor: theme.palette.facetBackgroundHover,
     },
   };
 
+  /******************************************************************************/
+
+  const top = {
+    height: '32px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  };
+
   const text = {
-    color: theme.palette.facetText,
     flexGrow: 1,
+    color: theme.palette.facetText,
+    fontWeight: 'bold',
   };
 
   const count = {
@@ -32,10 +42,25 @@ export default function styles(theme, props) {
     fontSize: '80%',
   };
 
+  /******************************************************************************/
+
+  const bottom = {
+    margin: '-5px 0px 5px 0px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  };
+
+  /******************************************************************************/
+
   return {
     facetFilterButton,
+
+    top,
     text,
     count,
+
+    bottom,
   };
 }
 

@@ -28,13 +28,24 @@ export default class FacetFilter extends Widget {
   }
   //#endregion
 
+  buildValueFlag() {
+    return this.props.facets.reduce((state, facet) => {
+      const value = facet.get('key');
+      state[value] = {
+        count: facet.get('doc_count'),
+        checked: this.props.filter.get('value').contains(value),
+      };
+      return state;
+    }, {});
+  }
+
   onToggleShowDialog() {
     this.showDialog = !this.showDialog;
   }
 
   /******************************************************************************/
 
-  renderDialog() {
+  renderDialog(flags) {
     if (!this.showDialog) {
       return null;
     }
@@ -44,6 +55,7 @@ export default class FacetFilter extends Widget {
     return (
       <FacetFilterDialog
         {...this.props}
+        flags={flags}
         parentButtonRect={r}
         onClose={this.onToggleShowDialog}
       />
@@ -56,27 +68,18 @@ export default class FacetFilter extends Widget {
       return null;
     }
 
-    let total = 0;
-    let totalInList = 0;
-    for (const value of this.props.facets.values()) {
-      const filter = value.get('key');
-      const isInList = this.props.filter.get('value').contains(filter);
-      total = total + value.get('doc_count');
-      if (!isInList) {
-        totalInList = totalInList + value.get('doc_count');
-      }
-    }
+    const flags = this.buildValueFlag();
 
     return (
       <div ref={node => (this.buttonNode = node)}>
         <FacetFilterButton
           text={name}
-          count={totalInList}
-          total={total}
+          {...this.props}
+          flags={flags}
           active={this.state.opened ? true : false}
           onClick={this.onToggleShowDialog}
         />
-        {this.renderDialog()}
+        {this.renderDialog(flags)}
       </div>
     );
   }

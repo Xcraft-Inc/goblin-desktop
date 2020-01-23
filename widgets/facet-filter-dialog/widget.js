@@ -38,17 +38,6 @@ export default class FacetFilterDialog extends Widget {
     this.props.onClose();
   }
 
-  buildValueFlag() {
-    return this.props.facets.reduce((state, facet) => {
-      const value = facet.get('key');
-      state[value] = {
-        count: facet.get('doc_count'),
-        checked: this.props.filter.get('value').contains(value),
-      };
-      return state;
-    }, {});
-  }
-
   _changeFacet(changed, newState) {
     const newValueList = [];
     for (const value of this.props.facets.values()) {
@@ -85,8 +74,7 @@ export default class FacetFilterDialog extends Widget {
 
   changeFacet(facet) {
     return () => {
-      this.flags[facet].checked = !this.flags[facet].checked;
-      this._changeFacet(facet, this.flags[facet].checked);
+      this._changeFacet(facet, !this.props.flags[facet].checked);
     };
   }
 
@@ -226,13 +214,10 @@ export default class FacetFilterDialog extends Widget {
   }
 
   render() {
-    const flags = this.buildValueFlag();
-    this.flags = flags;
-
     const rows = [];
     let enableClearAll = false;
     let enableSetAll = false;
-    for (const [key, flag] of Object.entries(flags)) {
+    for (const [key, flag] of Object.entries(this.props.flags)) {
       rows.push({
         text: key,
         count: flag.count,
