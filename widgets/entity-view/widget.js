@@ -19,7 +19,12 @@ class EntityView extends Widget {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      sortingColumn: {index: 0, direction: 'down'},
+    };
+
     this._entityIds = [];
+
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
@@ -28,7 +33,20 @@ class EntityView extends Widget {
     this.prevRow = this.prevRow.bind(this);
     this.nextRow = this.nextRow.bind(this);
     this.onEditColumns = this.onEditColumns.bind(this);
+    this.onSortColumn = this.onSortColumn.bind(this);
   }
+
+  //#region get/set
+  get sortingColumn() {
+    return this.state.sortingColumn;
+  }
+
+  set sortingColumn(value) {
+    this.setState({
+      sortingColumn: value,
+    });
+  }
+  //#endregion
 
   getEntityId(rowId) {
     const state = new Shredder(this.getState().backend);
@@ -97,21 +115,52 @@ class EntityView extends Widget {
     };
   }
 
+  onSortColumn(index) {
+    const x = this.sortingColumn;
+
+    if (x.index === index) {
+      this.sortingColumn = {
+        index: x.index,
+        direction: x.direction === 'down' ? 'up' : 'down',
+      };
+    } else {
+      this.sortingColumn = {
+        index: index,
+        direction: 'down',
+      };
+    }
+  }
+
+  /******************************************************************************/
+
+  renderHeaderCell(cell, index) {
+    let text = getColumnText(cell);
+
+    if (this.sortingColumn.index === index) {
+      const glyph =
+        this.sortingColumn.direction === 'down'
+          ? 'solid/caret-down'
+          : 'solid/caret-up';
+      text = new Shredder({text, glyph});
+    }
+
+    return (
+      <TableCell
+        key={index}
+        isLast="false"
+        isHeader="true"
+        {...getColumnProps(cell, index === 0)}
+        text={text}
+        selectionChanged={() => this.onSortColumn(index)}
+      />
+    );
+  }
+
   renderHeader(columns) {
     return (
       <div className={this.styles.classNames.header}>
-        <TableCell isLast="false" isHeader="true" width="60px" text="N°" />
-        {columns.map((c, i) => {
-          return (
-            <TableCell
-              key={i}
-              isLast="false"
-              isHeader="true"
-              {...getColumnProps(c, i === 0)}
-              text={getColumnText(c)}
-            />
-          );
-        })}
+        <TableCell isLast="false" isHeader="true" width="60px" text={T('N°')} />
+        {columns.map((c, i) => this.renderHeaderCell(c, i))}
       </div>
     );
   }
@@ -188,6 +237,9 @@ class EntityView extends Widget {
     );
   }
 }
+
+/******************************************************************************/
+
 const ConnectedEntityView = Widget.connect((state, prop) => {
   if (!prop.type) {
     return {};
@@ -195,7 +247,5 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
   const view = state.get(`backend.view@${prop.type}`);
   return {columns: view.get('columns'), view: view.get('query')};
 })(EntityView);
-
-/******************************************************************************/
 
 export default Widget.Wired(ConnectedEntityView)();
