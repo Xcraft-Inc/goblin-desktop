@@ -58,11 +58,13 @@ export default class FacetFilterDialog extends Widget {
       .splice(1)
       .join('@');
 
-    const value = this.getState()
-      .widgets.get(searchId)
-      .get('value');
+    const search = this.getState().widgets.get(searchId);
+    if (!search) {
+      console.log(`FacetFilterDialog: Value not found for id=${searchId}`);
+      return;
+    }
+    const value = search.get('value');
 
-    console.log(value);
     this.doAs('list', 'customize-visualization', {
       value,
       filter: {
