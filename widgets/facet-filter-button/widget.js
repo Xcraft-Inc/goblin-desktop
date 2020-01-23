@@ -104,11 +104,15 @@ export default class FacetFilterButton extends Widget {
       }
     }
 
+    const n = Object.keys(this.props.flags).length;
+    const disabled = n <= 1;
+
+    const style = disabled
+      ? this.styles.classNames.facetFilterButtonDisabled
+      : this.styles.classNames.facetFilterButton;
+
     return (
-      <div
-        className={this.styles.classNames.facetFilterButton}
-        onClick={this.props.onClick}
-      >
+      <div className={style} onClick={this.props.onClick}>
         {this.renderTop(count, total)}
         {this.renderBottom(count, total)}
       </div>

@@ -21,6 +21,12 @@ export default function styles(theme, props) {
     },
   };
 
+  const facetFilterButtonDisabled = {
+    ...facetFilterButton,
+    backgroundColor: theme.palette.textFieldBorderColor,
+    opacity: 0.3,
+  };
+
   /******************************************************************************/
 
   const top = {
@@ -56,6 +62,7 @@ export default function styles(theme, props) {
 
   return {
     facetFilterButton,
+    facetFilterButtonDisabled,
 
     top,
     text,
