@@ -34,6 +34,7 @@ export default function styles(theme, props) {
     flexGrow: 1,
     color: theme.palette.facetText,
     fontWeight: 'bold',
+    textTransform: 'uppercase',
   };
 
   const count = {
