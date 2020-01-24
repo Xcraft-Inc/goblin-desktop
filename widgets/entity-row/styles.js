@@ -11,7 +11,6 @@ export default function styles(theme, props) {
     'display': 'flex',
     'flexDirection': 'row',
     'alignItems': 'center',
-    'marginRight': '14px',
     'padding': '0px 20px',
     'color': selected ? theme.palette.tableSelectedText : null,
     'backgroundColor': selected

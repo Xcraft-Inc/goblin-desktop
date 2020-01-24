@@ -1,3 +1,5 @@
+import {Unit} from 'electrum-theme';
+
 /******************************************************************************/
 
 export default function styles(theme) {
@@ -32,9 +34,13 @@ export default function styles(theme) {
     flexGrow: '1',
   };
 
+  // Assumes the presence of a vertical scroller.
+  // When there are none, the header columns do not match the columns in the list!
+  const mr = Unit.add('20px', theme.shapes.scrollerThickness);
+
   const header = {
     minHeight: '24px',
-    padding: '0px 36px 0px 16px',
+    padding: `0px ${mr} 0px 20px`,
     borderBottom: '1px solid #888',
     display: 'flex',
     flexDirection: 'row',
