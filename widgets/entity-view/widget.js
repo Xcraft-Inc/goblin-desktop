@@ -11,7 +11,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
-const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;
+const {getEstimatedWidth, getColumnProps, getColumnHeaderText} = ListHelpers;
 
 /******************************************************************************/
 
@@ -134,7 +134,7 @@ class EntityView extends Widget {
   /******************************************************************************/
 
   renderHeaderCell(cell, index) {
-    let text = getColumnText(cell);
+    let text = getColumnHeaderText(cell);
 
     if (this.sortingColumn.index === index) {
       const glyph =

@@ -11,46 +11,11 @@ const {
   getColumnProps,
   getColumnTargetPath,
   getColumnSubPath,
-  getColumnPath,
-  getColumnType,
+  getColumnDisplayText,
   isTargetingValueOrRef,
 } = ListHelpers;
 
 import Shredder from 'xcraft-core-shredder';
-
-import {
-  date as DateConverters,
-  time as TimeConverters,
-  price as PriceConverters,
-} from 'xcraft-core-converters';
-
-/******************************************************************************/
-
-function getColumnText(c, entity) {
-  const columnPath = getColumnPath(c);
-  const text = columnPath && entity.get(columnPath, null);
-  switch (getColumnType(c)) {
-    case 'date':
-      if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
-        // Canonical date "yyyy-mm-dd" ?
-        return DateConverters.getDisplayed(text);
-      }
-      break;
-    case 'time':
-      if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
-        // Canonical time "00:00:00" ?
-        return TimeConverters.getDisplayed(text);
-      }
-      break;
-    case 'price':
-      if (text && text.length > 0 && text[0] >= '0' && text[0] <= '9') {
-        // Numeric price ?
-        return PriceConverters.getDisplayed(text);
-      }
-      break;
-  }
-  return text;
-}
 
 /******************************************************************************/
 
@@ -176,7 +141,7 @@ class EntityRow extends Widget {
   renderCell(cell, index) {
     const targetPath = getColumnTargetPath(cell);
     const columnSubPath = getColumnSubPath(cell);
-    const text = getColumnText(cell, this.props.entity);
+    const text = getColumnDisplayText(cell, this.props.entity);
 
     if (isTargetingValueOrRef(this.props.entity, targetPath) && text !== null) {
       return (
@@ -193,6 +158,7 @@ class EntityRow extends Widget {
       );
     } else {
       const props = getColumnProps(cell, index === 0);
+      const {type, ...otherProps} = props;
 
       return (
         <TableCell
@@ -201,7 +167,7 @@ class EntityRow extends Widget {
           index={index}
           isLast="false"
           isHeader="false"
-          {...props}
+          {...otherProps}
           text={text}
           selectionChanged={this.props.onSelect}
         />

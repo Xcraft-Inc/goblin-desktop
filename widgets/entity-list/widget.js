@@ -13,7 +13,7 @@ import Label from 'goblin-gadgets/widgets/label/widget';
 import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
-const {getEstimatedWidth, getColumnProps, getColumnText} = ListHelpers;
+const {getEstimatedWidth, getColumnProps, getColumnHeaderText} = ListHelpers;
 
 /******************************************************************************/
 
@@ -166,7 +166,7 @@ class EntityList extends Widget {
                     isLast="false"
                     isHeader="true"
                     {...getColumnProps(c)}
-                    text={getColumnText(c)}
+                    text={getColumnHeaderText(c)}
                   />
                 );
               })}
