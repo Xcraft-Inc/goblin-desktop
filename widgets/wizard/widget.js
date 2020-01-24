@@ -136,7 +136,8 @@ class Wizard extends Form {
                 width={this.props.dialog.get('width')}
                 height={this.props.dialog.get('height')}
                 zIndex={this.props.dialog.get('zIndex')}
-                onBackgroundClick={this.onBackgroundClick}
+                backgroundClose={true}
+                close={this.onBackgroundClick}
               >
                 <Form {...this.formConfig}>
                   <Step
