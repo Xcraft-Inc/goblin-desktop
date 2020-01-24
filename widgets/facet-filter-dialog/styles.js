@@ -24,9 +24,12 @@ export default function styles(theme) {
   };
 
   const button = {
-    minHeight: '20px',
-    display: 'flex',
-    flexDirection: 'row',
+    'minHeight': '20px',
+    'display': 'flex',
+    'flexDirection': 'row',
+    ':hover': {
+      background: theme.palette.facetBackgroundHover,
+    },
   };
 
   const letter = {
@@ -37,11 +40,12 @@ export default function styles(theme) {
   const footer = {
     height: '50px',
     minHeight: '50px',
-    padding: '0px 30px 10px 30px',
+    padding: '0px 30px 0px 30px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: '0px 0px 3px 3px',
+    backgroundColor: theme.palette.paneNavigatorBackground,
   };
 
   const closeButton = {

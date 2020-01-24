@@ -236,7 +236,7 @@ export default class FacetFilterDialog extends Widget {
     const windowHeight = window.innerHeight;
     const r = this.props.parentButtonRect;
     const count = this.props.facets.size;
-    const height = Math.min(count * 20 + 100, windowHeight - 20);
+    const height = Math.min(Math.max(count * 20 + 100, 200), windowHeight - 20);
     let centerY = r.top + r.height / 2;
 
     let shiftY = 0;
