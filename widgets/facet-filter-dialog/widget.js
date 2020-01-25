@@ -144,16 +144,19 @@ export default class FacetFilterDialog extends Widget {
     const glyph = row.checked ? 'solid/check-square' : 'regular/square';
 
     return (
-      <div key={index} className={this.styles.classNames.button}>
-        <Button
+      <div
+        key={index}
+        className={this.styles.classNames.button}
+        onClick={row.onChange}
+      >
+        <Label
           grow="1"
           height="20px"
           border="none"
           justify="left"
-          heightStrategy="compact"
+          wrap="no"
           text={row.text}
           glyph={glyph}
-          onClick={row.onChange}
         />
         <Label text={row.count} />
       </div>

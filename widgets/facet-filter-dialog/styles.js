@@ -20,11 +20,14 @@ export default function styles(theme) {
   };
 
   const scrollable = {
+    flexGrow: 1,
     overflowY: 'auto',
   };
 
   const button = {
     'minHeight': '20px',
+    'maxHeight': '20px',
+    'padding': '0px 0px 0px 10px',
     'display': 'flex',
     'flexDirection': 'row',
     ':hover': {
