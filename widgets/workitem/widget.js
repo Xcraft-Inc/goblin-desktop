@@ -224,6 +224,12 @@ class Workitem extends Form {
           <Label kind="pane-warning" text={T('Détruit')} />
         </div>
       );
+    } else if (this.props.status === 'missing') {
+      return (
+        <div className={this.styles.classNames.statusTrashed}>
+          <Label kind="pane-warning" text={T('Manquant')} />
+        </div>
+      );
     } else {
       return null;
     }
