@@ -54,7 +54,6 @@ class _Driller extends Widget {
           isHeader="false"
           text={this.props.text}
           {...getColumnProps(this.props.column)}
-          selectionChanged={this.props.onSelect}
         />
       );
     } else {
@@ -169,7 +168,6 @@ class EntityRow extends Widget {
           isHeader="false"
           {...otherProps}
           text={text}
-          selectionChanged={this.props.onSelect}
         />
       );
     }
@@ -200,8 +198,13 @@ class EntityRow extends Widget {
       weight: 'bold',
     });
 
+    const divProps = {};
+    if (this.props.onSelect) {
+      divProps.onClick = () => this.props.onSelect(rowIndex);
+    }
+
     return (
-      <div className={this.styles.classNames.entityRow}>
+      <div className={this.styles.classNames.entityRow} {...divProps}>
         <TableCell
           rowId={rowIndex}
           key={rowIndex}
