@@ -10,6 +10,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import EntityListItem from 'goblin-desktop/widgets/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
 import Label from 'goblin-gadgets/widgets/label/widget';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
@@ -130,6 +131,7 @@ class EntityList extends Widget {
     return {
       id: 'id',
       type: 'type',
+      loading: 'loading',
     };
   }
 
@@ -150,41 +152,46 @@ class EntityList extends Widget {
         <div className={this.styles.classNames.toolbar}>
           <Toolbar id={id} />
         </div>
-        <div className={this.styles.classNames.list}>
-          <div className={this.styles.classNames.content} style={widthStyle}>
-            <div className={this.styles.classNames.header}>
-              <TableCell
-                isLast="false"
-                isHeader="true"
-                width="50px"
-                text="n°"
-              />
-              {columns.map(c => {
-                return (
-                  <TableCell
-                    key={c}
-                    isLast="false"
-                    isHeader="true"
-                    {...getColumnProps(c)}
-                    text={getColumnHeaderText(c)}
-                  />
-                );
-              })}
-            </div>
-            <div className={this.styles.classNames.rows}>
-              <List
-                id={listId}
-                type={'uniform'}
-                renderItem={EntityListItem}
-                data={{
-                  onDrillDown: this.drillDown,
-                  onRenewTTL: this.renewTTL,
-                  columns: new Shredder(columns),
-                }}
-              />
+        {!this.props.loading ? (
+          <div className={this.styles.classNames.list}>
+            <div className={this.styles.classNames.content} style={widthStyle}>
+              <div className={this.styles.classNames.header}>
+                <TableCell
+                  isLast="false"
+                  isHeader="true"
+                  width="50px"
+                  text="n°"
+                />
+                {columns.map(c => {
+                  return (
+                    <TableCell
+                      key={c}
+                      isLast="false"
+                      isHeader="true"
+                      {...getColumnProps(c)}
+                      text={getColumnHeaderText(c)}
+                    />
+                  );
+                })}
+              </div>
+
+              <div className={this.styles.classNames.rows}>
+                <List
+                  id={listId}
+                  type={'uniform'}
+                  renderItem={EntityListItem}
+                  data={{
+                    onDrillDown: this.drillDown,
+                    onRenewTTL: this.renewTTL,
+                    columns: new Shredder(columns),
+                  }}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'8x'} pulse />
+        )}
       </div>
     );
   }
