@@ -7,7 +7,7 @@ import TT from 'nabu/t/widget';
 
 /******************************************************************************/
 
-export default class FacetFilterButton extends Widget {
+class FacetFilterButton extends Widget {
   constructor() {
     super(...arguments);
   }
@@ -75,8 +75,8 @@ export default class FacetFilterButton extends Widget {
 
     const sets = [];
     const clears = [];
-    for (const [key, flag] of Object.entries(this.props.flags)) {
-      if (flag.checked) {
+    for (const [key, flag] of this.props.flags.entries()) {
+      if (flag.get('checked') === false) {
         clears.push(key);
       } else {
         sets.push(key);
@@ -93,13 +93,17 @@ export default class FacetFilterButton extends Widget {
   }
 
   render() {
+    if (!this.props.flags) {
+      return null;
+    }
+
     let total = 0;
     let count = 0;
     for (const value of this.props.facets.values()) {
       const filter = value.get('key');
-      const isInList = this.props.filter.get('value').contains(filter);
+      const isChecked = this.props.flags._state.get(filter).get('checked');
       total = total + value.get('doc_count');
-      if (!isInList) {
+      if (isChecked) {
         count = count + value.get('doc_count');
       }
     }
@@ -119,5 +123,8 @@ export default class FacetFilterButton extends Widget {
     );
   }
 }
-
+export default Widget.connect((state, props) => {
+  const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
+  return {flags};
+})(FacetFilterButton);
 /******************************************************************************/

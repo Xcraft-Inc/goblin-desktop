@@ -24,31 +24,9 @@ export default function styles(theme) {
     overflowY: 'auto',
   };
 
-  const button = {
-    'minHeight': '20px',
-    'maxHeight': '20px',
-    'padding': '0px 0px 0px 10px',
-    'display': 'flex',
-    'flexDirection': 'row',
-    ':hover': {
-      background: theme.palette.facetBackgroundHover,
-    },
-  };
-
   const letter = {
     margin: '20px 0px 5px 0px',
     borderBottom: `1px solid ${theme.palette.textColor}`,
-  };
-
-  const footer = {
-    height: '50px',
-    minHeight: '50px',
-    padding: '0px 30px 0px 30px',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: '0px 0px 3px 3px',
-    backgroundColor: theme.palette.paneNavigatorBackground,
   };
 
   const closeButton = {
@@ -61,9 +39,7 @@ export default function styles(theme) {
     facetFilterDialog,
     buttons,
     scrollable,
-    button,
     letter,
-    footer,
     closeButton,
   };
 }

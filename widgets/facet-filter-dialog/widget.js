@@ -1,10 +1,9 @@
-import T from 't';
 import React from 'react';
 import Widget from 'laboratory/widget';
-import Button from 'goblin-gadgets/widgets/button/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'gadgets/label/widget';
-
+import FacetCheckbox from '../facet-checkbox/widget.js';
+import FacetFilterDialogFooter from '../facet-filter-dialog-footer/widget.js';
 /******************************************************************************/
 
 function extractFirstLetter(text) {
@@ -23,14 +22,11 @@ function extractFirstLetter(text) {
 
 /******************************************************************************/
 
-export default class FacetFilterDialog extends Widget {
+class FacetFilterDialog extends Widget {
   constructor() {
     super(...arguments);
 
     this.changeFacet = this.changeFacet.bind(this);
-    this.clearAllFacets = this.clearAllFacets.bind(this);
-    this.setAllFacets = this.setAllFacets.bind(this);
-    this.toggleAllFacets = this.toggleAllFacets.bind(this);
     this.onClose = this.onClose.bind(this);
   }
 
@@ -38,80 +34,13 @@ export default class FacetFilterDialog extends Widget {
     this.props.onClose();
   }
 
-  _changeFacet(changed, newState) {
-    const newValueList = [];
-    for (const value of this.props.facets.values()) {
-      const filter = value.get('key');
-      if (changed === filter.toString()) {
-        if (newState) {
-          newValueList.push(filter);
-        }
-      } else {
-        const isInList = this.props.filter.get('value').contains(filter);
-        if (isInList) {
-          newValueList.push(filter);
-        }
-      }
-    }
-    const searchId = this.props.id
-      .split('@')
-      .splice(1)
-      .join('@');
-
-    const search = this.getState().widgets.get(searchId);
-    if (!search) {
-      console.log(`FacetFilterDialog: Value not found for id=${searchId}`);
-      return;
-    }
-    const value = search.get('value');
-
-    this.doAs('list', 'customize-visualization', {
-      value,
-      filter: {
-        name: this.props.filter.get('name'),
-        value: newValueList,
-      },
-    });
-  }
-
   changeFacet(facet) {
     return () => {
-      this._changeFacet(facet, !this.props.flags[facet].checked);
+      this.doAs('list', 'toggle-facet-filter', {
+        facet: facet,
+        filterName: this.props.name,
+      });
     };
-  }
-
-  clearAllFacets() {
-    this.doAs('list', 'customize-visualization', {
-      filter: {
-        name: this.props.filter.get('name'),
-        value: this.props.facets.map(f => f.get('key')).toArray(),
-      },
-    });
-  }
-
-  setAllFacets() {
-    this.doAs('list', 'customize-visualization', {
-      filter: {
-        name: this.props.filter.get('name'),
-        value: [],
-      },
-    });
-  }
-
-  toggleAllFacets() {
-    const newValueList = [];
-    for (const value of this.props.facets.values()) {
-      const filter = value.get('key');
-      if (!this.props.filter.get('value').contains(filter)) {
-        newValueList.push(filter);
-      }
-    }
-    this.doAs('list', 'customize-visualization', {
-      filter: {
-        name: this.props.filter.get('name'),
-        value: newValueList,
-      },
-    });
   }
 
   /******************************************************************************/
@@ -132,113 +61,69 @@ export default class FacetFilterDialog extends Widget {
     //- );
   }
 
-  renderLetter(letter, index) {
-    return (
-      <div key={index} className={this.styles.classNames.letter}>
-        <Label fontSize="300%" disabled={true} text={letter} />
-      </div>
-    );
-  }
-
-  renderButton(row, index) {
-    const glyph = row.checked ? 'solid/check-square' : 'regular/square';
-
-    return (
-      <div
-        key={index}
-        className={this.styles.classNames.button}
-        onClick={row.onChange}
-      >
-        <Label
-          grow="1"
-          height="20px"
-          border="none"
-          justify="left"
-          wrap="no"
-          text={row.text}
-          glyph={glyph}
-        />
-        <Label text={row.count} />
-      </div>
-    );
-  }
-
-  renderButtons(rows) {
+  renderButtons() {
     const result = [];
-    let index = 0;
-
-    if (rows.length < 20) {
-      for (const row of rows) {
-        result.push(this.renderButton(row, index++));
+    const keys = this.getState()
+      .backend.get(this.props.id)
+      .get('checkboxes')
+      .get(this.props.name)
+      .keys();
+    if (this.props.numberOfCheckboxes < 20) {
+      for (const key of keys) {
+        result.push(
+          <FacetCheckbox
+            id={this.props.id}
+            key={`${key}-val`}
+            name={this.props.name}
+            text={`${key}`}
+            value={key}
+            onChange={this.changeFacet(key)}
+          />
+        );
       }
     } else {
       let lastLetter = null;
-      for (const row of rows) {
-        const letter = extractFirstLetter(row.text);
+      for (const key of keys) {
+        const letter = extractFirstLetter(key);
         if (lastLetter !== letter) {
           lastLetter = letter;
-          result.push(this.renderLetter(letter, index++));
+          result.push(
+            <div
+              key={`${key}-${letter}`}
+              className={this.styles.classNames.letter}
+            >
+              <Label fontSize="300%" disabled={true} text={letter} />
+            </div>
+          );
         }
-
-        result.push(this.renderButton(row, index++));
+        result.push(
+          <FacetCheckbox
+            id={this.props.id}
+            key={`${key}-val`}
+            name={this.props.name}
+            text={`${key}`}
+            value={key}
+            onChange={this.changeFacet(key)}
+          />
+        );
       }
     }
-
     return result;
   }
 
-  renderFooter(enableClearAll, enableSetAll) {
+  renderFooter() {
     return (
-      <div className={this.styles.classNames.footer}>
-        {enableSetAll ? (
-          <Button
-            border="none"
-            glyph={'solid/check-square'}
-            text={T('Tout cocher')}
-            onClick={this.setAllFacets}
-          />
-        ) : null}
-        {enableClearAll ? (
-          <Button
-            border="none"
-            glyph={'regular/square'}
-            text={T('Tout décocher')}
-            onClick={this.clearAllFacets}
-          />
-        ) : null}
-        {enableClearAll && enableSetAll ? (
-          <Button
-            border="none"
-            glyph={'solid/sync'}
-            text={T('Tout inverser')}
-            onClick={this.toggleAllFacets}
-          />
-        ) : null}
-      </div>
+      <FacetFilterDialogFooter id={this.props.id} name={this.props.name} />
     );
   }
 
   render() {
-    const rows = [];
-    let enableClearAll = false;
-    let enableSetAll = false;
-    for (const [key, flag] of Object.entries(this.props.flags)) {
-      rows.push({
-        text: key,
-        count: flag.count,
-        checked: !flag.checked,
-        onChange: this.changeFacet(key),
-      });
-      if (flag.checked) {
-        enableSetAll = true;
-      } else {
-        enableClearAll = true;
-      }
+    if (this.props.loading) {
+      return null;
     }
-
     const windowHeight = window.innerHeight;
     const r = this.props.parentButtonRect;
-    const count = this.props.facets.size;
+    const count = this.props.numberOfCheckboxes;
     const height = Math.min(Math.max(count * 20 + 100, 200), windowHeight - 20);
     let centerY = r.top + r.height / 2;
 
@@ -267,15 +152,22 @@ export default class FacetFilterDialog extends Widget {
         <div className={this.styles.classNames.facetFilterDialog}>
           <div className={this.styles.classNames.buttons}>
             <div className={this.styles.classNames.scrollable}>
-              {this.renderButtons(rows)}
+              {this.renderButtons()}
             </div>
           </div>
-          {this.renderFooter(enableClearAll, enableSetAll)}
+          {this.renderFooter()}
           {this.renderClose()}
         </div>
       </DialogModal>
     );
   }
 }
-
+export default Widget.connect((state, props) => {
+  const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
+  if (flags) {
+    return {numberOfCheckboxes: flags.size};
+  } else {
+    return {loading: true};
+  }
+})(FacetFilterDialog);
 /******************************************************************************/

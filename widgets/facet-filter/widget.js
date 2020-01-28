@@ -28,24 +28,13 @@ export default class FacetFilter extends Widget {
   }
   //#endregion
 
-  buildValueFlag() {
-    return this.props.facets.reduce((state, facet) => {
-      const value = facet.get('key');
-      state[value] = {
-        count: facet.get('doc_count'),
-        checked: this.props.filter.get('value').contains(value),
-      };
-      return state;
-    }, {});
-  }
-
   onToggleShowDialog() {
     this.showDialog = !this.showDialog;
   }
 
   /******************************************************************************/
 
-  renderDialog(flags) {
+  renderDialog() {
     if (!this.showDialog) {
       return null;
     }
@@ -54,8 +43,8 @@ export default class FacetFilter extends Widget {
 
     return (
       <FacetFilterDialog
-        {...this.props}
-        flags={flags}
+        id={this.props.id}
+        name={this.props.name}
         parentButtonRect={r}
         onClose={this.onToggleShowDialog}
       />
@@ -63,23 +52,20 @@ export default class FacetFilter extends Widget {
   }
 
   render() {
-    const {name, filter, facets} = this.props;
-    if (!filter || !facets) {
+    const {name, facets} = this.props;
+    if (!facets) {
       return null;
     }
-
-    const flags = this.buildValueFlag();
 
     return (
       <div ref={node => (this.buttonNode = node)}>
         <FacetFilterButton
           text={name}
           {...this.props}
-          flags={flags}
           active={this.state.opened ? true : false}
           onClick={this.onToggleShowDialog}
         />
-        {this.renderDialog(flags)}
+        {this.renderDialog()}
       </div>
     );
   }
