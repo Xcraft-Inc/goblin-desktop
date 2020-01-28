@@ -90,56 +90,12 @@ const config = {
       quest: function*(quest, form, next) {
         const r = quest.getStorage(entityStorage);
         for (const table of form.selectedTables) {
-          r.copyTableFromDb({fromDb: form.fromDb, table}, next.parallel());
+          r.copyTableFromDb(
+            {fromDb: form.fromDb, table, status: ['published']},
+            next.parallel()
+          );
         }
         yield next.sync();
-        if (form.reindex === 'true') {
-          const e = quest.getStorage('elastic');
-          const {configurations} = require('goblin-workshop').buildEntity;
-
-          for (const table of form.selectedTables) {
-            const entityDef = configurations[table];
-            if (entityDef && entityDef.indexer) {
-              const getInfo = (r, table) => {
-                return r
-                  .table(table)
-                  .pluck('id', {meta: [{summaries: ['info']}, 'type']})
-                  .map(function(doc) {
-                    return {
-                      id: doc('id'),
-                      info: doc('meta')('summaries')('info'),
-                      type: doc('meta')('type'),
-                    };
-                  });
-              };
-
-              const query = getInfo.toString();
-              const args = [table];
-              r.query({query, args}, next.parallel());
-            }
-          }
-
-          const toIndex = yield next.sync();
-          if (toIndex && toIndex.length) {
-            for (const documents of toIndex) {
-              for (const doc of documents) {
-                const indexed = {
-                  searchAutocomplete: doc.info,
-                  searchPhonetic: doc.info,
-                  info: doc.info,
-                };
-
-                const index = {
-                  documentId: doc.id,
-                  type: doc.type,
-                  document: indexed,
-                };
-                e.index(index, next.parallel());
-              }
-              yield next.sync();
-            }
-          }
-        }
 
         yield quest.me.next();
       },

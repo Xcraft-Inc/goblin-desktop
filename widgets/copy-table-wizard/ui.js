@@ -28,13 +28,6 @@ function prepare(props) {
           grow="1"
         />
       </Container>
-      <Separator kind="space" height="10px" />
-      <Field
-        kind="bool"
-        model=".form.reindex"
-        labelWidth="0px"
-        labelText={T('Réindexer les entités')}
-      />
     </Container>
   );
 }
