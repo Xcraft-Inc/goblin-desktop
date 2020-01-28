@@ -40,7 +40,7 @@ class _Driller extends Widget {
   }
 
   render() {
-    if (this._loadRequested === false) {
+    if (this._loadRequested === false && this.props.entityId) {
       setTimeout(this.props.onDrillDown, 0, this.props.entityId);
       this.renewTTL(this.props.entityId);
       this._loadRequested = true;
