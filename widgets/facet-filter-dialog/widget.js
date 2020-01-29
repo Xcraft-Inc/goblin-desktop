@@ -92,7 +92,11 @@ class FacetFilterDialog extends Widget {
               key={`${key}-${letter}`}
               className={this.styles.classNames.letter}
             >
-              <Label fontSize="300%" disabled={true} text={letter} />
+              <Label
+                fontSize="300%"
+                textColor={this.context.theme.palette.mainTabBackground}
+                text={letter}
+              />
             </div>
           );
         }
