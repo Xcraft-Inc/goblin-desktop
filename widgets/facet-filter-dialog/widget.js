@@ -145,7 +145,7 @@ class FacetFilterDialog extends Widget {
 
     return (
       <DialogModal
-        width="480px"
+        width="520px"
         height={height + 'px'}
         left={r.right + 40 + 'px'}
         center={centerY + 'px'}

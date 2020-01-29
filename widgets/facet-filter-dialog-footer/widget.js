@@ -11,6 +11,7 @@ class FacetFilterDialogFooter extends Widget {
     this.clearAllFacets = this.clearAllFacets.bind(this);
     this.setAllFacets = this.setAllFacets.bind(this);
     this.toggleAllFacets = this.toggleAllFacets.bind(this);
+    this.deleteFacets = this.deleteFacets.bind(this);
   }
 
   clearAllFacets() {
@@ -30,6 +31,12 @@ class FacetFilterDialogFooter extends Widget {
       filterName: this.props.name,
     });
   }
+
+  deleteFacets() {
+    // TODO
+  }
+
+  /******************************************************************************/
 
   render() {
     let enableClearAll = this.props.flags
@@ -65,6 +72,8 @@ class FacetFilterDialogFooter extends Widget {
             onClick={this.toggleAllFacets}
           />
         ) : null}
+        <div className={this.styles.classNames.sajex} />
+        <Button border="none" glyph="solid/trash" onClick={this.deleteFacets} />
       </div>
     );
   }
