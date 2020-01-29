@@ -23,7 +23,7 @@ export default function styles(theme, props) {
     },
     ':hover .buttons-hover': {
       transition: '0.4s ease-out', // delay for showing
-      right: '-14px',
+      right: '0px',
     },
   };
 
@@ -35,7 +35,7 @@ export default function styles(theme, props) {
     alignItems: 'center',
     // Animated:
     transition: '1.0s ease-out', // delay for hidden
-    right: '-85px',
+    right: '-75px',
   };
 
   return {
