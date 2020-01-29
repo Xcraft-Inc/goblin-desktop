@@ -123,8 +123,10 @@ class FacetFilterButton extends Widget {
     );
   }
 }
+
+/******************************************************************************/
+
 export default Widget.connect((state, props) => {
   const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
   return {flags};
 })(FacetFilterButton);
-/******************************************************************************/

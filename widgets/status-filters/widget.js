@@ -1,16 +1,13 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-import Label from 'goblin-gadgets/widgets/label/widget';
 import FacetFilter from 'goblin-desktop/widgets/facet-filter/widget';
-import * as styles from './styles';
+import FacetFilterAdd from 'goblin-desktop/widgets/facet-filter-add/widget';
 
 /******************************************************************************/
 
 class StatusFilter extends Widget {
   constructor() {
     super(...arguments);
-    this.styles = styles;
-    this.addFacet = this.addFacet.bind(this);
   }
 
   static get wiring() {
@@ -20,22 +17,7 @@ class StatusFilter extends Widget {
     };
   }
 
-  addFacet() {
-    // TODO
-  }
-
   /******************************************************************************/
-
-  renderAdd() {
-    return (
-      <div
-        className={this.styles.classNames.statusFilterAddButton}
-        onClick={this.addFacet}
-      >
-        <Label glyph="solid/plus" />
-      </div>
-    );
-  }
 
   render() {
     const {id, facets} = this.props;
@@ -48,7 +30,7 @@ class StatusFilter extends Widget {
         {Array.from(facets.entries()).map(([k, v], i) => {
           return <FacetFilter id={this.props.id} key={i} name={k} facets={v} />;
         })}
-        {this.renderAdd()}
+        <FacetFilterAdd id={this.props.id} />
       </React.Fragment>
     );
   }

@@ -1,7 +1,7 @@
 /******************************************************************************/
 
 export default function styles(theme) {
-  const statusFilterAddButton = {
+  const facetFilterButtonAdd = {
     'margin': '2px 0px',
     'padding': '0px 10px',
     'flexGrow': 1,
@@ -18,7 +18,7 @@ export default function styles(theme) {
   /******************************************************************************/
 
   return {
-    statusFilterAddButton,
+    facetFilterButtonAdd,
   };
 }
 
