@@ -4,6 +4,7 @@ import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'gadgets/label/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterDialogFooter from '../facet-filter-dialog-footer/widget.js';
+
 /******************************************************************************/
 
 function extractFirstLetter(text) {
@@ -166,6 +167,9 @@ class FacetFilterDialog extends Widget {
     );
   }
 }
+
+/******************************************************************************/
+
 export default Widget.connect((state, props) => {
   const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
   if (flags) {
@@ -174,4 +178,3 @@ export default Widget.connect((state, props) => {
     return {loading: true};
   }
 })(FacetFilterDialog);
-/******************************************************************************/

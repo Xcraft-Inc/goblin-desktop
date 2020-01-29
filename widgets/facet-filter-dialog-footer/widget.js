@@ -11,7 +11,7 @@ class FacetFilterDialogFooter extends Widget {
     this.clearAllFacets = this.clearAllFacets.bind(this);
     this.setAllFacets = this.setAllFacets.bind(this);
     this.toggleAllFacets = this.toggleAllFacets.bind(this);
-    this.deleteFacets = this.deleteFacets.bind(this);
+    this.deleteFacet = this.deleteFacet.bind(this);
   }
 
   clearAllFacets() {
@@ -32,7 +32,7 @@ class FacetFilterDialogFooter extends Widget {
     });
   }
 
-  deleteFacets() {
+  deleteFacet() {
     // TODO
   }
 
@@ -73,13 +73,15 @@ class FacetFilterDialogFooter extends Widget {
           />
         ) : null}
         <div className={this.styles.classNames.sajex} />
-        <Button border="none" glyph="solid/trash" onClick={this.deleteFacets} />
+        <Button border="none" glyph="solid/trash" onClick={this.deleteFacet} />
       </div>
     );
   }
 }
+
+/******************************************************************************/
+
 export default Widget.connect((state, props) => {
   const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
   return {flags};
 })(FacetFilterDialogFooter);
-/******************************************************************************/
