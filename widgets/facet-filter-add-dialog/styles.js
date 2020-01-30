@@ -19,7 +19,7 @@ export default function styles(theme) {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: '0px 0px 3px 3px',
-    backgroundColor: theme.palette.paneNavigatorBackground,
+    backgroundColor: theme.palette.stateBrowserHeaderBackground,
   };
 
   const content = {

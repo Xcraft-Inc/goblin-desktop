@@ -29,7 +29,11 @@ export default class FacetFilterAddDialog extends Widget {
   renderHeader() {
     return (
       <div className={this.styles.classNames.header}>
-        <Label kind="title" text={T('Ajouter un nouveau filtre')} />
+        <Label
+          kind="title"
+          textColor={this.context.theme.palette.stateBrowserBackText}
+          text={T('Ajouter un nouveau filtre')}
+        />
       </div>
     );
   }
