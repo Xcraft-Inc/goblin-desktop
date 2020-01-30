@@ -190,7 +190,7 @@ class Search extends Widget {
         </div>
 
         <div className={this.styles.classNames.pane}>
-          <StatusFilters id={listId} />
+          <StatusFilters id={listId} type={this.props.type} />
           <div className={this.styles.classNames.separator} />
           <Count id={listId} />
         </div>

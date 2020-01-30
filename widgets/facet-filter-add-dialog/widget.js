@@ -4,15 +4,19 @@ import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 import T from 't';
+import TT from 'nabu/t/widget';
+import C from 'goblin-laboratory/widgets/connect-helpers/c';
+import withC from 'goblin-laboratory/widgets/connect-helpers/with-c';
 
 /******************************************************************************/
 
-export default class FacetFilterAddDialog extends Widget {
+class FacetFilterAddDialog extends Widget {
   constructor() {
     super(...arguments);
 
     this.onAdd = this.onAdd.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.onClickItem = this.onClickItem.bind(this);
   }
 
   onAdd() {
@@ -22,6 +26,10 @@ export default class FacetFilterAddDialog extends Widget {
 
   onClose() {
     this.props.onClose();
+  }
+
+  onClickItem() {
+    // TODO
   }
 
   /******************************************************************************/
@@ -38,11 +46,50 @@ export default class FacetFilterAddDialog extends Widget {
     );
   }
 
+  renderType(type) {
+    if (typeof type === 'string') {
+      return <TT msgid={type} className={this.styles.classNames.itemType} />;
+    } else {
+      return this.renderGlyph('solid/chevron-right', 'end');
+    }
+  }
+
+  renderItem(key, value) {
+    if (typeof value === 'string') {
+      const p = value.split('@');
+      if (p.length > 1) {
+        value = p[1];
+      }
+    }
+
+    return (
+      <div
+        key={key}
+        className={this.styles.classNames.item}
+        onClick={() => this.onClickItem(key)}
+      >
+        <TT msgid={key} className={this.styles.classNames.itemName} />
+        {this.renderType(value)}
+      </div>
+    );
+  }
+
+  renderItems() {
+    return null;
+    // TODO: Not work!
+    const path = `backend.entity-schema@${this.props.type}`;
+    const state = C(path);
+
+    const items = [];
+    for (const [key, value] of state.get(path)) {
+      items.push(this.renderItem(key, value));
+    }
+    return items;
+  }
+
   renderContent() {
     return (
-      <div className={this.styles.classNames.content}>
-        <Label text="TODO: Montrer ici la liste des champs..." />
-      </div>
+      <div className={this.styles.classNames.content}>{this.renderItems()}</div>
     );
   }
 
@@ -112,3 +159,5 @@ export default class FacetFilterAddDialog extends Widget {
 }
 
 /******************************************************************************/
+
+export default withC(FacetFilterAddDialog);

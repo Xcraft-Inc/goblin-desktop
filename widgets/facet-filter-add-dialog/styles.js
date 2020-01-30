@@ -27,6 +27,27 @@ export default function styles(theme) {
     padding: '30px',
   };
 
+  const item = {
+    'height': '20px',
+    'padding': '0px 10px',
+    'display': 'flex',
+    'flexDirection': 'row',
+    'alignItems': 'center',
+    'borderRadius': '3px',
+    ':hover': {
+      background: theme.palette.facetBackgroundHover,
+    },
+  };
+
+  const itemName = {
+    flexGrow: 1,
+  };
+
+  const itemType = {
+    fontSize: '80%',
+    opacity: 0.6,
+  };
+
   const footer = {
     height: '50px',
     minHeight: '50px',
@@ -38,10 +59,15 @@ export default function styles(theme) {
     backgroundColor: theme.palette.paneNavigatorBackground,
   };
 
+  /******************************************************************************/
+
   return {
     facetFilterDialogAdd,
     header,
     content,
+    item,
+    itemName,
+    itemType,
     footer,
   };
 }

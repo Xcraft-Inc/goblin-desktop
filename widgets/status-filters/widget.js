@@ -30,7 +30,7 @@ class StatusFilter extends Widget {
         {Array.from(facets.entries()).map(([k, v], i) => {
           return <FacetFilter id={this.props.id} key={i} name={k} facets={v} />;
         })}
-        <FacetFilterAdd id={this.props.id} />
+        <FacetFilterAdd id={this.props.id} type={this.props.type} />
       </React.Fragment>
     );
   }
