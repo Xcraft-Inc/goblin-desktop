@@ -1,7 +1,7 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
+import Label from 'gadgets/label/widget';
 import FacetFilterAddDialog from 'goblin-desktop/widgets/facet-filter-add-dialog/widget';
-import FacetFilterButtonAdd from 'goblin-desktop/widgets/facet-filter-button-add/widget';
 
 /******************************************************************************/
 
@@ -50,13 +50,21 @@ export default class FacetFilterAdd extends Widget {
     );
   }
 
+  renderButton() {
+    return (
+      <div
+        className={this.styles.classNames.facetFilterAddButton}
+        onClick={this.onToggleShowDialog}
+      >
+        <Label glyph="solid/plus" />
+      </div>
+    );
+  }
+
   render() {
     return (
       <div ref={node => (this.buttonNode = node)}>
-        <FacetFilterButtonAdd
-          {...this.props}
-          onClick={this.onToggleShowDialog}
-        />
+        {this.renderButton()}
         {this.renderDialog()}
       </div>
     );
