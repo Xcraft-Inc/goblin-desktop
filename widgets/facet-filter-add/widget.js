@@ -1,7 +1,8 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import Label from 'gadgets/label/widget';
-import FacetFilterAddDialog from 'goblin-desktop/widgets/facet-filter-add-dialog/widget';
+import StateBrowserDialog from 'goblin-gadgets/widgets/state-browser-dialog/widget';
+import T from 't';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
 
 /******************************************************************************/
@@ -14,6 +15,7 @@ export default class FacetFilterAdd extends Widget {
       showDialog: false,
     };
 
+    this.onAdd = this.onAdd.bind(this);
     this.onToggleShowDialog = this.onToggleShowDialog.bind(this);
   }
 
@@ -28,6 +30,11 @@ export default class FacetFilterAdd extends Widget {
     });
   }
   //#endregion
+
+  onAdd(value) {
+    this.showDialog = false;
+    // TODO
+  }
 
   onToggleShowDialog() {
     this.showDialog = !this.showDialog;
@@ -46,10 +53,14 @@ export default class FacetFilterAdd extends Widget {
     const state = C(path);
 
     return (
-      <FacetFilterAddDialog
-        id={this.props.id}
-        state={state}
+      <StateBrowserDialog
         parentButtonRect={rect}
+        title={T('Ajouter un nouveau filtre')}
+        value=""
+        state={state}
+        acceptGlyph="solid/plus"
+        acceptText={T('Ajouter')}
+        onAccept={this.onAdd}
         onClose={this.onToggleShowDialog}
       />
     );
