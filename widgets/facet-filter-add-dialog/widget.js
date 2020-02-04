@@ -14,7 +14,7 @@ class FacetFilterAddDialog extends Widget {
     super(...arguments);
 
     this.state = {
-      selectedFieldName: null,
+      path: '',
     };
 
     this.onAdd = this.onAdd.bind(this);
@@ -23,13 +23,13 @@ class FacetFilterAddDialog extends Widget {
   }
 
   //#region get/set
-  get selectedFieldName() {
-    return this.state.selectedFieldName;
+  get path() {
+    return this.state.path;
   }
 
-  set selectedFieldName(value) {
+  set path(value) {
     this.setState({
-      selectedFieldName: value,
+      path: value,
     });
   }
   //#endregion
@@ -43,8 +43,16 @@ class FacetFilterAddDialog extends Widget {
     this.props.onClose();
   }
 
-  onClickItem(fieldName) {
-    this.selectedFieldName = fieldName;
+  onClickItem(level, fieldName) {
+    const parts = this.path.split('.');
+    const array = [];
+    for (let i = 0; i < level && i < parts.length; i++) {
+      array.push(parts[i]);
+    }
+    if (level > parts.length || parts[level] !== fieldName) {
+      array.push(fieldName);
+    }
+    this.path = array.join('.');
   }
 
   /******************************************************************************/
@@ -61,9 +69,32 @@ class FacetFilterAddDialog extends Widget {
     );
   }
 
-  renderItem(fieldName, fieldType) {
+  renderType(fieldType) {
+    if (typeof fieldType === 'string') {
+      return (
+        <TT msgid={fieldType} className={this.styles.classNames.itemType} />
+      );
+    } else {
+      return (
+        <Label
+          glyph="solid/chevron-right"
+          justify="end"
+          glyphPosition="right"
+        />
+      );
+    }
+  }
+
+  renderItem(level, fieldName, fieldType, selection) {
+    if (typeof fieldType === 'string') {
+      const p = fieldType.split('@');
+      if (p.length > 1) {
+        fieldType = p[1];
+      }
+    }
+
     const style =
-      fieldName === this.selectedFieldName
+      fieldName === selection
         ? this.styles.classNames.itemSelected
         : this.styles.classNames.item;
 
@@ -71,51 +102,80 @@ class FacetFilterAddDialog extends Widget {
       <div
         key={fieldName}
         className={style}
-        onClick={() => this.onClickItem(fieldName)}
+        onClick={() => this.onClickItem(level, fieldName)}
       >
         <TT msgid={fieldName} className={this.styles.classNames.itemName} />
-        <TT msgid={fieldType} className={this.styles.classNames.itemType} />
+        {this.renderType(fieldType)}
       </div>
     );
   }
 
-  renderItems() {
-    if (!this.props.state) {
+  renderItems(level, subpath, selection) {
+    const list = this.props.state.get(subpath);
+    if (!list || typeof list === 'string') {
       return null;
     }
 
     const items = [];
-    for (let [key, value] of this.props.state.get('')) {
-      if (typeof value === 'string') {
-        const p = value.split('@');
-        if (p.length > 1) {
-          value = p[1];
-        }
-      }
-
-      if (typeof value === 'string') {
-        items.push(this.renderItem(key, value));
-      }
+    for (const [key, value] of list) {
+      items.push(this.renderItem(level, key, value, selection));
     }
     return items;
   }
 
+  renderColumn(level, subpath, selection) {
+    const r = this.renderItems(level, subpath, selection);
+    if (!r) {
+      return null;
+    }
+    return (
+      <div key={level} className={this.styles.classNames.column}>
+        {r}
+      </div>
+    );
+  }
+
+  renderColumns() {
+    const result = [];
+    const parts = this.path ? this.path.split('.') : ['_'];
+    let subpath = '';
+    for (let level = 0; level <= parts.length; level++) {
+      const selection = parts[level];
+      const r = this.renderColumn(level, subpath, selection);
+      if (!r) {
+        break;
+      }
+      result.push(r);
+      if (subpath) {
+        subpath += '.';
+      }
+      subpath += selection;
+    }
+    return result;
+  }
+
   renderContent() {
     return (
-      <div className={this.styles.classNames.content}>{this.renderItems()}</div>
+      <div className={this.styles.classNames.content}>
+        {this.renderColumns()}
+      </div>
     );
   }
 
   renderFooter() {
+    const list = this.props.state.get(this.path);
+    const disabled = list && typeof list !== 'string';
+
     return (
       <div className={this.styles.classNames.footer}>
+        <Label text={this.path} grow="1" wrap="no" />
         <Button
           kind="action"
           place="1/2"
           width="160px"
           glyph="solid/plus"
           text={T('Ajouter')}
-          disabled={!this.selectedFieldName}
+          disabled={disabled}
           onClick={this.onAdd}
         />
         <Button
@@ -123,7 +183,7 @@ class FacetFilterAddDialog extends Widget {
           place="2/2"
           width="160px"
           glyph="solid/times"
-          text={T('Fermer')}
+          text={T('Annuler')}
           onClick={this.onClose}
         />
       </div>
@@ -131,6 +191,10 @@ class FacetFilterAddDialog extends Widget {
   }
 
   render() {
+    if (!this.props.state) {
+      return null;
+    }
+
     const windowHeight = window.innerHeight;
     const r = this.props.parentButtonRect;
     const count = this.props.numberOfCheckboxes;
@@ -151,7 +215,7 @@ class FacetFilterAddDialog extends Widget {
 
     return (
       <DialogModal
-        width="520px"
+        width="800px"
         height="600px"
         left={r.right + 40 + 'px'}
         center={centerY + 'px'}

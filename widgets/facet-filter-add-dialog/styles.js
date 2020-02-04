@@ -17,6 +17,7 @@ export default function styles(theme) {
     padding: '10px 30px',
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: '0px 0px 3px 3px',
     backgroundColor: theme.palette.stateBrowserHeaderBackground,
@@ -24,7 +25,16 @@ export default function styles(theme) {
 
   const content = {
     flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'row',
+  };
+
+  const column = {
+    maxWidth: '300px',
+    flexGrow: 1,
     padding: '30px',
+    borderRight: `1px solid ${theme.palette.textFieldBorderColor}`,
+    overflowY: 'auto',
   };
 
   const item = {
@@ -63,6 +73,7 @@ export default function styles(theme) {
     padding: '10px 30px',
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     borderRadius: '0px 0px 3px 3px',
     backgroundColor: theme.palette.paneNavigatorBackground,
@@ -74,6 +85,7 @@ export default function styles(theme) {
     facetFilterDialogAdd,
     header,
     content,
+    column,
     item,
     itemSelected,
     itemName,
