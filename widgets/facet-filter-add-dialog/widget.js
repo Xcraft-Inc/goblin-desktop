@@ -5,7 +5,6 @@ import Label from 'gadgets/label/widget';
 import Button from 'gadgets/button/widget';
 import T from 't';
 import TT from 'nabu/t/widget';
-import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import withC from 'goblin-laboratory/widgets/connect-helpers/with-c';
 
 /******************************************************************************/
@@ -14,10 +13,26 @@ class FacetFilterAddDialog extends Widget {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      selectedFieldName: null,
+    };
+
     this.onAdd = this.onAdd.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onClickItem = this.onClickItem.bind(this);
   }
+
+  //#region get/set
+  get selectedFieldName() {
+    return this.state.selectedFieldName;
+  }
+
+  set selectedFieldName(value) {
+    this.setState({
+      selectedFieldName: value,
+    });
+  }
+  //#endregion
 
   onAdd() {
     // TODO
@@ -28,8 +43,8 @@ class FacetFilterAddDialog extends Widget {
     this.props.onClose();
   }
 
-  onClickItem() {
-    // TODO
+  onClickItem(fieldName) {
+    this.selectedFieldName = fieldName;
   }
 
   /******************************************************************************/
@@ -46,43 +61,41 @@ class FacetFilterAddDialog extends Widget {
     );
   }
 
-  renderType(type) {
-    if (typeof type === 'string') {
-      return <TT msgid={type} className={this.styles.classNames.itemType} />;
-    } else {
-      return this.renderGlyph('solid/chevron-right', 'end');
-    }
-  }
-
-  renderItem(key, value) {
-    if (typeof value === 'string') {
-      const p = value.split('@');
-      if (p.length > 1) {
-        value = p[1];
-      }
-    }
+  renderItem(fieldName, fieldType) {
+    const style =
+      fieldName === this.selectedFieldName
+        ? this.styles.classNames.itemSelected
+        : this.styles.classNames.item;
 
     return (
       <div
-        key={key}
-        className={this.styles.classNames.item}
-        onClick={() => this.onClickItem(key)}
+        key={fieldName}
+        className={style}
+        onClick={() => this.onClickItem(fieldName)}
       >
-        <TT msgid={key} className={this.styles.classNames.itemName} />
-        {this.renderType(value)}
+        <TT msgid={fieldName} className={this.styles.classNames.itemName} />
+        <TT msgid={fieldType} className={this.styles.classNames.itemType} />
       </div>
     );
   }
 
   renderItems() {
-    return null;
-    // TODO: Not work!
-    const path = `backend.entity-schema@${this.props.type}`;
-    const state = C(path);
+    if (!this.props.state) {
+      return null;
+    }
 
     const items = [];
-    for (const [key, value] of state.get(path)) {
-      items.push(this.renderItem(key, value));
+    for (let [key, value] of this.props.state.get('')) {
+      if (typeof value === 'string') {
+        const p = value.split('@');
+        if (p.length > 1) {
+          value = p[1];
+        }
+      }
+
+      if (typeof value === 'string') {
+        items.push(this.renderItem(key, value));
+      }
     }
     return items;
   }
@@ -102,6 +115,7 @@ class FacetFilterAddDialog extends Widget {
           width="160px"
           glyph="solid/plus"
           text={T('Ajouter')}
+          disabled={!this.selectedFieldName}
           onClick={this.onAdd}
         />
         <Button
@@ -117,9 +131,6 @@ class FacetFilterAddDialog extends Widget {
   }
 
   render() {
-    if (this.props.loading) {
-      return null;
-    }
     const windowHeight = window.innerHeight;
     const r = this.props.parentButtonRect;
     const count = this.props.numberOfCheckboxes;

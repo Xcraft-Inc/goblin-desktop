@@ -28,14 +28,23 @@ export default function styles(theme) {
   };
 
   const item = {
-    'height': '20px',
+    'height': '30px',
     'padding': '0px 10px',
     'display': 'flex',
     'flexDirection': 'row',
     'alignItems': 'center',
     'borderRadius': '3px',
     ':hover': {
-      background: theme.palette.facetBackgroundHover,
+      background: theme.palette.filterItemBackgroundHover,
+    },
+  };
+
+  const itemSelected = {
+    ...item,
+    'color': theme.palette.filterItemSelected,
+    'background': theme.palette.filterItemBackgroundSelected,
+    ':hover': {
+      background: theme.palette.filterItemBackgroundHoverSelected,
     },
   };
 
@@ -66,6 +75,7 @@ export default function styles(theme) {
     header,
     content,
     item,
+    itemSelected,
     itemName,
     itemType,
     footer,

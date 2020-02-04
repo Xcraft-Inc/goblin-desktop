@@ -2,6 +2,7 @@ import React from 'react';
 import Widget from 'laboratory/widget';
 import Label from 'gadgets/label/widget';
 import FacetFilterAddDialog from 'goblin-desktop/widgets/facet-filter-add-dialog/widget';
+import C from 'goblin-laboratory/widgets/connect-helpers/c';
 
 /******************************************************************************/
 
@@ -39,13 +40,16 @@ export default class FacetFilterAdd extends Widget {
       return null;
     }
 
-    const r = this.buttonNode.getBoundingClientRect();
+    const rect = this.buttonNode.getBoundingClientRect();
+
+    const path = `backend.entity-schema@${this.props.type}`;
+    const state = C(path);
 
     return (
       <FacetFilterAddDialog
         id={this.props.id}
-        type={this.props.type}
-        parentButtonRect={r}
+        state={state}
+        parentButtonRect={rect}
         onClose={this.onToggleShowDialog}
       />
     );
