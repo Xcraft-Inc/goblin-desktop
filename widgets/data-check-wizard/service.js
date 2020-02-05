@@ -105,10 +105,10 @@ const config = {
         for (const entityType of form.selectedTables) {
           const schemaAPI = quest.getAPI(`entity-schema@${entityType}`);
           if (form.checkEntities === 'true') {
-            yield schemaAPI.checkEntities({entityType});
+            yield schemaAPI.checkEntities({desktopId, entityType});
           }
           if (form.cleanEntities === 'true') {
-            yield schemaAPI.cleanEntities({entityType});
+            yield schemaAPI.cleanEntities({desktopId, entityType});
           }
           yield desktop.addNotification({
             notificationId: `notification@${quest.uuidV4()}`,
