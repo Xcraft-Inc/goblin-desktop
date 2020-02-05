@@ -77,12 +77,8 @@ const config = {
         });
       },
       form: {
-        mustRebuild: 'false',
-        mustCompute: 'false',
-        mustBuildSummaries: 'true',
-        mustIndex: 'false',
-        emitHydrated: 'false',
-        onlyPublished: 'true',
+        checkEntities: 'false',
+        cleanEntities: 'false',
       },
       quest: function*(quest, form) {},
     },
@@ -98,7 +94,7 @@ const config = {
           notificationId: `notification@${quest.uuidV4()}`,
           color: 'blue',
           message: T(
-            `Recupération des entités {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
+            `Début du check/nettoyage {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
             null,
             {
               length: tablesNumber,
@@ -106,121 +102,32 @@ const config = {
             }
           ),
         });
-        for (const table of form.selectedTables) {
-          const getInfo = (r, table, onlyPublished) => {
-            let q = r.table(table);
-            if (onlyPublished === 'true') {
-              q = q.getAll('published', {index: 'status'});
-            }
-            return q
-              .pluck('id', {
-                meta: ['rootAggregateId', 'rootAggregatePath', 'type'],
-              })
-              .map(function(doc) {
-                return {
-                  id: doc('id'),
-                  root: doc('meta')('rootAggregateId'),
-                  path: doc('meta')('rootAggregatePath'),
-                  type: doc('meta')('type'),
-                };
-              });
-          };
 
-          const query = getInfo.toString();
-          const args = [table, form.onlyPublished];
-          r.query({query, args}, next.parallel());
+        for (const entityType of form.selectedTables) {
+          const schemaAPI = quest.getAPI(`entity-schema@${entityType}`);
+          if (form.checkEntities === 'true') {
+            yield schemaAPI.checkEntities({entityType});
+          }
+          if (form.cleanEntities === 'true') {
+            yield schemaAPI.cleanEntities({entityType});
+          }
+          yield desktop.addNotification({
+            notificationId: `notification@${quest.uuidV4()}`,
+            color: 'green',
+            message: T(
+              `Fin du check/nettoyage de la table {entityType}`,
+              null,
+              {
+                entityType,
+              }
+            ),
+          });
         }
 
-        const forRehydrate = yield next.sync();
-        const hydrateClassifier = forRehydrate.reduce(
-          (state, entities) => {
-            const roots = entities.filter(entity => entity.path.length === 0);
-            const leefs = entities.filter(entity => entity.path.length > 0);
-            state[0] = state[0].concat(roots);
-            leefs.reduce((state, leef) => {
-              const lvl = leef.path.length;
-              if (!state[lvl]) {
-                state[lvl] = [];
-              }
-              state[lvl].push(leef);
-              return state;
-            }, state);
-            return state;
-          },
-          {0: []}
-        );
-        let totalLength = 0;
-        const orderedHydratation = Object.keys(hydrateClassifier).reduce(
-          (order, index) => {
-            const entities = hydrateClassifier[index];
-            totalLength += entities.length;
-            order.push(entities);
-            return order;
-          },
-          []
-        );
-        const reverseHydratation = orderedHydratation.reverse();
-        let count = 1;
-        const batchSize = 100;
-        const progressNotificationId = `notification@${quest.uuidV4()}`;
         yield desktop.addNotification({
           notificationId: `notification@${quest.uuidV4()}`,
-          color: 'blue',
-          message: T(
-            `Début de l'hydratation {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
-            null,
-            {
-              length: tablesNumber,
-              tables,
-            }
-          ),
-        });
-        for (const [key, entities] of reverseHydratation.entries()) {
-          const cur = key + 1;
-          const tot = reverseHydratation.length;
-          if (entities.length > 0) {
-            for (const entity of entities) {
-              const requestId = quest.uuidV4();
-              quest.evt('hydrate-entity-requested', {
-                desktopId: quest.getDesktop(),
-                requestId,
-                entityId: entity.id,
-                rootAggregateId: entity.root,
-                rootAggregatePath: entity.path,
-                muteChanged: true,
-                muteHydrated: form.emitHydrated === 'false',
-                notify: false,
-                options: {
-                  rebuildValueCache: form.mustRebuild === 'true',
-                  buildSummaries: form.mustBuildSummaries === 'true',
-                  compute: form.mustCompute === 'true',
-                  index: form.mustIndex === 'true',
-                },
-              });
-              if (count % batchSize === 0) {
-                yield quest.sub.wait(`*::*.${requestId}-hydrate.done`);
-                const progress = (count / totalLength) * 100;
-                yield desktop.addNotification({
-                  notificationId: progressNotificationId,
-                  color: 'blue',
-                  message: `(${cur}/${tot}) ${progress.toFixed(0)} %`,
-                });
-              }
-              count++;
-            }
-          }
-        }
-
-        yield desktop.addNotification({
-          notificationId: progressNotificationId,
-          color: 'blue',
-          message: T(
-            `🍻 100 %  {length, plural, one {de la table hydratée !} other {des tables hydratées !}}`,
-            null,
-            {
-              length: tablesNumber,
-            }
-          ),
+          color: 'green',
+          message: T(`Fin du check/nettoyage des entités 🍻`),
         });
 
         yield quest.me.next();
