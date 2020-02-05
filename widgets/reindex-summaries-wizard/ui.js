@@ -11,7 +11,7 @@ function prepare(props) {
     <Container kind="column" grow="1">
       <Label text={T('Sélectionnez les entités à réindexer')} />
       <Separator kind="space" height="10px" />
-      <Container kind="row">
+      <Container kind="row" width="500px">
         <Field
           kind="gadget"
           name="tablesTable"

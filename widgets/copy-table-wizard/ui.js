@@ -17,7 +17,7 @@ function prepare(props) {
       />
       <Separator kind="space" height="10px" />
       <Label text={T('Sélectionnez les entités à répliquer')} />
-      <Container kind="row">
+      <Container kind="row" width="500px">
         <Field
           kind="gadget"
           name="tablesTable"
