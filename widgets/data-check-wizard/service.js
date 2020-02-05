@@ -87,7 +87,6 @@ const config = {
       quest: function*(quest, form, next) {
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
-        const r = quest.getStorage(entityStorage);
         const tables = form.selectedTables.join(', ');
         const tablesNumber = form.selectedTables.length;
         yield desktop.addNotification({

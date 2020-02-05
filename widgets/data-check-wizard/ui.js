@@ -14,7 +14,15 @@ function prepare(props) {
 
       <Field
         kind="bool"
-        model=".form.repair"
+        model=".form.checkEntities"
+        labelWidth="0px"
+        labelText={T('Checker/logger')}
+        verticalSpacing="compact"
+      />
+
+      <Field
+        kind="bool"
+        model=".form.cleanEntities"
         labelWidth="0px"
         labelText={T('Réparer')}
         verticalSpacing="compact"
