@@ -77,14 +77,15 @@ const config = {
         });
       },
       form: {
-        checkEntities: 'false',
-        cleanEntities: 'false',
+        setDefaultKeyValue: 'false',
+        deleteMissingKeys: 'false',
       },
       quest: function*(quest, form) {},
     },
     finish: {
       form: {},
       quest: function*(quest, form, next) {
+        const {setDefaultKeyValue, deleteMissingKeys} = form;
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
         const tables = form.selectedTables.join(', ');
@@ -104,12 +105,12 @@ const config = {
 
         for (const entityType of form.selectedTables) {
           const schemaAPI = quest.getAPI(`entity-schema@${entityType}`);
-          if (form.checkEntities === 'true') {
-            yield schemaAPI.checkEntities({desktopId, entityType});
-          }
-          if (form.cleanEntities === 'true') {
-            yield schemaAPI.cleanEntities({desktopId, entityType});
-          }
+          yield schemaAPI.checkEntities({
+            desktopId,
+            batckSize: 1000,
+            setDefaultKeyValue,
+            deleteMissingKeys,
+          });
           yield desktop.addNotification({
             notificationId: `notification@${quest.uuidV4()}`,
             color: 'green',

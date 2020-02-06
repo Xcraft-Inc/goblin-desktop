@@ -14,17 +14,16 @@ function prepare(props) {
 
       <Field
         kind="bool"
-        model=".form.checkEntities"
+        model=".form.setDefaultKeyValue"
         labelWidth="0px"
-        labelText={T('Checker/logger')}
+        labelText={T('Ajoutes les clés manquantes avec leur valeur par défaut')}
         verticalSpacing="compact"
       />
-
       <Field
         kind="bool"
-        model=".form.cleanEntities"
+        model=".form.deleteMissingKeys"
         labelWidth="0px"
-        labelText={T('Réparer')}
+        labelText={T('Supprimer les clés absentes du schéma')}
         verticalSpacing="compact"
       />
 
