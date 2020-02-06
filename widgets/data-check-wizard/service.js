@@ -115,7 +115,7 @@ const config = {
             notificationId: `notification@${quest.uuidV4()}`,
             color: 'green',
             message: T(
-              `Fin du check/nettoyage de la table {entityType} ! ${countErrors} erreur(s) trouvée(s)`,
+              `${countErrors} erreur(s) trouvée(s). Fin du check/nettoyage de la table {entityType}.`,
               null,
               {
                 entityType,
