@@ -9,24 +9,34 @@ import Field from 'goblin-gadgets/widgets/field/widget';
 function prepare(props) {
   return (
     <Container kind="column" grow="1">
-      <Label text={T('Sélectionnez les entités à vérifier.')} />
+      <Label text={T(`Checker/Cleaner d'entité`)} />
       <Separator kind="space" height="10px" />
 
       <Field
         kind="bool"
         model=".form.setDefaultKeyValue"
         labelWidth="0px"
-        labelText={T('Ajoutes les clés manquantes avec leur valeur par défaut')}
+        labelText={T('Ajouter les clés manquantes avec leur valeur par défaut')}
         verticalSpacing="compact"
       />
       <Field
         kind="bool"
         model=".form.deleteMissingKeys"
         labelWidth="0px"
-        labelText={T('Supprimer les clés absentes du schéma')}
+        labelText={T(
+          'Supprimer les clés absentes du schéma (Use at your own risk ⚡⚠⚡)'
+        )}
         verticalSpacing="compact"
       />
-
+      <Field
+        kind="bool"
+        model=".form.rehydrate"
+        labelWidth="0px"
+        labelText={T(`Emettre l'événement rehydrate-* (Side effect ⚡⚠⚡)`)}
+        verticalSpacing="compact"
+      />
+      <Separator kind="space" height="10px" />
+      <Label text={T(`Sélectionnez les types d'entité à traiter :`)} />
       <Separator kind="space" height="10px" />
       <Container kind="row" width="500px">
         <Field
