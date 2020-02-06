@@ -77,15 +77,21 @@ const config = {
         });
       },
       form: {
-        setDefaultKeyValue: 'false',
-        deleteMissingKeys: 'false',
+        fixMissingProperties: false,
+        deleteUndefinedSchemaProps: false,
       },
       quest: function*(quest, form) {},
     },
     finish: {
       form: {},
       quest: function*(quest, form, next) {
-        const {setDefaultKeyValue, deleteMissingKeys} = form;
+        let {fixMissingProperties, deleteUndefinedSchemaProps} = form;
+        if (fixMissingProperties === 'true') {
+          fixMissingProperties = true;
+        }
+        if (deleteUndefinedSchemaProps === 'true') {
+          deleteUndefinedSchemaProps = true;
+        }
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
         const tables = form.selectedTables.join(', ');
@@ -108,8 +114,8 @@ const config = {
           const countErrors = yield schemaAPI.checkEntities({
             desktopId,
             batckSize: 1000,
-            setDefaultKeyValue,
-            deleteMissingKeys,
+            fixMissingProperties,
+            deleteUndefinedSchemaProps,
           });
           yield desktop.addNotification({
             notificationId: `notification@${quest.uuidV4()}`,
