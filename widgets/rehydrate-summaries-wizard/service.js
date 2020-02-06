@@ -96,6 +96,7 @@ const config = {
         const tablesNumber = form.selectedTables.length;
         yield desktop.addNotification({
           notificationId: `notification@${quest.uuidV4()}`,
+          glyph: 'solid/download',
           color: 'blue',
           message: T(
             `Recupération des entités {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
@@ -165,6 +166,7 @@ const config = {
         const progressNotificationId = `notification@${quest.uuidV4()}`;
         yield desktop.addNotification({
           notificationId: `notification@${quest.uuidV4()}`,
+          glyph: 'solid/play',
           color: 'blue',
           message: T(
             `Début de l'hydratation {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
@@ -202,6 +204,7 @@ const config = {
                 const progress = (count / totalLength) * 100;
                 yield desktop.addNotification({
                   notificationId: progressNotificationId,
+                  glyph: 'solid/ellipsis-h',
                   color: 'blue',
                   message: `(${cur}/${tot}) ${progress.toFixed(0)} %`,
                 });
@@ -213,9 +216,10 @@ const config = {
 
         yield desktop.addNotification({
           notificationId: progressNotificationId,
+          glyph: 'solid/beer',
           color: 'blue',
           message: T(
-            `🍻 100 %  {length, plural, one {de la table hydratée !} other {des tables hydratées !}}`,
+            `100 % {length, plural, one {de la table hydratée} other {des tables hydratées}}`,
             null,
             {
               length: tablesNumber,
