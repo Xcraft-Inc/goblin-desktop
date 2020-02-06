@@ -28,13 +28,6 @@ function prepare(props) {
         )}
         verticalSpacing="compact"
       />
-      <Field
-        kind="bool"
-        model=".form.rehydrate"
-        labelWidth="0px"
-        labelText={T(`Emettre l'événement rehydrate-* (Side effect ⚡⚠⚡)`)}
-        verticalSpacing="compact"
-      />
       <Separator kind="space" height="10px" />
       <Label text={T(`Sélectionnez les types d'entité à traiter :`)} />
       <Separator kind="space" height="10px" />
