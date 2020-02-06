@@ -92,6 +92,7 @@ const config = {
         const tablesNumber = form.selectedTables.length;
         yield desktop.addNotification({
           notificationId: `notification@${quest.uuidV4()}`,
+          glyph: 'solid/play',
           color: 'blue',
           message: T(
             `Début du check/nettoyage {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
@@ -113,20 +114,32 @@ const config = {
           });
           yield desktop.addNotification({
             notificationId: `notification@${quest.uuidV4()}`,
-            color: 'green',
-            message: T(
-              `${countErrors} erreur(s) trouvée(s). Fin du check/nettoyage de la table {entityType}.`,
-              null,
-              {
-                entityType,
-              }
-            ),
+            glyph:
+              countErrors === 0 ? 'solid/check' : 'solid/exclamation-triangle',
+            color: countErrors === 0 ? 'green' : 'red',
+            message:
+              countErrors === 0
+                ? T(
+                    `Aucune erreur trouvée. Fin du check/nettoyage de la table {entityType}.`,
+                    null,
+                    {
+                      entityType,
+                    }
+                  )
+                : T(
+                    `${countErrors} erreurs trouvées. Fin du check/nettoyage de la table {entityType}.`,
+                    null,
+                    {
+                      entityType,
+                    }
+                  ),
           });
         }
 
         yield desktop.addNotification({
           notificationId: `notification@${quest.uuidV4()}`,
-          color: 'green',
+          glyph: 'solid/stop',
+          color: 'blue',
           message: T(`Fin du check/nettoyage des entités 🍻`),
         });
 
