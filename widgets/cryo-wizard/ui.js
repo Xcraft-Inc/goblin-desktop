@@ -1,16 +1,13 @@
 //T:2019-02-27
 import React from 'react';
-
+import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import Container from 'goblin-gadgets/widgets/container/widget';
-import Widget from 'goblin-laboratory/widgets/widget';
 import Ripley from 'goblin-desktop/widgets/ripley/widget';
 
 function configure(props) {
-  const WiredRipley = Widget.Wired(Ripley)(props.ripleyId);
-
   return (
     <Container kind="column" grow="1">
-      <WiredRipley />
+      <Ripley id={C(`backend.${props.ripleyId}`)} />
     </Container>
   );
 }

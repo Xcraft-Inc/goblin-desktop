@@ -21,12 +21,13 @@ const config = {
       form: {},
       quest: function*(quest) {
         const ripleyId = `ripley@${quest.goblin.id}`;
-        yield quest.create('ripley', {id: ripleyId});
+        yield quest.create('ripley', {
+          desktopId: quest.getDesktop(),
+          id: ripleyId,
+        });
 
         quest.do({
-          form: {
-            ripleyId,
-          },
+          ripleyId,
         });
       },
     },
