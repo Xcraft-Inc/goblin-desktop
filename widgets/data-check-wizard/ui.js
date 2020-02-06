@@ -14,25 +14,18 @@ function prepare(props) {
 
       <Field
         kind="bool"
-        model=".form.setDefaultKeyValue"
+        model=".form.fixMissingProperties"
         labelWidth="0px"
         labelText={T('Ajouter les clés manquantes avec leur valeur par défaut')}
         verticalSpacing="compact"
       />
       <Field
         kind="bool"
-        model=".form.deleteMissingKeys"
+        model=".form.deleteUndefinedSchemaProps"
         labelWidth="0px"
         labelText={T(
           'Supprimer les clés absentes du schéma (Use at your own risk ⚡⚠⚡)'
         )}
-        verticalSpacing="compact"
-      />
-      <Field
-        kind="bool"
-        model=".form.rehydrate"
-        labelWidth="0px"
-        labelText={T(`Emettre l'événement rehydrate-* (Side effect ⚡⚠⚡)`)}
         verticalSpacing="compact"
       />
       <Separator kind="space" height="10px" />
