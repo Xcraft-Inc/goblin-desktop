@@ -105,7 +105,7 @@ const config = {
 
         for (const entityType of form.selectedTables) {
           const schemaAPI = quest.getAPI(`entity-schema@${entityType}`);
-          yield schemaAPI.checkEntities({
+          const countErrors = yield schemaAPI.checkEntities({
             desktopId,
             batckSize: 1000,
             setDefaultKeyValue,
@@ -115,7 +115,7 @@ const config = {
             notificationId: `notification@${quest.uuidV4()}`,
             color: 'green',
             message: T(
-              `Fin du check/nettoyage de la table {entityType}`,
+              `Fin du check/nettoyage de la table {entityType} ! ${countErrors} erreur(s) trouvée(s)`,
               null,
               {
                 entityType,
