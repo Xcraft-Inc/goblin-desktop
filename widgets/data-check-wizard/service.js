@@ -94,21 +94,6 @@ const config = {
         }
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
-        const tables = form.selectedTables.join(', ');
-        const tablesNumber = form.selectedTables.length;
-        yield desktop.addNotification({
-          notificationId: `notification@${quest.uuidV4()}`,
-          glyph: 'solid/play',
-          color: 'blue',
-          message: T(
-            `Début du check/nettoyage {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
-            null,
-            {
-              length: tablesNumber,
-              tables,
-            }
-          ),
-        });
 
         for (const entityType of form.selectedTables) {
           const schemaAPI = quest.getAPI(`entity-schema@${entityType}`);
@@ -143,12 +128,23 @@ const config = {
           });
         }
 
-        yield desktop.addNotification({
-          notificationId: `notification@${quest.uuidV4()}`,
-          glyph: 'solid/stop',
-          color: 'blue',
-          message: T(`Fin du check/nettoyage des entités 🍻`),
-        });
+        const tablesNumber = form.selectedTables.length;
+        if (tablesNumber > 1) {
+          const tables = form.selectedTables.join(', ');
+          yield desktop.addNotification({
+            notificationId: `notification@${quest.uuidV4()}`,
+            glyph: 'solid/stop',
+            color: 'blue',
+            message: T(
+              `Fin du check/nettoyage {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
+              null,
+              {
+                length: tablesNumber,
+                tables,
+              }
+            ),
+          });
+        }
 
         yield quest.me.next();
       },
