@@ -3,6 +3,8 @@
 
 const watt = require('gigawatts');
 const path = require('path');
+const fs = require('fs');
+
 const goblinName = path.basename(module.parent.filename, '.js');
 
 const Goblin = require('xcraft-core-goblin');
@@ -81,6 +83,31 @@ Goblin.registerQuest(
 
 Goblin.registerQuest(goblinName, 'select', function(quest, type, selectedId) {
   quest.do();
+});
+Goblin.registerQuest(goblinName, 'ripley-action-store', function*(quest) {
+  // const state = quest.goblin.getState();
+  // const src = state.get('selected.from');
+  // const dst = state.get('selected.to');
+  // const workshop = quest.getAPI('workshop');
+  // const xHost = require('xcraft-core-host');
+  // const mainGoblin = state.get('mainGoblin');
+  // const {appConfigPath} = xHost;
+  // const cryoPath = path.join(appConfigPath, 'var/cryo');
+  // const srcPath = path.join(cryoPath, src);
+  // mkdirp(cryoPath);
+  // const dstPath = path.join(cryoPath, `copy.db`);
+  // if (!fs.existsSync(srcPath)) {
+  //   return;
+  // }
+  // fs.copyFileSync(srcPath, dstPath);
+  // yield workshop.ripleyFor({
+  //   dbSrc: path.join(cryoPath, src),
+  //   dbDst: dst,
+  //   timestamp: 9999,
+  //   rethinkdbHost: profile.rethinkdbHost,
+  //   elasticsearchUrl: profile.elasticsearchUrl,
+  //   appId: mainGoblin,
+  // });
 });
 
 Goblin.registerQuest(goblinName, 'update', function(quest, branches) {

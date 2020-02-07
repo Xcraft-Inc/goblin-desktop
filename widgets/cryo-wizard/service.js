@@ -36,6 +36,9 @@ const config = {
     finish: {
       form: {},
       quest: function*(quest, form) {
+        const state = quest.goblin.getState();
+        const ripleyAPI = quest.getAPI(form.ripleyId);
+        yield ripleyAPI.replayActionStore();
         yield quest.me.next();
       },
     },
