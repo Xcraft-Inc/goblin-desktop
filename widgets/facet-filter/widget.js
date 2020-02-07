@@ -62,7 +62,7 @@ export default class FacetFilter extends Widget {
         <FacetFilterButton
           text={name}
           {...this.props}
-          active={this.state.opened ? true : false}
+          active={this.showDialog}
           onClick={this.onToggleShowDialog}
         />
         {this.renderDialog()}

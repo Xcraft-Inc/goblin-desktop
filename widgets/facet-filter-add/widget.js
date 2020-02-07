@@ -68,11 +68,12 @@ export default class FacetFilterAdd extends Widget {
   }
 
   renderButton() {
+    const style = this.showDialog
+      ? this.styles.classNames.facetFilterAddButtonActive
+      : this.styles.classNames.facetFilterAddButton;
+
     return (
-      <div
-        className={this.styles.classNames.facetFilterAddButton}
-        onClick={this.onToggleShowDialog}
-      >
+      <div className={style} onClick={this.onToggleShowDialog}>
         <Label glyph="solid/plus" />
       </div>
     );

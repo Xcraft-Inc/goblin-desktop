@@ -15,10 +15,16 @@ export default function styles(theme) {
     },
   };
 
+  const facetFilterAddButtonActive = {
+    ...facetFilterAddButton,
+    backgroundColor: theme.palette.facetBackgroundActive,
+  };
+
   /******************************************************************************/
 
   return {
     facetFilterAddButton,
+    facetFilterAddButtonActive,
   };
 }
 
