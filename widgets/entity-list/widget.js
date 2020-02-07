@@ -135,17 +135,56 @@ class EntityList extends Widget {
     };
   }
 
-  render() {
+  renderList() {
     const {id, columns} = this.props;
-    if (!id || !columns) {
+    if (!columns) {
       return null;
     }
     const listId = `list@${id}`;
-
     const width = getEstimatedWidth(columns);
     const widthStyle = {
       minWidth: width,
     };
+    return (
+      <div className={this.styles.classNames.list}>
+        <div className={this.styles.classNames.content} style={widthStyle}>
+          <div className={this.styles.classNames.header}>
+            <TableCell isLast="false" isHeader="true" width="50px" text="n°" />
+            {columns.map(c => {
+              return (
+                <TableCell
+                  key={c}
+                  isLast="false"
+                  isHeader="true"
+                  {...getColumnProps(c)}
+                  text={getColumnHeaderText(c)}
+                />
+              );
+            })}
+          </div>
+
+          <div className={this.styles.classNames.rows}>
+            <List
+              id={listId}
+              type={'uniform'}
+              renderItem={EntityListItem}
+              data={{
+                onDrillDown: this.drillDown,
+                onRenewTTL: this.renewTTL,
+                columns: new Shredder(columns),
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const {id} = this.props;
+    if (!id) {
+      return null;
+    }
 
     return (
       <div className={this.styles.classNames.full}>
@@ -153,42 +192,7 @@ class EntityList extends Widget {
           <Toolbar id={id} />
         </div>
         {!this.props.loading ? (
-          <div className={this.styles.classNames.list}>
-            <div className={this.styles.classNames.content} style={widthStyle}>
-              <div className={this.styles.classNames.header}>
-                <TableCell
-                  isLast="false"
-                  isHeader="true"
-                  width="50px"
-                  text="n°"
-                />
-                {columns.map(c => {
-                  return (
-                    <TableCell
-                      key={c}
-                      isLast="false"
-                      isHeader="true"
-                      {...getColumnProps(c)}
-                      text={getColumnHeaderText(c)}
-                    />
-                  );
-                })}
-              </div>
-
-              <div className={this.styles.classNames.rows}>
-                <List
-                  id={listId}
-                  type={'uniform'}
-                  renderItem={EntityListItem}
-                  data={{
-                    onDrillDown: this.drillDown,
-                    onRenewTTL: this.renewTTL,
-                    columns: new Shredder(columns),
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+          <div /> //this.renderList()
         ) : (
           <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'8x'} pulse />
         )}
