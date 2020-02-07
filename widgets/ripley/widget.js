@@ -1,5 +1,6 @@
 //T:2019-02-27
 import React from 'react';
+import T from 't';
 import Widget from 'goblin-laboratory/widgets/widget';
 import {fromJS} from 'immutable';
 import Shredder from 'xcraft-core-shredder';
@@ -79,23 +80,27 @@ let Ripley = class Ripley extends Widget {
 
     return (
       <WithModel model={`backend.${this.props.id}`}>
-        <Container>
-          <RipleyTree
-            type="from"
-            description={T('Actions store (from)')}
-            hasBranches={true}
-            onSelect={this.select}
-            db={C(`.db`)}
-            selected={C(`.selected.from`)}
-          />
-          <RipleyTree
-            type="to"
-            description={T('Actions store (to)')}
-            hasBranches={false}
-            onSelect={this.select}
-            db={C(`.db`)}
-            selected={C(`.selected.to`)}
-          />
+        <Container kind="row" grow="1">
+          <Container kind="column" grow="1">
+            <RipleyTree
+              type="from"
+              description={T('Actions store (from)')}
+              hasBranches={true}
+              onSelect={this.select}
+              db={C(`.db`)}
+              selected={C(`.selected.from`)}
+            />
+          </Container>
+          <Container kind="column" grow="1">
+            <RipleyTree
+              type="to"
+              description={T('Actions store (to)')}
+              hasBranches={false}
+              onSelect={this.select}
+              db={C(`.db`)}
+              selected={C(`.selected.to`)}
+            />
+          </Container>
         </Container>
       </WithModel>
     );

@@ -9,6 +9,19 @@ const config = {
   title: T('Time machine'),
   gadgets: {},
   steps: {
+    initialize: {
+      quest: function*(quest) {
+        const ripleyId = `ripley@${quest.goblin.id}`;
+        quest.do({
+          form: {ripleyId},
+        });
+        yield quest.create('ripley', {
+          desktopId: quest.getDesktop(),
+          id: ripleyId,
+        });
+        yield quest.me.next();
+      },
+    },
     configure: {
       buttons: function(quest, buttons) {
         return buttons.set('main', {
@@ -18,18 +31,7 @@ const config = {
           disabled: false,
         });
       },
-      form: {},
-      quest: function*(quest) {
-        const ripleyId = `ripley@${quest.goblin.id}`;
-        yield quest.create('ripley', {
-          desktopId: quest.getDesktop(),
-          id: ripleyId,
-        });
-
-        quest.do({
-          ripleyId,
-        });
-      },
+      quest: function*(quest) {},
     },
     finish: {
       form: {},
