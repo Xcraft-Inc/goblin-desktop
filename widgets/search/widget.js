@@ -197,9 +197,9 @@ class Search extends Widget {
 
         <div className={this.styles.classNames.sajex} />
 
-        <div className={this.styles.classNames.lastPane}>
+        <Container kind="actions">
           <NewEntityButton id={this.props.hinterId} />
-        </div>
+        </Container>
       </div>
     );
   }

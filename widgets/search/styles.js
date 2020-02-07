@@ -35,11 +35,6 @@ export default function styles(theme) {
     backgroundColor: theme.palette.paneBackground,
   };
 
-  const lastPane = {
-    ...pane,
-    margin: '0px',
-  };
-
   const separator = {
     height: m,
   };
@@ -65,7 +60,6 @@ export default function styles(theme) {
     searchWithoutParams,
     params,
     pane,
-    lastPane,
     separator,
     sajex,
     button,
