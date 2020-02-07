@@ -126,6 +126,7 @@ class FacetFilterDialog extends Widget {
     if (this.props.loading) {
       return null;
     }
+
     const windowHeight = window.innerHeight;
     const r = this.props.parentButtonRect;
     const count = this.props.numberOfCheckboxes;

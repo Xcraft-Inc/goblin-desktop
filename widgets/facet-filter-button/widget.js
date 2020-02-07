@@ -93,7 +93,7 @@ class FacetFilterButton extends Widget {
   }
 
   render() {
-    if (!this.props.flags) {
+    if (this.props.loading) {
       return null;
     }
 
@@ -108,9 +108,7 @@ class FacetFilterButton extends Widget {
       }
     }
 
-    const n = this.props.flags ? this.props.flags.size : 0;
-    const disabled = n <= 1;
-
+    const disabled = this.props.numberOfCheckboxes <= 1;
     const style = disabled
       ? this.styles.classNames.facetFilterButtonDisabled
       : this.styles.classNames.facetFilterButton;
@@ -128,5 +126,9 @@ class FacetFilterButton extends Widget {
 
 export default Widget.connect((state, props) => {
   const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
-  return {flags};
+  if (flags) {
+    return {flags, numberOfCheckboxes: flags.size};
+  } else {
+    return {loading: true};
+  }
 })(FacetFilterButton);
