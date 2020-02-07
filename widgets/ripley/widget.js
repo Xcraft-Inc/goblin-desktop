@@ -11,6 +11,27 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Calendar from 'goblin-gadgets/widgets/calendar/widget';
 import Tree from 'goblin-gadgets/widgets/tree/widget';
 import WithModel from 'goblin-laboratory/widgets/with-model/widget';
+import * as styles from './styles';
+
+function transformTimestamp(timestamp) {
+  timestamp = timestamp.split('T');
+  let newString = timestamp[0];
+  if (timestamp.length === 2) {
+    // day
+    newString = `${timestamp[0].substring(6, 8)}`;
+    // month
+    newString += `.${timestamp[0].substring(4, 6)}`;
+    // year
+    newString += `.${timestamp[0].substring(0, 4)}`;
+    // hour
+    newString += ` ${timestamp[1].substring(0, 2)}`;
+    // minutes
+    newString += `:${timestamp[1].substring(2, 4)}`;
+    // millisecondes
+    newString += `:${timestamp[1].substring(4, 6)}`;
+  }
+  return newString;
+}
 
 let RipleyTree = class RipleyTree extends Widget {
   render() {
@@ -30,11 +51,11 @@ let RipleyTree = class RipleyTree extends Widget {
 
     for (let [db, branches] of this.props.db.entries()) {
       const subrows = [];
-
       if (this.props.hasBranches) {
         branches = branches.get('branches');
         for (const branch of branches.values()) {
-          subrows.push({id: branch, database: branch});
+          let text = transformTimestamp(branch.split('_')[1]);
+          subrows.push({id: branch, database: text});
         }
       }
 
@@ -67,10 +88,11 @@ let Ripley = class Ripley extends Widget {
   constructor() {
     super(...arguments);
     this.select = this.select.bind(this);
+    this.styles = styles;
   }
 
   select(type, selectedId) {
-    this.do('select', {type, selectedId});
+    this.doFor(this.props.id, 'select', {type, selectedId});
   }
 
   render() {
@@ -80,7 +102,7 @@ let Ripley = class Ripley extends Widget {
 
     return (
       <WithModel model={`backend.${this.props.id}`}>
-        <Container kind="row" grow="1">
+        <div className={this.styles.classNames.container}>
           <Container kind="column" grow="1">
             <RipleyTree
               type="from"
@@ -101,7 +123,7 @@ let Ripley = class Ripley extends Widget {
               selected={C(`.selected.to`)}
             />
           </Container>
-        </Container>
+        </div>
       </WithModel>
     );
   }

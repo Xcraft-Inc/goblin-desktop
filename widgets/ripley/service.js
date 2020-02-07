@@ -22,7 +22,7 @@ const logicHandlers = {
     return state.set('id', action.get('id'));
   },
   update: (state, action) => {
-    return state.set('db', action.get('branches'));
+    return state.set('db', action.get('groupedBranches'));
   },
   select: (state, action) => {
     const type = action.get('type');
@@ -38,15 +38,41 @@ Goblin.registerQuest(
   goblinName,
   'create',
   function*(quest) {
+    // Subscribe to update of cryo pages
     quest.goblin.defer(
       quest.sub(`*::cryo.updated`, function*() {
         const branches = yield quest.cmd('cryo.branches');
-        yield quest.me.update({branches});
+        let groupedBranches = {};
+        for (const [key, _] of Object.entries(branches)) {
+          const db = key.split('_');
+          if (db.length === 2) {
+            if (groupedBranches[db[0]]) {
+              groupedBranches[db[0]].branches.push(key);
+            } else {
+              groupedBranches[db[0]] = {branches: [key]};
+            }
+          }
+        }
+        yield quest.me.update({groupedBranches});
       })
     );
 
+    // initialize branches by mandate
     const branches = yield quest.cmd('cryo.branches');
-    quest.me.update({branches});
+    let groupedBranches = {};
+    for (const [key, _] of Object.entries(branches)) {
+      const db = key.split('_');
+      if (db.length === 1) {
+        groupedBranches[db[0]] = {branches: []};
+      } else if (db.length === 2) {
+        if (groupedBranches[db[0]]) {
+          groupedBranches[db[0]].branches.push(key);
+        } else {
+          groupedBranches[db[0]] = {branches: [key]};
+        }
+      }
+    }
+    quest.me.update({groupedBranches});
 
     quest.do();
   },
