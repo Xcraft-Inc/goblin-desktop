@@ -108,7 +108,7 @@ class FacetFilterButton extends Widget {
       }
     }
 
-    const n = Object.keys(this.props.flags).length;
+    const n = this.props.flags ? this.props.flags.size : 0;
     const disabled = n <= 1;
 
     const style = disabled
