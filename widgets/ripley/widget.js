@@ -8,6 +8,7 @@ import {date as DateConverters} from 'xcraft-core-converters';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import withC from 'goblin-laboratory/widgets/connect-helpers/with-c';
 import Container from 'goblin-gadgets/widgets/container/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import Calendar from 'goblin-gadgets/widgets/calendar/widget';
 import Tree from 'goblin-gadgets/widgets/tree/widget';
 import WithModel from 'goblin-laboratory/widgets/with-model/widget';
@@ -70,8 +71,9 @@ let RipleyTree = class RipleyTree extends Widget {
         grow="1"
         frame="false"
         hasButtons="false"
+        selectionMode="single"
         selection="true"
-        selectedIds={this.props.selected}
+        selectedIds={[this.props.selected]}
         selectionChanged={selectedId => {
           if (this.props.onSelect) {
             this.props.onSelect(this.props.type, selectedId);
@@ -102,27 +104,35 @@ let Ripley = class Ripley extends Widget {
 
     return (
       <WithModel model={`backend.${this.props.id}`}>
-        <div className={this.styles.classNames.container}>
-          <Container kind="column" grow="1">
+        <div className={this.styles.classNames.ripley}>
+          <div className={this.styles.classNames.ripleyTree}>
             <RipleyTree
               type="from"
-              description={T('Actions store (from)')}
+              description={T('From')}
               hasBranches={true}
               onSelect={this.select}
               db={C(`.db`)}
               selected={C(`.selected.from`)}
             />
-          </Container>
-          <Container kind="column" grow="1">
+          </div>
+          <div className={this.styles.classNames.ripleyArrow}>
+            <Label
+              glyph="solid/arrow-right"
+              glyphSize="400%"
+              glyphPosition="center"
+              justify="center"
+            />
+          </div>
+          <div className={this.styles.classNames.ripleyTree}>
             <RipleyTree
               type="to"
-              description={T('Actions store (to)')}
+              description={T('To')}
               hasBranches={false}
               onSelect={this.select}
               db={C(`.db`)}
               selected={C(`.selected.to`)}
             />
-          </Container>
+          </div>
         </div>
       </WithModel>
     );
