@@ -40,7 +40,7 @@ export default function styles(theme) {
   const status = {
     position: 'relative',
     margin: Unit.multiply(m, -1) + ' 0px ' + m + ' 0px',
-    height: '40px',
+    minHeight: '40px',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
