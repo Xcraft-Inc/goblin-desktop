@@ -7,12 +7,13 @@ import Shredder from 'xcraft-core-shredder';
 import {date as DateConverters} from 'xcraft-core-converters';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import withC from 'goblin-laboratory/widgets/connect-helpers/with-c';
-import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Calendar from 'goblin-gadgets/widgets/calendar/widget';
 import Tree from 'goblin-gadgets/widgets/tree/widget';
 import WithModel from 'goblin-laboratory/widgets/with-model/widget';
 import * as styles from './styles';
+
+/******************************************************************************/
 
 function transformTimestamp(timestamp) {
   timestamp = timestamp.split('T');
@@ -33,6 +34,8 @@ function transformTimestamp(timestamp) {
   }
   return newString;
 }
+
+/******************************************************************************/
 
 let RipleyTree = class RipleyTree extends Widget {
   render() {
@@ -86,11 +89,13 @@ let RipleyTree = class RipleyTree extends Widget {
 
 RipleyTree = withC(RipleyTree);
 
+/******************************************************************************/
+
 let Ripley = class Ripley extends Widget {
   constructor() {
     super(...arguments);
-    this.select = this.select.bind(this);
     this.styles = styles;
+    this.select = this.select.bind(this);
   }
 
   select(type, selectedId) {
@@ -154,6 +159,8 @@ let Ripley = class Ripley extends Widget {
     );
   }
 };
+
+/******************************************************************************/
 
 Ripley = withC(Ripley);
 export default Ripley;
