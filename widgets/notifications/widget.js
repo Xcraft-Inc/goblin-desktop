@@ -123,7 +123,9 @@ class Notifications extends Widget {
       })
       .sort((a, b) => b.get('order') - a.get('order'))
       .map(n => {
-        return this.renderNotification(n.toJS(), index++);
+        if (n && n.toJS) {
+          return this.renderNotification(n.toJS(), index++);
+        }
       })
       .toArray();
   }
