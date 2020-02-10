@@ -167,6 +167,7 @@ class EntityRow extends Widget {
           isLast="false"
           isHeader="false"
           {...otherProps}
+          maxHeight={this.props.maxHeight}
           text={text}
         />
       );

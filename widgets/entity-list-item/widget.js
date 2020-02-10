@@ -9,11 +9,11 @@ class EntityListItem extends Widget {
   }
 
   render() {
-    const height = '28px';
     return (
       <EntityRow
         id={this.props.id}
-        minHeight={height}
+        minHeight="28px"
+        maxHeight="100px"
         itemId={this.props.itemId}
         columns={this.props.columns}
         rowIndex={this.props.rowIndex}
