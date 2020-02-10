@@ -57,7 +57,7 @@ export default class FacetFilterAdd extends Widget {
         parentButtonRect={rect}
         title={T('Ajouter un nouveau filtre')}
         value=""
-        filter={['markdown']}
+        // filter={['markdown']}
         state={state}
         acceptGlyph="solid/plus"
         acceptText={T('Ajouter')}

@@ -172,7 +172,7 @@ class EntityView extends Widget {
       <div className={this.styles.classNames.rows}>
         <List
           id={listId}
-          type={'uniform'}
+          type={'variable'}
           renderItem={EntityListItem}
           data={{
             onDrillDown: this.drillDown,

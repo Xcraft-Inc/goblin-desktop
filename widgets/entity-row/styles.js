@@ -1,13 +1,14 @@
 /******************************************************************************/
 
-export const propNames = ['height', 'selected'];
+export const propNames = ['height', 'minHeight', 'selected'];
 
 export default function styles(theme, props) {
-  const {height, selected} = props;
+  const {height, minHeight, selected} = props;
 
   const entityRow = {
     'position': 'relative',
     'height': height,
+    'minHeight': minHeight,
     'display': 'flex',
     'flexDirection': 'row',
     'alignItems': 'center',

@@ -13,7 +13,7 @@ class EntityListItem extends Widget {
     return (
       <EntityRow
         id={this.props.id}
-        height={height}
+        minHeight={height}
         itemId={this.props.itemId}
         columns={this.props.columns}
         rowIndex={this.props.rowIndex}
