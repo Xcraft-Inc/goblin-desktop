@@ -62,6 +62,7 @@ class EntityView extends Widget {
   }
 
   selectRow(rowId) {
+    console.log(`EntityView.selectRow rowId='${rowId}'`);
     this.dispatch({type: 'select-row', rowId});
     const entityId = this.getEntityId(rowId);
     if (this.props.hinter) {
