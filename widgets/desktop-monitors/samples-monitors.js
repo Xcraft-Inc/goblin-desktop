@@ -24,7 +24,6 @@ function pushSample(channel, value) {
   const samples = channelsSamples[channel];
   samples.shift();
   samples.push(value);
-  channelsSamples[channel] = Array.from(samples);
 }
 
 function pushSampleMock(channel) {

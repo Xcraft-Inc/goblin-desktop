@@ -8,7 +8,7 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
 import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
-import SamplesMonitor from 'goblin-gadgets/widgets/samples-monitor/widget';
+import DesktopMonitors from 'goblin-desktop/widgets/desktop-monitors/widget';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
 import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
 import Notifications from 'goblin-desktop/widgets/notifications/widget';
@@ -268,20 +268,12 @@ class Desktop extends Widget {
   /******************************************************************************/
 
   renderSamplesMonitorPopup() {
-    const style = this.monitor
-      ? this.styles.classNames.footerSampleMonitor
-      : this.styles.classNames.footerSampleMonitorHidden;
-
     return (
-      <div className={style}>
-        <SamplesMonitor
-          showed={!!this.monitor}
-          width="400px"
-          height="300px"
-          samples={samplesMonitors.getSamples(this.monitor)}
-          period={samplesMonitors.period}
-        />
-      </div>
+      <DesktopMonitors
+        showed={!!this.monitor}
+        period={samplesMonitors.period}
+        getSamples={() => samplesMonitors.getSamples(this.monitor)}
+      />
     );
   }
 
