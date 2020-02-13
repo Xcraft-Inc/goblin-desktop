@@ -117,7 +117,10 @@ class Desktop extends Widget {
 
     samplesMonitors.openChannel('hydrate', 100);
     samplesMonitors.openChannel('check', 100);
-    this.timer = setInterval(() => this.updateSamplesMonitors(), 1000);
+    this.timer = setInterval(
+      () => this.updateSamplesMonitors(),
+      samplesMonitors.period
+    );
   }
 
   componentDidMount() {
@@ -276,6 +279,7 @@ class Desktop extends Widget {
           width="400px"
           height="300px"
           samples={samplesMonitors.getSamples(this.monitor)}
+          period={samplesMonitors.period}
         />
       </div>
     );
@@ -287,16 +291,24 @@ class Desktop extends Widget {
         <Button
           kind="button-footer"
           width="130px"
-          glyph={this.monitor === 'hydrate' ? 'solid/square' : 'regular/square'}
-          glyphColor={this.monitor === 'hydrate' ? '#0f0' : '#f00'}
+          glyph={this.monitor === 'hydrate' ? 'solid/square' : 'light/square'}
+          glyphColor={
+            this.monitor === 'hydrate'
+              ? '#0f0'
+              : this.context.theme.palette.buttonDisableText
+          }
           text={T('Hydrate')}
           onClick={() => this.onMonitor('hydrate')}
         />
         <Button
           kind="button-footer"
           width="130px"
-          glyph={this.monitor === 'check' ? 'solid/square' : 'regular/square'}
-          glyphColor={this.monitor === 'check' ? '#0f0' : '#f00'}
+          glyph={this.monitor === 'check' ? 'solid/square' : 'light/square'}
+          glyphColor={
+            this.monitor === 'check'
+              ? '#0f0'
+              : this.context.theme.palette.buttonDisableText
+          }
           text={T('Check')}
           onClick={() => this.onMonitor('check')}
         />

@@ -18,6 +18,8 @@ function closeChannel(channel) {
   // TODO
 }
 
+const period = 1000; // 1s
+
 function pushSample(channel, value) {
   const samples = channelsSamples[channel];
   samples.shift();
@@ -48,6 +50,7 @@ function getSamples(channel) {
 module.exports = {
   openChannel,
   closeChannel,
+  period,
   pushSample,
   pushSampleMock,
   getSamples,
