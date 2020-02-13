@@ -8,15 +8,18 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
 import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
+import SamplesMonitor from 'goblin-gadgets/widgets/samples-monitor/widget';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
 import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
 import Notifications from 'goblin-desktop/widgets/notifications/widget';
 import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
+import samplesMonitors from './samples-monitors';
 import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
 import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
 const NabuToolbarConnected = Widget.Wired(NabuToolbar)();
+
 /******************************************************************************/
 
 let currentTheme = 'default';
@@ -98,7 +101,9 @@ class Desktop extends Widget {
 
     this.state = {
       showFooter: true,
+      monitor: null,
     };
+
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeLocale = this.onChangeLocale.bind(this);
@@ -108,6 +113,11 @@ class Desktop extends Widget {
     this.onTab = this.onTab.bind(this);
     this.onShiftTab = this.onShiftTab.bind(this);
     this.togglePrompt = this.togglePrompt.bind(this);
+    this.onMonitor = this.onMonitor.bind(this);
+
+    samplesMonitors.openChannel('hydrate', 100);
+    samplesMonitors.openChannel('check', 100);
+    this.timer = setInterval(() => this.updateSamplesMonitors(), 1000);
   }
 
   componentDidMount() {
@@ -120,8 +130,12 @@ class Desktop extends Widget {
     super.componentWillUnmount();
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
+    clearInterval(this.timer);
+    samplesMonitors.closeChannel('hydrate');
+    samplesMonitors.closeChannel('check');
   }
 
+  //#region get/set
   get showFooter() {
     return this.state.showFooter;
   }
@@ -131,6 +145,17 @@ class Desktop extends Widget {
       showFooter: value,
     });
   }
+
+  get monitor() {
+    return this.state.monitor;
+  }
+
+  set monitor(value) {
+    this.setState({
+      monitor: value,
+    });
+  }
+  //#endregion
 
   static get wiring() {
     return {
@@ -171,13 +196,16 @@ class Desktop extends Widget {
     e.preventDefault();
   }
 
-  /******************************************************************************/
-
-  renderNofications() {
-    const WiredNotifications = wiredNotifications(this.props.id);
-
-    return <WiredNotifications />;
+  onMonitor(m) {
+    this.monitor = this.monitor === m ? null : m;
   }
+
+  updateSamplesMonitors() {
+    samplesMonitors.pushSampleMock('hydrate');
+    samplesMonitors.pushSampleMock('check');
+  }
+
+  /******************************************************************************/
 
   togglePrompt(e) {
     if (e) {
@@ -234,6 +262,54 @@ class Desktop extends Widget {
     );
   }
 
+  /******************************************************************************/
+
+  renderSamplesMonitorPopup() {
+    const style = this.monitor
+      ? this.styles.classNames.footerSampleMonitor
+      : this.styles.classNames.footerSampleMonitorHidden;
+
+    return (
+      <div className={style}>
+        <SamplesMonitor
+          showed={!!this.monitor}
+          width="400px"
+          height="300px"
+          samples={samplesMonitors.getSamples(this.monitor)}
+        />
+      </div>
+    );
+  }
+
+  renderFooterSamplesMonitorsButtons() {
+    return (
+      <div className={this.styles.classNames.footerSampleMonitors}>
+        <Button
+          kind="button-footer"
+          width="130px"
+          glyph={this.monitor === 'hydrate' ? 'solid/square' : 'regular/square'}
+          glyphColor={this.monitor === 'hydrate' ? '#0f0' : '#f00'}
+          text={T('Hydrate')}
+          onClick={() => this.onMonitor('hydrate')}
+        />
+        <Button
+          kind="button-footer"
+          width="130px"
+          glyph={this.monitor === 'check' ? 'solid/square' : 'regular/square'}
+          glyphColor={this.monitor === 'check' ? '#0f0' : '#f00'}
+          text={T('Check')}
+          onClick={() => this.onMonitor('check')}
+        />
+      </div>
+    );
+  }
+
+  renderNofications() {
+    const WiredNotifications = wiredNotifications(this.props.id);
+
+    return <WiredNotifications />;
+  }
+
   renderFooter() {
     const CommandsPrompt = this.connectCommandsPrompt();
     const footerClass = this.showFooter
@@ -252,6 +328,7 @@ class Desktop extends Widget {
           id={this.props.id + '$widget-doc-caller'}
         />
         <CommandsPrompt />
+        {this.renderFooterSamplesMonitorsButtons()}
       </div>
     );
   }
@@ -402,6 +479,7 @@ class Desktop extends Widget {
             <div className={contentClass}>
               <Content desktopId={id} />
               {this.renderNofications()}
+              {this.renderSamplesMonitorPopup()}
             </div>
             {this.renderFooter()}
           </Container>

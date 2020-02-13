@@ -1,5 +1,3 @@
-//T:2019-02-27
-
 /******************************************************************************/
 
 export default function styles(theme) {
@@ -37,11 +35,37 @@ export default function styles(theme) {
     top: theme.shapes.footerHeight,
   };
 
+  const footerSampleMonitors = {
+    display: 'none',
+    // display: 'flex',
+    flexDirection: 'row',
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+  };
+
+  const footerSampleMonitor = {
+    position: 'absolute',
+    right: '10px',
+    bottom: '10px',
+    // transition: '0.7s ease-out',
+    // transitionTimingFunction: 'cubic-bezier(0.6, 2.5, 0.5, 0.35)', // bounce
+    transition: '0.5s ease-out',
+    transitionTimingFunction: 'cubic-bezier(0.35, 1.5, 0.75, 1.0)',
+  };
+
+  const footerSampleMonitorHidden = {
+    ...footerSampleMonitor,
+    bottom: '-420px',
+  };
+
   return {
     content,
     contentWithoutfooter,
     footer,
     footerHidden,
+    footerSampleMonitors,
+    footerSampleMonitor,
+    footerSampleMonitorHidden,
   };
 }
 
