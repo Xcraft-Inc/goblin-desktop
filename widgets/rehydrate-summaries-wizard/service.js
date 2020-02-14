@@ -209,8 +209,8 @@ const config = {
                 },
               });
               if (count % batchSize === 0) {
+                const progress = (count / totalLength) * 100;
                 yield quest.sub.wait(`*::*.${requestId}-hydrate.done`);
-                //- const progress = (count / totalLength) * 100;
                 //- yield desktop.addNotification({
                 //-   notificationId: progressNotificationId,
                 //-   glyph: 'solid/ellipsis-h',
@@ -223,8 +223,8 @@ const config = {
                 yield desktop.monitorPushSample({
                   channel: 'hydrate',
                   sample: duration,
-                  current: cur,
-                  total: tot,
+                  current: progress,
+                  total: 100,
                 });
               }
               count++;
@@ -236,13 +236,14 @@ const config = {
           notificationId: progressNotificationId,
           glyph: 'solid/beer',
           color: 'blue',
-          message: T(
-            `100 % {length, plural, one {de la table hydratée} other {des tables hydratées}}`,
-            null,
-            {
-              length: tablesNumber,
-            }
-          ),
+          //- message: T(
+          //-   `100 % {length, plural, one {de la table hydratée} other {des tables hydratées}}`,
+          //-   null,
+          //-   {
+          //-     length: tablesNumber,
+          //-   }
+          //- ),
+          message: T('Réhydratation terminée'),
         });
         yield desktop.monitorPushSample({
           channel: 'hydrate',
