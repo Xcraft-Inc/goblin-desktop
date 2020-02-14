@@ -8,12 +8,12 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
 import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
+import DesktopMonitorsButtons from 'goblin-desktop/widgets/desktop-monitors-buttons/widget';
 import DesktopMonitors from 'goblin-desktop/widgets/desktop-monitors/widget';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
 import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
 import Notifications from 'goblin-desktop/widgets/notifications/widget';
 import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
-import samplesMonitors from './samples-monitors';
 import IMG_GOBLIN from './goblin.png';
 const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
@@ -95,13 +95,12 @@ const UserInfo = Widget.connect((state, props) => {
 
 /******************************************************************************/
 
-class Desktop extends Widget {
+export default class Desktop extends Widget {
   constructor() {
     super(...arguments);
 
     this.state = {
       showFooter: true,
-      monitor: null,
     };
 
     this.onChangeScreen = this.onChangeScreen.bind(this);
@@ -113,14 +112,6 @@ class Desktop extends Widget {
     this.onTab = this.onTab.bind(this);
     this.onShiftTab = this.onShiftTab.bind(this);
     this.togglePrompt = this.togglePrompt.bind(this);
-    this.onMonitor = this.onMonitor.bind(this);
-
-    samplesMonitors.openChannel('hydrate', 100);
-    samplesMonitors.openChannel('check', 100);
-    this.timer = setInterval(
-      () => this.updateSamplesMonitors(),
-      samplesMonitors.period
-    );
   }
 
   componentDidMount() {
@@ -134,8 +125,6 @@ class Desktop extends Widget {
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
     clearInterval(this.timer);
-    samplesMonitors.closeChannel('hydrate');
-    samplesMonitors.closeChannel('check');
   }
 
   //#region get/set
@@ -146,16 +135,6 @@ class Desktop extends Widget {
   set showFooter(value) {
     this.setState({
       showFooter: value,
-    });
-  }
-
-  get monitor() {
-    return this.state.monitor;
-  }
-
-  set monitor(value) {
-    this.setState({
-      monitor: value,
     });
   }
   //#endregion
@@ -197,15 +176,6 @@ class Desktop extends Widget {
   onShiftTab(e) {
     console.log('desktop.onShiftTab');
     e.preventDefault();
-  }
-
-  onMonitor(m) {
-    this.monitor = this.monitor === m ? null : m;
-  }
-
-  updateSamplesMonitors() {
-    samplesMonitors.pushSampleMock('hydrate');
-    samplesMonitors.pushSampleMock('check');
   }
 
   /******************************************************************************/
@@ -267,51 +237,22 @@ class Desktop extends Widget {
 
   /******************************************************************************/
 
+  renderNofications() {
+    const WiredNotifications = wiredNotifications(this.props.id);
+
+    return <WiredNotifications />;
+  }
+
   renderSamplesMonitorPopup() {
-    return (
-      <DesktopMonitors
-        showed={!!this.monitor}
-        period={samplesMonitors.period}
-        getSamples={() => samplesMonitors.getSamples(this.monitor)}
-      />
-    );
+    return <DesktopMonitors id={this.props.id} />;
   }
 
   renderFooterSamplesMonitorsButtons() {
     return (
       <div className={this.styles.classNames.footerSampleMonitors}>
-        <Button
-          kind="button-footer"
-          width="130px"
-          glyph={this.monitor === 'hydrate' ? 'solid/square' : 'light/square'}
-          glyphColor={
-            this.monitor === 'hydrate'
-              ? '#0f0'
-              : this.context.theme.palette.buttonDisableText
-          }
-          text={T('Hydrate')}
-          onClick={() => this.onMonitor('hydrate')}
-        />
-        <Button
-          kind="button-footer"
-          width="130px"
-          glyph={this.monitor === 'check' ? 'solid/square' : 'light/square'}
-          glyphColor={
-            this.monitor === 'check'
-              ? '#0f0'
-              : this.context.theme.palette.buttonDisableText
-          }
-          text={T('Check')}
-          onClick={() => this.onMonitor('check')}
-        />
+        <DesktopMonitorsButtons id={this.props.id} />
       </div>
     );
-  }
-
-  renderNofications() {
-    const WiredNotifications = wiredNotifications(this.props.id);
-
-    return <WiredNotifications />;
   }
 
   renderFooter() {
@@ -494,4 +435,3 @@ class Desktop extends Widget {
 }
 
 /******************************************************************************/
-export default Desktop;

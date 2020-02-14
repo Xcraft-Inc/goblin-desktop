@@ -40,6 +40,7 @@ export default function styles(theme) {
     flexDirection: 'row',
     flexGrow: 1,
     justifyContent: 'flex-end',
+    alignItems: 'center',
   };
 
   /******************************************************************************/

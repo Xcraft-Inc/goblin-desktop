@@ -94,18 +94,22 @@ const config = {
         const r = quest.getStorage(entityStorage);
         const tables = form.selectedTables.join(', ');
         const tablesNumber = form.selectedTables.length;
-        yield desktop.addNotification({
-          notificationId: `notification@${quest.uuidV4()}`,
-          glyph: 'solid/download',
-          color: 'blue',
-          message: T(
-            `Recupération des entités {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
-            null,
-            {
-              length: tablesNumber,
-              tables,
-            }
-          ),
+        //- yield desktop.addNotification({
+        //-   notificationId: `notification@${quest.uuidV4()}`,
+        //-   glyph: 'solid/download',
+        //-   color: 'blue',
+        //-   message: T(
+        //-     `Recupération des entités {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
+        //-     null,
+        //-     {
+        //-       length: tablesNumber,
+        //-       tables,
+        //-     }
+        //-   ),
+        //- });
+        yield desktop.monitorPushSample({
+          channel: 'hydrate',
+          sample: 5,
         });
         for (const table of form.selectedTables) {
           const getInfo = (r, table, onlyPublished) => {
@@ -164,19 +168,24 @@ const config = {
         let count = 1;
         const batchSize = 100;
         const progressNotificationId = `notification@${quest.uuidV4()}`;
-        yield desktop.addNotification({
-          notificationId: `notification@${quest.uuidV4()}`,
-          glyph: 'solid/play',
-          color: 'blue',
-          message: T(
-            `Début de l'hydratation {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
-            null,
-            {
-              length: tablesNumber,
-              tables,
-            }
-          ),
+        //- yield desktop.addNotification({
+        //-   notificationId: `notification@${quest.uuidV4()}`,
+        //-   glyph: 'solid/play',
+        //-   color: 'blue',
+        //-   message: T(
+        //-     `Début de l'hydratation {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
+        //-     null,
+        //-     {
+        //-       length: tablesNumber,
+        //-       tables,
+        //-     }
+        //-   ),
+        //- });
+        yield desktop.monitorPushSample({
+          channel: 'hydrate',
+          sample: 10,
         });
+        let startTime = Date.now() / 100;
         for (const [key, entities] of reverseHydratation.entries()) {
           const cur = key + 1;
           const tot = reverseHydratation.length;
@@ -201,12 +210,21 @@ const config = {
               });
               if (count % batchSize === 0) {
                 yield quest.sub.wait(`*::*.${requestId}-hydrate.done`);
-                const progress = (count / totalLength) * 100;
-                yield desktop.addNotification({
-                  notificationId: progressNotificationId,
-                  glyph: 'solid/ellipsis-h',
-                  color: 'blue',
-                  message: `(${cur}/${tot}) ${progress.toFixed(0)} %`,
+                //- const progress = (count / totalLength) * 100;
+                //- yield desktop.addNotification({
+                //-   notificationId: progressNotificationId,
+                //-   glyph: 'solid/ellipsis-h',
+                //-   color: 'blue',
+                //-   message: `(${cur}/${tot}) ${progress.toFixed(0)} %`,
+                //- });
+                const currentTime = Date.now() / 100;
+                const duration = currentTime - startTime;
+                startTime = currentTime;
+                yield desktop.monitorPushSample({
+                  channel: 'hydrate',
+                  sample: duration,
+                  current: cur,
+                  total: tot,
                 });
               }
               count++;
@@ -225,6 +243,10 @@ const config = {
               length: tablesNumber,
             }
           ),
+        });
+        yield desktop.monitorPushSample({
+          channel: 'hydrate',
+          sample: 0,
         });
 
         yield quest.me.next();

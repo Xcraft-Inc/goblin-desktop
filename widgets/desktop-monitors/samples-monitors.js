@@ -1,7 +1,10 @@
 /******************************************************************************/
 
-const channelsSamples = {};
-const channelsMockRanks = {};
+const channelsData = {};
+
+/******************************************************************************/
+
+const period = 1000; // 1s
 
 /******************************************************************************/
 
@@ -10,48 +13,48 @@ function openChannel(channel, sampleCount) {
   for (let i = 0; i < sampleCount; i++) {
     samples.push(0);
   }
-  channelsSamples[channel] = samples;
-  channelsMockRanks[channel] = 0;
+  channelsData[channel] = {
+    samples,
+    rank: 0,
+  };
 }
 
 function closeChannel(channel) {
   // TODO
 }
 
-const period = 1000; // 1s
+function update(channel) {
+  const data = channelsData[channel];
+  const samples = data.samples;
 
-function pushSample(channel, value) {
-  const samples = channelsSamples[channel];
   samples.shift();
-  samples.push(value);
+  samples.push(samples[samples.length - 1]);
 }
 
-function pushSampleMock(channel) {
-  const rank = channelsMockRanks[channel];
-
-  const limit = channel === 'hydrate' ? 30 : 70;
-  const offset = channel === 'hydrate' ? 2 : 10;
-  const factor = channel === 'hydrate' ? 0.05 : 0;
-  if (rank % (limit * 2) < limit) {
-    pushSample(channel, Math.random() + offset);
-  } else {
-    pushSample(channel, Math.random() * factor);
+function pushSample(channel, sample) {
+  const data = channelsData[channel];
+  if (data) {
+    const samples = data.samples;
+    samples[samples.length - 1] = sample;
   }
-
-  channelsMockRanks[channel] = rank + 1;
 }
 
 function getSamples(channel) {
-  return channelsSamples[channel];
+  if (channel) {
+    const data = channelsData[channel];
+    return Array.from(data.samples);
+  } else {
+    return 0;
+  }
 }
 
 /******************************************************************************/
 
 module.exports = {
+  period,
   openChannel,
   closeChannel,
-  period,
+  update,
   pushSample,
-  pushSampleMock,
   getSamples,
 };

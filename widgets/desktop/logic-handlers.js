@@ -15,6 +15,8 @@ module.exports = {
       current: {
         workitems: {},
       },
+      monitorShowed: null,
+      monitorsSamples: {},
     });
   },
   'add-context': (state, action) => {
@@ -101,5 +103,25 @@ module.exports = {
         workitem: lastWorkitem,
         view: lastView,
       });
+  },
+
+  'monitor-showed': (state, action) => {
+    const channel = action.get('channel');
+    return state.set('monitorShowed', channel);
+  },
+  'monitor-push-sample': (state, action) => {
+    const channel = action.get('channel');
+    const sample = action.get('sample');
+    const current = action.get('current');
+    const total = action.get('total');
+    const monitorsSamples = state.get('monitorsSamples');
+    const n = monitorsSamples.set(channel, {sample, current, total});
+    state = state.set('monitorsSamples', n);
+    if (sample > 0) {
+      state = state.set('monitorShowed', channel); // show monitor when activity is on
+    } else {
+      state = state.set('monitorShowed', null); // hide monitor when activity is off
+    }
+    return state;
   },
 };
