@@ -585,6 +585,10 @@ Goblin.registerQuest(goblinName, 'monitor-showed', function(quest) {
   quest.do();
 });
 
+Goblin.registerQuest(goblinName, 'monitor-look', function(quest) {
+  quest.do();
+});
+
 Goblin.registerQuest(goblinName, 'monitor-push-sample', function(quest) {
   quest.do();
 });

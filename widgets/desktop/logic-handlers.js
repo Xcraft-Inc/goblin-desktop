@@ -16,6 +16,7 @@ module.exports = {
         workitems: {},
       },
       monitorShowed: null,
+      monitorLook: 'modern',
       monitorsSamples: {},
     });
   },
@@ -108,6 +109,10 @@ module.exports = {
   'monitor-showed': (state, action) => {
     const channel = action.get('channel');
     return state.set('monitorShowed', channel);
+  },
+  'monitor-look': (state, action) => {
+    const look = action.get('look');
+    return state.set('monitorLook', look);
   },
   'monitor-push-sample': (state, action) => {
     const channel = action.get('channel');

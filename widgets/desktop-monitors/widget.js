@@ -41,9 +41,17 @@ class DesktopMonitors extends Widget {
 
     const showed = !!this.props.monitorShowed;
 
-    const style = showed
-      ? this.styles.classNames.desktopMonitors
-      : this.styles.classNames.desktopMonitorsHidden;
+    let style;
+
+    if (this.props.monitorLook === 'modern') {
+      style = showed
+        ? this.styles.classNames.desktopMonitorsModern
+        : this.styles.classNames.desktopMonitorsModernHidden;
+    } else {
+      style = showed
+        ? this.styles.classNames.desktopMonitorsRetro
+        : this.styles.classNames.desktopMonitorsRetroHidden;
+    }
 
     let current = null;
     let total = null;
@@ -59,6 +67,7 @@ class DesktopMonitors extends Widget {
       <div className={style}>
         <SamplesMonitor
           showed={showed}
+          look={this.props.monitorLook}
           width="400px"
           height="300px"
           samples={samplesMonitors.getSamples(this.props.monitorShowed)}
@@ -74,9 +83,11 @@ class DesktopMonitors extends Widget {
 
 export default Widget.connect((state, props) => {
   const monitorShowed = state.get(`backend.${props.id}.monitorShowed`);
+  const monitorLook = state.get(`backend.${props.id}.monitorLook`);
   const monitorsSamples = state.get(`backend.${props.id}.monitorsSamples`);
   return {
     monitorShowed,
+    monitorLook,
     monitorsSamples,
   };
 })(DesktopMonitors);

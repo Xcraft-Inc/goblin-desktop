@@ -13,6 +13,7 @@ class DesktopMonitorsButtons extends Widget {
     this.styles = styles;
 
     this.onMonitor = this.onMonitor.bind(this);
+    this.onMonitorLook = this.onMonitorLook.bind(this);
     this.onMonitorPushSample = this.onMonitorPushSample.bind(this);
   }
 
@@ -21,14 +22,30 @@ class DesktopMonitorsButtons extends Widget {
     this.doFor(this.props.id, 'monitor-showed', {channel});
   }
 
+  onMonitorLook() {
+    const look = this.props.monitorLook === 'modern' ? 'retro' : 'modern';
+    this.doFor(this.props.id, 'monitor-look', {look});
+  }
+
   onMonitorPushSample(channel, sample) {
     this.doFor(this.props.id, 'monitor-push-sample', {channel, sample});
   }
 
   /******************************************************************************/
 
+  renderLook() {
+    return (
+      <Button
+        border="none"
+        text=""
+        width="5px"
+        height="5px"
+        onClick={() => this.onMonitorLook()}
+      />
+    );
+  }
+
   renderDebug() {
-    return null;
     return (
       <React.Fragment>
         <Button
@@ -83,7 +100,7 @@ class DesktopMonitorsButtons extends Widget {
   render() {
     return (
       <React.Fragment>
-        {this.renderDebug()}
+        {this.renderLook()}
         {this.renderButton('activity', T('Activity'))}
       </React.Fragment>
     );
@@ -94,9 +111,11 @@ class DesktopMonitorsButtons extends Widget {
 
 export default Widget.connect((state, props) => {
   const monitorShowed = state.get(`backend.${props.id}.monitorShowed`);
+  const monitorLook = state.get(`backend.${props.id}.monitorLook`);
   const monitorsSamples = state.get(`backend.${props.id}.monitorsSamples`);
   return {
     monitorShowed,
+    monitorLook,
     monitorsSamples,
   };
 })(DesktopMonitorsButtons);
