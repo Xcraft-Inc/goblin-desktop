@@ -13,8 +13,6 @@ class DesktopMonitors extends Widget {
     this.styles = styles;
 
     samplesMonitors.openChannel('activity', 100);
-    samplesMonitors.openChannel('hydrate', 100);
-
     this.timer = setInterval(() => this.update(), samplesMonitors.period);
   }
 
@@ -23,17 +21,17 @@ class DesktopMonitors extends Widget {
     clearInterval(this.timer);
 
     samplesMonitors.closeChannel('activity');
-    samplesMonitors.closeChannel('hydrate');
   }
 
   update() {
     samplesMonitors.update('activity');
-    samplesMonitors.update('hydrate');
 
     if (this.props.monitorShowed) {
       this.forceUpdate();
     }
   }
+
+  /******************************************************************************/
 
   render() {
     const monitorsSamples = this.props.monitorsSamples;
@@ -42,6 +40,7 @@ class DesktopMonitors extends Widget {
     }
 
     const showed = !!this.props.monitorShowed;
+
     const style = showed
       ? this.styles.classNames.desktopMonitors
       : this.styles.classNames.desktopMonitorsHidden;

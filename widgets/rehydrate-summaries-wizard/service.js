@@ -108,7 +108,7 @@ const config = {
         //-   ),
         //- });
         yield desktop.monitorPushSample({
-          channel: 'hydrate',
+          channel: 'activity',
           sample: 5,
         });
         for (const table of form.selectedTables) {
@@ -166,7 +166,8 @@ const config = {
         );
         const reverseHydratation = orderedHydratation.reverse();
         let count = 1;
-        const batchSize = 100;
+        //- const batchSize = 100;
+        const batchSize = 20;
         const progressNotificationId = `notification@${quest.uuidV4()}`;
         //- yield desktop.addNotification({
         //-   notificationId: `notification@${quest.uuidV4()}`,
@@ -182,7 +183,7 @@ const config = {
         //-   ),
         //- });
         yield desktop.monitorPushSample({
-          channel: 'hydrate',
+          channel: 'activity',
           sample: 10,
         });
         let startTime = Date.now() / 100;
@@ -221,7 +222,7 @@ const config = {
                 const duration = currentTime - startTime;
                 startTime = currentTime;
                 yield desktop.monitorPushSample({
-                  channel: 'hydrate',
+                  channel: 'activity',
                   sample: duration,
                   current: progress,
                   total: 100,
@@ -235,7 +236,7 @@ const config = {
         yield desktop.addNotification({
           notificationId: progressNotificationId,
           glyph: 'solid/beer',
-          color: 'blue',
+          //- color: 'blue',
           //- message: T(
           //-   `100 % {length, plural, one {de la table hydratée} other {des tables hydratées}}`,
           //-   null,
@@ -243,10 +244,11 @@ const config = {
           //-     length: tablesNumber,
           //-   }
           //- ),
+          color: '#0f0',
           message: T('Réhydratation terminée'),
         });
         yield desktop.monitorPushSample({
-          channel: 'hydrate',
+          channel: 'activity',
           sample: 0,
         });
 

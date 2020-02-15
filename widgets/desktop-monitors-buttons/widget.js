@@ -27,6 +27,27 @@ class DesktopMonitorsButtons extends Widget {
 
   /******************************************************************************/
 
+  renderDebug() {
+    return null;
+    return (
+      <React.Fragment>
+        <Button
+          border="none"
+          text="R"
+          onClick={() => this.onMonitorPushSample('activity', 0)}
+        />
+        <Button
+          border="none"
+          text="A"
+          onClick={() =>
+            this.onMonitorPushSample('activity', Math.random() * 100)
+          }
+          horizontalSpacing="large"
+        />
+      </React.Fragment>
+    );
+  }
+
   renderButton(channel, text) {
     let isActive = false;
     const monitorsSamples = this.props.monitorsSamples;
@@ -49,7 +70,8 @@ class DesktopMonitorsButtons extends Widget {
     return (
       <Button
         kind="button-footer"
-        width="130px"
+        width="140px"
+        justify="start"
         glyph={glyph}
         glyphColor={glyphColor}
         text={text}
@@ -61,32 +83,8 @@ class DesktopMonitorsButtons extends Widget {
   render() {
     return (
       <React.Fragment>
-        <Button
-          border="none"
-          text="R"
-          onClick={() => {
-            this.onMonitorPushSample('activity', 0);
-            this.onMonitorPushSample('hydrate', 0);
-          }}
-        />
-        <Button
-          border="none"
-          text="A"
-          onClick={() =>
-            this.onMonitorPushSample('activity', Math.random() * 100)
-          }
-        />
-        <Button
-          border="none"
-          text="H"
-          onClick={() =>
-            this.onMonitorPushSample('hydrate', Math.random() * 100)
-          }
-          horizontalSpacing="large"
-        />
-
+        {this.renderDebug()}
         {this.renderButton('activity', T('Activity'))}
-        {this.renderButton('hydrate', T('Hydrate'))}
       </React.Fragment>
     );
   }

@@ -6,6 +6,7 @@ export default function styles() {
     position: 'absolute',
     right: '10px',
     bottom: '10px',
+    opacity: 1,
     transition: '0.6s ease-out',
     transitionTimingFunction: 'cubic-bezier(0.35, 1.5, 0.75, 1.0)',
   };
@@ -13,6 +14,7 @@ export default function styles() {
   const desktopMonitorsHidden = {
     ...desktopMonitors,
     bottom: '-420px',
+    opacity: 0,
     transition: '0.7s ease-out',
     transitionTimingFunction: 'cubic-bezier(0.9, -0.7, 0.85, 0.4)',
   };
