@@ -35,14 +35,6 @@ export default function styles(theme) {
     top: theme.shapes.footerHeight,
   };
 
-  const footerSampleMonitors = {
-    display: 'flex',
-    flexDirection: 'row',
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  };
-
   /******************************************************************************/
 
   return {
@@ -50,7 +42,6 @@ export default function styles(theme) {
     contentWithoutfooter,
     footer,
     footerHidden,
-    footerSampleMonitors,
   };
 }
 

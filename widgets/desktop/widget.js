@@ -8,7 +8,6 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
 import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
-import DesktopMonitorsButtons from 'goblin-desktop/widgets/desktop-monitors-buttons/widget';
 import DesktopMonitors from 'goblin-desktop/widgets/desktop-monitors/widget';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
 import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
@@ -243,18 +242,6 @@ export default class Desktop extends Widget {
     return <WiredNotifications />;
   }
 
-  renderSamplesMonitorPopup() {
-    return <DesktopMonitors id={this.props.id} />;
-  }
-
-  renderFooterSamplesMonitorsButtons() {
-    return (
-      <div className={this.styles.classNames.footerSampleMonitors}>
-        <DesktopMonitorsButtons id={this.props.id} />
-      </div>
-    );
-  }
-
   renderFooter() {
     const CommandsPrompt = this.connectCommandsPrompt();
     const footerClass = this.showFooter
@@ -273,7 +260,7 @@ export default class Desktop extends Widget {
           id={this.props.id + '$widget-doc-caller'}
         />
         <CommandsPrompt />
-        {this.renderFooterSamplesMonitorsButtons()}
+        <DesktopMonitors id={this.props.id} />
       </div>
     );
   }
@@ -424,7 +411,6 @@ export default class Desktop extends Widget {
             <div className={contentClass}>
               <Content desktopId={id} />
               {this.renderNofications()}
-              {this.renderSamplesMonitorPopup()}
             </div>
             {this.renderFooter()}
           </Container>
