@@ -190,6 +190,9 @@ class DesktopMonitors extends Widget {
   }
 
   render() {
+    if (!this.props.monitorsSamples) {
+      return null;
+    }
     return (
       <div className={this.styles.classNames.desktopMonitors}>
         {this.renderButton('activity', T('Activity'))}
