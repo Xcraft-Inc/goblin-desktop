@@ -7,8 +7,8 @@ export const propNames = ['monitorLook'];
 export default function styles(theme, props) {
   const {monitorLook = 'modern'} = props;
 
-  let panel;
-  let panelHidden;
+  let notificationsShowed;
+  let notificationsHidden;
   let header;
   let headerRow;
   let notifications;
@@ -21,7 +21,7 @@ export default function styles(theme, props) {
     const s = theme.shapes.lineSpacing;
     const width = '400px';
 
-    panel = {
+    notificationsShowed = {
       position: 'absolute',
       top: '0px',
       right: '0px',
@@ -36,8 +36,8 @@ export default function styles(theme, props) {
       zIndex: '5',
     };
 
-    panelHidden = {
-      ...panel,
+    notificationsHidden = {
+      ...notificationsShowed,
       right: Unit.multiply(width, -1),
     };
 
@@ -71,7 +71,7 @@ export default function styles(theme, props) {
     const s = theme.shapes.lineSpacing;
     const width = '460px';
 
-    panel = {
+    notificationsShowed = {
       position: 'absolute',
       top: '10px',
       right: '10px',
@@ -90,8 +90,8 @@ export default function styles(theme, props) {
       transitionTimingFunction: 'cubic-bezier(0.35, 1.5, 0.75, 1.0)',
     };
 
-    panelHidden = {
-      ...panel,
+    notificationsHidden = {
+      ...notificationsShowed,
       right: Unit.multiply(Unit.add(width, '10px'), -1),
       transition: '0.7s ease-out',
       transitionTimingFunction: 'cubic-bezier(0.9, -0.7, 0.85, 0.4)',
@@ -131,8 +131,8 @@ export default function styles(theme, props) {
   /******************************************************************************/
 
   return {
-    panel,
-    panelHidden,
+    notificationsShowed,
+    notificationsHidden,
     header,
     headerRow,
     notifications,

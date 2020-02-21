@@ -140,15 +140,14 @@ class Notifications extends Widget {
 
     const panelClass =
       show === 'true'
-        ? this.styles.classNames.panel
-        : this.styles.classNames.panelHidden;
-    const notificationsClass = this.styles.classNames.notifications;
+        ? this.styles.classNames.notificationsShowed
+        : this.styles.classNames.notificationsHidden;
 
     return (
       <div className={panelClass}>
         {this.renderHeader()}
         {!data || data.size === 0 ? null : (
-          <div className={notificationsClass}>
+          <div className={this.styles.classNames.notifications}>
             {this.renderNotifications(data)}
           </div>
         )}
