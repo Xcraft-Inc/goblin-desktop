@@ -29,6 +29,8 @@ class Notifications extends Widget {
     return this.props.data && this.props.data.size > 0;
   }
 
+  /******************************************************************************/
+
   renderHeader() {
     const headerClass = this.styles.classNames.header;
     const headerRowClass = this.styles.classNames.headerRow;
@@ -97,6 +99,7 @@ class Notifications extends Widget {
         key={index}
         data={notification}
         status={notification.status}
+        look={this.props.monitorLook}
         onClickNotification={() =>
           this.doAs('desktop', 'click-notification', {notification})
         }
@@ -109,9 +112,6 @@ class Notifications extends Widget {
   }
 
   renderNotifications(notifications) {
-    if (!notifications || notifications.size === 0) {
-      return null;
-    }
     // The most recent notification first (on top).
     const nn = Widget.shred(notifications);
     let index = 0;
@@ -147,13 +147,21 @@ class Notifications extends Widget {
     return (
       <div className={panelClass}>
         {this.renderHeader()}
-        <div className={notificationsClass}>
-          {this.renderNotifications(data)}
-        </div>
+        {!data || data.size === 0 ? null : (
+          <div className={notificationsClass}>
+            {this.renderNotifications(data)}
+          </div>
+        )}
       </div>
     );
   }
 }
 
 /******************************************************************************/
-export default Notifications;
+
+export default Widget.connect((state, props) => {
+  const monitorLook = state.get(`backend.${props.id}.monitorLook`);
+  return {
+    monitorLook,
+  };
+})(Notifications);
