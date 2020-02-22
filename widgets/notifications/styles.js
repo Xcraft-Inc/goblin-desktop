@@ -85,9 +85,10 @@ export default function styles(theme) {
   };
 
   const headerRetro = {
+    position: 'relative',
     display: 'inline',
     flexGrow: '1',
-    padding: Unit.multiply(m, 0.5) + ' ' + m,
+    padding: '15px 50px',
     margin: '0px 0px ' + s + ' 0px',
     borderRadius: '20px',
     borderTop: '10px solid #666',
@@ -123,7 +124,7 @@ export default function styles(theme) {
     borderRadius: '6px',
     border: '1px solid #333',
     backgroundColor: '#777',
-    boxShadow: '1px 2px 5px 1px #555',
+    boxShadow: '1px 2px 5px 1px #111',
   };
   const screwMainTopLeft = {
     ..._screwMain,

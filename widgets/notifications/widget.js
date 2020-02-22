@@ -32,6 +32,42 @@ class Notifications extends Widget {
 
   /******************************************************************************/
 
+  renderScrew(styleMain, styleSlot) {
+    return (
+      <React.Fragment>
+        <div className={styleMain} />
+        <div className={styleSlot} />
+      </React.Fragment>
+    );
+  }
+
+  renderScrews() {
+    if (this.props.monitorLook !== 'retro') {
+      return null;
+    }
+
+    return (
+      <React.Fragment>
+        {this.renderScrew(
+          this.styles.classNames.screwMainTopLeft,
+          this.styles.classNames.screwSlotTopLeft
+        )}
+        {this.renderScrew(
+          this.styles.classNames.screwMainTopRight,
+          this.styles.classNames.screwSlotTopRight
+        )}
+        {this.renderScrew(
+          this.styles.classNames.screwMainBottomLeft,
+          this.styles.classNames.screwSlotBottomLeft
+        )}
+        {this.renderScrew(
+          this.styles.classNames.screwMainBottomRight,
+          this.styles.classNames.screwSlotBottomRight
+        )}
+      </React.Fragment>
+    );
+  }
+
   renderHeader() {
     const headerClass = this.isRetro
       ? this.styles.classNames.headerRetro
@@ -43,6 +79,7 @@ class Notifications extends Widget {
 
     return (
       <div className={headerClass}>
+        {this.renderScrews()}
         <div className={headerRowClass}>
           <Button
             glyph={
@@ -136,42 +173,6 @@ class Notifications extends Widget {
       .toArray();
   }
 
-  renderScrew(styleMain, styleSlot) {
-    return (
-      <React.Fragment>
-        <div className={styleMain} />
-        <div className={styleSlot} />
-      </React.Fragment>
-    );
-  }
-
-  renderScrews() {
-    if (this.props.monitorLook !== 'retro') {
-      return null;
-    }
-
-    return (
-      <React.Fragment>
-        {this.renderScrew(
-          this.styles.classNames.screwMainTopLeft,
-          this.styles.classNames.screwSlotTopLeft
-        )}
-        {this.renderScrew(
-          this.styles.classNames.screwMainTopRight,
-          this.styles.classNames.screwSlotTopRight
-        )}
-        {this.renderScrew(
-          this.styles.classNames.screwMainBottomLeft,
-          this.styles.classNames.screwSlotBottomLeft
-        )}
-        {this.renderScrew(
-          this.styles.classNames.screwMainBottomRight,
-          this.styles.classNames.screwSlotBottomRight
-        )}
-      </React.Fragment>
-    );
-  }
-
   renderPanel() {
     const notifications = this.props.data;
     if (!notifications || notifications.size === 0) {
@@ -183,10 +184,7 @@ class Notifications extends Widget {
       : this.styles.classNames.notificationsModern;
 
     return (
-      <div className={style}>
-        {this.renderScrews()}
-        {this.renderNotifications(notifications)}
-      </div>
+      <div className={style}>{this.renderNotifications(notifications)}</div>
     );
   }
 
