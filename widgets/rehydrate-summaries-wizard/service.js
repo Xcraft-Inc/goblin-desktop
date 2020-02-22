@@ -244,7 +244,7 @@ const config = {
           //-     length: tablesNumber,
           //-   }
           //- ),
-          color: '#0f0',
+          color: 'green',
           message: T('Réhydratation terminée'),
         });
         yield desktop.monitorPushSample({

@@ -85,16 +85,16 @@ export default function styles(theme, props) {
       backgroundColor: '#222',
       boxShadow: '0px 0px 50px black',
       zIndex: '5',
-      transition: '0.6s ease-out',
       transitionProperty: 'right',
-      transitionTimingFunction: 'cubic-bezier(0.35, 1.5, 0.75, 1.0)',
+      transition: theme.transitions.retroOpenTransition,
+      transitionTimingFunction: theme.transitions.retroOpenFunction,
     };
 
     notificationsHidden = {
       ...notificationsShowed,
       right: Unit.multiply(Unit.add(width, '10px'), -1),
-      transition: '0.7s ease-out',
-      transitionTimingFunction: 'cubic-bezier(0.9, -0.7, 0.85, 0.4)',
+      transition: theme.transitions.retroCloseTransition,
+      transitionTimingFunction: theme.transitions.retroCloseFunction,
     };
 
     header = {
