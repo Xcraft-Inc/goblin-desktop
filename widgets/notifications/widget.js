@@ -77,14 +77,15 @@ class Notifications extends Widget {
       ? this.styles.classNames.headerRowRetro
       : this.styles.classNames.headerRowModern;
 
+    const glyphOff = this.isRetro ? 'regular/square' : 'light/toggle-off';
+    const glyphOn = this.isRetro ? 'solid/times-square' : 'light/toggle-on';
+
     return (
       <div className={headerClass}>
         {this.renderScrews()}
         <div className={headerRowClass}>
           <Button
-            glyph={
-              this.props.dnd === 'true' ? 'light/toggle-on' : 'light/toggle-off'
-            }
+            glyph={this.props.dnd === 'true' ? glyphOn : glyphOff}
             text={T('Ne pas me déranger')}
             kind="button-notification"
             onClick={() => {
@@ -96,11 +97,7 @@ class Notifications extends Widget {
         </div>
         <div className={headerRowClass}>
           <Button
-            glyph={
-              this.props.onlyNews === 'true'
-                ? 'light/toggle-on'
-                : 'light/toggle-off'
-            }
+            glyph={this.props.onlyNews === 'true' ? glyphOn : glyphOff}
             text={T('Seulement les nouvelles')}
             kind="button-notification"
             onClick={() => {
@@ -159,11 +156,6 @@ class Notifications extends Widget {
     const nn = Widget.shred(notifications);
     let index = 0;
     return nn
-      .map(n => {
-        if (this.props.onlyNews === 'false' || n.get('status') === 'not-read') {
-          return n;
-        }
-      })
       .sort((a, b) => b.get('order') - a.get('order'))
       .map(n => {
         if (n && n.toJS) {
@@ -174,8 +166,13 @@ class Notifications extends Widget {
   }
 
   renderPanel() {
-    const notifications = this.props.data;
-    if (!notifications || notifications.size === 0) {
+    if (!this.props.data) {
+      return null;
+    }
+    const notifications = this.props.data.filter(
+      n => this.props.onlyNews === 'false' || n.get('status') === 'not-read'
+    );
+    if (notifications.size === 0) {
       return null;
     }
 
