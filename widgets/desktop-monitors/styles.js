@@ -15,7 +15,7 @@ export default function styles(theme) {
 
   const look = {
     position: 'absolute',
-    top: '0px',
+    bottom: '0px',
     right: '0px',
   };
 

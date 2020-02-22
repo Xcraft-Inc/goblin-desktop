@@ -1,8 +1,5 @@
-//T:2019-02-27
-
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Notification from 'goblin-gadgets/widgets/notification/widget';
@@ -29,11 +26,20 @@ class Notifications extends Widget {
     return this.props.data && this.props.data.size > 0;
   }
 
+  get isRetro() {
+    return this.props.monitorLook === 'retro';
+  }
+
   /******************************************************************************/
 
   renderHeader() {
-    const headerClass = this.styles.classNames.header;
-    const headerRowClass = this.styles.classNames.headerRow;
+    const headerClass = this.isRetro
+      ? this.styles.classNames.headerRetro
+      : this.styles.classNames.headerModern;
+
+    const headerRowClass = this.isRetro
+      ? this.styles.classNames.headerRowRetro
+      : this.styles.classNames.headerRowModern;
 
     return (
       <div className={headerClass}>
@@ -130,27 +136,83 @@ class Notifications extends Widget {
       .toArray();
   }
 
+  renderScrew(styleMain, styleSlot) {
+    return (
+      <React.Fragment>
+        <div className={styleMain} />
+        <div className={styleSlot} />
+      </React.Fragment>
+    );
+  }
+
+  renderScrews() {
+    if (this.props.monitorLook !== 'retro') {
+      return null;
+    }
+
+    return (
+      <React.Fragment>
+        {this.renderScrew(
+          this.styles.classNames.screwMainTopLeft,
+          this.styles.classNames.screwSlotTopLeft
+        )}
+        {this.renderScrew(
+          this.styles.classNames.screwMainTopRight,
+          this.styles.classNames.screwSlotTopRight
+        )}
+        {this.renderScrew(
+          this.styles.classNames.screwMainBottomLeft,
+          this.styles.classNames.screwSlotBottomLeft
+        )}
+        {this.renderScrew(
+          this.styles.classNames.screwMainBottomRight,
+          this.styles.classNames.screwSlotBottomRight
+        )}
+      </React.Fragment>
+    );
+  }
+
+  renderPanel() {
+    const notifications = this.props.data;
+    if (!notifications || notifications.size === 0) {
+      return null;
+    }
+
+    const style = this.isRetro
+      ? this.styles.classNames.notificationsRetro
+      : this.styles.classNames.notificationsModern;
+
+    return (
+      <div className={style}>
+        {this.renderScrews()}
+        {this.renderNotifications(notifications)}
+      </div>
+    );
+  }
+
   render() {
     if (!this.props.id) {
       return null;
     }
 
-    const data = this.props.data;
     const show = this.props.show;
-
-    const panelClass =
-      show === 'true'
-        ? this.styles.classNames.notificationsShowed
-        : this.styles.classNames.notificationsHidden;
+    let panelClass;
+    if (this.isRetro) {
+      panelClass =
+        show === 'true'
+          ? this.styles.classNames.notificationsShowedRetro
+          : this.styles.classNames.notificationsHiddenRetro;
+    } else {
+      panelClass =
+        show === 'true'
+          ? this.styles.classNames.notificationsShowedModern
+          : this.styles.classNames.notificationsHiddenModern;
+    }
 
     return (
       <div className={panelClass}>
         {this.renderHeader()}
-        {!data || data.size === 0 ? null : (
-          <div className={this.styles.classNames.notifications}>
-            {this.renderNotifications(data)}
-          </div>
-        )}
+        {this.renderPanel()}
       </div>
     );
   }
