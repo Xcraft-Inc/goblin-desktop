@@ -13,8 +13,8 @@ class DesktopMonitors extends Widget {
     super(...arguments);
     this.styles = styles;
 
+    this.onLook = this.onLook.bind(this);
     this.onMonitor = this.onMonitor.bind(this);
-    this.onMonitorLook = this.onMonitorLook.bind(this);
     this.onMonitorPushSample = this.onMonitorPushSample.bind(this);
 
     this.state = {
@@ -61,14 +61,14 @@ class DesktopMonitors extends Widget {
     }
   }
 
+  onLook() {
+    const name = this.props.look === 'modern' ? 'retro' : 'modern';
+    this.doFor(this.props.id, 'change-look', {name});
+  }
+
   onMonitor(channel) {
     channel = this.props.monitorShowed === channel ? null : channel;
     this.doFor(this.props.id, 'monitor-showed', {channel});
-  }
-
-  onMonitorLook() {
-    const look = this.props.monitorLook === 'modern' ? 'retro' : 'modern';
-    this.doFor(this.props.id, 'monitor-look', {look});
   }
 
   onMonitorPushSample(channel, sample) {
@@ -86,7 +86,7 @@ class DesktopMonitors extends Widget {
     const showed = !!this.props.monitorShowed;
 
     let style;
-    if (this.props.monitorLook === 'modern') {
+    if (this.props.look === 'modern') {
       style = showed
         ? this.styles.classNames.desktopMonitorsModern
         : this.styles.classNames.desktopMonitorsModernHidden;
@@ -111,7 +111,7 @@ class DesktopMonitors extends Widget {
         {showed || this.doRenderMonitor ? (
           <SamplesMonitor
             showed={showed}
-            look={this.props.monitorLook}
+            look={this.props.look}
             width="400px"
             height="300px"
             samples={samplesMonitors.getSamples(this.props.monitorShowed)}
@@ -131,7 +131,7 @@ class DesktopMonitors extends Widget {
           text=""
           width="5px"
           height="5px"
-          onClick={() => this.onMonitorLook()}
+          onClick={() => this.onLook()}
         />
       </div>
     );
@@ -205,13 +205,21 @@ class DesktopMonitors extends Widget {
 
 /******************************************************************************/
 
-export default Widget.connect((state, props) => {
+const ConnectedDesktopMonitors = Widget.connect((state, props) => {
+  const look = state.get(`backend.${props.labId}.look`);
   const monitorShowed = state.get(`backend.${props.id}.monitorShowed`);
-  const monitorLook = state.get(`backend.${props.id}.monitorLook`);
   const monitorsSamples = state.get(`backend.${props.id}.monitorsSamples`);
   return {
+    look,
     monitorShowed,
-    monitorLook,
     monitorsSamples,
   };
 })(DesktopMonitors);
+
+export default class extends Widget {
+  render() {
+    return (
+      <ConnectedDesktopMonitors labId={this.context.labId} {...this.props} />
+    );
+  }
+}

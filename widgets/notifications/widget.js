@@ -16,22 +16,12 @@ class Notifications extends Widget {
     this.handleToggleOnlyNews = this.handleToggleOnlyNews.bind(this);
   }
 
-  static get wiring() {
-    return {
-      id: 'id',
-      show: 'showNotifications',
-      data: 'notifications',
-      dnd: 'dnd',
-      onlyNews: 'onlyNews',
-    };
-  }
-
   get hasNotifications() {
     return this.props.data && this.props.data.size > 0;
   }
 
   get isRetro() {
-    return this.props.monitorLook === 'retro';
+    return this.props.look === 'retro';
   }
 
   handleToggleDnd() {
@@ -58,7 +48,7 @@ class Notifications extends Widget {
   }
 
   renderScrews() {
-    if (this.props.monitorLook !== 'retro') {
+    if (!this.isRetro) {
       return null;
     }
 
@@ -167,7 +157,7 @@ class Notifications extends Widget {
         key={index}
         data={notification}
         status={notification.status}
-        look={this.props.monitorLook}
+        look={this.props.look}
         onClickNotification={() =>
           this.doAs('desktop', 'click-notification', {notification})
         }
@@ -243,9 +233,21 @@ class Notifications extends Widget {
 
 /******************************************************************************/
 
-export default Widget.connect((state, props) => {
-  const monitorLook = state.get(`backend.${props.id}.monitorLook`);
+const ConnectedNotifications = Widget.connect((state, props) => {
+  const desktopState = state.get(`backend.${props.id}`);
+  const look = state.get(`backend.${props.labId}.look`);
   return {
-    monitorLook,
+    show: desktopState.get('showNotifications'),
+    data: desktopState.get('notifications'),
+    dnd: desktopState.get('dnd'),
+    onlyNews: desktopState.get('onlyNews'),
+    look,
   };
 })(Notifications);
+export default class extends Widget {
+  render() {
+    return (
+      <ConnectedNotifications labId={this.context.labId} {...this.props} />
+    );
+  }
+}

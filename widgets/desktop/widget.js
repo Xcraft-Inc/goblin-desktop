@@ -14,7 +14,6 @@ import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
 import Notifications from 'goblin-desktop/widgets/notifications/widget';
 import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 import IMG_GOBLIN from './goblin.png';
-const wiredNotifications = Widget.Wired(Notifications);
 const viewImporter = importer('view');
 import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
 const NabuToolbarConnected = Widget.Wired(NabuToolbar)();
@@ -237,9 +236,7 @@ export default class Desktop extends Widget {
   /******************************************************************************/
 
   renderNofications() {
-    const WiredNotifications = wiredNotifications(this.props.id);
-
-    return <WiredNotifications />;
+    return <Notifications id={this.props.id} />;
   }
 
   renderFooter() {

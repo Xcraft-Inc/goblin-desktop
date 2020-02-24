@@ -477,6 +477,22 @@ Goblin.registerQuest(goblinName, 'change-team', function(quest, teamId) {
 
 /******************************************************************************/
 
+Goblin.registerQuest(goblinName, 'change-look', function(quest, name) {
+  quest.evt(`change-look.requested`, {
+    name,
+  });
+});
+
+Goblin.registerQuest(goblinName, 'monitor-showed', function(quest) {
+  quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'monitor-push-sample', function(quest) {
+  quest.do();
+});
+
+/******************************************************************************/
+
 Goblin.registerQuest(goblinName, 'get-current-context', function(quest) {
   return quest.goblin.getState().get('current.workcontext');
 });
@@ -577,20 +593,6 @@ Goblin.registerQuest(goblinName, 'dispatch', function(quest, action) {
   quest.evt(`dispatch.requested`, {
     action,
   });
-});
-
-/******************************************************************************/
-
-Goblin.registerQuest(goblinName, 'monitor-showed', function(quest) {
-  quest.do();
-});
-
-Goblin.registerQuest(goblinName, 'monitor-look', function(quest) {
-  quest.do();
-});
-
-Goblin.registerQuest(goblinName, 'monitor-push-sample', function(quest) {
-  quest.do();
 });
 
 /******************************************************************************/
