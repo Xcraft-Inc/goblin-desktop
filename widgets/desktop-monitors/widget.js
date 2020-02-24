@@ -79,17 +79,6 @@ class DesktopMonitors extends Widget {
 
     const showed = !!this.props.monitorShowed;
 
-    let style;
-    if (this.props.look === 'modern') {
-      style = showed
-        ? this.styles.classNames.desktopMonitorsModern
-        : this.styles.classNames.desktopMonitorsModernHidden;
-    } else {
-      style = showed
-        ? this.styles.classNames.desktopMonitorsRetro
-        : this.styles.classNames.desktopMonitorsRetroHidden;
-    }
-
     let current = null;
     let total = null;
     if (showed) {
@@ -101,7 +90,10 @@ class DesktopMonitors extends Widget {
     }
 
     return (
-      <div className={style} onTransitionEnd={this.handleTransitionEnd}>
+      <div
+        className={this.styles.classNames.monitor}
+        onTransitionEnd={this.handleTransitionEnd}
+      >
         {showed || this.doRenderMonitor ? (
           <SamplesMonitor
             showed={showed}

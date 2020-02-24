@@ -2,7 +2,11 @@ import {Unit} from 'electrum-theme';
 
 /******************************************************************************/
 
-export default function styles(theme) {
+export const propNames = ['look', 'monitorShowed'];
+
+export default function styles(theme, props) {
+  const {look = 'modern', monitorShowed} = props;
+
   const desktopMonitors = {
     position: 'relative',
     height: theme.spacing.footerHeight,
@@ -15,52 +19,44 @@ export default function styles(theme) {
 
   /******************************************************************************/
 
+  let monitor;
+
   //---------\
   //  MODERN  >
   //---------/
-  const desktopMonitorsModern = {
-    zIndex: 20,
-    position: 'absolute',
-    right: '0px',
-    bottom: theme.shapes.footerHeight,
-    transitionProperty: 'bottom',
-    transition: '0.3s ease-out',
-  };
-
-  const desktopMonitorsModernHidden = {
-    ...desktopMonitorsModern,
-    bottom: '-420px',
-  };
+  if (look === 'modern') {
+    monitor = {
+      zIndex: 20,
+      position: 'absolute',
+      right: '0px',
+      bottom: monitorShowed ? theme.shapes.footerHeight : '-420px',
+      transitionProperty: 'bottom',
+      transition: '0.3s ease-out',
+    };
+  }
 
   //--------\
   //  RETRO  >
   //--------/
-  const desktopMonitorsRetro = {
-    zIndex: 20,
-    position: 'absolute',
-    right: '10px',
-    bottom: Unit.add(theme.shapes.footerHeight, '10px'),
-    transitionProperty: 'bottom',
-    transition: theme.transitions.retroOpenTransition,
-    transitionTimingFunction: theme.transitions.retroOpenFunction,
-  };
-
-  const desktopMonitorsRetroHidden = {
-    ...desktopMonitorsRetro,
-    bottom: '-420px',
-    transition: theme.transitions.retroCloseTransition,
-    transitionTimingFunction: theme.transitions.retroCloseFunction,
-  };
+  if (look === 'retro') {
+    monitor = {
+      zIndex: 20,
+      position: 'absolute',
+      right: '10px',
+      bottom: monitorShowed
+        ? Unit.add(theme.shapes.footerHeight, '10px')
+        : '-420px',
+      transitionProperty: 'bottom',
+      transition: theme.transitions.retroOpenTransition,
+      transitionTimingFunction: theme.transitions.retroOpenFunction,
+    };
+  }
 
   /******************************************************************************/
 
   return {
     desktopMonitors,
-
-    desktopMonitorsModern,
-    desktopMonitorsModernHidden,
-    desktopMonitorsRetro,
-    desktopMonitorsRetroHidden,
+    monitor,
   };
 }
 
