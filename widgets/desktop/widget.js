@@ -21,7 +21,6 @@ const NabuToolbarConnected = Widget.Wired(NabuToolbar)();
 /******************************************************************************/
 
 let currentTheme = 'default';
-
 const themes = [
   {text: T('Standard'), value: 'default'},
   {text: T('Standard compact'), value: 'default-compact'},
@@ -34,6 +33,14 @@ const themes = [
   {text: T('Foncé'), value: 'default-dark'},
   {text: T('Dragula'), value: 'default-dragula'},
 ];
+
+let currentLook = 'modern';
+const looks = [
+  {text: T('Moderne'), value: 'modern'},
+  {text: T('Steampunk'), value: 'retro'},
+];
+
+/******************************************************************************/
 
 const LocaleMenuConnected = Widget.connect((state, props) => {
   const locales = state.get(`backend.nabu.locales`);
@@ -105,6 +112,7 @@ export default class Desktop extends Widget {
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeLocale = this.onChangeLocale.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
+    this.onChangeLook = this.onChangeLook.bind(this);
     this.onChangeTeam = this.onChangeTeam.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.onTab = this.onTab.bind(this);
@@ -160,6 +168,11 @@ export default class Desktop extends Widget {
   onChangeTheme(name) {
     currentTheme = name;
     this.do('change-theme', {name});
+  }
+
+  onChangeLook(name) {
+    currentLook = name;
+    this.do('change-look', {name});
   }
 
   onChangeTeam(teamId) {
@@ -364,9 +377,17 @@ export default class Desktop extends Widget {
                   kind="main-tab-right"
                   tooltip={T('Choix du thème')}
                   items={themes}
-                  onChange={this.onChangeTheme}
                   currentItemValue={currentTheme}
+                  onChange={this.onChangeTheme}
                 />
+                {/* <MainTabMenu
+                  glyph="solid/jack-o-lantern"
+                  kind="main-tab-right"
+                  tooltip={T('Choix du look')}
+                  items={looks}
+                  currentItemValue={currentLook}
+                  onChange={this.onChangeLook}
+                /> */}
                 <Button
                   glyph="solid/tv"
                   kind="main-tab-right"
@@ -402,6 +423,20 @@ export default class Desktop extends Widget {
                     }}
                   />
                 ) : null}
+                <Container kind="column">
+                  <Button
+                    border="none"
+                    width="5px"
+                    height="20px"
+                    onClick={() => this.onChangeLook('modern')}
+                  />
+                  <Button
+                    border="none"
+                    width="5px"
+                    height="20px"
+                    onClick={() => this.onChangeLook('retro')}
+                  />
+                </Container>
               </Container>
             </Container>
             <BeforeContent desktopId={id} />

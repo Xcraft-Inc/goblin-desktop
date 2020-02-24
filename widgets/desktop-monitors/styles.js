@@ -13,12 +13,6 @@ export default function styles(theme) {
     alignItems: 'center',
   };
 
-  const look = {
-    position: 'absolute',
-    bottom: '0px',
-    right: '0px',
-  };
-
   /******************************************************************************/
 
   //---------\
@@ -62,7 +56,6 @@ export default function styles(theme) {
 
   return {
     desktopMonitors,
-    look,
 
     desktopMonitorsModern,
     desktopMonitorsModernHidden,

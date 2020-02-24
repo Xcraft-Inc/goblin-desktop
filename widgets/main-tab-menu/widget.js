@@ -9,7 +9,7 @@ import Combo from 'goblin-gadgets/widgets/combo/widget';
 
 /******************************************************************************/
 
-class MainTabMenu extends Widget {
+export default class MainTabMenu extends Widget {
   constructor() {
     super(...arguments);
 
@@ -18,6 +18,7 @@ class MainTabMenu extends Widget {
     this.state = {
       showMenu: false,
     };
+
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
@@ -103,7 +104,7 @@ class MainTabMenu extends Widget {
       currentItemValue,
       itemsTextKey,
       itemsValueKey,
-      ...other
+      ...otherProps
     } = this.props;
     const contentClass = this.styles.classNames.content;
 
@@ -113,7 +114,7 @@ class MainTabMenu extends Widget {
           ref={x => (this.comboButton = x)}
           active={this.showMenu}
           onClick={this.onClick}
-          {...other}
+          {...otherProps}
         />
         <div className={contentClass}>{this.renderMenu()}</div>
       </div>
@@ -122,4 +123,3 @@ class MainTabMenu extends Widget {
 }
 
 /******************************************************************************/
-export default MainTabMenu;

@@ -13,7 +13,6 @@ class DesktopMonitors extends Widget {
     super(...arguments);
     this.styles = styles;
 
-    this.onLook = this.onLook.bind(this);
     this.onMonitor = this.onMonitor.bind(this);
     this.onMonitorPushSample = this.onMonitorPushSample.bind(this);
 
@@ -59,11 +58,6 @@ class DesktopMonitors extends Widget {
       const showed = !!this.props.monitorShowed;
       this.doRenderMonitor = showed;
     }
-  }
-
-  onLook() {
-    const name = this.props.look === 'modern' ? 'retro' : 'modern';
-    this.doFor(this.props.id, 'change-look', {name});
   }
 
   onMonitor(channel) {
@@ -119,20 +113,6 @@ class DesktopMonitors extends Widget {
             total={total}
           />
         ) : null}
-      </div>
-    );
-  }
-
-  renderLook() {
-    return (
-      <div className={this.styles.classNames.look}>
-        <Button
-          border="none"
-          text=""
-          width="5px"
-          height="5px"
-          onClick={() => this.onLook()}
-        />
       </div>
     );
   }
@@ -196,7 +176,6 @@ class DesktopMonitors extends Widget {
     return (
       <div className={this.styles.classNames.desktopMonitors}>
         {this.renderButton('activity', T('Activity'))}
-        {this.renderLook()}
         {this.renderMonitor()}
       </div>
     );
