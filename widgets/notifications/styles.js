@@ -103,6 +103,7 @@ export default function styles(theme) {
     minHeight: '32px',
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
   };
 
   const notificationsRetro = {
