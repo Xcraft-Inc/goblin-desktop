@@ -3,6 +3,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
+import Screw from 'goblin-gadgets/widgets/screw/widget';
 import Notification from 'goblin-gadgets/widgets/notification/widget';
 import T from 't';
 
@@ -38,15 +39,6 @@ class Notifications extends Widget {
 
   /******************************************************************************/
 
-  renderScrew(styleMain, styleSlot) {
-    return (
-      <React.Fragment>
-        <div className={styleMain} />
-        <div className={styleSlot} />
-      </React.Fragment>
-    );
-  }
-
   renderScrews() {
     if (!this.isRetro) {
       return null;
@@ -54,22 +46,10 @@ class Notifications extends Widget {
 
     return (
       <React.Fragment>
-        {this.renderScrew(
-          this.styles.classNames.screwMainTopLeft,
-          this.styles.classNames.screwSlotTopLeft
-        )}
-        {this.renderScrew(
-          this.styles.classNames.screwMainTopRight,
-          this.styles.classNames.screwSlotTopRight
-        )}
-        {this.renderScrew(
-          this.styles.classNames.screwMainBottomLeft,
-          this.styles.classNames.screwSlotBottomLeft
-        )}
-        {this.renderScrew(
-          this.styles.classNames.screwMainBottomRight,
-          this.styles.classNames.screwSlotBottomRight
-        )}
+        <Screw top="8px" left="8px" angle="-45deg" />
+        <Screw top="8px" right="8px" angle="70deg" />
+        <Screw bottom="8px" left="8px" angle="20deg" />
+        <Screw bottom="8px" right="8px" angle="-10deg" />
       </React.Fragment>
     );
   }

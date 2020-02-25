@@ -131,86 +131,11 @@ export default function styles(theme, props) {
 
     /******************************************************************************/
 
-    const _screwMain = {
-      position: 'absolute',
-      width: '12px',
-      height: '12px',
-      borderRadius: '6px',
-      border: '1px solid #333',
-      backgroundColor: '#777',
-      boxShadow: '1px 2px 5px 1px #111',
-    };
-    screwMainTopLeft = {
-      ..._screwMain,
-      top: '8px',
-      left: '8px',
-    };
-    screwMainTopRight = {
-      ..._screwMain,
-      top: '8px',
-      right: '8px',
-    };
-    screwMainBottomLeft = {
-      ..._screwMain,
-      bottom: '8px',
-      left: '8px',
-    };
-    screwMainBottomRight = {
-      ..._screwMain,
-      bottom: '8px',
-      right: '8px',
-    };
-
-    const _screwSlot = {
-      position: 'absolute',
-      width: '12px',
-      height: '3px',
-      margin: '4.5px 0px',
-      border: '1px solid #333',
-      backgroundColor: '#666',
-    };
-    screwSlotTopLeft = {
-      ..._screwSlot,
-      top: '8px',
-      left: '8px',
-      transform: 'rotate(45deg)',
-    };
-    screwSlotTopRight = {
-      ..._screwSlot,
-      top: '8px',
-      right: '8px',
-      transform: 'rotate(-20deg)',
-    };
-    screwSlotBottomLeft = {
-      ..._screwSlot,
-      bottom: '8px',
-      left: '8px',
-      transform: 'rotate(70deg)',
-    };
-    screwSlotBottomRight = {
-      ..._screwSlot,
-      bottom: '8px',
-      right: '8px',
-      transform: 'rotate(0deg)',
-    };
-  }
-
-  /******************************************************************************/
-
   return {
     notifications,
     header,
     headerRow,
     panel,
-
-    screwMainTopLeft,
-    screwMainTopRight,
-    screwMainBottomLeft,
-    screwMainBottomRight,
-    screwSlotTopLeft,
-    screwSlotTopRight,
-    screwSlotBottomLeft,
-    screwSlotBottomRight,
   };
 }
 
