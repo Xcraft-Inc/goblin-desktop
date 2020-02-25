@@ -16,15 +16,6 @@ export default function styles(theme, props) {
   let headerRow;
   let panel;
 
-  let screwMainTopLeft;
-  let screwMainTopRight;
-  let screwMainBottomLeft;
-  let screwMainBottomRight;
-  let screwSlotTopLeft;
-  let screwSlotTopRight;
-  let screwSlotBottomLeft;
-  let screwSlotBottomRight;
-
   //---------\
   //  MODERN  >
   //---------/
