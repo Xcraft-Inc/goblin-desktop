@@ -1,5 +1,4 @@
 'use strict';
-//T:2019-02-27
 
 const T = require('goblin-nabu');
 const {buildWizard} = require('goblin-desktop');
@@ -8,6 +7,19 @@ const entityStorage = workshopConfig.entityStorageProvider.replace(
   'goblin-',
   ''
 );
+
+/******************************************************************************/
+
+function isTrue(value) {
+  const type = typeof value;
+  if (type === 'boolean') {
+    return value;
+  } else if (type === 'string') {
+    return value === 'true';
+  } else {
+    return false; // if undefined, never true
+  }
+}
 
 function buildTableList(tableList) {
   const data = {
@@ -31,14 +43,74 @@ function buildTableList(tableList) {
   return data;
 }
 
+function* addEntityNotification(
+  quest,
+  desktop,
+  entityType,
+  countErrors,
+  clean
+) {
+  const action = clean ? 'du nettoyage' : 'de la vérification';
+  const message =
+    countErrors === 0
+      ? T(
+          `Aucune erreur trouvée. Fin {action} de la table {entityType}.`,
+          null,
+          {
+            action,
+            entityType,
+          }
+        )
+      : T(
+          `{countErrors} erreurs trouvées. Fin {action} de la table {entityType}.`,
+          null,
+          {
+            action,
+            countErrors,
+            entityType,
+          }
+        );
+
+  yield desktop.addNotification({
+    notificationId: `notification@${quest.uuidV4()}`,
+    glyph: countErrors === 0 ? 'solid/check' : 'solid/exclamation-triangle',
+    color: countErrors === 0 ? 'green' : 'red',
+    message,
+  });
+}
+
+function* addFinalNotification(quest, desktop, form, clean) {
+  const tablesNumber = form.selectedTables.length;
+  if (tablesNumber > 1) {
+    const action = clean ? 'du nettoyage' : 'de la vérification';
+    const message = T(
+      `Fin {action} {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
+      null,
+      {
+        action,
+        length: tablesNumber,
+        tables: form.selectedTables.join(', '),
+      }
+    );
+
+    yield desktop.addNotification({
+      notificationId: `notification@${quest.uuidV4()}`,
+      glyph: 'solid/stop',
+      color: 'blue',
+      message,
+    });
+  }
+}
+
 /******************************************************************************/
 
 const config = {
   name: 'data-check',
   title: T("Vérification de l'intégrité des données"),
   dialog: {
-    width: '500px',
+    width: '800px',
   },
+
   gadgets: {
     tablesTable: {
       type: 'table',
@@ -50,6 +122,7 @@ const config = {
       },
     },
   },
+
   steps: {
     initialize: {
       quest: function*(quest) {
@@ -63,15 +136,21 @@ const config = {
         yield quest.me.next();
       },
     },
+
     prepare: {
       updateButtonsMode: 'onChange',
       buttons: function(quest, buttons, form) {
         const selectedTables = form.get('selectedTables');
         const disabled =
           !selectedTables || (selectedTables && selectedTables.length < 1);
+        const clean =
+          isTrue(form.get('fixMissingProperties')) ||
+          isTrue(form.get('deleteUndefinedSchemaProps'));
         return buttons.set('main', {
-          glyph: 'solid/play',
-          text: 'Démarrer la vérification',
+          glyph: clean ? 'solid/shower' : 'solid/search',
+          text: clean
+            ? T('Démarrer le nettoyage')
+            : T('Démarrer la vérification'),
           grow: disabled ? '0.5' : '2',
           disabled: disabled,
         });
@@ -82,16 +161,16 @@ const config = {
       },
       quest: function*(quest, form) {},
     },
+
     finish: {
       form: {},
       quest: function*(quest, form, next) {
-        let {fixMissingProperties, deleteUndefinedSchemaProps} = form;
-        if (fixMissingProperties === 'true') {
-          fixMissingProperties = true;
-        }
-        if (deleteUndefinedSchemaProps === 'true') {
-          deleteUndefinedSchemaProps = true;
-        }
+        const fixMissingProperties = isTrue(form.fixMissingProperties);
+        const deleteUndefinedSchemaProps = isTrue(
+          form.deleteUndefinedSchemaProps
+        );
+        const clean = fixMissingProperties || deleteUndefinedSchemaProps;
+
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
 
@@ -103,49 +182,16 @@ const config = {
             fixMissingProperties,
             deleteUndefinedSchemaProps,
           });
-          yield desktop.addNotification({
-            notificationId: `notification@${quest.uuidV4()}`,
-            glyph:
-              countErrors === 0 ? 'solid/check' : 'solid/exclamation-triangle',
-            color: countErrors === 0 ? 'green' : 'red',
-            message:
-              countErrors === 0
-                ? T(
-                    `Aucune erreur trouvée. Fin du check/nettoyage de la table {entityType}.`,
-                    null,
-                    {
-                      entityType,
-                    }
-                  )
-                : T(
-                    `{countErrors} erreurs trouvées. Fin du check/nettoyage de la table {entityType}.`,
-                    null,
-                    {
-                      countErrors,
-                      entityType,
-                    }
-                  ),
-          });
+          yield* addEntityNotification(
+            quest,
+            desktop,
+            entityType,
+            countErrors,
+            clean
+          );
         }
 
-        const tablesNumber = form.selectedTables.length;
-        if (tablesNumber > 1) {
-          const tables = form.selectedTables.join(', ');
-          yield desktop.addNotification({
-            notificationId: `notification@${quest.uuidV4()}`,
-            glyph: 'solid/stop',
-            color: 'blue',
-            message: T(
-              `Fin du check/nettoyage {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
-              null,
-              {
-                length: tablesNumber,
-                tables,
-              }
-            ),
-          });
-        }
-
+        yield* addFinalNotification(quest, desktop, form, clean);
         yield quest.me.next();
       },
     },
