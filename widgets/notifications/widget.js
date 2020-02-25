@@ -100,25 +100,17 @@ class Notifications extends Widget {
   }
 
   renderHeader() {
-    const headerClass = this.isRetro
-      ? this.styles.classNames.headerRetro
-      : this.styles.classNames.headerModern;
-
-    const headerRowClass = this.isRetro
-      ? this.styles.classNames.headerRowRetro
-      : this.styles.classNames.headerRowModern;
-
     return (
-      <div className={headerClass}>
+      <div className={this.styles.classNames.header}>
         {this.renderScrews()}
-        <div className={headerRowClass}>
+        <div className={this.styles.classNames.headerRow}>
           {this.renderCheckButton(
             this.props.dnd === 'true',
             T('Ne pas me déranger'),
             this.handleToggleDnd
           )}
         </div>
-        <div className={headerRowClass}>
+        <div className={this.styles.classNames.headerRow}>
           {this.renderCheckButton(
             this.props.onlyNews === 'true',
             T('Seulement les nouvelles'),
@@ -194,12 +186,10 @@ class Notifications extends Widget {
       return null;
     }
 
-    const style = this.isRetro
-      ? this.styles.classNames.notificationsRetro
-      : this.styles.classNames.notificationsModern;
-
     return (
-      <div className={style}>{this.renderNotifications(notifications)}</div>
+      <div className={this.styles.classNames.panel}>
+        {this.renderNotifications(notifications)}
+      </div>
     );
   }
 
@@ -208,22 +198,8 @@ class Notifications extends Widget {
       return null;
     }
 
-    const show = this.props.show;
-    let panelClass;
-    if (this.isRetro) {
-      panelClass =
-        show === 'true'
-          ? this.styles.classNames.notificationsShowedRetro
-          : this.styles.classNames.notificationsHiddenRetro;
-    } else {
-      panelClass =
-        show === 'true'
-          ? this.styles.classNames.notificationsShowedModern
-          : this.styles.classNames.notificationsHiddenModern;
-    }
-
     return (
-      <div className={panelClass}>
+      <div className={this.styles.classNames.notifications}>
         {this.renderHeader()}
         {this.renderPanel()}
       </div>
@@ -244,6 +220,7 @@ const ConnectedNotifications = Widget.connect((state, props) => {
     look,
   };
 })(Notifications);
+
 export default class extends Widget {
   render() {
     return (
