@@ -97,7 +97,6 @@ class DesktopMonitors extends Widget {
         {showed || this.doRenderMonitor ? (
           <SamplesMonitor
             showed={showed}
-            look={this.props.look}
             width="400px"
             height="300px"
             samples={samplesMonitors.getSamples(this.props.monitorShowed)}
@@ -177,11 +176,9 @@ class DesktopMonitors extends Widget {
 /******************************************************************************/
 
 const ConnectedDesktopMonitors = Widget.connect((state, props) => {
-  const look = state.get(`backend.${props.labId}.look`);
   const monitorShowed = state.get(`backend.${props.id}.monitorShowed`);
   const monitorsSamples = state.get(`backend.${props.id}.monitorsSamples`);
   return {
-    look,
     monitorShowed,
     monitorsSamples,
   };

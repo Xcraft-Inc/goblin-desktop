@@ -22,7 +22,7 @@ class Notifications extends Widget {
   }
 
   get isRetro() {
-    return this.props.look === 'retro';
+    return this.context.theme.look.name === 'retro';
   }
 
   handleToggleDnd() {
@@ -129,7 +129,6 @@ class Notifications extends Widget {
         key={index}
         data={notification}
         status={notification.status}
-        look={this.props.look}
         onClickNotification={() =>
           this.doAs('desktop', 'click-notification', {notification})
         }
@@ -191,13 +190,11 @@ class Notifications extends Widget {
 
 const ConnectedNotifications = Widget.connect((state, props) => {
   const desktopState = state.get(`backend.${props.id}`);
-  const look = state.get(`backend.${props.labId}.look`);
   return {
     show: desktopState.get('showNotifications'),
     data: desktopState.get('notifications'),
     dnd: desktopState.get('dnd'),
     onlyNews: desktopState.get('onlyNews'),
-    look,
   };
 })(Notifications);
 

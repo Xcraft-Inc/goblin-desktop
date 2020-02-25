@@ -1,12 +1,13 @@
 import {Unit} from 'electrum-theme';
 
-export const propNames = ['look', 'show'];
+export const propNames = ['show'];
 
 /******************************************************************************/
 
 export default function styles(theme, props) {
-  const {look = 'modern', show} = props;
+  const {show} = props;
   const visible = show === 'true';
+  const look = theme.look.name;
 
   const m = theme.shapes.containerMargin;
   const s = theme.shapes.lineSpacing;

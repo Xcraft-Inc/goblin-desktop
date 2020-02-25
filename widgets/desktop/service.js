@@ -477,12 +477,6 @@ Goblin.registerQuest(goblinName, 'change-team', function(quest, teamId) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'change-look', function(quest, name) {
-  quest.evt(`change-look.requested`, {
-    name,
-  });
-});
-
 Goblin.registerQuest(goblinName, 'monitor-showed', function(quest) {
   quest.do();
 });

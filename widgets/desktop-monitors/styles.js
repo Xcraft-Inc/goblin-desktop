@@ -2,10 +2,12 @@ import {Unit} from 'electrum-theme';
 
 /******************************************************************************/
 
-export const propNames = ['look', 'monitorShowed'];
+export const propNames = ['monitorShowed'];
 
 export default function styles(theme, props) {
-  const {look = 'modern', monitorShowed} = props;
+  const {monitorShowed} = props;
+
+  const look = theme.look.name;
 
   const desktopMonitors = {
     position: 'relative',
