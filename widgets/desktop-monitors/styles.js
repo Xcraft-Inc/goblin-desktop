@@ -47,8 +47,12 @@ export default function styles(theme, props) {
         ? Unit.add(theme.shapes.footerHeight, '10px')
         : '-420px',
       transitionProperty: 'bottom',
-      transition: theme.transitions.retroOpenTransition,
-      transitionTimingFunction: theme.transitions.retroOpenFunction,
+      transition: monitorShowed
+        ? theme.transitions.retroOpenTransition
+        : theme.transitions.retroCloseTransition,
+      transitionTimingFunction: monitorShowed
+        ? theme.transitions.retroOpenFunction
+        : theme.transitions.retroCloseFunction,
     };
   }
 
