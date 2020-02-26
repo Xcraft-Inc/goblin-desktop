@@ -58,7 +58,7 @@ class Notifications extends Widget {
     if (this.isRetro) {
       return (
         <Checkbox
-          kind="switch-dark"
+          background="dark"
           checked={checked}
           text={text}
           onChange={action}
