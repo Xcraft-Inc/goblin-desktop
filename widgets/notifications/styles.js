@@ -1,4 +1,5 @@
 import {Unit} from 'electrum-theme';
+import {ColorManipulator} from 'electrum-theme';
 
 export const propNames = ['show'];
 
@@ -69,7 +70,7 @@ export default function styles(theme, props) {
     notifications = {
       position: 'absolute',
       top: '10px',
-      right: visible ? '10px' : Unit.multiply(Unit.add(width, '10px'), -1),
+      right: visible ? '10px' : Unit.multiply(Unit.add(width, '30px'), -1),
       overflowY: 'hidden',
       maxHeight: '100%',
       width: visible ? width : Unit.sub(width, '1px'), // fix mysterious bug with right screws at bad position!
@@ -96,10 +97,22 @@ export default function styles(theme, props) {
       padding: '15px 50px',
       margin: '0px 0px ' + s + ' 0px',
       borderRadius: '20px',
-      borderTop: '10px solid #666',
-      borderBottom: '10px solid #ccc',
-      borderLeft: '10px solid #888',
-      borderRight: '10px solid #aaa',
+      borderTop: `10px solid ${ColorManipulator.lighten(
+        theme.palette.actionButtonBackground,
+        0.4
+      )}`,
+      borderBottom: `10px solid ${ColorManipulator.darken(
+        theme.palette.actionButtonBackground,
+        0.5
+      )}`,
+      borderLeft: `10px solid ${ColorManipulator.lighten(
+        theme.palette.actionButtonBackground,
+        0.2
+      )}`,
+      borderRight: `10px solid ${ColorManipulator.darken(
+        theme.palette.actionButtonBackground,
+        0.3
+      )}`,
       background: 'linear-gradient(170deg, #111 0%, #555)',
       color: '#999',
     };

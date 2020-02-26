@@ -80,7 +80,7 @@ class Tabs extends Widget {
                   return (
                     <Button
                       text={props.info || T('Nouveau', 'nouvelle fiche')}
-                      kind="view-tab"
+                      kind="view-tab-first"
                       glyph={v.get('glyph')}
                       onClick={() =>
                         this.goToWorkItem(context, v.get('view'), wid)
@@ -92,7 +92,7 @@ class Tabs extends Widget {
                   return (
                     <Button
                       text={T('Chargement…')}
-                      kind="view-tab"
+                      kind="view-tab-first"
                       glyph={v.get('glyph')}
                       onClick={() =>
                         this.goToWorkItem(context, v.get('view'), wid)
@@ -121,7 +121,7 @@ class Tabs extends Widget {
                   <EntityTab />
                   <Button
                     glyph="solid/times"
-                    kind="view-tab"
+                    kind="view-tab-last"
                     show={show}
                     onClick={() => {
                       this.do('remove', {
@@ -140,7 +140,7 @@ class Tabs extends Widget {
                 <Container kind="row" key={k}>
                   <Button
                     text={name}
-                    kind="view-tab"
+                    kind="view-tab-first"
                     glyph={v.get('glyph')}
                     onClick={() =>
                       this.goToWorkItem(context, v.get('view'), wid)
@@ -149,7 +149,7 @@ class Tabs extends Widget {
                   />
                   <Button
                     glyph="solid/times"
-                    kind="view-tab"
+                    kind="view-tab-last"
                     show={show}
                     onClick={() => {
                       this.do('remove', {
