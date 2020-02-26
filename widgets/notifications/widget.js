@@ -46,10 +46,10 @@ class Notifications extends Widget {
 
     return (
       <React.Fragment>
-        <Screw top="8px" left="8px" angle="-45deg" />
-        <Screw top="8px" right="8px" angle="70deg" />
-        <Screw bottom="8px" left="8px" angle="20deg" />
-        <Screw bottom="8px" right="8px" angle="-10deg" />
+        <Screw background="dark" top="8px" left="8px" angle="-45deg" />
+        <Screw background="dark" top="8px" right="8px" angle="70deg" />
+        <Screw background="dark" bottom="8px" left="8px" angle="20deg" />
+        <Screw background="dark" bottom="8px" right="8px" angle="-10deg" />
       </React.Fragment>
     );
   }
