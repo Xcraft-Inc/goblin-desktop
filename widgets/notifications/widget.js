@@ -46,10 +46,20 @@ class Notifications extends Widget {
 
     return (
       <React.Fragment>
-        <Screw background="dark" top="8px" left="8px" angle="-45deg" />
-        <Screw background="dark" top="8px" right="8px" angle="70deg" />
-        <Screw background="dark" bottom="8px" left="8px" angle="20deg" />
-        <Screw background="dark" bottom="8px" right="8px" angle="-10deg" />
+        <Screw backgroundBrigtness="dark" top="8px" left="8px" angle="-45deg" />
+        <Screw backgroundBrigtness="dark" top="8px" right="8px" angle="70deg" />
+        <Screw
+          backgroundBrigtness="dark"
+          bottom="8px"
+          left="8px"
+          angle="20deg"
+        />
+        <Screw
+          backgroundBrigtness="dark"
+          bottom="8px"
+          right="8px"
+          angle="-10deg"
+        />
       </React.Fragment>
     );
   }
@@ -58,7 +68,7 @@ class Notifications extends Widget {
     if (this.isRetro) {
       return (
         <Checkbox
-          background="dark"
+          backgroundBrigtness="dark"
           checked={checked}
           text={text}
           onChange={action}
