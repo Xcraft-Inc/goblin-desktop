@@ -228,8 +228,17 @@ class EntityRow extends Widget {
 
 export default Widget.connect((state, props) => {
   const entityId = props.useView ? `entity-view@${props.id}` : props.id;
+  const entity = state.get(`backend.${entityId}`);
+  if (!entity) {
+    // TODO: !!!
+    console.warn(`>>> Entity ${entityId} not found <<<`);
+  } else if (!entity.get('meta')) {
+    // TODO: Why some entities don't have meta ???
+    console.warn(`>>> Entity ${entityId} has no meta <<<`);
+  }
+
   return {
     id: props.id,
-    entity: state.get(`backend.${entityId}`),
+    entity,
   };
 })(EntityRow);
