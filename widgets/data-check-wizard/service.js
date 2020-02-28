@@ -3,23 +3,13 @@
 const T = require('goblin-nabu');
 const {buildWizard} = require('goblin-desktop');
 const workshopConfig = require('xcraft-core-etc')().load('goblin-workshop');
+const Bool = require('goblin-gadgets/widgets/helpers/bool-helpers');
 const entityStorage = workshopConfig.entityStorageProvider.replace(
   'goblin-',
   ''
 );
 
 /******************************************************************************/
-
-function isTrue(value) {
-  const type = typeof value;
-  if (type === 'boolean') {
-    return value;
-  } else if (type === 'string') {
-    return value === 'true';
-  } else {
-    return false; // if undefined, never true
-  }
-}
 
 function buildTableList(tableList) {
   const data = {
@@ -144,8 +134,8 @@ const config = {
         const disabled =
           !selectedTables || (selectedTables && selectedTables.length < 1);
         const clean =
-          isTrue(form.get('fixMissingProperties')) ||
-          isTrue(form.get('deleteUndefinedSchemaProps'));
+          Bool.isTrue(form.get('fixMissingProperties')) ||
+          Bool.isTrue(form.get('deleteUndefinedSchemaProps'));
         return buttons.set('main', {
           glyph: clean ? 'solid/shower' : 'solid/search',
           text: clean
@@ -165,8 +155,8 @@ const config = {
     finish: {
       form: {},
       quest: function*(quest, form, next) {
-        const fixMissingProperties = isTrue(form.fixMissingProperties);
-        const deleteUndefinedSchemaProps = isTrue(
+        const fixMissingProperties = Bool.isTrue(form.fixMissingProperties);
+        const deleteUndefinedSchemaProps = Bool.isTrue(
           form.deleteUndefinedSchemaProps
         );
         const clean = fixMissingProperties || deleteUndefinedSchemaProps;
