@@ -260,7 +260,7 @@ export default class Desktop extends Widget {
           id={this.props.id + '$widget-doc-caller'}
         />
         <CommandsPrompt />
-        <DesktopMonitors id={this.props.id} />
+        <DesktopMonitors id="activity-monitor" desktopId={this.props.id} />
       </div>
     );
   }
