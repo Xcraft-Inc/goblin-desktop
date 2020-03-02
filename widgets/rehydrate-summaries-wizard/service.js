@@ -107,10 +107,10 @@ const config = {
         //-     }
         //-   ),
         //- });
-        yield desktop.monitorPushSample({
-          channel: 'activity',
-          sample: 5,
-        });
+        //- yield desktop.monitorPushSample({
+        //-   channel: 'activity',
+        //-   sample: 5,
+        //- });
         for (const table of form.selectedTables) {
           const getInfo = (r, table, onlyPublished) => {
             let q = r.table(table);
@@ -182,10 +182,10 @@ const config = {
         //-     }
         //-   ),
         //- });
-        yield desktop.monitorPushSample({
-          channel: 'activity',
-          sample: 10,
-        });
+        //- yield desktop.monitorPushSample({
+        //-   channel: 'activity',
+        //-   sample: 10,
+        //- });
         let startTime = Date.now() / 100;
         for (const [key, entities] of reverseHydratation.entries()) {
           const cur = key + 1;
@@ -221,12 +221,12 @@ const config = {
                 const currentTime = Date.now() / 100;
                 const duration = currentTime - startTime;
                 startTime = currentTime;
-                yield desktop.monitorPushSample({
-                  channel: 'activity',
-                  sample: duration,
-                  current: progress,
-                  total: 100,
-                });
+                //- yield desktop.monitorPushSample({
+                //-   channel: 'activity',
+                //-   sample: duration,
+                //-   current: progress,
+                //-   total: 100,
+                //- });
               }
               count++;
             }
@@ -247,10 +247,10 @@ const config = {
           color: 'green',
           message: T('Réhydratation terminée'),
         });
-        yield desktop.monitorPushSample({
-          channel: 'activity',
-          sample: 0,
-        });
+        //- yield desktop.monitorPushSample({
+        //-   channel: 'activity',
+        //-   sample: 0,
+        //- });
 
         yield quest.me.next();
       },

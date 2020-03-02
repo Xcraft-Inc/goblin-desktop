@@ -481,10 +481,6 @@ Goblin.registerQuest(goblinName, 'monitor-showed', function(quest) {
   quest.do();
 });
 
-Goblin.registerQuest(goblinName, 'monitor-push-sample', function(quest) {
-  quest.do();
-});
-
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'get-current-context', function(quest) {
