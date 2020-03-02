@@ -30,10 +30,12 @@ const themes = [
   {text: T('Rose'), value: 'default-pink'},
   {text: T('Rose compact'), value: 'compact-pink'},
   {text: T('Monochrome compact'), value: 'compact-mono'},
-  {text: T('Rétro'), value: 'default-retro'},
-  {text: T('Steampunk'), value: 'steampunk-retro'},
   {text: T('Foncé'), value: 'default-dark'},
   {text: T('Dragula'), value: 'default-dragula'},
+];
+const eggsThemes = [
+  {text: T('Rétro'), value: 'default-retro'},
+  {text: T('Steampunk'), value: 'steampunk-retro'},
 ];
 
 /******************************************************************************/
@@ -367,6 +369,14 @@ export default class Desktop extends Widget {
                   kind="main-tab-right"
                   tooltip={T('Choix du thème')}
                   items={themes}
+                  currentItemValue={currentTheme}
+                  onChange={this.onChangeTheme}
+                />
+                <MainTabMenu
+                  border="none"
+                  width="5px"
+                  height="20px"
+                  items={eggsThemes}
                   currentItemValue={currentTheme}
                   onChange={this.onChangeTheme}
                 />
