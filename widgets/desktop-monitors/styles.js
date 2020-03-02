@@ -2,11 +2,7 @@ import {Unit} from 'electrum-theme';
 
 /******************************************************************************/
 
-export const propNames = ['monitorShowed'];
-
-export default function styles(theme, props) {
-  const {monitorShowed} = props;
-
+export default function styles(theme) {
   const look = theme.look.name;
 
   const desktopMonitors = {
@@ -21,19 +17,25 @@ export default function styles(theme, props) {
 
   /******************************************************************************/
 
-  let monitor;
+  let monitorShowed;
+  let monitorHidden;
 
   //---------\
   //  MODERN  >
   //---------/
   if (look === 'modern') {
-    monitor = {
+    monitorShowed = {
       zIndex: 20,
       position: 'absolute',
       right: '0px',
-      bottom: monitorShowed ? theme.shapes.footerHeight : '-420px',
+      bottom: theme.shapes.footerHeight,
       transitionProperty: 'bottom',
       transition: '0.3s ease-out',
+    };
+
+    monitorHidden = {
+      ...monitorShowed,
+      bottom: '-420px',
     };
   }
 
@@ -41,20 +43,21 @@ export default function styles(theme, props) {
   //  RETRO  >
   //--------/
   if (look === 'retro') {
-    monitor = {
+    monitorShowed = {
       zIndex: 20,
       position: 'absolute',
       right: '10px',
-      bottom: monitorShowed
-        ? Unit.add(theme.shapes.footerHeight, '10px')
-        : '-420px',
+      bottom: Unit.add(theme.shapes.footerHeight, '10px'),
       transitionProperty: 'bottom',
-      transition: monitorShowed
-        ? theme.transitions.retroOpenTransition
-        : theme.transitions.retroCloseTransition,
-      transitionTimingFunction: monitorShowed
-        ? theme.transitions.retroOpenFunction
-        : theme.transitions.retroCloseFunction,
+      transition: theme.transitions.retroOpenTransition,
+      transitionTimingFunction: theme.transitions.retroOpenFunction,
+    };
+
+    monitorHidden = {
+      ...monitorShowed,
+      bottom: '-420px',
+      transition: theme.transitions.retroCloseTransition,
+      transitionTimingFunction: theme.transitions.retroCloseFunction,
     };
   }
 
@@ -62,7 +65,8 @@ export default function styles(theme, props) {
 
   return {
     desktopMonitors,
-    monitor,
+    monitorShowed,
+    monitorHidden,
   };
 }
 

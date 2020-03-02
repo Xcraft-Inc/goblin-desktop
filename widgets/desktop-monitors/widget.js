@@ -1,6 +1,5 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-import T from 't';
 import * as styles from './styles';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import SamplesMonitor from 'goblin-gadgets/widgets/samples-monitor/widget';
@@ -58,23 +57,25 @@ class DesktopMonitors extends Widget {
 
   /******************************************************************************/
 
-  renderMonitor(channel, index) {
-    const showed = true;
+  renderMonitor(channel, isActive, index) {
+    const showed = this.props.monitorShowed === channel || isActive;
+    const style = showed
+      ? this.styles.classNames.monitorShowed
+      : this.styles.classNames.monitorHidden;
+
     return (
       <div
         key={index}
-        className={this.styles.classNames.monitor}
+        className={style}
         onTransitionEnd={this.handleTransitionEnd}
       >
-        {showed || this.doRenderMonitor ? (
-          <ConnectedSamplesMonitor
-            id={this.props.id}
-            channel={channel}
-            showed={true}
-            width="400px"
-            height="300px"
-          />
-        ) : null}
+        <ConnectedSamplesMonitor
+          id={this.props.id}
+          channel={channel}
+          showed={showed}
+          width="400px"
+          height="300px"
+        />
       </div>
     );
   }
@@ -82,16 +83,16 @@ class DesktopMonitors extends Widget {
   renderMonitors() {
     const result = [];
     let index = 0;
-    for (const channel of Object.keys(this.props.channels)) {
-      result.push(this.renderMonitor(channel, index++));
+    for (const [channel, isActive] of Object.entries(this.props.channels)) {
+      result.push(this.renderMonitor(channel, isActive, index++));
     }
     return result;
   }
 
-  renderButton(channel, hasActivity, index) {
+  renderButton(channel, isActive, index) {
     let glyph = 'light/square';
     let glyphColor = this.context.theme.palette.buttonDisableText;
-    if (hasActivity) {
+    if (isActive) {
       glyphColor = '#0f0';
     }
     if (this.props.monitorShowed === channel) {
@@ -115,8 +116,8 @@ class DesktopMonitors extends Widget {
   renderButtons() {
     const result = [];
     let index = 0;
-    for (const [channel, hasActivity] of Object.entries(this.props.channels)) {
-      result.push(this.renderButton(channel, hasActivity, index++));
+    for (const [channel, isActive] of Object.entries(this.props.channels)) {
+      result.push(this.renderButton(channel, isActive, index++));
     }
     return result;
   }
@@ -142,8 +143,7 @@ const ConnectedDesktopMonitors = Widget.connect((state, props) => {
   const channels = Array.from(
     state.get(`backend.${props.id}.channels`).entries()
   ).reduce((state, [name, data]) => {
-    const samples = data.get('samples');
-    state[name] = samples.last() > 0;
+    state[name] = data.get('isActive');
     return state;
   }, {});
 
