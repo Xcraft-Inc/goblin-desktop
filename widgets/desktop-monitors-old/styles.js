@@ -35,7 +35,7 @@ export default function styles(theme) {
 
     monitorHidden = {
       ...monitorShowed,
-      bottom: '-500px',
+      bottom: '-420px',
     };
   }
 
@@ -55,7 +55,7 @@ export default function styles(theme) {
 
     monitorHidden = {
       ...monitorShowed,
-      bottom: '-500px',
+      bottom: '-420px',
       transition: theme.transitions.retroCloseTransition,
       transitionTimingFunction: theme.transitions.retroCloseFunction,
     };

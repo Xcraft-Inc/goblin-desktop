@@ -1,19 +1,9 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
+const T = require('goblin-nabu');
 import * as styles from './styles';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import SamplesMonitor from 'goblin-gadgets/widgets/samples-monitor/widget';
-
-/******************************************************************************/
-
-const ConnectedSamplesMonitor = Widget.connect((state, props) => {
-  const channel = state.get(`backend.${props.id}.channels.${props.channel}`);
-  return {
-    samples: channel.get('samples').toArray(),
-    current: channel.get('current'),
-    total: channel.get('total'),
-  };
-})(SamplesMonitor);
 
 /******************************************************************************/
 
@@ -25,6 +15,7 @@ class DesktopMonitors extends Widget {
     this.onMonitor = this.onMonitor.bind(this);
 
     this.state = {
+      showMonitor: false,
       doRenderMonitor: false,
     };
 
@@ -32,6 +23,16 @@ class DesktopMonitors extends Widget {
   }
 
   //#region get/set
+  get showMonitor() {
+    return this.state.showMonitor;
+  }
+
+  set showMonitor(value) {
+    this.setState({
+      showMonitor: value,
+    });
+  }
+
   get doRenderMonitor() {
     return this.state.doRenderMonitor;
   }
@@ -45,81 +46,58 @@ class DesktopMonitors extends Widget {
 
   handleTransitionEnd(e) {
     if (e.propertyName === 'bottom') {
-      const showed = !!this.props.monitorShowed;
+      const showed = !!this.showMonitor;
       this.doRenderMonitor = showed;
     }
   }
 
-  onMonitor(channel) {
-    channel = this.props.monitorShowed === channel ? null : channel;
-    this.doFor(this.props.desktopId, 'monitor-showed', {channel});
+  onMonitor() {
+    this.showMonitor = !this.showMonitor;
   }
 
   /******************************************************************************/
 
-  renderMonitor(channel, isActive, index) {
-    const showed = this.props.monitorShowed === channel || isActive;
+  renderMonitor() {
+    //? const showed = this.showMonitor|| this.props.isActive;
+    const showed = this.showMonitor;
     const style = showed
       ? this.styles.classNames.monitorShowed
       : this.styles.classNames.monitorHidden;
 
     return (
-      <div
-        key={index}
-        className={style}
-        onTransitionEnd={this.handleTransitionEnd}
-      >
-        <ConnectedSamplesMonitor
+      <div className={style} onTransitionEnd={this.handleTransitionEnd}>
+        <SamplesMonitor
           id={this.props.id}
-          channel={channel}
           showed={showed}
-          width="400px"
-          height="300px"
+          channels={this.props.channels}
+          width="600px"
+          height="450px"
         />
       </div>
     );
   }
 
-  renderMonitors() {
-    const result = [];
-    let index = 0;
-    for (const [channel, isActive] of Object.entries(this.props.channels)) {
-      result.push(this.renderMonitor(channel, isActive, index++));
-    }
-    return result;
-  }
-
-  renderButton(channel, isActive, index) {
+  renderButton() {
     let glyph = 'light/square';
     let glyphColor = this.context.theme.palette.buttonDisableText;
-    if (isActive) {
+    if (this.props.isActive) {
       glyphColor = '#0f0';
     }
-    if (this.props.monitorShowed === channel) {
+    if (this.showMonitor) {
       glyph = 'solid/square';
     }
 
     return (
       <Button
-        key={index}
         kind="button-footer"
         width="140px"
         justify="start"
         glyph={glyph}
         glyphColor={glyphColor}
-        text={channel}
-        onClick={() => this.onMonitor(channel)}
+        text={T('Activité')}
+        onClick={this.onMonitor}
       />
     );
-  }
-
-  renderButtons() {
-    const result = [];
-    let index = 0;
-    for (const [channel, isActive] of Object.entries(this.props.channels)) {
-      result.push(this.renderButton(channel, isActive, index++));
-    }
-    return result;
   }
 
   render() {
@@ -129,8 +107,8 @@ class DesktopMonitors extends Widget {
 
     return (
       <div className={this.styles.classNames.desktopMonitors}>
-        {this.renderButtons()}
-        {this.renderMonitors()}
+        {this.renderButton()}
+        {this.renderMonitor()}
       </div>
     );
   }
@@ -138,25 +116,27 @@ class DesktopMonitors extends Widget {
 
 /******************************************************************************/
 
-const ConnectedDesktopMonitors = Widget.connect((state, props) => {
-  const monitorShowed = state.get(`backend.${props.desktopId}.monitorShowed`);
-  const channels = Array.from(
-    state.get(`backend.${props.id}.channels`).entries()
-  ).reduce((state, [name, data]) => {
-    state[name] = data.get('isActive');
-    return state;
-  }, {});
+export default Widget.connect((state, props) => {
+  const s = state.get(`backend.${props.id}.channels`);
+  const channels = Array.from(s.entries()).map(([channel, data]) => {
+    return {
+      name: channel,
+      samples: data.get('samples'),
+      isActive: data.get('isActive'),
+      max: data.get('max'),
+    };
+  });
+
+  let isActive = false;
+  for (const channel of channels) {
+    if (channel.isActive) {
+      isActive = true;
+      continue;
+    }
+  }
 
   return {
-    monitorShowed,
+    isActive,
     channels,
   };
 })(DesktopMonitors);
-
-export default class extends Widget {
-  render() {
-    return (
-      <ConnectedDesktopMonitors labId={this.context.labId} {...this.props} />
-    );
-  }
-}
