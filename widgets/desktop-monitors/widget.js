@@ -72,6 +72,7 @@ class DesktopMonitors extends Widget {
           channels={this.props.channels}
           width="600px"
           height="450px"
+          onOff={this.onMonitor}
         />
       </div>
     );
