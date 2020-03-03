@@ -58,7 +58,6 @@ class DesktopMonitors extends Widget {
   /******************************************************************************/
 
   renderMonitor() {
-    //? const showed = this.showMonitor|| this.props.isActive;
     const showed = this.showMonitor;
     const style = showed
       ? this.styles.classNames.monitorShowed
@@ -82,10 +81,8 @@ class DesktopMonitors extends Widget {
     let glyph = 'light/square';
     let glyphColor = this.context.theme.palette.buttonDisableText;
     if (this.props.isActive) {
-      glyphColor = '#0f0';
-    }
-    if (this.showMonitor) {
       glyph = 'solid/square';
+      glyphColor = '#0f0';
     }
 
     return (
