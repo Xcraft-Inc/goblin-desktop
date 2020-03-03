@@ -15,8 +15,6 @@ module.exports = {
       current: {
         workitems: {},
       },
-      monitorShowed: null,
-      monitorsSamples: {},
     });
   },
   'add-context': (state, action) => {
@@ -103,10 +101,5 @@ module.exports = {
         workitem: lastWorkitem,
         view: lastView,
       });
-  },
-
-  'monitor-showed': (state, action) => {
-    const channel = action.get('channel');
-    return state.set('monitorShowed', channel);
   },
 };

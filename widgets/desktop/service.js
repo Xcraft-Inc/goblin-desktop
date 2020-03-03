@@ -477,12 +477,6 @@ Goblin.registerQuest(goblinName, 'change-team', function(quest, teamId) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'monitor-showed', function(quest) {
-  quest.do();
-});
-
-/******************************************************************************/
-
 Goblin.registerQuest(goblinName, 'get-current-context', function(quest) {
   return quest.goblin.getState().get('current.workcontext');
 });
