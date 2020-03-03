@@ -398,10 +398,8 @@ export default class Desktop extends Widget {
                   currentItemValue={currentTheme}
                   onChange={this.onChangeTheme}
                 />
-                <Button
-                  border="none"
-                  width="5px"
-                  height="20px"
+                <div
+                  className={this.styles.classNames.eggButton}
                   onClick={this.onChangeEggs}
                 />
                 <Button
