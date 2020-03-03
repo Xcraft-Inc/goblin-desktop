@@ -34,8 +34,18 @@ const themes = [
   {text: T('Dragula'), value: 'default-dragula'},
 ];
 const eggsThemes = [
+  {text: T('Standard'), value: 'default'},
+  {text: T('Standard compact'), value: 'default-compact'},
+  {text: T('Vert'), value: 'default-green'},
+  {text: T('Vert spécial'), value: 'special-green'},
+  {text: T('Vert arrondi'), value: 'smooth-green'},
+  {text: T('Rose'), value: 'default-pink'},
+  {text: T('Rose compact'), value: 'compact-pink'},
+  {text: T('Monochrome compact'), value: 'compact-mono'},
   {text: T('Rétro'), value: 'default-retro'},
   {text: T('Steampunk'), value: 'steampunk-retro'},
+  {text: T('Foncé'), value: 'default-dark'},
+  {text: T('Dragula'), value: 'default-dragula'},
 ];
 
 /******************************************************************************/
@@ -104,12 +114,14 @@ export default class Desktop extends Widget {
 
     this.state = {
       showFooter: true,
+      accessToEggsThemes: false,
     };
 
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeMandate = this.onChangeMandate.bind(this);
     this.onChangeLocale = this.onChangeLocale.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
+    this.onChangeEggs = this.onChangeEggs.bind(this);
     this.onChangeTeam = this.onChangeTeam.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
     this.onTab = this.onTab.bind(this);
@@ -140,6 +152,16 @@ export default class Desktop extends Widget {
       showFooter: value,
     });
   }
+
+  get accessToEggsThemes() {
+    return this.state.accessToEggsThemes;
+  }
+
+  set accessToEggsThemes(value) {
+    this.setState({
+      accessToEggsThemes: value,
+    });
+  }
   //#endregion
 
   static get wiring() {
@@ -165,6 +187,10 @@ export default class Desktop extends Widget {
   onChangeTheme(name) {
     currentTheme = name;
     this.do('change-theme', {name});
+  }
+
+  onChangeEggs() {
+    this.accessToEggsThemes = !this.accessToEggsThemes;
   }
 
   onChangeTeam(teamId) {
@@ -368,17 +394,15 @@ export default class Desktop extends Widget {
                   glyph="solid/tint"
                   kind="main-tab-right"
                   tooltip={T('Choix du thème')}
-                  items={themes}
+                  items={this.accessToEggsThemes ? eggsThemes : themes}
                   currentItemValue={currentTheme}
                   onChange={this.onChangeTheme}
                 />
-                <MainTabMenu
+                <Button
                   border="none"
                   width="5px"
                   height="20px"
-                  items={eggsThemes}
-                  currentItemValue={currentTheme}
-                  onChange={this.onChangeTheme}
+                  onClick={this.onChangeEggs}
                 />
                 <Button
                   glyph="solid/tv"
