@@ -223,9 +223,10 @@ class Search extends Widget {
     return (
       <div className={style}>
         <Button
-          width="24px"
-          height="24px"
+          width="20px"
+          height="20px"
           glyph={this.showParams ? 'solid/chevron-left' : 'solid/chevron-right'}
+          glyphSize="80%"
           onClick={this.onToggleParams}
         />
       </div>
