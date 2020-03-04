@@ -190,7 +190,7 @@ export default class Desktop extends Widget {
   }
 
   onChangeEggs() {
-    this.accessToEggsThemes = !this.accessToEggsThemes;
+    this.accessToEggsThemes = true;
   }
 
   onChangeTeam(teamId) {
@@ -391,7 +391,9 @@ export default class Desktop extends Widget {
                   desktopId={id}
                 />
                 <MainTabMenu
-                  glyph="solid/tint"
+                  glyph={
+                    this.accessToEggsThemes ? 'regular/tint' : 'solid/tint'
+                  }
                   kind="main-tab-right"
                   tooltip={T('Choix du thème')}
                   items={this.accessToEggsThemes ? eggsThemes : themes}
