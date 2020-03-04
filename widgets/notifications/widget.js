@@ -3,7 +3,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
-import Screw from 'goblin-gadgets/widgets/screw/widget';
+import RetroScrew from 'goblin-gadgets/widgets/retro-screw/widget';
 import Notification from 'goblin-gadgets/widgets/notification/widget';
 import T from 't';
 
@@ -46,15 +46,25 @@ class Notifications extends Widget {
 
     return (
       <React.Fragment>
-        <Screw backgroundBrigtness="dark" top="8px" left="8px" angle="-45deg" />
-        <Screw backgroundBrigtness="dark" top="8px" right="8px" angle="70deg" />
-        <Screw
+        <RetroScrew
+          backgroundBrigtness="dark"
+          top="8px"
+          left="8px"
+          angle="-45deg"
+        />
+        <RetroScrew
+          backgroundBrigtness="dark"
+          top="8px"
+          right="8px"
+          angle="70deg"
+        />
+        <RetroScrew
           backgroundBrigtness="dark"
           bottom="8px"
           left="8px"
           angle="20deg"
         />
-        <Screw
+        <RetroScrew
           backgroundBrigtness="dark"
           bottom="8px"
           right="8px"
