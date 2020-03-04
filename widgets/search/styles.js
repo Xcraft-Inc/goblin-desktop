@@ -45,8 +45,8 @@ export default function styles(theme) {
 
   const button = {
     position: 'absolute',
-    left: '2px',
-    top: '2px',
+    left: '0px',
+    top: '0px',
     transition: '0.5s ease-out',
   };
 

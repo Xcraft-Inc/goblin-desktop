@@ -223,6 +223,7 @@ class Search extends Widget {
     return (
       <div className={style}>
         <Button
+          kind="subaction"
           width="20px"
           height="20px"
           glyph={this.showParams ? 'solid/chevron-left' : 'solid/chevron-right'}
