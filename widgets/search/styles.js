@@ -52,7 +52,7 @@ export default function styles(theme) {
 
   const buttonWithoutParams = {
     ...button,
-    left: '304px',
+    left: '301px',
   };
 
   return {
