@@ -48,26 +48,26 @@ class Notifications extends Widget {
       <React.Fragment>
         <RetroScrew
           backgroundBrigtness="dark"
-          top="8px"
-          left="8px"
+          top="15px"
+          left="15px"
           angle="-45deg"
         />
         <RetroScrew
           backgroundBrigtness="dark"
-          top="8px"
-          right="8px"
+          top="15px"
+          right="15px"
           angle="70deg"
         />
         <RetroScrew
           backgroundBrigtness="dark"
-          bottom="8px"
-          left="8px"
+          bottom="15px"
+          left="15px"
           angle="20deg"
         />
         <RetroScrew
           backgroundBrigtness="dark"
-          bottom="8px"
-          right="8px"
+          bottom="15px"
+          right="15px"
           angle="-10deg"
         />
       </React.Fragment>
