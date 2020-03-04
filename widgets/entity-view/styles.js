@@ -9,7 +9,6 @@ export default function styles(theme) {
     padding: '20px 0px 0px 0px',
     overflowX: 'hidden',
     overflowY: 'hidden',
-    flexGrow: '1',
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: theme.palette.paneBackground,
@@ -58,8 +57,8 @@ export default function styles(theme) {
 
   const button = {
     position: 'absolute',
-    top: '14px',
-    right: '0px',
+    top: '13px',
+    right: '-2px',
   };
 
   return {

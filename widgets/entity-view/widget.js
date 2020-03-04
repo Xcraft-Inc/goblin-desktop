@@ -195,7 +195,6 @@ class EntityView extends Widget {
         <Button
           width="30px"
           height="30px"
-          border="none"
           glyph="solid/columns"
           tooltip={T('Choisir les colonnes')}
           onClick={this.onEditColumns}
