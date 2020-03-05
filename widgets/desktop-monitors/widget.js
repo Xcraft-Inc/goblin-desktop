@@ -99,7 +99,10 @@ class DesktopMonitors extends Widget {
   }
 
   render() {
-    if (!Object.keys(this.props.channels).length === 0) {
+    if (
+      !this.props.channels ||
+      !Object.keys(this.props.channels).length === 0
+    ) {
       return null;
     }
 
@@ -116,6 +119,9 @@ class DesktopMonitors extends Widget {
 
 export default Widget.connect((state, props) => {
   const s = state.get(`backend.${props.id}.channels`);
+  if (!s) {
+    return {};
+  }
   const channels = Array.from(s.entries()).map(([channel, data]) => {
     return {
       name: channel,
