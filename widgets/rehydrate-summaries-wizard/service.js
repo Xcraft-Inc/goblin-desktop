@@ -70,7 +70,7 @@ const config = {
         const disabled =
           !selectedTables || (selectedTables && selectedTables.length < 1);
         return buttons.set('main', {
-          glyph: 'solid/sync',
+          glyph: 'solid/leaf',
           text: 'Démarrer la réhydratation',
           grow: disabled ? '0.5' : '2',
           disabled: disabled,
