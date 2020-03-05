@@ -11,7 +11,12 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import T from 't';
 
 import {ListHelpers} from 'goblin-toolbox';
-const {getEstimatedWidth, getColumnProps, getColumnHeaderText} = ListHelpers;
+const {
+  getEstimatedWidth,
+  getColumnProps,
+  getColumnPath,
+  getColumnHeaderText,
+} = ListHelpers;
 
 /******************************************************************************/
 
@@ -58,6 +63,13 @@ class EntityView extends Widget {
     this.doFor(this.props.id, 'open-entity-workitem', {
       entityId,
       navigate,
+    });
+  }
+
+  sortList(key, dir) {
+    this.doFor(this.props.id, 'sort-list', {
+      key,
+      dir,
     });
   }
 
@@ -116,7 +128,7 @@ class EntityView extends Widget {
     };
   }
 
-  onSortColumn(index) {
+  onSortColumn(index, path) {
     const x = this.sortingColumn;
 
     if (x.index === index) {
@@ -124,11 +136,13 @@ class EntityView extends Widget {
         index: x.index,
         direction: x.direction === 'down' ? 'up' : 'down',
       };
+      this.sortList(path, x.direction === 'down' ? 'asc' : 'desc');
     } else {
       this.sortingColumn = {
         index: index,
         direction: 'down',
       };
+      this.sortList(path, 'desc');
     }
   }
 
@@ -136,7 +150,6 @@ class EntityView extends Widget {
 
   renderHeaderCell(cell, index) {
     let text = getColumnHeaderText(cell);
-
     if (this.sortingColumn.index === index) {
       const glyph =
         this.sortingColumn.direction === 'down'
@@ -152,7 +165,7 @@ class EntityView extends Widget {
         isHeader="true"
         {...getColumnProps(cell, index === 0)}
         text={text}
-        selectionChanged={() => this.onSortColumn(index)}
+        selectionChanged={() => this.onSortColumn(index, getColumnPath(cell))}
       />
     );
   }
