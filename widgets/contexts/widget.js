@@ -23,6 +23,7 @@ export default class Contexts extends Widget {
     this.cmd('desktop.nav-to-context', {
       id: this.props.desktopId,
       contextId,
+      currentLocation: this.getRouting().get('location'),
     });
   }
 

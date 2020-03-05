@@ -102,4 +102,13 @@ module.exports = {
         view: lastView,
       });
   },
+
+  'setCurrentLocationByContext': (state, action) => {
+    const lastWorkcontext = state.get('current.workcontext');
+    return state.set(`current.location.${lastWorkcontext}`, {
+      path: action.get('path'),
+      search: action.get('search'),
+      hash: action.get('hash'),
+    });
+  },
 };

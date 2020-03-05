@@ -72,7 +72,11 @@ class Workitem extends Form {
   }
 
   onClose() {
-    this.navGoBack();
+    this.doAs(this.service, 'close', {
+      kind: 'terminate',
+      desktopId: this.desktopId,
+      contextId: this.contextId,
+    });
   }
 
   onEdit() {

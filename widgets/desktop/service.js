@@ -483,18 +483,28 @@ Goblin.registerQuest(goblinName, 'get-current-context', function(quest) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'nav-to-context', function*(quest, contextId) {
+Goblin.registerQuest(goblinName, 'nav-to-context', function*(
+  quest,
+  contextId,
+  currentLocation
+) {
+  const contextsAPI = quest.getAPI(`contexts@${quest.goblin.id}`);
   const state = quest.goblin.getState();
-  const view = state.get(`current.views.${contextId}`, null);
+  const location = state.get(`current.location.${contextId}`, null);
   let route;
 
-  if (view) {
-    const workItem = state.get(`current.workitems.${contextId}`, null);
-    if (workItem) {
-      route = `/${contextId}/${view}?wid=${workItem}`;
-    } else {
-      route = `/${contextId}/${view}`;
-    }
+  if (currentLocation) {
+    quest.dispatch('setCurrentLocationByContext', {
+      path: currentLocation.get('pathname'),
+      hash: currentLocation.get('hash'),
+      search: currentLocation.get('search'),
+    });
+  }
+
+  if (location) {
+    route = `${location.get('path')}${location.get('search')}${location.get(
+      'hash'
+    )}`;
   } else {
     route = `/${contextId}`;
   }
@@ -502,8 +512,7 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function*(quest, contextId) {
     route,
   });
 
-  const contexts = quest.getAPI(`contexts@${quest.goblin.id}`);
-  yield contexts.setCurrent({
+  yield contextsAPI.setCurrent({
     contextId,
   });
 
