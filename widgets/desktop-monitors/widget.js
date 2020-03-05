@@ -116,14 +116,16 @@ class DesktopMonitors extends Widget {
 
 export default Widget.connect((state, props) => {
   const s = state.get(`backend.${props.id}.channels`);
-  const channels = Array.from(s.entries()).map(([channel, data]) => {
-    return {
-      name: channel,
-      samples: data.get('samples'),
-      isActive: data.get('isActive'),
-      max: data.get('max'),
-    };
-  });
+  const channels = s
+    ? Array.from(s.entries()).map(([channel, data]) => {
+        return {
+          name: channel,
+          samples: data.get('samples'),
+          isActive: data.get('isActive'),
+          max: data.get('max'),
+        };
+      })
+    : [];
 
   let isActive = false;
   for (const channel of channels) {
