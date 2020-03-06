@@ -40,6 +40,8 @@ module.exports = {
       glyph: action.get('glyph'),
       color: action.get('color'),
       message: action.get('message'),
+      current: action.get('current'),
+      total: action.get('total'),
       externalUrl: action.get('externalUrl'),
       isDownload: action.get('isDownload'),
     };
