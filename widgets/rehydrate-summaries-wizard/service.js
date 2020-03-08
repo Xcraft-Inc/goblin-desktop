@@ -94,6 +94,7 @@ const config = {
         const r = quest.getStorage(entityStorage);
         const tables = form.selectedTables.join(', ');
         const tablesNumber = form.selectedTables.length;
+        yield desktop.hideDialogs();
         yield desktop.addNotification({
           notificationId: `notification@${quest.uuidV4()}`,
           glyph: 'solid/download',
