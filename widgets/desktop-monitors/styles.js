@@ -26,7 +26,7 @@ export default function styles(theme) {
   if (look === 'modern') {
     monitorShowed = {
       zIndex: 20,
-      position: 'absolute',
+      position: 'fixed',
       right: '0px',
       bottom: theme.shapes.footerHeight,
       transitionProperty: 'bottom',
@@ -45,7 +45,7 @@ export default function styles(theme) {
   if (look === 'retro') {
     monitorShowed = {
       zIndex: 20,
-      position: 'absolute',
+      position: 'fixed',
       right: '10px',
       bottom: Unit.add(theme.shapes.footerHeight, '10px'),
       transitionProperty: 'bottom',
