@@ -15,6 +15,8 @@ const {
   isTargetingValueOrRef,
 } = ListHelpers;
 
+import RetroGear from 'goblin-gadgets/widgets/retro-gear/widget';
+import {ColorManipulator} from 'electrum-theme';
 import Shredder from 'xcraft-core-shredder';
 
 /******************************************************************************/
@@ -37,6 +39,32 @@ class _Driller extends Widget {
   componentWillUnmount() {
     super.componentWillUnmount();
     clearInterval(this._renewInterval);
+  }
+
+  /******************************************************************************/
+
+  renderSpinner() {
+    if (this.context.theme.look.name === 'retro') {
+      return (
+        <div className={this.styles.classNames.busyBox}>
+          <RetroGear
+            color={ColorManipulator.darken(
+              this.context.theme.palette.light,
+              0.2
+            )}
+            left="0px"
+            top="0px"
+            radius="30px"
+            toothCount={16}
+            toothThickness={8}
+            rotationDuration="3s"
+            rotationDirection="cw"
+          />
+        </div>
+      );
+    } else {
+      return <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />;
+    }
   }
 
   render() {
@@ -64,7 +92,7 @@ class _Driller extends Widget {
           isHeader="false"
           {...getColumnProps(this.props.column)}
         >
-          <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
+          {this.renderSpinner()}
         </TableCell>
       );
     }
@@ -175,6 +203,30 @@ class EntityRow extends Widget {
     }
   }
 
+  renderSpinner() {
+    if (this.context.theme.look.name === 'retro') {
+      return (
+        <div className={this.styles.classNames.busyBox}>
+          <RetroGear
+            color={ColorManipulator.darken(
+              this.context.theme.palette.light,
+              0.2
+            )}
+            left="0px"
+            top="0px"
+            radius="30px"
+            toothCount={16}
+            toothThickness={8}
+            rotationDuration="3s"
+            rotationDirection="cw"
+          />
+        </div>
+      );
+    } else {
+      return <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />;
+    }
+  }
+
   render() {
     const {id, rowIndex, entity, columns, onDrillDown} = this.props;
     const loaded = id && entity;
@@ -189,7 +241,7 @@ class EntityRow extends Widget {
       return (
         <div className={this.styles.classNames.entityRow}>
           <TableCell grow="1" isLast="false" isHeader="false">
-            <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
+            {this.renderSpinner()}
           </TableCell>
         </div>
       );

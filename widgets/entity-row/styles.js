@@ -39,9 +39,22 @@ export default function styles(theme, props) {
     right: '-75px',
   };
 
+  const busyBox = {
+    zIndex: 9,
+    position: 'absolute',
+    left: '10%',
+    top: '50%',
+    width: '0px',
+    height: '0px',
+    display: 'flex',
+  };
+
+  /******************************************************************************/
+
   return {
     entityRow,
     buttons,
+    busyBox,
   };
 }
 
