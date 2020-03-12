@@ -1,9 +1,16 @@
+import {ColorManipulator} from 'electrum-theme';
+
 /******************************************************************************/
 
-export const propNames = ['height', 'minHeight', 'selected'];
+export const propNames = ['height', 'minHeight', 'selected', 'rowIndex'];
 
 export default function styles(theme, props) {
-  const {height, minHeight, selected} = props;
+  const {height, minHeight, selected, rowIndex} = props;
+
+  let backgroundColor = theme.palette.tableCellBackground;
+  if (theme.look.name === 'retro' && rowIndex % 2 === 0) {
+    backgroundColor = ColorManipulator.darken(backgroundColor, 0.1);
+  }
 
   const entityRow = {
     'position': 'relative',
@@ -16,7 +23,7 @@ export default function styles(theme, props) {
     'color': selected ? theme.palette.tableSelectedText : null,
     'backgroundColor': selected
       ? theme.palette.tableSelectedBackground
-      : theme.palette.tableCellBackground,
+      : backgroundColor,
     'borderBottom': `1px solid ${theme.palette.viewBackground}`,
     'cursor': 'default',
     ':hover': {
