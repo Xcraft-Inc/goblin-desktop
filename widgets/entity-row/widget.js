@@ -265,7 +265,7 @@ class EntityRow extends Widget {
           index={rowIndex}
           isLast="false"
           isHeader="false"
-          width="60px"
+          width={this.props.firstColumnWidth || '50px'}
           wrap="no-end"
           text={n}
         />
@@ -283,10 +283,10 @@ export default Widget.connect((state, props) => {
   const entity = state.get(`backend.${entityId}`);
   if (!entity) {
     // TODO: !!!
-    console.warn(`>>> Entity ${entityId} not found <<<`);
+    //? console.warn(`>>> Entity ${entityId} not found <<<`);
   } else if (!entity.get('meta')) {
     // TODO: Why some entities don't have meta ???
-    console.warn(`>>> Entity ${entityId} has no meta <<<`);
+    //? console.warn(`>>> Entity ${entityId} has no meta <<<`);
   }
 
   return {

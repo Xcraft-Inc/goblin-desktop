@@ -25,6 +25,7 @@ class EntityView extends Widget {
     super(...arguments);
 
     this.state = {
+      firstColumnWidth: '50px',
       sortingColumn: {index: 0, direction: 'down'},
     };
 
@@ -39,9 +40,20 @@ class EntityView extends Widget {
     this.nextRow = this.nextRow.bind(this);
     this.onEditColumns = this.onEditColumns.bind(this);
     this.onSortColumn = this.onSortColumn.bind(this);
+    this.onWidthChanged = this.onWidthChanged.bind(this);
   }
 
   //#region get/set
+  get firstColumnWidth() {
+    return this.state.firstColumnWidth;
+  }
+
+  set firstColumnWidth(value) {
+    this.setState({
+      firstColumnWidth: value,
+    });
+  }
+
   get sortingColumn() {
     return this.state.sortingColumn;
   }
@@ -146,6 +158,15 @@ class EntityView extends Widget {
     }
   }
 
+  onWidthChanged(index, path, width) {
+    console.log(`onWidthChanged index=${index} path=${path} width=${width}`);
+    if (index === -1) {
+      this.firstColumnWidth = width;
+    } else {
+      // TODO
+    }
+  }
+
   /******************************************************************************/
 
   renderHeaderCell(cell, index) {
@@ -166,6 +187,9 @@ class EntityView extends Widget {
         {...getColumnProps(cell, index === 0)}
         text={text}
         selectionChanged={() => this.onSortColumn(index, getColumnPath(cell))}
+        widthChanged={(rowId, width) =>
+          this.onWidthChanged(index, getColumnPath(cell), width)
+        }
       />
     );
   }
@@ -173,7 +197,13 @@ class EntityView extends Widget {
   renderHeader(columns) {
     return (
       <div className={this.styles.classNames.header}>
-        <TableCell isLast="false" isHeader="true" width="60px" text={T('N°')} />
+        <TableCell
+          isLast="false"
+          isHeader="true"
+          width={this.firstColumnWidth}
+          text={T('N°')}
+          widthChanged={(rowId, width) => this.onWidthChanged(-1, null, width)}
+        />
         {columns.map((c, i) => this.renderHeaderCell(c, i))}
       </div>
     );
@@ -189,6 +219,7 @@ class EntityView extends Widget {
           type={'variable'}
           renderItem={EntityListItem}
           data={{
+            firstColumnWidth: this.firstColumnWidth,
             onDrillDown: this.drillDown,
             onRenewTTL: this.renewTTL,
             columns: columns,
