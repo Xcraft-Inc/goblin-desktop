@@ -122,7 +122,7 @@ export default Widget.connect((state, props) => {
           name: channel,
           samples: data.get('samples'),
           isActive: data.get('isActive'),
-          max: data.get('max'),
+          max: data.get('delayedMax'),
         };
       })
     : [];
