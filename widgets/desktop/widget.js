@@ -16,7 +16,9 @@ import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 import IMG_GOBLIN from './goblin.png';
 const viewImporter = importer('view');
 import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
+import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 const NabuToolbarConnected = Widget.Wired(NabuToolbar)();
+import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
@@ -293,6 +295,30 @@ export default class Desktop extends Widget {
     );
   }
 
+  renderRetroPanel() {
+    if (this.context.theme.look.name !== 'retro') {
+      return null;
+    }
+
+    const c1 = ColorManipulator.darken(this.context.theme.palette.base, 0.1);
+    const c2 = ColorManipulator.darken(this.context.theme.palette.base, 0.4);
+
+    return (
+      <RetroPanel
+        kind="metal-plate"
+        gears="four"
+        top="0px"
+        bottom="0px"
+        left="0px"
+        right="0px"
+        margin="80px"
+        radius="40px"
+        strokeColor={this.context.theme.palette.dark}
+        fillColor={`radial-gradient(at 20% 20%, ${c1}, ${c2})`}
+      />
+    );
+  }
+
   render() {
     const {id, routesMap} = this.props;
 
@@ -443,6 +469,7 @@ export default class Desktop extends Widget {
             </Container>
             <BeforeContent desktopId={id} />
             <div className={contentClass}>
+              {this.renderRetroPanel()}
               <Content desktopId={id} />
               {this.renderNofications()}
             </div>
