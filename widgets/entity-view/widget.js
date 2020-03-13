@@ -9,6 +9,7 @@ import EntityListItem from 'goblin-desktop/widgets/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import T from 't';
+import MouseTrap from 'mousetrap';
 
 import {ListHelpers} from 'goblin-toolbox';
 const {
@@ -30,17 +31,34 @@ class EntityView extends Widget {
     };
 
     this._entityIds = [];
+    this.selectedRowId = null; // TODO: Make better!
 
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
     this.selectRow = this.selectRow.bind(this);
     this.editRow = this.editRow.bind(this);
-    this.prevRow = this.prevRow.bind(this);
-    this.nextRow = this.nextRow.bind(this);
     this.onEditColumns = this.onEditColumns.bind(this);
     this.onSortColumn = this.onSortColumn.bind(this);
     this.onWidthChanged = this.onWidthChanged.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyValidate = this.onKeyValidate.bind(this);
+  }
+
+  componentWillMount() {
+    MouseTrap.bind('up', this.onKeyUp, 'keydown');
+    MouseTrap.bind('down', this.onKeyDown, 'keydown');
+    MouseTrap.bind('return', this.onKeyValidate);
+    MouseTrap.bind('tab', this.onKeyValidate);
+  }
+
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    MouseTrap.unbind('up');
+    MouseTrap.unbind('down');
+    MouseTrap.unbind('return');
+    MouseTrap.unbind('tab');
   }
 
   //#region get/set
@@ -87,6 +105,7 @@ class EntityView extends Widget {
 
   selectRow(rowId) {
     console.log(`EntityView.selectRow rowId='${rowId}'`);
+    this.selectedRowId = rowId;
     this.dispatch({type: 'select-row', rowId});
     const entityId = this.getEntityId(rowId);
     if (this.props.hinter) {
@@ -94,22 +113,41 @@ class EntityView extends Widget {
     }
   }
 
-  get selectedIndex() {
-    return this.getBackendValue(`backend.${this.props.id}.selectedIndex`);
-  }
-
-  prevRow() {
-    //
-  }
-
-  nextRow() {
-    //
-  }
+  //- get selectedIndex() {
+  //-   return this.getBackendValue(`backend.${this.props.id}.selectedIndex`);
+  //- }
 
   onEditColumns() {
     this.doFor(this.props.id, 'open-entity-workitem', {
       entityId: `view@${this.props.type}`,
     });
+  }
+
+  onKeyUp() {
+    // TODO: Make better!
+    const rowId = parseInt(this.selectedRowId);
+    if (isNaN(rowId)) {
+      return;
+    }
+    this.selectRow(rowId - 1);
+  }
+
+  onKeyDown() {
+    // TODO: Make better!
+    const rowId = parseInt(this.selectedRowId);
+    if (isNaN(rowId)) {
+      return;
+    }
+    this.selectRow(rowId + 1);
+  }
+
+  onKeyValidate() {
+    // TODO: Make better!
+    const rowId = parseInt(this.selectedRowId);
+    if (isNaN(rowId)) {
+      return;
+    }
+    this.editRow(rowId);
   }
 
   _drillDownInternal() {
