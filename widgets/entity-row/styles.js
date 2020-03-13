@@ -49,7 +49,7 @@ export default function styles(theme, props) {
   const busyBox = {
     zIndex: 9,
     position: 'absolute',
-    left: '10%',
+    left: '50px',
     top: '50%',
     width: '0px',
     height: '0px',

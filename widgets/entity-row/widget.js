@@ -54,11 +54,12 @@ class _Driller extends Widget {
             )}
             left="0px"
             top="0px"
-            radius="30px"
-            toothCount={16}
-            toothThickness={8}
+            radius="20px"
+            toothCount={12}
+            toothThickness={6}
             rotationDuration="3s"
             rotationDirection="cw"
+            shadow="no"
           />
         </div>
       );
@@ -214,11 +215,12 @@ class EntityRow extends Widget {
             )}
             left="0px"
             top="0px"
-            radius="30px"
-            toothCount={16}
-            toothThickness={8}
+            radius="20px"
+            toothCount={12}
+            toothThickness={6}
             rotationDuration="3s"
             rotationDirection="cw"
+            shadow="no"
           />
         </div>
       );
@@ -240,7 +242,7 @@ class EntityRow extends Widget {
     if (!loaded) {
       return (
         <div className={this.styles.classNames.entityRow}>
-          <TableCell grow="1" isLast="false" isHeader="false">
+          <TableCell isLast="false" isHeader="false">
             {this.renderSpinner()}
           </TableCell>
         </div>
