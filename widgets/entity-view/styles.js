@@ -38,6 +38,7 @@ export default function styles(theme) {
   const mr = Unit.add('20px', theme.shapes.scrollerThickness);
 
   const header = {
+    position: 'relative',
     minHeight: '24px',
     padding: `0px ${mr} 0px 20px`,
     borderBottom: '1px solid #888',

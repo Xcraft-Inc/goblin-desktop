@@ -5,6 +5,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import throttle from 'lodash/throttle';
 import List from 'goblin-gadgets/widgets/list/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
+import TableHeaderDragManager from 'goblin-gadgets/widgets/table-header-drag-manager/widget';
 import EntityListItem from 'goblin-desktop/widgets/entity-list-item/widget';
 import Shredder from 'xcraft-core-shredder';
 import Button from 'goblin-gadgets/widgets/button/widget';
@@ -196,9 +197,9 @@ class EntityView extends Widget {
     }
   }
 
-  onWidthChanged(index, path, width) {
-    console.log(`onWidthChanged index=${index} path=${path} width=${width}`);
-    if (index === -1) {
+  onWidthChanged(index, width) {
+    console.log(`onWidthChanged index=${index} width=${width}`);
+    if (index === 0) {
       this.firstColumnWidth = width;
     } else {
       // TODO
@@ -225,14 +226,19 @@ class EntityView extends Widget {
         {...getColumnProps(cell, index === 0)}
         text={text}
         selectionChanged={() => this.onSortColumn(index, getColumnPath(cell))}
-        widthChanged={(rowId, width) =>
-          this.onWidthChanged(index, getColumnPath(cell), width)
-        }
       />
     );
   }
 
   renderHeader(columns) {
+    const columnsData = [];
+    let index = 0;
+    columnsData.push({index: index++, width: this.firstColumnWidth});
+    for (const column of columns) {
+      const props = getColumnProps(column, false);
+      columnsData.push({index: index++, width: props.width});
+    }
+
     return (
       <div className={this.styles.classNames.header}>
         <TableCell
@@ -240,9 +246,13 @@ class EntityView extends Widget {
           isHeader="true"
           width={this.firstColumnWidth}
           text={T('N°')}
-          widthChanged={(rowId, width) => this.onWidthChanged(-1, null, width)}
         />
         {columns.map((c, i) => this.renderHeaderCell(c, i))}
+        <TableHeaderDragManager
+          marginLeft="20px"
+          columns={columnsData}
+          widthChanged={(index, width) => this.onWidthChanged(index, width)}
+        />
       </div>
     );
   }
