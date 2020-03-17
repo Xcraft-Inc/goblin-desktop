@@ -44,11 +44,12 @@ Goblin.registerQuest(goblinName, 'remove', function*(
   const desktopId = quest.getDesktop();
   const deskAPI = quest.getAPI(desktopId);
   const wi = quest.getAPI(workitemId);
-
+  let closed = false;
   try {
     if (close && wi) {
       if (wi.close) {
         yield wi.close({kind: 'terminate', desktopId});
+        closed = true;
       } else {
         const nameId = workitemId.split('@');
         yield deskAPI.removeWorkitem({
@@ -72,6 +73,9 @@ Goblin.registerQuest(goblinName, 'remove', function*(
 
   quest.evt('removed', {workitemId});
 
+  if (closed) {
+    return;
+  }
   const desk = quest.getAPI(desktopId);
   yield desk.cleanWorkitem({workitemId});
 
