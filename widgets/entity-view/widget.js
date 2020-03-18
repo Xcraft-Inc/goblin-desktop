@@ -26,10 +26,6 @@ class EntityView extends Widget {
   constructor() {
     super(...arguments);
 
-    this.state = {
-      sortingColumn: {index: 0, direction: 'down'},
-    };
-
     this._entityIds = [];
     this.selectedRowId = null; // TODO: Make better!
 
@@ -62,18 +58,6 @@ class EntityView extends Widget {
     MouseTrap.unbind('tab');
   }
 
-  //#region get/set
-  get sortingColumn() {
-    return this.state.sortingColumn;
-  }
-
-  set sortingColumn(value) {
-    this.setState({
-      sortingColumn: value,
-    });
-  }
-  //#endregion
-
   get firstColumnWidth() {
     if (this.props.settings) {
       const userWidth = this.props.settings.get('widths.id@first-column', null);
@@ -83,6 +67,20 @@ class EntityView extends Widget {
     }
 
     return '50px';
+  }
+
+  get sorting() {
+    if (this.props.settings) {
+      const sorting = this.props.settings.get('sorting', null);
+      if (sorting) {
+        return sorting.toJS();
+      }
+    }
+
+    return {
+      columnId: this.props.columns.get(0),
+      direction: 'asc',
+    };
   }
 
   getEntityId(rowId) {
@@ -98,13 +96,6 @@ class EntityView extends Widget {
     });
   }
 
-  sortList(key, dir) {
-    this.doFor(this.props.id, 'sort-list', {
-      key,
-      dir,
-    });
-  }
-
   selectRow(rowId) {
     console.log(`EntityView.selectRow rowId='${rowId}'`);
     this.selectedRowId = rowId;
@@ -114,10 +105,6 @@ class EntityView extends Widget {
       this.navToDetail(this.props.id, entityId, this.props.hinter);
     }
   }
-
-  //- get selectedIndex() {
-  //-   return this.getBackendValue(`backend.${this.props.id}.selectedIndex`);
-  //- }
 
   onEditColumns() {
     this.doFor(this.props.id, 'open-entity-workitem', {
@@ -180,7 +167,32 @@ class EntityView extends Widget {
     };
   }
 
-  onSortColumn(index, path) {
+  sortList(key, dir) {
+    this.doFor(this.props.id, 'sort-list', {
+      key,
+      dir,
+    });
+  }
+
+  onSortColumn(index) {
+    const columnId = this.props.columns.get(index - 1);
+    const sorting = this.sorting;
+    if (sorting.columnId === columnId) {
+      sorting.direction = sorting.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      sorting.columnId = columnId;
+      sorting.direction = 'asc';
+    }
+    this.setUserSettings('set-view-column-sorting', {
+      viewId: `view@${this.props.type}`,
+      columnId: sorting.columnId,
+      direction: sorting.direction,
+    });
+
+    //? this.sortList(path, sorting.direction);
+  }
+
+  onSortColumn_OLD(index, path) {
     // TODO: Manage when path is undefined!
     console.log(`onSortColumn index=${index} path=${path}`);
     const x = this.sortingColumn;
@@ -244,11 +256,11 @@ class EntityView extends Widget {
 
   renderHeaderCell(cell, index) {
     let text = getColumnHeaderText(cell);
-    if (this.sortingColumn.index === index) {
+    const columnId = this.props.columns.get(index);
+    const sorting = this.sorting;
+    if (sorting.columnId === columnId) {
       const glyph =
-        this.sortingColumn.direction === 'down'
-          ? 'solid/caret-down'
-          : 'solid/caret-up';
+        sorting.direction === 'asc' ? 'solid/caret-down' : 'solid/caret-up';
       text = new Shredder({text, glyph});
     }
 
@@ -260,7 +272,9 @@ class EntityView extends Widget {
         verticalAlign="center"
         {...getColumnProps(cell, index === 0, this.props.settings)}
         text={text}
-        selectionChanged={() => this.onSortColumn(index, getColumnPath(cell))}
+        selectionChanged={() =>
+          this.onSortColumn(index + 1, getColumnPath(cell))
+        }
       />
     );
   }
