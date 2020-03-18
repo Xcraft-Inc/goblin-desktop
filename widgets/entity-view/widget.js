@@ -27,7 +27,6 @@ class EntityView extends Widget {
     super(...arguments);
 
     this.state = {
-      firstColumnWidth: '50px',
       sortingColumn: {index: 0, direction: 'down'},
     };
 
@@ -64,16 +63,6 @@ class EntityView extends Widget {
   }
 
   //#region get/set
-  get firstColumnWidth() {
-    return this.state.firstColumnWidth;
-  }
-
-  set firstColumnWidth(value) {
-    this.setState({
-      firstColumnWidth: value,
-    });
-  }
-
   get sortingColumn() {
     return this.state.sortingColumn;
   }
@@ -84,6 +73,17 @@ class EntityView extends Widget {
     });
   }
   //#endregion
+
+  get firstColumnWidth() {
+    if (this.props.settings) {
+      const userWidth = this.props.settings.get('widths.id@first-column', null);
+      if (userWidth) {
+        return userWidth;
+      }
+    }
+
+    return '50px';
+  }
 
   getEntityId(rowId) {
     const state = new Shredder(this.getState().backend);
@@ -204,7 +204,11 @@ class EntityView extends Widget {
     console.log(`onWidthChanged index=${index} width=${width}`);
 
     if (index === 0) {
-      this.firstColumnWidth = width;
+      this.setUserSettings('set-view-column-width', {
+        viewId: `view@${this.props.type}`,
+        columnId: 'id@first-column',
+        width,
+      });
     } else {
       index--;
       const columnId = this.props.columns.get(index);
@@ -222,13 +226,13 @@ class EntityView extends Widget {
     indexDst--;
 
     if (indexDst > indexSrc) {
-      indexDst--;
+      indexDst--; // if moved from left to right, skip the initial column (indexSrc).
     }
 
     const c = this.props.columns.toArray();
     const srcId = c[indexSrc];
-    c.splice(indexSrc, 1);
-    c.splice(indexDst, 0, srcId);
+    c.splice(indexSrc, 1); // Firstly, remove the column at initial position.
+    c.splice(indexDst, 0, srcId); // Secondly, insert the column at new position.
 
     this.setUserSettings('set-view-columns-order', {
       viewId: `view@${this.props.type}`,
