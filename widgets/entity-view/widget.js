@@ -202,16 +202,38 @@ class EntityView extends Widget {
 
   onWidthChanged(index, width) {
     console.log(`onWidthChanged index=${index} width=${width}`);
+
     if (index === 0) {
       this.firstColumnWidth = width;
     } else {
-      // TODO
+      index--;
+      const columnId = this.props.columns.get(index);
+      this.setUserSettings('set-view-column-width', {
+        viewId: `view@${this.props.type}`,
+        columnId,
+        width,
+      });
     }
   }
 
   onColumnMoved(indexSrc, indexDst) {
-    // TODO
     console.log(`onColumnMoved indexSrc=${indexSrc} indexDst=${indexDst}`);
+    indexSrc--;
+    indexDst--;
+
+    if (indexDst > indexSrc) {
+      indexDst--;
+    }
+
+    const c = this.props.columns.toArray();
+    const srcId = c[indexSrc];
+    c.splice(indexSrc, 1);
+    c.splice(indexDst, 0, srcId);
+
+    this.setUserSettings('set-view-columns-order', {
+      viewId: `view@${this.props.type}`,
+      columnIds: c,
+    });
   }
 
   /******************************************************************************/
@@ -232,7 +254,7 @@ class EntityView extends Widget {
         isLast="false"
         isHeader="true"
         verticalAlign="center"
-        {...getColumnProps(cell, index === 0)}
+        {...getColumnProps(cell, index === 0, this.props.settings)}
         text={text}
         selectionChanged={() => this.onSortColumn(index, getColumnPath(cell))}
       />
@@ -244,7 +266,7 @@ class EntityView extends Widget {
     let index = 0;
     columnsData.push({index: index++, width: this.firstColumnWidth});
     for (const column of columns) {
-      const props = getColumnProps(column, false);
+      const props = getColumnProps(column, false, this.props.settings);
       columnsData.push({index: index++, width: props.width});
     }
 
@@ -285,6 +307,7 @@ class EntityView extends Widget {
             onDrillDown: this.drillDown,
             onRenewTTL: this.renewTTL,
             columns: columns,
+            settings: this.props.settings,
             onSelect: this.selectRow,
             onEdit: this.editRow,
             useView: this.props.view ? true : false,
@@ -310,7 +333,7 @@ class EntityView extends Widget {
   }
 
   render() {
-    const {id, columns} = this.props;
+    const {id, columns, type} = this.props;
     if (!id || !columns) {
       return null;
     }
@@ -319,7 +342,7 @@ class EntityView extends Widget {
       columns.toArray(),
       ({collection}) => {
         const columns = collection;
-        const width = getEstimatedWidth(columns);
+        const width = getEstimatedWidth(columns, this.props.settings);
         const widthStyle = {
           minWidth: width,
         };
@@ -351,7 +374,20 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
     return {};
   }
   const view = state.get(`backend.view@${prop.type}`);
-  return {columns: view.get('columns'), view: view.get('query')};
+  let columns = view.get('columns');
+
+  const clientSessionId = state.get(`backend.${window.labId}.clientSessionId`);
+  const userView = state.get(
+    `backend.${clientSessionId}.views.view@${prop.type}`
+  );
+  if (userView) {
+    const order = userView.get('order');
+    if (order.size > 0) {
+      //todo clean non available
+      columns = order;
+    }
+  }
+  return {columns, view: view.get('query'), settings: userView};
 })(EntityView);
 
 export default Widget.Wired(ConnectedEntityView)();

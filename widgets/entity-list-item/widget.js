@@ -17,6 +17,7 @@ class EntityListItem extends Widget {
         firstColumnWidth={this.props.firstColumnWidth}
         itemId={this.props.itemId}
         columns={this.props.columns}
+        settings={this.props.settings}
         rowIndex={this.props.rowIndex}
         selected={this.props.selected}
         onDrillDown={this.props.onDrillDown}
@@ -41,6 +42,7 @@ export default Widget.connect((state, props) => {
     itemId: props.itemId,
     firstColumnWidth: props.data.firstColumnWidth,
     columns: props.data.columns,
+    settings: props.data.settings,
     onDrillDown: props.data.onDrillDown,
     onSelect: props.data.onSelect,
     onEdit: props.data.onEdit,

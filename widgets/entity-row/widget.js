@@ -82,7 +82,7 @@ class _Driller extends Widget {
           isLast="false"
           isHeader="false"
           text={this.props.text}
-          {...getColumnProps(this.props.column)}
+          {...getColumnProps(this.props.column, false, this.props.settings)}
         />
       );
     } else {
@@ -91,7 +91,7 @@ class _Driller extends Widget {
           rowId={this.props.rowId}
           isLast="false"
           isHeader="false"
-          {...getColumnProps(this.props.column)}
+          {...getColumnProps(this.props.column, false, this.props.settings)}
         >
           {this.renderSpinner()}
         </TableCell>
@@ -185,7 +185,7 @@ class EntityRow extends Widget {
         />
       );
     } else {
-      const props = getColumnProps(cell, index === 0);
+      const props = getColumnProps(cell, index === 0, this.props.settings);
       const {type, ...otherProps} = props;
 
       return (
