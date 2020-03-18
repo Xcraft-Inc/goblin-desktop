@@ -189,27 +189,8 @@ class EntityView extends Widget {
       direction: sorting.direction,
     });
 
-    //? this.sortList(path, sorting.direction);
-  }
-
-  onSortColumn_OLD(index, path) {
-    // TODO: Manage when path is undefined!
-    console.log(`onSortColumn index=${index} path=${path}`);
-    const x = this.sortingColumn;
-
-    if (x.index === index) {
-      this.sortingColumn = {
-        index: x.index,
-        direction: x.direction === 'down' ? 'up' : 'down',
-      };
-      this.sortList(path, x.direction === 'down' ? 'asc' : 'desc');
-    } else {
-      this.sortingColumn = {
-        index: index,
-        direction: 'down',
-      };
-      this.sortList(path, 'desc');
-    }
+    const path = getColumnPath(columnId);
+    this.sortList(path, sorting.direction);
   }
 
   onWidthChanged(index, width) {
@@ -272,9 +253,6 @@ class EntityView extends Widget {
         verticalAlign="center"
         {...getColumnProps(cell, index === 0, this.props.settings)}
         text={text}
-        selectionChanged={() =>
-          this.onSortColumn(index + 1, getColumnPath(cell))
-        }
       />
     );
   }
