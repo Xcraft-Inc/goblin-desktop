@@ -6,7 +6,6 @@ export default function styles(theme) {
   const entityView = {
     position: 'relative',
     margin: '0px',
-    padding: '20px 0px 0px 0px',
     overflowX: 'hidden',
     overflowY: 'hidden',
     display: 'flex',
@@ -39,7 +38,7 @@ export default function styles(theme) {
 
   const header = {
     position: 'relative',
-    minHeight: '24px',
+    minHeight: '44px',
     padding: `0px ${mr} 0px 20px`,
     borderBottom: '1px solid #888',
     display: 'flex',

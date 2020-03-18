@@ -42,6 +42,7 @@ class EntityView extends Widget {
     this.onEditColumns = this.onEditColumns.bind(this);
     this.onSortColumn = this.onSortColumn.bind(this);
     this.onWidthChanged = this.onWidthChanged.bind(this);
+    this.onColumnMoved = this.onColumnMoved.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyValidate = this.onKeyValidate.bind(this);
@@ -180,6 +181,8 @@ class EntityView extends Widget {
   }
 
   onSortColumn(index, path) {
+    // TODO: Manage when path is undefined!
+    console.log(`onSortColumn index=${index} path=${path}`);
     const x = this.sortingColumn;
 
     if (x.index === index) {
@@ -206,6 +209,11 @@ class EntityView extends Widget {
     }
   }
 
+  onColumnMoved(indexSrc, indexDst) {
+    // TODO
+    console.log(`onColumnMoved indexSrc=${indexSrc} indexDst=${indexDst}`);
+  }
+
   /******************************************************************************/
 
   renderHeaderCell(cell, index) {
@@ -223,6 +231,7 @@ class EntityView extends Widget {
         key={index}
         isLast="false"
         isHeader="true"
+        verticalAlign="center"
         {...getColumnProps(cell, index === 0)}
         text={text}
         selectionChanged={() => this.onSortColumn(index, getColumnPath(cell))}
@@ -244,14 +253,19 @@ class EntityView extends Widget {
         <TableCell
           isLast="false"
           isHeader="true"
+          verticalAlign="center"
           width={this.firstColumnWidth}
           text={T('N°')}
         />
         {columns.map((c, i) => this.renderHeaderCell(c, i))}
         <TableHeaderDragManager
+          height="44px"
           marginLeft="20px"
           columns={columnsData}
+          fixedColumns={[0]}
           widthChanged={(index, width) => this.onWidthChanged(index, width)}
+          columnMoved={(src, dst) => this.onColumnMoved(src, dst)}
+          columnClicked={index => this.onSortColumn(index)}
         />
       </div>
     );
