@@ -251,7 +251,7 @@ class EntityView extends Widget {
         isLast="false"
         isHeader="true"
         verticalAlign="center"
-        {...getColumnProps(cell, index === 0, this.props.settings)}
+        {...getColumnProps(cell, this.props.settings)}
         text={text}
       />
     );
@@ -262,7 +262,7 @@ class EntityView extends Widget {
     let index = 0;
     columnsData.push({index: index++, width: this.firstColumnWidth});
     for (const column of columns) {
-      const props = getColumnProps(column, false, this.props.settings);
+      const props = getColumnProps(column, this.props.settings);
       columnsData.push({index: index++, width: props.width});
     }
 
