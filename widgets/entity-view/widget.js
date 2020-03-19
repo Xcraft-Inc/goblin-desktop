@@ -11,14 +11,7 @@ import Shredder from 'xcraft-core-shredder';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import T from 't';
 import MouseTrap from 'mousetrap';
-
 import {ListHelpers} from 'goblin-toolbox';
-const {
-  getEstimatedWidth,
-  getColumnProps,
-  getColumnPath,
-  getColumnHeaderText,
-} = ListHelpers;
 
 /******************************************************************************/
 
@@ -189,7 +182,7 @@ class EntityView extends Widget {
       direction: sorting.direction,
     });
 
-    const path = getColumnPath(columnId);
+    const path = ListHelpers.getColumnPath(columnId);
     this.sortList(path, sorting.direction);
   }
 
@@ -236,7 +229,7 @@ class EntityView extends Widget {
   /******************************************************************************/
 
   renderHeaderCell(cell, index) {
-    let text = getColumnHeaderText(cell);
+    let text = ListHelpers.getColumnHeaderText(cell);
     const columnId = this.props.columns.get(index);
     const sorting = this.sorting;
     if (sorting.columnId === columnId) {
@@ -251,7 +244,7 @@ class EntityView extends Widget {
         isLast="false"
         isHeader="true"
         verticalAlign="center"
-        {...getColumnProps(cell, this.props.settings)}
+        {...ListHelpers.getColumnProps(cell, this.props.settings)}
         text={text}
       />
     );
@@ -262,7 +255,7 @@ class EntityView extends Widget {
     let index = 0;
     columnsData.push({index: index++, width: this.firstColumnWidth});
     for (const column of columns) {
-      const props = getColumnProps(column, this.props.settings);
+      const props = ListHelpers.getColumnProps(column, this.props.settings);
       columnsData.push({index: index++, width: props.width});
     }
 
@@ -338,7 +331,10 @@ class EntityView extends Widget {
       columns.toArray(),
       ({collection}) => {
         const columns = collection;
-        const width = getEstimatedWidth(columns, this.props.settings);
+        const width = ListHelpers.getEstimatedWidth(
+          columns,
+          this.props.settings
+        );
         const widthStyle = {
           minWidth: width,
         };

@@ -5,16 +5,7 @@ import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
 import EntityRowButton from 'goblin-desktop/widgets/entity-row-button/widget';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import T from 't';
-
 import {ListHelpers} from 'goblin-toolbox';
-const {
-  getColumnProps,
-  getColumnTargetPath,
-  getColumnSubPath,
-  getColumnDisplayText,
-  isTargetingValueOrRef,
-} = ListHelpers;
-
 import RetroGear from 'goblin-gadgets/widgets/retro-gear/widget';
 import {ColorManipulator} from 'electrum-theme';
 import Shredder from 'xcraft-core-shredder';
@@ -82,7 +73,10 @@ class _Driller extends Widget {
           isLast="false"
           isHeader="false"
           text={this.props.text}
-          {...getColumnProps(this.props.column, this.props.settings)}
+          {...ListHelpers.getColumnProps(
+            this.props.column,
+            this.props.settings
+          )}
         />
       );
     } else {
@@ -91,7 +85,10 @@ class _Driller extends Widget {
           rowId={this.props.rowId}
           isLast="false"
           isHeader="false"
-          {...getColumnProps(this.props.column, this.props.settings)}
+          {...ListHelpers.getColumnProps(
+            this.props.column,
+            this.props.settings
+          )}
         >
           {this.renderSpinner()}
         </TableCell>
@@ -167,11 +164,14 @@ class EntityRow extends Widget {
   }
 
   renderCell(cell, index) {
-    const targetPath = getColumnTargetPath(cell);
-    const columnSubPath = getColumnSubPath(cell);
-    const text = getColumnDisplayText(cell, this.props.entity);
+    const targetPath = ListHelpers.getColumnTargetPath(cell);
+    const columnSubPath = ListHelpers.getColumnSubPath(cell);
+    const text = ListHelpers.getColumnDisplayText(cell, this.props.entity);
 
-    if (isTargetingValueOrRef(this.props.entity, targetPath) && text !== null) {
+    if (
+      ListHelpers.isTargetingValueOrRef(this.props.entity, targetPath) &&
+      text !== null
+    ) {
       return (
         <Driller
           entityId={text}
@@ -185,7 +185,7 @@ class EntityRow extends Widget {
         />
       );
     } else {
-      const props = getColumnProps(cell, this.props.settings);
+      const props = ListHelpers.getColumnProps(cell, this.props.settings);
       const {type, ...otherProps} = props;
 
       return (

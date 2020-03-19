@@ -12,9 +12,7 @@ import Shredder from 'xcraft-core-shredder';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import T from 't';
-
 import {ListHelpers} from 'goblin-toolbox';
-const {getEstimatedWidth, getColumnProps, getColumnHeaderText} = ListHelpers;
 
 /******************************************************************************/
 
@@ -141,7 +139,7 @@ class EntityList extends Widget {
       return null;
     }
     const listId = `list@${id}`;
-    const width = getEstimatedWidth(columns);
+    const width = ListHelpers.getEstimatedWidth(columns);
     const widthStyle = {
       minWidth: width,
     };
@@ -156,8 +154,8 @@ class EntityList extends Widget {
                   key={c}
                   isLast="false"
                   isHeader="true"
-                  {...getColumnProps(c)}
-                  text={getColumnHeaderText(c)}
+                  {...ListHelpers.getColumnProps(c)}
+                  text={ListHelpers.getColumnHeaderText(c)}
                 />
               );
             })}
