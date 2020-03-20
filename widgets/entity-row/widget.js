@@ -142,6 +142,13 @@ class EntityRow extends Widget {
     clearInterval(this._renewInterval);
   }
 
+  isFilterPath(path) {
+    if (this.props.filterPaths) {
+      return this.props.filterPaths.includes(path);
+    }
+    return false;
+  }
+
   /******************************************************************************/
 
   renderButtons() {
@@ -161,6 +168,43 @@ class EntityRow extends Widget {
         />
       </div>
     );
+  }
+
+  renderCellText(cell, text, isFilter, index) {
+    const props = ListHelpers.getColumnProps(cell, this.props.settings);
+    const {type, ...otherProps} = props;
+
+    if (isFilter) {
+      return (
+        <div key={index} className={this.styles.classNames.filteredCell}>
+          <TableCell
+            rowId={this.props.rowIndex}
+            key={index}
+            index={index}
+            isLast="false"
+            isHeader="false"
+            {...otherProps}
+            maxHeight={this.props.maxHeight}
+            cellFormat="original"
+            text={text}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <TableCell
+          rowId={this.props.rowIndex}
+          key={index}
+          index={index}
+          isLast="false"
+          isHeader="false"
+          {...otherProps}
+          maxHeight={this.props.maxHeight}
+          cellFormat="original"
+          text={text}
+        />
+      );
+    }
   }
 
   renderCell(cell, index) {
@@ -185,22 +229,8 @@ class EntityRow extends Widget {
         />
       );
     } else {
-      const props = ListHelpers.getColumnProps(cell, this.props.settings);
-      const {type, ...otherProps} = props;
-
-      return (
-        <TableCell
-          rowId={this.props.rowIndex}
-          key={index}
-          index={index}
-          isLast="false"
-          isHeader="false"
-          {...otherProps}
-          maxHeight={this.props.maxHeight}
-          cellFormat="original"
-          text={text}
-        />
-      );
+      const isFilter = this.isFilterPath(targetPath);
+      return this.renderCellText(cell, text, isFilter, index);
     }
   }
 

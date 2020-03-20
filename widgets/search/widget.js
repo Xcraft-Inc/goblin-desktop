@@ -106,6 +106,7 @@ class Search extends Widget {
 
     this.state = {
       showParams: true,
+      hasFilter: false,
     };
 
     this.onToggleParams = this.onToggleParams.bind(this);
@@ -138,6 +139,16 @@ class Search extends Widget {
       showParams: value,
     });
   }
+
+  get hasFilter() {
+    return this.state.hasFilter;
+  }
+
+  set hasFilter(value) {
+    this.setState({
+      hasFilter: value,
+    });
+  }
   //#endregion
 
   onToggleParams() {
@@ -167,6 +178,7 @@ class Search extends Widget {
     this.doFor(`list@${this.props.id}`, 'set-filter-value', {
       filterValue: value,
     });
+    this.hasFilter = !!value;
   }
 
   renderParams() {
@@ -209,8 +221,8 @@ class Search extends Widget {
       <EntityView
         id={this.props.id}
         hinter={this.props.hinter}
-        disableToolbar="true"
         type={this.props.type}
+        hasFilter={this.hasFilter}
       />
     );
   }

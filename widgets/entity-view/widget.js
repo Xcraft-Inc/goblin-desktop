@@ -76,6 +76,13 @@ class EntityView extends Widget {
     };
   }
 
+  get filterPaths() {
+    // TODO...
+    return this.props.hasFilter
+      ? ['meta.summaries.description', 'meta.summaries.info']
+      : null;
+  }
+
   getEntityId(rowId) {
     const state = new Shredder(this.getState().backend);
     return state.get(`list@${this.props.id}.list.${rowId}-item`);
@@ -168,6 +175,10 @@ class EntityView extends Widget {
   }
 
   onSortColumn(index, columns) {
+    if (this.props.hasFilter) {
+      return;
+    }
+
     const columnId = this.props.columns.get(index - 1);
     const sorting = this.sorting;
     if (sorting.columnId === columnId) {
@@ -182,7 +193,8 @@ class EntityView extends Widget {
       direction: sorting.direction,
     });
 
-    const path = ListHelpers.getColumnPath(columns[index - 1]);
+    const cell = columns[index - 1];
+    const path = ListHelpers.getColumnPath(cell);
     this.sortList(path, sorting.direction);
   }
 
@@ -232,7 +244,7 @@ class EntityView extends Widget {
     let text = ListHelpers.getColumnHeaderText(cell);
     const columnId = this.props.columns.get(index);
     const sorting = this.sorting;
-    if (sorting.columnId === columnId) {
+    if (sorting.columnId === columnId && !this.props.hasFilter) {
       const glyph =
         sorting.direction === 'asc' ? 'solid/caret-down' : 'solid/caret-up';
       text = new Shredder({text, glyph});
@@ -293,6 +305,7 @@ class EntityView extends Widget {
           renderItem={EntityListItem}
           data={{
             firstColumnWidth: this.firstColumnWidth,
+            filterPaths: this.filterPaths,
             onDrillDown: this.drillDown,
             onRenewTTL: this.renewTTL,
             columns: columns,

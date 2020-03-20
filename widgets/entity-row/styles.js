@@ -1,4 +1,5 @@
 import {ColorManipulator} from 'electrum-theme';
+import {Unit} from 'electrum-theme';
 
 /******************************************************************************/
 
@@ -56,12 +57,22 @@ export default function styles(theme, props) {
     display: 'flex',
   };
 
+  const m = Unit.multiply(theme.shapes.tablePadding, -0.5);
+  const p = Unit.multiply(theme.shapes.tablePadding, 0.5);
+
+  const filteredCell = {
+    margin: `${m} 0px ${m} ${m}`,
+    padding: `${p} 0px ${p} ${p}`,
+    backgroundColor: ColorManipulator.fade(theme.palette.base, 0.2),
+  };
+
   /******************************************************************************/
 
   return {
     entityRow,
     buttons,
     busyBox,
+    filteredCell,
   };
 }
 

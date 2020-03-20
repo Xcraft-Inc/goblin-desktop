@@ -15,6 +15,7 @@ class EntityListItem extends Widget {
         minHeight="28px"
         maxHeight="200px"
         firstColumnWidth={this.props.firstColumnWidth}
+        filterPaths={this.props.filterPaths}
         itemId={this.props.itemId}
         columns={this.props.columns}
         settings={this.props.settings}
@@ -41,6 +42,7 @@ export default Widget.connect((state, props) => {
     id,
     itemId: props.itemId,
     firstColumnWidth: props.data.firstColumnWidth,
+    filterPaths: props.data.filterPaths,
     columns: props.data.columns,
     settings: props.data.settings,
     onDrillDown: props.data.onDrillDown,
