@@ -167,7 +167,7 @@ class EntityView extends Widget {
     });
   }
 
-  onSortColumn(index) {
+  onSortColumn(index, columns) {
     const columnId = this.props.columns.get(index - 1);
     const sorting = this.sorting;
     if (sorting.columnId === columnId) {
@@ -182,7 +182,7 @@ class EntityView extends Widget {
       direction: sorting.direction,
     });
 
-    const path = ListHelpers.getColumnPath(columnId);
+    const path = ListHelpers.getColumnPath(columns[index - 1]);
     this.sortList(path, sorting.direction);
   }
 
@@ -276,7 +276,7 @@ class EntityView extends Widget {
           fixedColumns={[0]}
           widthChanged={(index, width) => this.onWidthChanged(index, width)}
           columnMoved={(src, dst) => this.onColumnMoved(src, dst)}
-          columnClicked={index => this.onSortColumn(index)}
+          columnClicked={index => this.onSortColumn(index, columns)}
         />
       </div>
     );
