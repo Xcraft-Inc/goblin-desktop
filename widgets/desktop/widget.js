@@ -1,18 +1,16 @@
 //T:2019-02-27
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-import T from 't';
 import MouseTrap from 'mousetrap';
 import importer from 'goblin_importer';
 import Container from 'goblin-gadgets/widgets/container/widget';
-import Button from 'goblin-gadgets/widgets/button/widget';
-import Separator from 'goblin-gadgets/widgets/separator/widget';
 import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
+import DesktopTaskbar from 'goblin-desktop/widgets/desktop-taskbar/widget';
+import DesktopTopbar from 'goblin-desktop/widgets/desktop-topbar/widget';
+import DesktopNotifications from 'goblin-desktop/widgets/desktop-notifications/widget';
 import DesktopMonitors from 'goblin-desktop/widgets/desktop-monitors/widget';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
 import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
-import Notifications from 'goblin-desktop/widgets/notifications/widget';
-import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 import IMG_GOBLIN from './goblin.png';
 const viewImporter = importer('view');
 import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
@@ -22,113 +20,16 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-let currentTheme = 'default';
-const themes = [
-  {text: T('Standard'), value: 'default'},
-  {text: T('Standard compact'), value: 'default-compact'},
-  {text: T('Vert'), value: 'default-green'},
-  {text: T('Vert spécial'), value: 'special-green'},
-  {text: T('Vert arrondi'), value: 'smooth-green'},
-  {text: T('Rose'), value: 'default-pink'},
-  {text: T('Rose compact'), value: 'compact-pink'},
-  {text: T('Monochrome compact'), value: 'compact-mono'},
-  {text: T('Foncé'), value: 'default-dark'},
-  {text: T('Dragula'), value: 'default-dragula'},
-];
-const eggsThemes = [
-  {text: T('Standard'), value: 'default'},
-  {text: T('Standard compact'), value: 'default-compact'},
-  {text: T('Vert'), value: 'default-green'},
-  {text: T('Vert spécial'), value: 'special-green'},
-  {text: T('Vert arrondi'), value: 'smooth-green'},
-  {text: T('Rose'), value: 'default-pink'},
-  {text: T('Rose compact'), value: 'compact-pink'},
-  {text: T('Monochrome compact'), value: 'compact-mono'},
-  {text: T('Rétro'), value: 'default-retro'},
-  {text: T('Steampunk'), value: 'steampunk-retro'},
-  {text: T('Foncé'), value: 'default-dark'},
-  {text: T('Dragula'), value: 'default-dragula'},
-];
-
-/******************************************************************************/
-
-const LocaleMenuConnected = Widget.connect((state, props) => {
-  const locales = state.get(`backend.nabu.locales`);
-  const localeId = Widget.getUserSession(state).get('locale');
-
-  return {
-    items: locales,
-    itemsTextKey: 'text',
-    itemsValueKey: 'name',
-    currentItemValue: localeId,
-  };
-})(MainTabMenu);
-
-const TeamSelector = Widget.connect((state, props) => {
-  const teamIds = state.get('backend.mandate@main.teamIds');
-  if (!teamIds) {
-    return {
-      items: [{text: 'non configuré', value: null}],
-      currentItemValue: null,
-    };
-  }
-  const currentTeam = state.get(
-    `backend.${props.desktopId}.teamId`,
-    teamIds.get(0)
-  );
-  const items = teamIds.reduce((items, id) => {
-    const item = state.get(`backend.${id}`);
-    if (item) {
-      items.push({text: item.get('name'), value: id});
-    }
-    return items;
-  }, []);
-  return {
-    items,
-    currentItemValue: currentTeam,
-  };
-})(MainTabMenu);
-
-const UserInfo = Widget.connect((state, props) => {
-  const teamIds = state.get('backend.mandate@main.teamIds');
-  if (!teamIds) {
-    return {
-      text: `${props.user}`,
-      kind: 'main-tab-right',
-    };
-  }
-  const currentTeam = state.get(
-    `backend.${props.desktopId}.teamId`,
-    teamIds.get(0)
-  );
-  const team = state.get(`backend.${currentTeam}.alias`, '');
-  return {
-    text: `${props.user} ${team}`,
-    kind: 'main-tab-right',
-  };
-})(Button);
-
-/******************************************************************************/
-
 export default class Desktop extends Widget {
   constructor() {
     super(...arguments);
 
     this.state = {
       showFooter: true,
-      accessToEggsThemes: false,
     };
 
-    this.onChangeScreen = this.onChangeScreen.bind(this);
-    this.onChangeMandate = this.onChangeMandate.bind(this);
-    this.onChangeLocale = this.onChangeLocale.bind(this);
-    this.onChangeTheme = this.onChangeTheme.bind(this);
-    this.onChangeEggs = this.onChangeEggs.bind(this);
-    this.onChangeTeam = this.onChangeTeam.bind(this);
-    this.renderFooter = this.renderFooter.bind(this);
-    this.onTab = this.onTab.bind(this);
-    this.onShiftTab = this.onShiftTab.bind(this);
     this.togglePrompt = this.togglePrompt.bind(this);
+    this.toggleFooter = this.toggleFooter.bind(this);
   }
 
   componentDidMount() {
@@ -154,59 +55,13 @@ export default class Desktop extends Widget {
       showFooter: value,
     });
   }
-
-  get accessToEggsThemes() {
-    return this.state.accessToEggsThemes;
-  }
-
-  set accessToEggsThemes(value) {
-    this.setState({
-      accessToEggsThemes: value,
-    });
-  }
   //#endregion
 
   static get wiring() {
     return {
       id: 'id',
-      username: 'username',
       routesMap: 'routes',
     };
-  }
-
-  onChangeScreen() {
-    this.do('change-screen');
-  }
-
-  onChangeMandate() {
-    this.do('change-mandate');
-  }
-
-  onChangeLocale(locale) {
-    this.do('change-locale', {locale});
-  }
-
-  onChangeTheme(name) {
-    currentTheme = name;
-    this.do('change-theme', {name});
-  }
-
-  onChangeEggs() {
-    this.accessToEggsThemes = true;
-  }
-
-  onChangeTeam(teamId) {
-    this.do('change-team', {teamId});
-  }
-
-  onTab(e) {
-    console.log('desktop.onTab');
-    e.preventDefault();
-  }
-
-  onShiftTab(e) {
-    console.log('desktop.onShiftTab');
-    e.preventDefault();
   }
 
   /******************************************************************************/
@@ -266,10 +121,28 @@ export default class Desktop extends Widget {
     );
   }
 
+  toggleFooter() {
+    this.showFooter = !this.showFooter;
+  }
+
   /******************************************************************************/
 
+  renderTaskBar(routes) {
+    return (
+      <DesktopTaskbar
+        id={this.props.id}
+        routes={routes}
+        onToggleFooter={this.toggleFooter}
+      />
+    );
+  }
+
+  renderTopBar(routes) {
+    return <DesktopTopbar id={this.props.id} routes={routes} />;
+  }
+
   renderNofications() {
-    return <Notifications id={this.props.id} />;
+    return <DesktopNotifications id={this.props.id} />;
   }
 
   renderFooter() {
@@ -348,22 +221,12 @@ export default class Desktop extends Widget {
       }
     });
 
-    const taskView = viewImporter(routes['/task-bar/'].component);
-    const Tasks = Widget.WithRoute(taskView, 'context')(
-      routes['/task-bar/'].path
-    );
-
     const contentView = viewImporter(routes['/content/'].component);
     const Content = Widget.WithRoute(
       contentView,
       ['context', 'view'],
       ['wid', 'did']
     )(routes['/content/'].path);
-
-    const topbarView = viewImporter(routes['/top-bar/'].component);
-    const TopBar = Widget.WithRoute(topbarView, 'context')(
-      routes['/top-bar/'].path
-    );
 
     const beforeView = viewImporter(routes['/before-content/'].component);
     const BeforeContent = Widget.WithRoute(beforeView, 'context')(
@@ -376,97 +239,10 @@ export default class Desktop extends Widget {
 
     return (
       <Container kind="root">
-        <Container kind="left-bar">
-          <Container kind="task-bar">
-            <Button
-              textTransform="none"
-              text={this.props.id.split('@')[1]}
-              glyph="light/cube"
-              tooltip={T('Changer de mandat')}
-              kind="task-logo"
-              onClick={this.onChangeMandate}
-            />
-            <Tasks desktopId={id} />
-            <Separator kind="sajex" />
-            <Button
-              kind="task-show-footer"
-              glyph="solid/chevron-right"
-              tooltip={T('Montre ou cache la barre de pied de page')}
-              onClick={() => (this.showFooter = !this.showFooter)}
-            />
-          </Container>
-        </Container>
+        {this.renderTaskBar(routes)}
         <Container kind="right">
           <Container kind="content">
-            <Container kind="top-bar">
-              <TopBar desktopId={id} />
-              <Container kind="main-tab-right">
-                <UserInfo user={this.props.username} desktopId={id} />
-                <TeamSelector
-                  desktopId={id}
-                  glyph="solid/users"
-                  kind="main-tab-right"
-                  tooltip="Team"
-                  onChange={this.onChangeTeam}
-                />
-                <LocaleMenuConnected
-                  glyph="solid/flag"
-                  kind="main-tab-right"
-                  tooltip={T('Choix de la locale')}
-                  onChange={this.onChangeLocale}
-                  desktopId={id}
-                />
-                <MainTabMenu
-                  glyph={
-                    this.accessToEggsThemes ? 'regular/tint' : 'solid/tint'
-                  }
-                  kind="main-tab-right"
-                  tooltip={T('Choix du thème')}
-                  items={this.accessToEggsThemes ? eggsThemes : themes}
-                  currentItemValue={currentTheme}
-                  onChange={this.onChangeTheme}
-                />
-                <div
-                  className={this.styles.classNames.eggButton}
-                  onClick={this.onChangeEggs}
-                />
-                <Button
-                  glyph="solid/tv"
-                  kind="main-tab-right"
-                  onClick={this.onChangeScreen}
-                />
-                {window.zoomable ? (
-                  <Button
-                    glyph="solid/plus"
-                    kind="main-tab-right"
-                    tooltip={T('Augmente le zoom')}
-                    onClick={() => {
-                      this.doFor(this.context.labId, 'zoom');
-                    }}
-                  />
-                ) : null}
-                {window.zoomable ? (
-                  <Button
-                    text="1"
-                    kind="main-tab-right"
-                    tooltip={T('Remet le zoom 100%')}
-                    onClick={() => {
-                      this.doFor(this.context.labId, 'default-zoom');
-                    }}
-                  />
-                ) : null}
-                {window.zoomable ? (
-                  <Button
-                    glyph="solid/minus"
-                    kind="main-tab-right"
-                    tooltip={T('Diminue le zoom')}
-                    onClick={() => {
-                      this.doFor(this.context.labId, 'un-zoom');
-                    }}
-                  />
-                ) : null}
-              </Container>
-            </Container>
+            {this.renderTopBar(routes)}
             <BeforeContent desktopId={id} />
             <div className={contentClass}>
               {this.renderRetroPanel()}

@@ -35,11 +35,6 @@ export default function styles(theme) {
     top: theme.shapes.footerHeight,
   };
 
-  const eggButton = {
-    width: '5px',
-    height: '15px',
-  };
-
   /******************************************************************************/
 
   return {
@@ -47,7 +42,6 @@ export default function styles(theme) {
     contentWithoutfooter,
     footer,
     footerHidden,
-    eggButton,
   };
 }
 

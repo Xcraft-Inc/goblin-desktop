@@ -9,7 +9,7 @@ import T from 't';
 
 /******************************************************************************/
 
-class Notifications extends Widget {
+class DesktopNotifications extends Widget {
   constructor() {
     super(...arguments);
 
@@ -208,7 +208,7 @@ class Notifications extends Widget {
 
 /******************************************************************************/
 
-const ConnectedNotifications = Widget.connect((state, props) => {
+const ConnectedDesktopNotifications = Widget.connect((state, props) => {
   const desktopState = state.get(`backend.${props.id}`);
   return {
     show: desktopState.get('showNotifications'),
@@ -216,12 +216,15 @@ const ConnectedNotifications = Widget.connect((state, props) => {
     dnd: desktopState.get('dnd'),
     onlyNews: desktopState.get('onlyNews'),
   };
-})(Notifications);
+})(DesktopNotifications);
 
 export default class extends Widget {
   render() {
     return (
-      <ConnectedNotifications labId={this.context.labId} {...this.props} />
+      <ConnectedDesktopNotifications
+        labId={this.context.labId}
+        {...this.props}
+      />
     );
   }
 }
