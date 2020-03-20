@@ -1,5 +1,4 @@
 import {Unit} from 'electrum-theme';
-import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
@@ -47,7 +46,7 @@ export default function styles(theme) {
     flexGrow: '1',
   };
 
-  const hc = ColorManipulator.fade(theme.palette.dark, 0.1);
+  const hc = theme.palette.tableFilterHeaderHatch;
   const hs = '10px';
   const ht = Unit.multiply(hs, 2);
   const headerFilter = {

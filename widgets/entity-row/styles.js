@@ -60,7 +60,7 @@ export default function styles(theme, props) {
   const filteredCell = {
     margin: '-100px 0px -100px -10px',
     padding: '100px 0px 100px 10px',
-    backgroundColor: ColorManipulator.fade(theme.palette.base, 0.2),
+    backgroundColor: theme.palette.tableFilterCellBackground,
   };
 
   /******************************************************************************/
