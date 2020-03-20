@@ -272,7 +272,13 @@ class EntityView extends Widget {
     }
 
     return (
-      <div className={this.styles.classNames.header}>
+      <div
+        className={
+          this.props.hasFilter
+            ? this.styles.classNames.headerFilter
+            : this.styles.classNames.header
+        }
+      >
         <TableCell
           isLast="false"
           isHeader="true"

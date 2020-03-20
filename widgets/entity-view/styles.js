@@ -1,4 +1,5 @@
 import {Unit} from 'electrum-theme';
+import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
@@ -46,6 +47,14 @@ export default function styles(theme) {
     flexGrow: '1',
   };
 
+  const hc = ColorManipulator.fade(theme.palette.dark, 0.1);
+  const hs = '10px';
+  const ht = Unit.multiply(hs, 2);
+  const headerFilter = {
+    ...header,
+    background: `repeating-linear-gradient(-45deg, ${hc}, ${hc} ${hs}, rgba(0,0,0,0) 0px, rgba(0,0,0,0) ${ht})`,
+  };
+
   const rows = {
     height: '100%',
     overflowX: 'hidden',
@@ -66,6 +75,7 @@ export default function styles(theme) {
     list,
     content,
     header,
+    headerFilter,
     rows,
     button,
   };

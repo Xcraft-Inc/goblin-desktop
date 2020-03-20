@@ -1,5 +1,4 @@
 import {ColorManipulator} from 'electrum-theme';
-import {Unit} from 'electrum-theme';
 
 /******************************************************************************/
 
@@ -21,6 +20,7 @@ export default function styles(theme, props) {
     'flexDirection': 'row',
     'alignItems': 'center',
     'padding': '5px 20px',
+    'overflow': 'hidden',
     'color': selected ? theme.palette.tableSelectedText : null,
     'backgroundColor': selected
       ? theme.palette.tableSelectedBackground
@@ -57,12 +57,9 @@ export default function styles(theme, props) {
     display: 'flex',
   };
 
-  const m = Unit.multiply(theme.shapes.tablePadding, -0.5);
-  const p = Unit.multiply(theme.shapes.tablePadding, 0.5);
-
   const filteredCell = {
-    margin: `${m} 0px ${m} ${m}`,
-    padding: `${p} 0px ${p} ${p}`,
+    margin: '-100px 0px -100px -10px',
+    padding: '100px 0px 100px 10px',
     backgroundColor: ColorManipulator.fade(theme.palette.base, 0.2),
   };
 
