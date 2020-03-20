@@ -106,7 +106,6 @@ class Search extends Widget {
 
     this.state = {
       showParams: true,
-      hasFilter: false,
     };
 
     this.onToggleParams = this.onToggleParams.bind(this);
@@ -115,6 +114,7 @@ class Search extends Widget {
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
     this.filter = this.filter.bind(this);
+    this.resetFilter = this.resetFilter.bind(this);
   }
 
   static get wiring() {
@@ -137,16 +137,6 @@ class Search extends Widget {
   set showParams(value) {
     this.setState({
       showParams: value,
-    });
-  }
-
-  get hasFilter() {
-    return this.state.hasFilter;
-  }
-
-  set hasFilter(value) {
-    this.setState({
-      hasFilter: value,
     });
   }
   //#endregion
@@ -178,7 +168,10 @@ class Search extends Widget {
     this.doFor(`list@${this.props.id}`, 'set-filter-value', {
       filterValue: value,
     });
-    this.hasFilter = !!value;
+  }
+
+  resetFilter() {
+    this.filter('');
   }
 
   renderParams() {
@@ -190,14 +183,27 @@ class Search extends Widget {
           <Label text={this.props.title} grow="1" kind="title" />
           <div className={this.styles.classNames.separator} />
           <FrontendForm widgetId={this.props.id} initialState={{value: ''}}>
-            <TextFieldNew
-              hintText={this.props.hintText}
-              value={C('.value')}
-              changeMode="throttled"
-              onChange={this.filter}
-              autoFocus={true}
-              selectAllOnFocus={true}
-            />
+            <Container kind="row">
+              <TextFieldNew
+                grow="1"
+                hintText={this.props.hintText || T('Chercher')}
+                value={C('.value')}
+                changeMode="throttled"
+                onChange={this.filter}
+                autoFocus={true}
+                selectAllOnFocus={true}
+                shape={this.props.hasFilter ? 'left-rounded' : 'rounded'}
+                horizontalSpacing={this.props.hasFilter ? 'overlap' : null}
+              />
+              {this.props.hasFilter ? (
+                <Button
+                  shape="right-rounded"
+                  glyph="solid/times"
+                  tooltip={T('Tout montrer')}
+                  onClick={this.resetFilter}
+                />
+              ) : null}
+            </Container>
           </FrontendForm>
         </div>
 
@@ -222,7 +228,6 @@ class Search extends Widget {
         id={this.props.id}
         hinter={this.props.hinter}
         type={this.props.type}
-        hasFilter={this.hasFilter}
       />
     );
   }
@@ -267,4 +272,9 @@ class Search extends Widget {
 
 /******************************************************************************/
 
-export default Widget.Wired(Search)();
+const ConnectedSearch = Widget.connect((state, prop) => {
+  const hasFilter = !!state.get(`widgets.${prop.id}.value`, null);
+  return {hasFilter};
+})(Search);
+
+export default Widget.Wired(ConnectedSearch)();

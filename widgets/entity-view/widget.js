@@ -384,6 +384,9 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
   if (!prop.type) {
     return {};
   }
+
+  const hasFilter = !!state.get(`widgets.${prop.id}.value`, null);
+
   const view = state.get(`backend.view@${prop.type}`);
   let columns = view.get('columns');
 
@@ -398,7 +401,8 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
       columns = order;
     }
   }
-  return {columns, view: view.get('query'), settings: userView};
+
+  return {hasFilter, columns, view: view.get('query'), settings: userView};
 })(EntityView);
 
 export default Widget.Wired(ConnectedEntityView)();
