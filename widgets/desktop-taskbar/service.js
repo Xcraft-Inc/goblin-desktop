@@ -7,7 +7,15 @@ const goblinName = path.basename(module.parent.filename, '.js');
 const logicState = {};
 
 // Define logic handlers according rc.json
-const logicHandlers = require('./logic-handlers.js');
+const logicHandlers = {
+  create: (state, action) => {
+    const id = action.get('id');
+    return state.set('', {
+      id: id,
+      context: action.get('contextId'),
+    });
+  },
+};
 
 /******************************************************************************/
 

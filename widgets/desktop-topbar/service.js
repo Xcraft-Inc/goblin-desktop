@@ -8,7 +8,11 @@ const goblinName = path.basename(module.parent.filename, '.js');
 const logicState = {};
 
 // Define logic handlers according rc.json
-const logicHandlers = require('./logic-handlers.js');
+const logicHandlers = {
+  'change-team': (state, action) => {
+    return state.set('teamId', action.get('teamId'));
+  },
+};
 
 /******************************************************************************/
 
