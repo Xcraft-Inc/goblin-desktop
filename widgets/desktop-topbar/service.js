@@ -1,5 +1,4 @@
 'use strict';
-//T:2019-02-27
 const path = require('path');
 const Goblin = require('xcraft-core-goblin');
 const goblinName = path.basename(module.parent.filename, '.js');
@@ -9,6 +8,11 @@ const logicState = {};
 
 // Define logic handlers according rc.json
 const logicHandlers = {
+  'create': (state, action) => {
+    const id = action.get('id');
+    const username = action.get('username', 'guest');
+    return state.set('', {id, username});
+  },
   'change-team': (state, action) => {
     return state.set('teamId', action.get('teamId'));
   },
@@ -17,7 +21,8 @@ const logicHandlers = {
 /******************************************************************************/
 
 // Register quest's according rc.json
-Goblin.registerQuest(goblinName, 'create', function(quest) {
+Goblin.registerQuest(goblinName, 'create', function(quest, id, username) {
+  quest.do({id, username});
   return quest.goblin.id;
 });
 

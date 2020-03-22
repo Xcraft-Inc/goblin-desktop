@@ -10,17 +10,15 @@ const logicState = {};
 const logicHandlers = {
   create: (state, action) => {
     const id = action.get('id');
-    return state.set('', {
-      id: id,
-      context: action.get('contextId'),
-    });
+    return state.set('', {id});
   },
 };
 
 /******************************************************************************/
 
 // Register quest's according rc.json
-Goblin.registerQuest(goblinName, 'create', function(quest) {
+Goblin.registerQuest(goblinName, 'create', function(quest, id) {
+  quest.do({id});
   return quest.goblin.id;
 });
 

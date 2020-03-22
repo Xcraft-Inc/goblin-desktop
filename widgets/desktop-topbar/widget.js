@@ -125,25 +125,17 @@ export default class DesktopTopbar extends Widget {
   }
   //#endregion
 
-  static get wiring() {
-    return {
-      id: 'id',
-      username: 'username',
-      routesMap: 'routes',
-    };
-  }
-
   onChangeScreen() {
-    this.do('change-screen');
+    this.doAs('desktop', 'change-screen');
   }
 
   onChangeLocale(locale) {
-    this.do('change-locale', {locale});
+    this.doAs('desktop', 'change-locale', {locale});
   }
 
   onChangeTheme(name) {
     currentTheme = name;
-    this.do('change-theme', {name});
+    this.doAs('desktop', 'change-theme', {name});
   }
 
   onChangeEggs() {
@@ -151,7 +143,7 @@ export default class DesktopTopbar extends Widget {
   }
 
   onChangeTeam(teamId) {
-    this.do('change-team', {teamId});
+    this.doAs('desktop', 'change-team', {teamId});
   }
 
   /******************************************************************************/

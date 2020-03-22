@@ -53,6 +53,7 @@ export default class Desktop extends Widget {
     return {
       id: 'id',
       routesMap: 'routes',
+      username: 'username',
     };
   }
 
@@ -73,7 +74,13 @@ export default class Desktop extends Widget {
   }
 
   renderTopBar(routes) {
-    return <DesktopTopbar id={this.props.id} routes={routes} />;
+    return (
+      <DesktopTopbar
+        id={this.props.id}
+        routes={routes}
+        username={this.props.username}
+      />
+    );
   }
 
   renderNofications() {

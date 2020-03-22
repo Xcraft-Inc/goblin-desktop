@@ -17,7 +17,7 @@ export default class DesktopTaskbar extends Widget {
   }
 
   onChangeMandate() {
-    this.do('change-mandate');
+    this.doAs('desktop', 'change-mandate');
   }
 
   render() {

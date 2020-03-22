@@ -19,13 +19,6 @@ export default class DesktopFooter extends Widget {
     this.togglePrompt = this.togglePrompt.bind(this);
   }
 
-  static get wiring() {
-    return {
-      id: 'id',
-      routesMap: 'routes',
-    };
-  }
-
   /******************************************************************************/
 
   togglePrompt(e) {
