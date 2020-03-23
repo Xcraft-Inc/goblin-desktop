@@ -19,6 +19,9 @@ export default function styles(theme) {
 
   let monitorShowed;
   let monitorHidden;
+  let monitorPanel;
+  let monitorPanelContent;
+  let monitorSajex;
 
   //---------\
   //  MODERN  >
@@ -59,6 +62,26 @@ export default function styles(theme) {
       transition: theme.transitions.retroCloseTransition,
       transitionTimingFunction: theme.transitions.retroCloseFunction,
     };
+
+    monitorPanel = {
+      position: 'relative',
+      width: '180px',
+      height: '60px',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
+
+    monitorPanelContent = {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+    };
+
+    monitorSajex = {
+      width: '10px',
+    };
   }
 
   /******************************************************************************/
@@ -67,6 +90,9 @@ export default function styles(theme) {
     desktopMonitors,
     monitorShowed,
     monitorHidden,
+    monitorPanel,
+    monitorPanelContent,
+    monitorSajex,
   };
 }
 

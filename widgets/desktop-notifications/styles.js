@@ -79,8 +79,7 @@ export default function styles(theme, props) {
       margin: '0px',
       borderRadius: '20px',
       backgroundColor: 'rgba(0,0,0,0.5)',
-      //? boxShadow: '0px 0px 50px black',
-      boxShadow: '0px 0px 80px 15px black',
+      boxShadow: '0px 0px 29px 12px black',
       zIndex: '5',
       transitionProperty: 'right',
       transition: visible
