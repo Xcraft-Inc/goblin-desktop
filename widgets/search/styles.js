@@ -21,7 +21,10 @@ export default function styles(theme) {
   const params = {
     width: '300px',
     minWidth: '300px',
-    margin: '0px 5px 0px 0px',
+    margin: '0px',
+    borderRightWidth: theme.shapes.viewSpacing,
+    borderRightStyle: 'solid',
+    borderRightColor: theme.palette.rootBackground,
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: theme.palette.viewBackground,
