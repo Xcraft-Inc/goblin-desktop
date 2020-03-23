@@ -15,7 +15,7 @@ export default function styles(theme) {
 
   const list = {
     width: '100%',
-    height: '100%',
+    height: '0px', // strange fix, replace '100%' by '0px'!
     overflowX: 'auto',
     overflowY: 'hidden',
     display: 'flex',
