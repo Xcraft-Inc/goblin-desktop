@@ -96,7 +96,7 @@ export default class DesktopFooter extends Widget {
           id={this.props.id + '$widget-doc-caller'}
         />
         <CommandsPrompt />
-        <DesktopMonitors id="activity-monitor" desktopId={this.props.id} />
+        <DesktopMonitors id={`activity-monitor@${this.props.id}`} />
       </div>
     );
   }
