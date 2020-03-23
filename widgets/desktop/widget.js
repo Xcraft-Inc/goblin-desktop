@@ -66,7 +66,7 @@ export default class Desktop extends Widget {
   renderTaskBar(routes) {
     return (
       <DesktopTaskbar
-        id={this.props.id}
+        id={`taskbar@${this.props.id}`}
         routes={routes}
         onToggleFooter={this.toggleFooter}
       />
@@ -76,7 +76,7 @@ export default class Desktop extends Widget {
   renderTopBar(routes) {
     return (
       <DesktopTopbar
-        id={this.props.id}
+        id={`desktop-topbar@${this.props.id}`}
         routes={routes}
         username={this.props.username}
       />

@@ -71,6 +71,12 @@ Goblin.registerQuest(
       desktopId: quest.goblin.id,
     });
 
+    // CREATE USER TOOLBAR
+    yield quest.create('desktop-topbar', {
+      id: `desktop-topbar@${quest.goblin.id}`,
+      desktopId: quest.goblin.id,
+    });
+
     if (!routes) {
       routes = defaultRoutes;
     }

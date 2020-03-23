@@ -26,6 +26,10 @@ Goblin.registerQuest(goblinName, 'create', function(quest, desktopId) {
   return quest.goblin.id;
 });
 
+Goblin.registerQuest(goblinName, 'change-mandate', function(quest) {
+  quest.evt(`mandate.changed`);
+});
+
 Goblin.registerQuest(goblinName, 'delete', function(quest) {
   quest.log.info('deleting tasks...');
 });

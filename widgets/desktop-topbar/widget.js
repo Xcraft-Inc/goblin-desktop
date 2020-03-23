@@ -128,16 +128,16 @@ export default class DesktopTopbar extends Widget {
   //#endregion
 
   onChangeScreen() {
-    this.doAs('desktop', 'change-screen');
+    this.do('change-screen');
   }
 
   onChangeLocale(locale) {
-    this.doAs('desktop', 'change-locale', {locale});
+    this.do('change-locale', {locale});
   }
 
   onChangeTheme(name) {
     currentTheme = name;
-    this.doAs('desktop', 'change-theme', {name});
+    this.do('change-theme', {name});
   }
 
   onChangeEggs() {
@@ -145,7 +145,7 @@ export default class DesktopTopbar extends Widget {
   }
 
   onChangeTeam(teamId) {
-    this.doAs('desktop', 'change-team', {teamId});
+    this.do('change-team', {teamId});
   }
 
   /******************************************************************************/
