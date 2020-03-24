@@ -12,11 +12,13 @@ export default function styles(theme) {
   };
 
   const detail = {
+    height: '100%',
     display: 'flex',
     flexGrow: 1,
   };
 
   const board = {
+    height: '100%',
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -24,12 +26,14 @@ export default function styles(theme) {
   };
 
   const roadbook = {
+    height: '100%',
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
   };
 
   const desk = {
+    height: '100%',
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
