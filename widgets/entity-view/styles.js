@@ -15,7 +15,6 @@ export default function styles(theme) {
 
   const list = {
     width: '100%',
-    height: '0px', // strange fix, replace '100%' by '0px'!
     overflowX: 'auto',
     overflowY: 'hidden',
     display: 'flex',
@@ -24,7 +23,6 @@ export default function styles(theme) {
   };
 
   const content = {
-    height: '100%',
     overflowX: 'hidden',
     overflowY: 'hidden',
     display: 'flex',
@@ -55,7 +53,6 @@ export default function styles(theme) {
   };
 
   const rows = {
-    height: '100%',
     overflowX: 'hidden',
     overflowY: 'auto',
     display: 'flex',
