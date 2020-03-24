@@ -9,6 +9,7 @@ export default function styles(theme) {
     flexShrink: '1',
     marginBottom: '0px',
     transition: 'all 1s ease-out',
+    overflow: 'hidden',
   };
 
   const contentWithoutfooter = {
