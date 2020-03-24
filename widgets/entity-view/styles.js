@@ -41,7 +41,6 @@ export default function styles(theme) {
     borderBottom: '1px solid #888',
     display: 'flex',
     flexDirection: 'row',
-    flexGrow: '1',
   };
 
   const hc = theme.palette.tableFilterHeaderHatch;
