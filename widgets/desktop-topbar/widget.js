@@ -6,6 +6,8 @@ import importer from 'goblin_importer';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
+import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
+import {ColorManipulator} from 'electrum-theme';
 const viewImporter = importer('view');
 
 /******************************************************************************/
@@ -150,6 +152,107 @@ export default class DesktopTopbar extends Widget {
 
   /******************************************************************************/
 
+  renderUserPart() {
+    return (
+      <React.Fragment>
+        <UserInfo user={this.props.username} desktopId={this.props.id} />
+        <TeamSelector
+          desktopId={this.props.id}
+          glyph="solid/users"
+          kind="main-tab-right"
+          tooltip="Team"
+          onChange={this.onChangeTeam}
+        />
+        <LocaleMenuConnected
+          glyph="solid/flag"
+          kind="main-tab-right"
+          tooltip={T('Choix de la locale')}
+          onChange={this.onChangeLocale}
+          desktopId={this.props.id}
+        />
+        <MainTabMenu
+          glyph={this.accessToEggsThemes ? 'regular/tint' : 'solid/tint'}
+          kind="main-tab-right"
+          tooltip={T('Choix du thème')}
+          items={this.accessToEggsThemes ? eggsThemes : themes}
+          currentItemValue={currentTheme}
+          onChange={this.onChangeTheme}
+        />
+        <div
+          className={this.styles.classNames.eggButton}
+          onClick={this.onChangeEggs}
+        />
+        <Button
+          glyph="solid/tv"
+          kind="main-tab-right"
+          onClick={this.onChangeScreen}
+        />
+        {window.zoomable ? (
+          <Button
+            glyph="solid/plus"
+            kind="main-tab-right"
+            tooltip={T('Augmente le zoom')}
+            onClick={() => {
+              this.doFor(this.context.labId, 'zoom');
+            }}
+          />
+        ) : null}
+        {window.zoomable ? (
+          <Button
+            text="1"
+            kind="main-tab-right"
+            tooltip={T('Remet le zoom 100%')}
+            onClick={() => {
+              this.doFor(this.context.labId, 'default-zoom');
+            }}
+          />
+        ) : null}
+        {window.zoomable ? (
+          <Button
+            glyph="solid/minus"
+            kind="main-tab-right"
+            tooltip={T('Diminue le zoom')}
+            onClick={() => {
+              this.doFor(this.context.labId, 'un-zoom');
+            }}
+          />
+        ) : null}
+      </React.Fragment>
+    );
+  }
+
+  renderUserUI() {
+    if (this.context.theme.look.name === 'retro') {
+      return (
+        <RetroPanel
+          position="relative"
+          height="54px"
+          kind="metal-plate"
+          margin="3px"
+          padding="0px 20px"
+          radius="12px"
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
+          fillColor={ColorManipulator.darken(
+            this.context.theme.palette.light,
+            0.2
+          )}
+          strokeColor={ColorManipulator.darken(
+            this.context.theme.palette.light,
+            0.5
+          )}
+        >
+          {this.renderUserPart()}
+        </RetroPanel>
+      );
+    } else {
+      return (
+        <Container kind="main-tab-right">{this.renderUserPart()}</Container>
+      );
+    }
+  }
+
   render() {
     const routes = this.props.routes;
     const topbarView = viewImporter(routes['/top-bar/'].component);
@@ -160,70 +263,7 @@ export default class DesktopTopbar extends Widget {
     return (
       <Container kind="top-bar">
         <TopBar desktopId={this.props.id} />
-        <Container kind="main-tab-right">
-          <UserInfo user={this.props.username} desktopId={this.props.id} />
-          <TeamSelector
-            desktopId={this.props.id}
-            glyph="solid/users"
-            kind="main-tab-right"
-            tooltip="Team"
-            onChange={this.onChangeTeam}
-          />
-          <LocaleMenuConnected
-            glyph="solid/flag"
-            kind="main-tab-right"
-            tooltip={T('Choix de la locale')}
-            onChange={this.onChangeLocale}
-            desktopId={this.props.id}
-          />
-          <MainTabMenu
-            glyph={this.accessToEggsThemes ? 'regular/tint' : 'solid/tint'}
-            kind="main-tab-right"
-            tooltip={T('Choix du thème')}
-            items={this.accessToEggsThemes ? eggsThemes : themes}
-            currentItemValue={currentTheme}
-            onChange={this.onChangeTheme}
-          />
-          <div
-            className={this.styles.classNames.eggButton}
-            onClick={this.onChangeEggs}
-          />
-          <Button
-            glyph="solid/tv"
-            kind="main-tab-right"
-            onClick={this.onChangeScreen}
-          />
-          {window.zoomable ? (
-            <Button
-              glyph="solid/plus"
-              kind="main-tab-right"
-              tooltip={T('Augmente le zoom')}
-              onClick={() => {
-                this.doFor(this.context.labId, 'zoom');
-              }}
-            />
-          ) : null}
-          {window.zoomable ? (
-            <Button
-              text="1"
-              kind="main-tab-right"
-              tooltip={T('Remet le zoom 100%')}
-              onClick={() => {
-                this.doFor(this.context.labId, 'default-zoom');
-              }}
-            />
-          ) : null}
-          {window.zoomable ? (
-            <Button
-              glyph="solid/minus"
-              kind="main-tab-right"
-              tooltip={T('Diminue le zoom')}
-              onClick={() => {
-                this.doFor(this.context.labId, 'un-zoom');
-              }}
-            />
-          ) : null}
-        </Container>
+        {this.renderUserUI()}
       </Container>
     );
   }

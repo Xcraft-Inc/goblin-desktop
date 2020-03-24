@@ -84,39 +84,37 @@ class DesktopMonitors extends Widget {
   renderButton() {
     if (this.context.theme.look.name === 'retro') {
       return (
-        <div className={this.styles.classNames.monitorPanel}>
-          <RetroPanel
-            top="0px"
-            bottom="0px"
-            left="0px"
-            right="0px"
-            kind="metal-plate"
-            margin="3px"
-            radius="12px"
-            fillColor={ColorManipulator.darken(
-              this.context.theme.palette.base,
-              0.5
-            )}
-          >
-            <div className={this.styles.classNames.monitorPanelContent}>
-              <Checkbox
-                backgroundBrigtness="dark"
-                checked={this.showMonitor}
-                onChange={this.onMonitor}
-              />
-              <div className={this.styles.classNames.monitorSajex} />
-              <RetroIlluminatedButton
-                glyph="solid/none"
-                width="20px"
-                height="20px"
-                material="led"
-                backgroundColor={this.props.isActive ? '#0f0' : '#888'}
-                color="white"
-                onClick={this.onMonitor}
-              />
-            </div>
-          </RetroPanel>
-        </div>
+        <RetroPanel
+          position="relative"
+          height="54px"
+          kind="metal-plate"
+          margin="3px"
+          padding="0px 40px"
+          radius="12px"
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
+          fillColor={ColorManipulator.darken(
+            this.context.theme.palette.base,
+            0.5
+          )}
+        >
+          <Checkbox
+            backgroundBrigtness="dark"
+            checked={this.showMonitor}
+            onChange={this.onMonitor}
+          />
+          <div className={this.styles.classNames.monitorSajex} />
+          <RetroIlluminatedButton
+            glyph="solid/none"
+            width="20px"
+            height="20px"
+            material="led"
+            backgroundColor={this.props.isActive ? '#0f0' : '#888'}
+            color="white"
+            onClick={this.onMonitor}
+          />
+        </RetroPanel>
       );
     } else {
       let glyph = 'light/square';

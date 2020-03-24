@@ -101,6 +101,7 @@ export default class Desktop extends Widget {
 
     return (
       <RetroPanel
+        position="absolute"
         kind="metal-plate"
         gears="four"
         top="0px"
