@@ -11,6 +11,7 @@ import Shredder from 'xcraft-core-shredder';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import T from 't';
 import MouseTrap from 'mousetrap';
+import {Unit} from 'electrum-theme';
 import {ListHelpers} from 'goblin-toolbox';
 
 /******************************************************************************/
@@ -60,6 +61,22 @@ class EntityView extends Widget {
     }
 
     return '50px';
+  }
+
+  getEstimatedWidth(columns) {
+    let width = ListHelpers.getEstimatedWidth(columns, this.props.settings);
+
+    // Add left and right margins of rows.
+    width = Unit.add(width, '40px');
+
+    // Add width of first column (and his right margin).
+    width = Unit.add(width, this.firstColumnWidth);
+    width = Unit.add(width, '10px');
+
+    // Add right margin after each column.
+    width = Unit.add(width, Unit.multiply('10px', columns.length));
+
+    return width;
   }
 
   get sorting() {
@@ -350,10 +367,7 @@ class EntityView extends Widget {
       columns.toArray(),
       ({collection}) => {
         const columns = collection;
-        const width = ListHelpers.getEstimatedWidth(
-          columns,
-          this.props.settings
-        );
+        const width = this.getEstimatedWidth(columns);
         const widthStyle = {
           minWidth: width,
         };
