@@ -407,7 +407,7 @@ class Plugin extends Widget {
             glyph="solid/angle-up"
             glyphSize="180%"
             tooltip={T('Replier')}
-            active="false"
+            active={false}
             activeColor={
               this.context.theme.palette.recurrenceExtendedBoxBackground
             }
@@ -463,7 +463,7 @@ class Plugin extends Widget {
             glyph="solid/angle-down"
             glyphSize="180%"
             tooltip={T('Etendre')}
-            active="false"
+            active={false}
             activeColor={
               this.context.theme.palette.recurrenceExtendedBoxBackground
             }

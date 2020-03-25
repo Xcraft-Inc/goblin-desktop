@@ -85,7 +85,7 @@ class Tabs extends Widget {
                       onClick={() =>
                         this.goToWorkItem(context, v.get('view'), wid)
                       }
-                      active={currentTab === wid ? 'true' : 'false'}
+                      active={currentTab === wid}
                     />
                   );
                 } else {
@@ -97,7 +97,7 @@ class Tabs extends Widget {
                       onClick={() =>
                         this.goToWorkItem(context, v.get('view'), wid)
                       }
-                      active={currentTab === wid ? 'true' : 'false'}
+                      active={currentTab === wid}
                     />
                   );
                 }
@@ -131,7 +131,7 @@ class Tabs extends Widget {
                         close: true,
                       });
                     }}
-                    active={currentTab === wid ? 'true' : 'false'}
+                    active={currentTab === wid}
                   />
                 </Container>
               );
@@ -145,7 +145,7 @@ class Tabs extends Widget {
                     onClick={() =>
                       this.goToWorkItem(context, v.get('view'), wid)
                     }
-                    active={currentTab === wid ? 'true' : 'false'}
+                    active={currentTab === wid}
                   />
                   <Button
                     glyph="solid/times"
@@ -159,7 +159,7 @@ class Tabs extends Widget {
                         close: true,
                       });
                     }}
-                    active={currentTab === wid ? 'true' : 'false'}
+                    active={currentTab === wid}
                   />
                 </Container>
               );
