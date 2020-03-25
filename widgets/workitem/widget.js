@@ -343,7 +343,7 @@ class Workitem extends Form {
             <WorkitemFields
               id={`workitem@${this.props.id.split('@')[0]}`}
               workitemId={this.props.id}
-              readonly="false"
+              readonly={false}
             />
           </Form>
         </ScrollableContainer>
@@ -384,7 +384,7 @@ class Workitem extends Form {
             <WorkitemFields
               id={`workitem@${this.props.id.split('@')[0]}`}
               workitemId={this.props.id}
-              readonly="true"
+              readonly={true}
             />
           </Form>
         </ScrollableContainer>

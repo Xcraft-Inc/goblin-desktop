@@ -98,7 +98,7 @@ class Detail extends Widget {
             title={() => {
               return <div>{T('Détails')}</div>;
             }}
-            readonly="true"
+            readonly={true}
             dragServiceId={this.props.dragServiceId}
           >
             <DetailUI
