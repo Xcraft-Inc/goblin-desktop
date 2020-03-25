@@ -54,7 +54,7 @@ class Taskbar extends Widget {
     return (
       <Container kind="task-bar">
         {contextTasks.map((task, i) => {
-          if (task.separator === 'true') {
+          if (task.separator) {
             return this.renderSeparator(i);
           } else {
             return this.renderButton(context, task, i);
