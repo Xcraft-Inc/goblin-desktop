@@ -212,7 +212,7 @@ class Plugin extends Widget {
           ref={x => (this.comboButton = x)}
           glyph="solid/ellipsis-h"
           horizontalSpacing="large"
-          active={Bool.toString(this.showActionMenu)}
+          active={this.showActionMenu}
           onClick={this.open}
         />
       );
