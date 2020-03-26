@@ -134,8 +134,9 @@ const config = {
         const disabled =
           !selectedTables || (selectedTables && selectedTables.length < 1);
         const clean =
-          Bool.isTrue(form.get('fixMissingProperties')) ||
-          Bool.isTrue(form.get('deleteUndefinedSchemaProps'));
+          form.get('fixMissingProperties') ||
+          form.get('deleteUndefinedSchemaProps');
+
         return buttons.set('main', {
           glyph: clean ? 'solid/shower' : 'solid/search',
           text: clean
@@ -155,10 +156,9 @@ const config = {
     finish: {
       form: {},
       quest: function*(quest, form, next) {
-        const fixMissingProperties = Bool.isTrue(form.fixMissingProperties);
-        const deleteUndefinedSchemaProps = Bool.isTrue(
-          form.deleteUndefinedSchemaProps
-        );
+        const fixMissingProperties = form.fixMissingProperties;
+        const deleteUndefinedSchemaProps = form.deleteUndefinedSchemaProps;
+
         const clean = fixMissingProperties || deleteUndefinedSchemaProps;
 
         const desktopId = quest.getDesktop();

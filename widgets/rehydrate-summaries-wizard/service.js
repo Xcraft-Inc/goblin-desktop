@@ -77,12 +77,12 @@ const config = {
         });
       },
       form: {
-        mustRebuild: 'false',
-        mustCompute: 'false',
-        mustBuildSummaries: 'true',
-        mustIndex: 'false',
-        emitHydrated: 'false',
-        onlyPublished: 'true',
+        mustRebuild: false,
+        mustCompute: false,
+        mustBuildSummaries: true,
+        mustIndex: false,
+        emitHydrated: false,
+        onlyPublished: true,
       },
       quest: function*(quest, form) {},
     },
@@ -111,7 +111,7 @@ const config = {
         for (const table of form.selectedTables) {
           const getInfo = (r, table, onlyPublished) => {
             let q = r.table(table);
-            if (onlyPublished === 'true') {
+            if (onlyPublished === true) {
               q = q.getAll('published', {index: 'status'});
             }
             return q
@@ -191,13 +191,13 @@ const config = {
                 rootAggregateId: entity.root,
                 rootAggregatePath: entity.path,
                 muteChanged: true,
-                muteHydrated: form.emitHydrated === 'false',
+                muteHydrated: form.emitHydrated === false,
                 notify: false,
                 options: {
-                  rebuildValueCache: form.mustRebuild === 'true',
-                  buildSummaries: form.mustBuildSummaries === 'true',
-                  compute: form.mustCompute === 'true',
-                  index: form.mustIndex === 'true',
+                  rebuildValueCache: form.mustRebuild === true,
+                  buildSummaries: form.mustBuildSummaries === true,
+                  compute: form.mustCompute === true,
+                  index: form.mustIndex === true,
                 },
               });
               if (count % batchSize === 0) {
