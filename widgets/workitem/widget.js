@@ -325,7 +325,7 @@ class Workitem extends Form {
         horizontalSpacing="large"
       >
         <Container kind="pane-header">
-          <Title kind="pane-header" singleLine="true" wrap="no" />
+          <Title kind="pane-header" singleLine={true} wrap="no" />
           {this.props.version}
         </Container>
         {this.renderStatus()}
@@ -367,7 +367,7 @@ class Workitem extends Form {
     return (
       <Container kind="column-full">
         <Container kind="pane-header">
-          <Title kind="pane-header" singleLine="true" wrap="no" />
+          <Title kind="pane-header" singleLine={true} wrap="no" />
         </Container>
         {this.renderStatus()}
         <ScrollableContainer
@@ -403,7 +403,7 @@ class Workitem extends Form {
     return (
       <Container kind="column-full">
         <Container kind="pane-header">
-          <Title kind="pane-header" singleLine="true" wrap="no" />
+          <Title kind="pane-header" singleLine={true} wrap="no" />
         </Container>
         {this.renderStatus()}
         <Form

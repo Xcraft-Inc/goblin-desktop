@@ -147,13 +147,13 @@ class EntityList extends Widget {
       <div className={this.styles.classNames.list}>
         <div className={this.styles.classNames.content} style={widthStyle}>
           <div className={this.styles.classNames.header}>
-            <TableCell isLast="false" isHeader="true" width="50px" text="n°" />
+            <TableCell isLast={false} isHeader={true} width="50px" text="n°" />
             {columns.map(c => {
               return (
                 <TableCell
                   key={c}
-                  isLast="false"
-                  isHeader="true"
+                  isLast={false}
+                  isHeader={true}
                   {...ListHelpers.getColumnProps(c)}
                   text={ListHelpers.getColumnHeaderText(c)}
                 />

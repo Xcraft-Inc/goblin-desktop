@@ -70,8 +70,8 @@ class _Driller extends Widget {
       return (
         <TableCell
           rowId={this.props.rowId}
-          isLast="false"
-          isHeader="false"
+          isLast={false}
+          isHeader={false}
           text={this.props.text}
           {...ListHelpers.getColumnProps(
             this.props.column,
@@ -83,8 +83,8 @@ class _Driller extends Widget {
       return (
         <TableCell
           rowId={this.props.rowId}
-          isLast="false"
-          isHeader="false"
+          isLast={false}
+          isHeader={false}
           {...ListHelpers.getColumnProps(
             this.props.column,
             this.props.settings
@@ -181,8 +181,8 @@ class EntityRow extends Widget {
             rowId={this.props.rowIndex}
             key={index}
             index={index}
-            isLast="false"
-            isHeader="false"
+            isLast={false}
+            isHeader={false}
             {...otherProps}
             maxHeight={this.props.maxHeight}
             cellFormat="original"
@@ -196,8 +196,8 @@ class EntityRow extends Widget {
           rowId={this.props.rowIndex}
           key={index}
           index={index}
-          isLast="false"
-          isHeader="false"
+          isLast={false}
+          isHeader={false}
           {...otherProps}
           maxHeight={this.props.maxHeight}
           cellFormat="original"
@@ -272,7 +272,7 @@ class EntityRow extends Widget {
     if (!loaded) {
       return (
         <div className={this.styles.classNames.entityRow}>
-          <TableCell isLast="false" isHeader="false">
+          <TableCell isLast={false} isHeader={false}>
             {this.renderSpinner()}
           </TableCell>
         </div>
@@ -295,8 +295,8 @@ class EntityRow extends Widget {
           rowId={rowIndex}
           key={rowIndex}
           index={rowIndex}
-          isLast="false"
-          isHeader="false"
+          isLast={false}
+          isHeader={false}
           width={this.props.firstColumnWidth || '50px'}
           wrap="no-end"
           text={n}

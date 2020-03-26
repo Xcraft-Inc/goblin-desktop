@@ -72,8 +72,8 @@ function prepare(props) {
           kind="gadget"
           name="tablesTable"
           selectionMode="multi"
-          frame="true"
-          hasButtons="true"
+          frame={true}
+          hasButtons={true}
           height="300px"
           grow="1"
         />

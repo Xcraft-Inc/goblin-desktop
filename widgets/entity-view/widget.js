@@ -270,8 +270,8 @@ class EntityView extends Widget {
     return (
       <TableCell
         key={index}
-        isLast="false"
-        isHeader="true"
+        isLast={false}
+        isHeader={true}
         verticalAlign="center"
         {...ListHelpers.getColumnProps(cell, this.props.settings)}
         text={text}
@@ -297,8 +297,8 @@ class EntityView extends Widget {
         }
       >
         <TableCell
-          isLast="false"
-          isHeader="true"
+          isLast={false}
+          isHeader={true}
           verticalAlign="center"
           width={this.firstColumnWidth}
           text={T('N°')}
