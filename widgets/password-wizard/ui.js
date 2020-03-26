@@ -6,7 +6,7 @@ import Field from 'goblin-gadgets/widgets/field/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 
 function renderMain(props) {
-  const type = props.showPassword === 'true' ? {} : {type: 'password'};
+  const type = props.showPassword ? {} : {type: 'password'};
   const disableRandomPasswordButton =
     props.passwordLength && Number.isInteger(parseInt(props.passwordLength))
       ? false

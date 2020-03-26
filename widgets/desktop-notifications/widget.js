@@ -118,7 +118,7 @@ class DesktopNotifications extends Widget {
           )}
           <Label grow="1" />
           <Button
-            disabled={this.hasNotifications ? 'false' : 'true'}
+            disabled={!this.hasNotifications}
             text={T('Tout effacer')}
             kind="button-notification"
             onClick={() => this.doAs('desktop', 'remove-notifications')}

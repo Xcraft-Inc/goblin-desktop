@@ -28,7 +28,7 @@ const config = {
         });
       },
       form: {
-        showPassword: 'true',
+        showPassword: true,
       },
       quest: function*(quest) {
         const state = quest.goblin.getState();
