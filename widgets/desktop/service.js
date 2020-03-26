@@ -633,8 +633,8 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
     isDownload,
   });
   const dnd = quest.goblin.getState().get('dnd');
-  if (dnd !== 'true') {
-    quest.dispatch('set-notifications', {show: 'true'});
+  if (!dnd) {
+    quest.dispatch('set-notifications', {show: true});
   }
   quest.dispatch('update-not-read-count');
 
@@ -688,7 +688,7 @@ Goblin.registerQuest(goblinName, 'set-only-news', function(quest, show) {
 
 Goblin.registerQuest(goblinName, 'set-notifications', function(quest, show) {
   quest.do();
-  if (show === 'false') {
+  if (!show) {
     quest.dispatch('read-all');
   }
   quest.dispatch('update-not-read-count');

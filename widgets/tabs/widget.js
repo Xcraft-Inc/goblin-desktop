@@ -71,7 +71,7 @@ class Tabs extends Widget {
           {contextTabs.map((v, k) => {
             const wid = v.get('workitemId');
             const closable = v.get('closable', false);
-            const show = closable ? 'true' : 'false';
+            const show = closable;
             const name = v.get('name');
             const entityId = v.get('entityId');
             if (entityId) {

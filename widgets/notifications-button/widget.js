@@ -26,8 +26,7 @@ class NotificationsButton extends Widget {
         badgeValue={this.props.notReadCount}
         onClick={() => {
           const state = this.getBackendState();
-          const show =
-            state.get('showNotifications') === 'false' ? 'true' : 'false';
+          const show = !state.get('showNotifications');
           this.doAs('desktop', 'set-notifications', {show});
         }}
       />

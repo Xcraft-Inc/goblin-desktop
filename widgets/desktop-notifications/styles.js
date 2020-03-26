@@ -7,7 +7,6 @@ export const propNames = ['show'];
 
 export default function styles(theme, props) {
   const {show} = props;
-  const visible = show === 'true';
   const look = theme.look.name;
 
   const m = theme.shapes.containerMargin;
@@ -27,7 +26,7 @@ export default function styles(theme, props) {
     notifications = {
       position: 'absolute',
       top: '0px',
-      right: visible ? '0px' : Unit.multiply(width, -1),
+      right: show ? '0px' : Unit.multiply(width, -1),
       overflowY: 'hidden',
       maxHeight: '100%',
       width: width,
@@ -70,10 +69,10 @@ export default function styles(theme, props) {
     notifications = {
       position: 'absolute',
       top: '10px',
-      right: visible ? '10px' : Unit.multiply(Unit.add(width, '30px'), -1),
+      right: show ? '10px' : Unit.multiply(Unit.add(width, '30px'), -1),
       overflowY: 'hidden',
       maxHeight: '100%',
-      width: visible ? width : Unit.sub(width, '1px'), // fix mysterious bug with right screws at bad position!
+      width: show ? width : Unit.sub(width, '1px'), // fix mysterious bug with right screws at bad position!
       display: 'flex',
       flexDirection: 'column',
       margin: '0px',
@@ -82,10 +81,10 @@ export default function styles(theme, props) {
       boxShadow: '0px 0px 29px 12px black',
       zIndex: '5',
       transitionProperty: 'right',
-      transition: visible
+      transition: show
         ? theme.transitions.retroOpenTransition
         : theme.transitions.retroCloseTransition,
-      transitionTimingFunction: visible
+      transitionTimingFunction: show
         ? theme.transitions.retroOpenFunction
         : theme.transitions.retroCloseFunction,
     };

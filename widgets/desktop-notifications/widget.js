@@ -27,13 +27,13 @@ class DesktopNotifications extends Widget {
 
   handleToggleDnd() {
     const state = this.getBackendState();
-    const show = state.get('dnd') === 'false' ? 'true' : 'false';
+    const show = !state.get('dnd');
     this.doAs('desktop', 'set-dnd', {show});
   }
 
   handleToggleOnlyNews() {
     const state = this.getBackendState();
-    const show = state.get('onlyNews') === 'false' ? 'true' : 'false';
+    const show = !state.get('onlyNews');
     this.doAs('desktop', 'set-only-news', {show});
   }
 
@@ -105,14 +105,14 @@ class DesktopNotifications extends Widget {
         {this.renderScrews()}
         <div className={this.styles.classNames.headerRow}>
           {this.renderCheckButton(
-            this.props.dnd === 'true',
+            this.props.dnd,
             T('Ne pas me déranger'),
             this.handleToggleDnd
           )}
         </div>
         <div className={this.styles.classNames.headerRow}>
           {this.renderCheckButton(
-            this.props.onlyNews === 'true',
+            this.props.onlyNews,
             T('Seulement les nouvelles'),
             this.handleToggleOnlyNews
           )}
@@ -179,7 +179,7 @@ class DesktopNotifications extends Widget {
       return null;
     }
     const notifications = this.props.data.filter(
-      n => this.props.onlyNews === 'false' || n.get('status') === 'not-read'
+      n => !this.props.onlyNews || n.get('status') === 'not-read'
     );
     if (notifications.size === 0) {
       return null;
