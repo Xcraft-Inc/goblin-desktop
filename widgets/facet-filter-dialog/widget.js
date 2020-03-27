@@ -4,6 +4,7 @@ import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'gadgets/label/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterDialogFooter from '../facet-filter-dialog-footer/widget.js';
+import {datetime as DateTimeConverters} from 'xcraft-core-converters';
 
 /******************************************************************************/
 
@@ -19,6 +20,26 @@ function extractFirstLetter(text) {
   // TODO: If Nabu?
 
   return '?';
+}
+
+function getType(keys) {
+  for (const key of keys) {
+    // Check only the first key.
+    if (DateTimeConverters.check(key)) {
+      return 'datetime';
+    } else {
+      break;
+    }
+  }
+  return 'string';
+}
+
+function format(text, type) {
+  if (type === 'datetime') {
+    return DateTimeConverters.getDisplayed(text);
+  }
+  console.log(text);
+  return text;
 }
 
 /******************************************************************************/
@@ -62,13 +83,9 @@ class FacetFilterDialog extends Widget {
     //- );
   }
 
-  renderButtons() {
+  renderButtons(keys) {
     const result = [];
-    const keys = this.getState()
-      .backend.get(this.props.id)
-      .get('checkboxes')
-      .get(this.props.name)
-      .keys();
+    const type = getType(keys);
     if (this.props.numberOfCheckboxes < 20) {
       for (const key of keys) {
         result.push(
@@ -76,8 +93,7 @@ class FacetFilterDialog extends Widget {
             id={this.props.id}
             key={`${key}-val`}
             name={this.props.name}
-            text={`${key}`}
-            value={key}
+            text={format(key, type)}
             onChange={this.changeFacet(key)}
           />
         );
@@ -106,7 +122,7 @@ class FacetFilterDialog extends Widget {
             id={this.props.id}
             key={`${key}-val`}
             name={this.props.name}
-            text={`${key}`}
+            text={format(key, type)}
             value={key}
             onChange={this.changeFacet(key)}
           />
@@ -145,6 +161,12 @@ class FacetFilterDialog extends Widget {
       shiftY = offset;
     }
 
+    const keys = this.getState()
+      .backend.get(this.props.id)
+      .get('checkboxes')
+      .get(this.props.name)
+      .keys();
+
     return (
       <DialogModal
         width="520px"
@@ -158,7 +180,7 @@ class FacetFilterDialog extends Widget {
         <div className={this.styles.classNames.facetFilterDialog}>
           <div className={this.styles.classNames.buttons}>
             <div className={this.styles.classNames.scrollable}>
-              {this.renderButtons()}
+              {this.renderButtons(keys)}
             </div>
           </div>
           {this.renderFooter()}
