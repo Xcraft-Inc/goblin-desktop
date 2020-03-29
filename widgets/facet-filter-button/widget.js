@@ -4,28 +4,7 @@ import Gauge from 'gadgets/gauge/widget';
 import Label from 'gadgets/label/widget';
 import T from 't';
 import TT from 'nabu/t/widget';
-import {datetime as DateTimeConverters} from 'xcraft-core-converters';
-
-/******************************************************************************/
-
-function getType(keys) {
-  for (const key of keys) {
-    // Check only the first key.
-    if (DateTimeConverters.check(key)) {
-      return 'datetime';
-    } else {
-      break;
-    }
-  }
-  return 'string';
-}
-
-function format(text, type) {
-  if (type === 'datetime') {
-    return DateTimeConverters.getDisplayed(text);
-  }
-  return text;
-}
+import * as FacetHelpers from '../helpers/facet-helpers';
 
 /******************************************************************************/
 
@@ -88,9 +67,9 @@ class FacetFilterButton extends Widget {
 
   renderFilter(glyph, array) {
     let text;
-    const type = getType(array);
+    const type = FacetHelpers.getType(array);
     if (type === 'datetime') {
-      text = array.map(t => format(t, type)).join(', ');
+      text = array.map(t => FacetHelpers.format(t, type)).join(', ');
     } else {
       text = array.join(', ');
     }

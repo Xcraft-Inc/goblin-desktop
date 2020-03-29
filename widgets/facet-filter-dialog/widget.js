@@ -4,54 +4,7 @@ import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'gadgets/label/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterDialogFooter from '../facet-filter-dialog-footer/widget.js';
-import {
-  datetime as DateTimeConverters,
-  month as MonthConverters,
-} from 'xcraft-core-converters';
-const StringBuilder = require('goblin-nabu/lib/string-builder.js');
-
-/******************************************************************************/
-
-function extractTab(text, type) {
-  if (text && typeof text === 'string' && text.length > 0) {
-    if (type === 'datetime') {
-      const y = DateTimeConverters.getYear(text);
-      const m = DateTimeConverters.getMonth(text);
-      const mm = MonthConverters.getDisplayed(m, 'short');
-      const displayed = StringBuilder.combine(mm, ' ', y);
-      const internal = `${m}.${y}`;
-      return {displayed, internal};
-    } else {
-      const letter = text[0];
-      if (letter === ' ' || letter === '\t') {
-        return {displayed: '?', internal: '?'};
-      }
-      return {displayed: letter, internal: letter};
-    }
-  }
-
-  // TODO: If Nabu?
-  return {displayed: '?', internal: '?'};
-}
-
-function getType(keys) {
-  for (const key of keys) {
-    // Check only the first key.
-    if (DateTimeConverters.check(key)) {
-      return 'datetime';
-    } else {
-      break;
-    }
-  }
-  return 'string';
-}
-
-function format(text, type) {
-  if (type === 'datetime') {
-    return DateTimeConverters.getDisplayed(text);
-  }
-  return text;
-}
+import * as FacetHelpers from '../helpers/facet-helpers';
 
 /******************************************************************************/
 
@@ -96,7 +49,7 @@ class FacetFilterDialog extends Widget {
 
   renderButtons(keys) {
     const result = [];
-    const type = getType(keys);
+    const type = FacetHelpers.getType(keys);
     if (this.props.numberOfCheckboxes < 20) {
       for (const key of keys) {
         result.push(
@@ -104,7 +57,7 @@ class FacetFilterDialog extends Widget {
             id={this.props.id}
             key={`${key}-val`}
             name={this.props.name}
-            text={format(key, type)}
+            text={FacetHelpers.format(key, type)}
             onChange={this.changeFacet(key)}
           />
         );
@@ -112,7 +65,7 @@ class FacetFilterDialog extends Widget {
     } else {
       let lastTab = null;
       for (const key of keys) {
-        const tab = extractTab(key, type);
+        const tab = FacetHelpers.extractTab(key, type);
         if (lastTab !== tab.internal) {
           lastTab = tab.internal;
           result.push(
@@ -133,7 +86,7 @@ class FacetFilterDialog extends Widget {
             id={this.props.id}
             key={`${key}-val`}
             name={this.props.name}
-            text={format(key, type)}
+            text={FacetHelpers.format(key, type)}
             value={key}
             onChange={this.changeFacet(key)}
           />
