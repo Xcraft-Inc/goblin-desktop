@@ -4,22 +4,34 @@ import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'gadgets/label/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterDialogFooter from '../facet-filter-dialog-footer/widget.js';
-import {datetime as DateTimeConverters} from 'xcraft-core-converters';
+import {
+  datetime as DateTimeConverters,
+  month as MonthConverters,
+} from 'xcraft-core-converters';
+const StringBuilder = require('goblin-nabu/lib/string-builder.js');
 
 /******************************************************************************/
 
-function extractFirstLetter(text) {
+function extractTab(text, type) {
   if (text && typeof text === 'string' && text.length > 0) {
-    const letter = text[0];
-    if (letter === ' ' || letter === '\t') {
-      return '?';
+    if (type === 'datetime') {
+      const y = DateTimeConverters.getYear(text);
+      const m = DateTimeConverters.getMonth(text);
+      const mm = MonthConverters.getDisplayed(m, 'short');
+      const displayed = StringBuilder.combine(mm, ' ', y);
+      const internal = `${m}.${y}`;
+      return {displayed, internal};
+    } else {
+      const letter = text[0];
+      if (letter === ' ' || letter === '\t') {
+        return {displayed: '?', internal: '?'};
+      }
+      return {displayed: letter, internal: letter};
     }
-    return letter;
   }
 
   // TODO: If Nabu?
-
-  return '?';
+  return {displayed: '?', internal: '?'};
 }
 
 function getType(keys) {
@@ -99,20 +111,20 @@ class FacetFilterDialog extends Widget {
         );
       }
     } else {
-      let lastLetter = null;
+      let lastTab = null;
       for (const key of keys) {
-        const letter = extractFirstLetter(key);
-        if (lastLetter !== letter) {
-          lastLetter = letter;
+        const tab = extractTab(key, type);
+        if (lastTab !== tab.internal) {
+          lastTab = tab.internal;
           result.push(
             <div
-              key={`${key}-${letter}`}
+              key={`${key}-${tab.internal}`}
               className={this.styles.classNames.letter}
             >
               <Label
                 fontSize="300%"
                 textColor={this.context.theme.palette.mainTabBackground}
-                text={letter}
+                text={tab.displayed}
               />
             </div>
           );
