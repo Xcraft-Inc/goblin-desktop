@@ -50,7 +50,6 @@ function format(text, type) {
   if (type === 'datetime') {
     return DateTimeConverters.getDisplayed(text);
   }
-  console.log(text);
   return text;
 }
 
