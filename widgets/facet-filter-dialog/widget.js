@@ -47,8 +47,13 @@ class FacetFilterDialog extends Widget {
     //- );
   }
 
-  renderButtons(keys) {
+  renderButtons() {
     const result = [];
+    const keys = this.getState()
+      .backend.get(this.props.id)
+      .get('checkboxes')
+      .get(this.props.name)
+      .keySeq();
     const type = FacetHelpers.getType(keys);
     if (this.props.numberOfCheckboxes < 20) {
       for (const key of keys) {
@@ -58,6 +63,7 @@ class FacetFilterDialog extends Widget {
             key={`${key}-val`}
             name={this.props.name}
             text={FacetHelpers.format(key, type)}
+            value={key}
             onChange={this.changeFacet(key)}
           />
         );
@@ -125,12 +131,6 @@ class FacetFilterDialog extends Widget {
       shiftY = offset;
     }
 
-    const keys = this.getState()
-      .backend.get(this.props.id)
-      .get('checkboxes')
-      .get(this.props.name)
-      .keys();
-
     return (
       <DialogModal
         width="520px"
@@ -144,7 +144,7 @@ class FacetFilterDialog extends Widget {
         <div className={this.styles.classNames.facetFilterDialog}>
           <div className={this.styles.classNames.buttons}>
             <div className={this.styles.classNames.scrollable}>
-              {this.renderButtons(keys)}
+              {this.renderButtons()}
             </div>
           </div>
           {this.renderFooter()}
