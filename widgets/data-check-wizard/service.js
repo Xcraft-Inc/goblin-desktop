@@ -4,6 +4,7 @@ const T = require('goblin-nabu');
 const {buildWizard} = require('goblin-desktop');
 const workshopConfig = require('xcraft-core-etc')().load('goblin-workshop');
 const Bool = require('goblin-gadgets/widgets/helpers/bool-helpers');
+const DataCheckHelpers = require('../helpers/data-check-helpers');
 const entityStorage = workshopConfig.entityStorageProvider.replace(
   'goblin-',
   ''
@@ -38,9 +39,9 @@ function* addEntityNotification(
   desktop,
   entityType,
   countErrors,
-  clean
+  cleaning
 ) {
-  const action = clean ? 'du nettoyage' : 'de la vérification';
+  const action = cleaning ? 'du nettoyage' : 'de la vérification';
   const message =
     countErrors === 0
       ? T(
@@ -48,7 +49,7 @@ function* addEntityNotification(
           null,
           {
             action,
-            entityType,
+            entityType: `'${entityType}'`,
           }
         )
       : T(
@@ -57,7 +58,7 @@ function* addEntityNotification(
           {
             action,
             countErrors,
-            entityType,
+            entityType: `'${entityType}'`,
           }
         );
 
@@ -69,17 +70,17 @@ function* addEntityNotification(
   });
 }
 
-function* addFinalNotification(quest, desktop, form, clean) {
+function* addFinalNotification(quest, desktop, form, cleaning) {
   const tablesNumber = form.selectedTables.length;
   if (tablesNumber > 1) {
-    const action = clean ? 'du nettoyage' : 'de la vérification';
+    const action = cleaning ? 'du nettoyage' : 'de la vérification';
     const message = T(
-      `Fin {action} {length, plural, one {de la table {tables}} other {des tables: {tables}s}}`,
+      `Fin {action} {length, plural, one {de la table {tables}} other {des tables: {tables}}}`,
       null,
       {
         action,
         length: tablesNumber,
-        tables: form.selectedTables.join(', '),
+        tables: form.selectedTables.map(t => `'${t}'`).join(', '),
       }
     );
 
@@ -131,35 +132,28 @@ const config = {
       updateButtonsMode: 'onChange',
       buttons: function(quest, buttons, form) {
         const selectedTables = form.get('selectedTables');
+        const r = DataCheckHelpers.getCleaning(form);
         const disabled =
-          !selectedTables || (selectedTables && selectedTables.length < 1);
-        const clean =
-          form.get('fixMissingProperties') ||
-          form.get('deleteUndefinedSchemaProps');
+          !r.enabled ||
+          !selectedTables ||
+          (selectedTables && selectedTables.length < 1);
 
         return buttons.set('main', {
-          glyph: clean ? 'solid/shower' : 'solid/search',
-          text: clean
-            ? T('Démarrer le nettoyage')
-            : T('Démarrer la vérification'),
+          glyph: r.glyph,
+          text: r.action,
           grow: disabled ? '0.5' : '2',
           disabled: disabled,
         });
       },
-      form: {
-        fixMissingProperties: false,
-        deleteUndefinedSchemaProps: false,
-      },
+      form: {},
       quest: function*(quest, form) {},
     },
 
     finish: {
       form: {},
       quest: function*(quest, form, next) {
-        const fixMissingProperties = form.fixMissingProperties;
-        const deleteUndefinedSchemaProps = form.deleteUndefinedSchemaProps;
-
-        const clean = fixMissingProperties || deleteUndefinedSchemaProps;
+        const options = DataCheckHelpers.getOptions(form);
+        const r = DataCheckHelpers.getCleaning(form);
 
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
@@ -168,20 +162,19 @@ const config = {
           const schemaAPI = quest.getAPI(`entity-schema@${entityType}`);
           const countErrors = yield schemaAPI.checkEntities({
             desktopId,
-            batckSize: 1000,
-            fixMissingProperties,
-            deleteUndefinedSchemaProps,
+            batchSize: 1000,
+            options,
           });
           yield* addEntityNotification(
             quest,
             desktop,
             entityType,
             countErrors,
-            clean
+            r.cleaning
           );
         }
 
-        yield* addFinalNotification(quest, desktop, form, clean);
+        yield* addFinalNotification(quest, desktop, form, r.cleaning);
         yield quest.me.next();
       },
     },

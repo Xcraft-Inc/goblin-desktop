@@ -5,40 +5,59 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
 import Field from 'goblin-gadgets/widgets/field/widget';
+import * as DataCheckHelpers from '../helpers/data-check-helpers';
+
+/******************************************************************************/
+
+function renderBool(position, item, index) {
+  if (position !== item.position) {
+    return null;
+  }
+
+  if (item.title) {
+    return (
+      <React.Fragment key={index}>
+        {item.separator ? <Separator kind="exact" height="10px" /> : null}
+        <Label text={item.title} />
+        <Separator kind="exact" height="5px" />
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <Field
+        key={index}
+        kind="bool"
+        model={`.form.${item.option}`}
+        labelWidth="0px"
+        labelText={item.description}
+        verticalSpacing="compact"
+      />
+    );
+  }
+}
+
+function renderBools(position) {
+  return DataCheckHelpers.items.map((item, index) =>
+    renderBool(position, item, index)
+  );
+}
+
+/******************************************************************************/
 
 function prepare(props) {
   return (
     <Container kind="column" grow="1">
-      <Label text={T(`Vérification et/ou nettoyage d'entités`)} />
-      <Separator kind="space" height="10px" />
-
-      <Field
-        kind="bool"
-        model=".form.fixMissingProperties"
-        labelWidth="0px"
-        labelText={T(
-          'Ajouter les champs manquants avec leur valeur par défaut'
-        )}
-        verticalSpacing="compact"
-      />
-      <Field
-        kind="bool"
-        model=".form.deleteUndefinedSchemaProps"
-        labelWidth="0px"
-        labelText={T('Supprimer les champs absents du schéma')}
-        verticalSpacing="compact"
-      />
-      <Label
-        width="800px"
-        glyph="solid/exclamation-triangle"
-        text={T(
-          "À n'utiliser qu'après avoir véfifié que les champs surnuméraires n'ont pas été oubliés dans le schéma !"
-        )}
-      />
-
-      <Separator kind="space" height="10px" />
+      <Container kind="row" grow="1">
+        <Container kind="column" grow="1">
+          {renderBools('left')}
+        </Container>
+        <Container kind="column" grow="1">
+          {renderBools('right')}
+        </Container>
+      </Container>
+      <Separator kind="exact" height="10px" />
       <Label text={T("Sélectionnez les types d'entité à traiter :")} />
-      <Separator kind="space" height="10px" />
+      <Separator kind="exact" height="5px" />
       <Container kind="row">
         <Field
           kind="gadget"
@@ -55,6 +74,7 @@ function prepare(props) {
 }
 
 /******************************************************************************/
+
 export default {
   prepare,
 };
