@@ -66,13 +66,8 @@ class FacetFilterButton extends Widget {
   }
 
   renderFilter(glyph, array) {
-    let text;
     const type = FacetHelpers.getType(array);
-    if (type === 'datetime') {
-      text = array.map(t => FacetHelpers.format(t, type)).join(', ');
-    } else {
-      text = array.join(', ');
-    }
+    const text = array.map(t => FacetHelpers.format(t, type)).join('\n');
 
     return <Label fontSize="80%" glyph={glyph} text={text} />;
   }
