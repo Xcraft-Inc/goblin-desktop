@@ -44,11 +44,11 @@ const types = [
   },
   {
     type: 'pointer-reference',
-    description: T('reference (pointeurs)'),
+    description: T('reference (pointeur)'),
   },
   {
     type: 'pointer-value',
-    description: T('value (pointeurs)'),
+    description: T('value (pointeur)'),
   },
 ];
 

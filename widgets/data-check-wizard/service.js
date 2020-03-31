@@ -128,6 +128,12 @@ const config = {
         select: (state, action) => {
           return state.set('form.selectedTypes', action.get('selectedIds'));
         },
+        selectAll: (state, action) => {
+          return state.set('form.selectedTypes', action.get('selectedIds'));
+        },
+        deselectAll: (state, action) => {
+          return state.set('form.selectedTypes', action.get('selectedIds'));
+        },
         doubleClick: state => state,
       },
     },
@@ -135,6 +141,12 @@ const config = {
       type: 'table',
       onActions: {
         select: (state, action) => {
+          return state.set('form.selectedEntities', action.get('selectedIds'));
+        },
+        selectAll: (state, action) => {
+          return state.set('form.selectedEntities', action.get('selectedIds'));
+        },
+        deselectAll: (state, action) => {
           return state.set('form.selectedEntities', action.get('selectedIds'));
         },
         doubleClick: state => state,
