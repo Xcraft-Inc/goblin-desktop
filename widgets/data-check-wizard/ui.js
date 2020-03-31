@@ -77,7 +77,7 @@ function prepare(props) {
           <Container kind="row">
             <Field
               kind="gadget"
-              name="tablesTable"
+              name="entitiesTable"
               selectionMode="multi"
               frame={true}
               hasButtons={true}

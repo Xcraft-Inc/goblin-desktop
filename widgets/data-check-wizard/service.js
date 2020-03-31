@@ -29,7 +29,7 @@ function buildTypesTable() {
   return data;
 }
 
-function buildTablesTable(tableList) {
+function buildEntitiesTable(tableList) {
   const data = {
     header: [
       {
@@ -90,7 +90,7 @@ function* addEntityNotification(
 }
 
 function* addFinalNotification(quest, desktop, form, cleaning) {
-  const tablesNumber = form.selectedTables.length;
+  const tablesNumber = form.selectedEntities.length;
   if (tablesNumber > 1) {
     const action = cleaning ? 'du nettoyage' : 'de la vérification';
     const message = T(
@@ -99,7 +99,7 @@ function* addFinalNotification(quest, desktop, form, cleaning) {
       {
         action,
         length: tablesNumber,
-        tables: form.selectedTables.map(t => `'${t}'`).join(', '),
+        tables: form.selectedEntities.map(t => `'${t}'`).join(', '),
       }
     );
 
@@ -131,11 +131,11 @@ const config = {
         doubleClick: state => state,
       },
     },
-    tablesTable: {
+    entitiesTable: {
       type: 'table',
       onActions: {
         select: (state, action) => {
-          return state.set('form.selectedTables', action.get('selectedIds'));
+          return state.set('form.selectedEntities', action.get('selectedIds'));
         },
         doubleClick: state => state,
       },
@@ -152,9 +152,9 @@ const config = {
 
         const r = quest.getStorage(entityStorage);
         const tableList = yield r.listTableFromDb({fromDb: quest.getSession()});
-        yield quest.me.useTablesTable({
+        yield quest.me.useEntitiesTable({
           action: 'setData',
-          payload: {data: buildTablesTable(tableList)},
+          payload: {data: buildEntitiesTable(tableList)},
         });
 
         yield quest.me.next();
@@ -165,9 +165,9 @@ const config = {
       updateButtonsMode: 'onChange',
       buttons: function(quest, buttons, form) {
         const selectedTypes = form.get('selectedTypes', []);
-        const selectedTables = form.get('selectedTables', []);
+        const selectedEntities = form.get('selectedEntities', []);
         const r = DataCheckHelpers.getCleaning(selectedTypes, form);
-        const disabled = !r.enabled || selectedTables.length === 0;
+        const disabled = !r.enabled || selectedEntities.length === 0;
 
         return buttons.set('main', {
           glyph: r.glyph,
@@ -190,7 +190,7 @@ const config = {
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
 
-        for (const entityType of form.selectedTables) {
+        for (const entityType of form.selectedEntities) {
           const schemaAPI = quest.getAPI(`entity-schema@${entityType}`);
           const countErrors = yield schemaAPI.checkEntities({
             desktopId,
