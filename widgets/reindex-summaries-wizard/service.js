@@ -46,6 +46,12 @@ const config = {
         select: (state, action) => {
           return state.set('form.selectedTables', action.get('selectedIds'));
         },
+        selectAll: (state, action) => {
+          return state.set('form.selectedTables', action.get('selectedIds'));
+        },
+        deselectAll: (state, action) => {
+          return state.set('form.selectedTables', action.get('selectedIds'));
+        },
         doubleClick: state => state,
       },
     },
