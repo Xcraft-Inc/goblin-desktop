@@ -123,7 +123,7 @@ const config = {
 
   gadgets: {
     typesTable: {
-      type: 'table2',
+      type: 'table',
       onActions: {
         select: (state, action) => {
           return state.set('form.selectedTypes', action.get('selectedIds'));
