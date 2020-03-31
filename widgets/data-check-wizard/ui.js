@@ -9,11 +9,7 @@ import * as DataCheckHelpers from '../helpers/data-check-helpers';
 
 /******************************************************************************/
 
-function renderBool(position, item, index) {
-  if (position !== item.position) {
-    return null;
-  }
-
+function renderBool(item, index) {
   if (item.title) {
     return (
       <React.Fragment key={index}>
@@ -37,9 +33,9 @@ function renderBool(position, item, index) {
 }
 
 function renderBools(position) {
-  return DataCheckHelpers.items.map((item, index) =>
-    renderBool(position, item, index)
-  );
+  return DataCheckHelpers.items
+    .filter(item => item.position === position)
+    .map((item, index) => renderBool(item, index));
 }
 
 /******************************************************************************/
@@ -55,19 +51,41 @@ function prepare(props) {
           {renderBools('right')}
         </Container>
       </Container>
-      <Separator kind="exact" height="10px" />
-      <Label text={T("Sélectionnez les types d'entité à traiter :")} />
-      <Separator kind="exact" height="5px" />
-      <Container kind="row">
-        <Field
-          kind="gadget"
-          name="tablesTable"
-          selectionMode="multi"
-          frame={true}
-          hasButtons={true}
-          height="300px"
-          grow="1"
-        />
+
+      <Separator kind="exact" height="20px" />
+
+      <Container kind="row" grow="1">
+        <Container kind="column" grow="1">
+          <Label text={T('Types des champs à traiter :')} />
+          <Separator kind="exact" height="5px" />
+          <Container kind="row">
+            <Field
+              kind="gadget"
+              name="typesTable"
+              selectionMode="multi"
+              frame={true}
+              hasButtons={true}
+              height="300px"
+              grow="1"
+            />
+          </Container>
+        </Container>
+        <Container kind="column" width="20px" />
+        <Container kind="column" grow="1">
+          <Label text={T('Entités à traiter :')} />
+          <Separator kind="exact" height="5px" />
+          <Container kind="row">
+            <Field
+              kind="gadget"
+              name="tablesTable"
+              selectionMode="multi"
+              frame={true}
+              hasButtons={true}
+              height="300px"
+              grow="1"
+            />
+          </Container>
+        </Container>
       </Container>
     </Container>
   );

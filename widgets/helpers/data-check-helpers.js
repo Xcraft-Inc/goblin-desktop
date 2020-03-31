@@ -13,92 +13,72 @@ function isChecked(form, option) {
 
 //-----------------------------------------------------------------------------
 
+const types = [
+  {
+    type: 'entityId',
+    description: T('entityId'),
+  },
+  {
+    type: 'string',
+    description: T('string'),
+  },
+  {
+    type: 'bool',
+    description: T('bool'),
+  },
+  {
+    type: 'enum',
+    description: T('enum'),
+  },
+  {
+    type: 'typed',
+    description: T('typed'),
+  },
+  {
+    type: 'array',
+    description: T('array'),
+  },
+  {
+    type: 'object',
+    description: T('object'),
+  },
+  {
+    type: 'pointer-reference',
+    description: T('reference (pointeurs)'),
+  },
+  {
+    type: 'pointer-value',
+    description: T('value (pointeurs)'),
+  },
+];
+
 const items = [
   {
     position: 'left',
-    title: T('Champs à prendre en compte :'),
-  },
-  {
-    position: 'left',
-    option: 'field-entityId',
-    description: T("Champs de type 'entityId'"),
-    field: true,
-  },
-  {
-    position: 'left',
-    option: 'field-string',
-    description: T("Champs de type 'string'"),
-    field: true,
-  },
-  {
-    position: 'left',
-    option: 'field-bool',
-    description: T("Champs de type 'bool'"),
-    field: true,
-  },
-  {
-    position: 'left',
-    option: 'field-enum',
-    description: T("Champs de type 'enum'"),
-    field: true,
-  },
-  {
-    position: 'left',
-    option: 'field-typed',
-    description: T("Champs de type 'typed'"),
-    field: true,
-  },
-  {
-    position: 'left',
-    option: 'field-array',
-    description: T("Champs de type 'array'"),
-    field: true,
-  },
-  {
-    position: 'left',
-    option: 'field-object',
-    description: T("Champs de type 'object'"),
-    field: true,
-  },
-  {
-    position: 'left',
-    option: 'field-pointer-reference',
-    description: T("Pointeurs de type 'reference'"),
-    field: true,
-  },
-  {
-    position: 'left',
-    option: 'field-pointer-value',
-    description: T("Pointeurs de type 'value'"),
-    field: true,
-  },
-  // -----------
-  {
-    position: 'right',
     title: T('Vérification à effectuer :'),
   },
   {
-    position: 'right',
+    position: 'left',
     option: 'check-value-fields',
     description: T('Vérifier les contenus des champs'),
     checking: true,
   },
   {
-    position: 'right',
+    position: 'left',
     option: 'check-missing-fields',
     description: T('Vérifier les champs manquants'),
     checking: true,
   },
   {
-    position: 'right',
+    position: 'left',
     option: 'check-undefined-schema-fields',
     description: T('Vérifier les champs absents du schéma'),
     checking: true,
+    withoutTypes: true,
   },
   // -----------
   {
     position: 'right',
-    separator: true,
     title: T('Nettoyages à effectuer :'),
   },
   {
@@ -121,21 +101,25 @@ const items = [
       'Supprimer les champs absents du schéma'
     ),
     cleaning: true,
+    withoutTypes: true,
     dangerous: true,
   },
 ];
 
-// Return true if the user has chosen to clean.
-function getCleaning(form) {
-  let field = false;
+function getCleaning(selectedTypes, form) {
+  let type = false;
   let checking = false;
   let cleaning = false;
   let dangerous = false;
 
+  for (const selectedType of selectedTypes) {
+    type = true;
+  }
+
   for (const item of items) {
     if (isChecked(form, item.option)) {
-      if (item.field) {
-        field = true;
+      if (item.withoutTypes) {
+        type = true;
       }
       if (item.checking) {
         checking = true;
@@ -161,7 +145,7 @@ function getCleaning(form) {
       : T('Démarrer le nettoyage')
     : T('Démarrer la vérification');
 
-  const enabled = field && (checking || cleaning);
+  const enabled = type && (checking || cleaning);
 
   return {enabled, cleaning, glyph, action};
 }
@@ -169,17 +153,20 @@ function getCleaning(form) {
 // Return the choices of the user.
 function getOptions(form) {
   const options = [];
+
   for (const item of items) {
     if (isChecked(form, item.option)) {
       options.push(item.option);
     }
   }
+
   return options;
 }
 
 //-----------------------------------------------------------------------------
 
 module.exports = {
+  types,
   items,
   getCleaning,
   getOptions,
