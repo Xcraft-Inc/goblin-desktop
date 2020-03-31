@@ -90,7 +90,8 @@ module.exports = config => {
       if (gadgets) {
         for (const key of Object.keys(gadgets)) {
           const gadget = gadgets[key];
-          const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
+          // const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
+          const newGadgetId = `${key}@${quest.goblin.id}`; // Uses 'key' instead of 'gadget.type' to allow the same gadget to be used in a wizard more then once.
           wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
 
           if (gadgets[key].onActions) {
