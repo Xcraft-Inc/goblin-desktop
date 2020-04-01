@@ -103,6 +103,8 @@ export default class Desktop extends Widget {
       <RetroPanel
         position="absolute"
         kind="metal-plate"
+        title="Steampunk"
+        subtitle="Experimental Theme"
         gears="four"
         top="0px"
         bottom="0px"
