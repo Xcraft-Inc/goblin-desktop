@@ -3,7 +3,6 @@
 const T = require('goblin-nabu');
 const {buildWizard} = require('goblin-desktop');
 const workshopConfig = require('xcraft-core-etc')().load('goblin-workshop');
-const Bool = require('goblin-gadgets/widgets/helpers/bool-helpers');
 const DataCheckHelpers = require('../helpers/data-check-helpers');
 const entityStorage = workshopConfig.entityStorageProvider.replace(
   'goblin-',

@@ -1,12 +1,10 @@
-//
-import T from 't';
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Field from 'goblin-gadgets/widgets/field/widget';
-import Button from 'goblin-gadgets/widgets/button/widget';
-import * as Bool from 'gadgets/helpers/bool-helpers';
+
 /******************************************************************************/
+
 const CustomField = Widget.connectBackend(state => {
   return {field: state};
 })(props => {

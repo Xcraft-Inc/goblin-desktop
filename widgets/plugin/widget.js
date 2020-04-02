@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'goblin-laboratory/widgets/widget';
 import {Unit} from 'electrum-theme';
-import * as Bool from 'gadgets/helpers/bool-helpers';
 
 import Workitem from 'goblin-desktop/widgets/workitem/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
@@ -246,7 +245,7 @@ class Plugin extends Widget {
 
   renderHeaderAdd(numberOfIds) {
     const canAdd =
-      !Bool.isTrue(this.props.disableAdd) &&
+      !this.props.disableAdd &&
       (!this.props.arity ||
         this.props.arity.endsWith('n') ||
         (this.props.arity === '0..1' && numberOfIds === 0));
@@ -276,7 +275,7 @@ class Plugin extends Widget {
       ? this.props.pluginTitle
       : this.props.title;
 
-    if (Bool.isTrue(this.props.readonly)) {
+    if (this.props.readonly) {
       return (
         <div className={headerClass}>
           <Label text={title} grow="1" kind="title" />
@@ -306,14 +305,14 @@ class Plugin extends Widget {
     }
 
     const itemClass = extended
-      ? Bool.isTrue(this.props.embedded)
+      ? this.props.embedded
         ? this.styles.classNames.extendedEmbeddedItem
         : this.styles.classNames.extendedItem
-      : Bool.isTrue(this.props.embedded)
+      : this.props.embedded
       ? this.styles.classNames.compactedEmbeddedItem
       : this.styles.classNames.compactedItem;
 
-    const key1 = Bool.isTrue(this.props.readonly) ? 'readonly' : 'edit';
+    const key1 = this.props.readonly ? 'readonly' : 'edit';
     const key2 = extended ? 'extend' : 'compact';
 
     let UI = this.WithState(workitemUI.plugin[key1][key2], 'entityId')(
@@ -380,24 +379,22 @@ class Plugin extends Widget {
 
   renderButtons(entityId, extended, numberOfIds) {
     if (extended) {
-      const buttonsClass = Bool.isTrue(this.props.readonly)
-        ? Bool.isTrue(this.props.embedded)
+      const buttonsClass = this.props.readonly
+        ? this.props.embedded
           ? this.styles.classNames.extendedEmbeddedReadonlyButtons
           : this.styles.classNames.extendedReadonlyButtons
-        : Bool.isTrue(this.props.embedded)
+        : this.props.embedded
         ? this.styles.classNames.extendedEmbeddedButtons
         : this.styles.classNames.extendedButtons;
 
       const canDelete =
-        !Bool.isTrue(this.props.readonly) &&
-        !Bool.isTrue(this.props.disableDelete) &&
+        !this.props.readonly &&
+        !this.props.disableDelete &&
         (!this.props.arity ||
           this.props.arity.startsWith('0') ||
           numberOfIds > 1);
 
-      const kind = Bool.isTrue(this.props.readonly)
-        ? 'plugin-light'
-        : 'plugin-dark';
+      const kind = this.props.readonly ? 'plugin-light' : 'plugin-dark';
 
       return (
         <div className={buttonsClass}>
@@ -432,23 +429,22 @@ class Plugin extends Widget {
         </div>
       );
     } else {
-      const buttonsClass = Bool.isTrue(this.props.readonly)
-        ? Bool.isTrue(this.props.embedded)
+      const buttonsClass = this.props.readonly
+        ? this.props.embedded
           ? this.styles.classNames.compactedEmbeddedReadonlyButtons
           : this.styles.classNames.compactedReadonlyButtons
-        : Bool.isTrue(this.props.embedded)
+        : this.props.embedded
         ? this.styles.classNames.compactedEmbeddedButtons
         : this.styles.classNames.compactedButtons;
 
       const kind =
-        Bool.isTrue(this.props.readonly) || !Bool.isTrue(this.props.embedded)
+        this.props.readonly || !this.props.embedded
           ? 'plugin-light'
           : 'plugin-dark';
 
       return (
         <div className={buttonsClass}>
-          {Bool.isTrue(this.props.readonly) &&
-          !Bool.isTrue(this.props.embedded) ? (
+          {this.props.readonly && !this.props.embedded ? (
             <Button
               width="32px"
               kind={kind}
@@ -476,14 +472,14 @@ class Plugin extends Widget {
 
   renderRowContent(entityId, extended, numberOfIds, index) {
     const rowClass = extended
-      ? Bool.isTrue(this.props.embedded)
+      ? this.props.embedded
         ? this.styles.classNames.extendedEmbeddedRow
         : this.styles.classNames.extendedRow
       : numberOfIds > 1 && this.props.horizontalSeparator !== 'compact'
-      ? Bool.isTrue(this.props.embedded)
+      ? this.props.embedded
         ? this.styles.classNames.compactedEmbeddedDashedRow
         : this.styles.classNames.compactedDashedRow
-      : Bool.isTrue(this.props.embedded)
+      : this.props.embedded
       ? this.styles.classNames.compactedEmbeddedRow
       : this.styles.classNames.compactedRow;
 
@@ -533,8 +529,7 @@ class Plugin extends Widget {
 
   renderRows(entityIds) {
     const dragEnabled =
-      !Bool.isTrue(this.props.readonly) &&
-      (entityIds.length > 1 || !!this.props.dragType);
+      !this.props.readonly && (entityIds.length > 1 || !!this.props.dragType);
 
     let index = 0;
 
@@ -552,21 +547,17 @@ class Plugin extends Widget {
 
   renderDefault() {
     const entityIds = this.props.entityIds.toArray();
-    if (
-      entityIds.length === 0 &&
-      Bool.isTrue(this.props.readonly) &&
-      Bool.isTrue(this.props.embedded)
-    ) {
+    if (entityIds.length === 0 && this.props.readonly && this.props.embedded) {
       return null;
     }
 
     let boxClass = null;
     if (!this.props.entityIds || this.props.entityIds.size === 0) {
-      boxClass = Bool.isTrue(this.props.embedded)
+      boxClass = this.props.embedded
         ? this.styles.classNames.emptyembeddedBox
         : this.styles.classNames.emptyBox;
     } else {
-      boxClass = Bool.isTrue(this.props.embedded)
+      boxClass = this.props.embedded
         ? this.styles.classNames.embeddedBox
         : this.styles.classNames.box;
     }
