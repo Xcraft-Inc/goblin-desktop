@@ -3,7 +3,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
 import EntityRowButton from 'goblin-desktop/widgets/entity-row-button/widget';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import T from 't';
 import {ListHelpers} from 'goblin-toolbox';
 import RetroGear from 'goblin-gadgets/widgets/retro-gear/widget';

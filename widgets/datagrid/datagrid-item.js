@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Container from 'goblin-gadgets/widgets/container/widget';
 
 class DatagridItem extends Widget {
