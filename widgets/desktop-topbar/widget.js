@@ -36,7 +36,7 @@ const eggsThemes = [
   {text: T('Rose'), value: 'default-pink'},
   {text: T('Rose compact'), value: 'compact-pink'},
   {text: T('Monochrome compact'), value: 'compact-mono'},
-  {text: T('Rétro'), value: 'default-retro'},
+  {text: T('Retro Royal'), value: 'default-retro'},
   {text: T('Steampunk'), value: 'steampunk-retro'},
   {text: T('Foncé'), value: 'default-dark'},
   {text: T('Dragula'), value: 'default-dragula'},
