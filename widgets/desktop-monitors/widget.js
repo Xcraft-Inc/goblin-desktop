@@ -17,9 +17,11 @@ class DesktopMonitors extends Widget {
     this.styles = styles;
 
     this.onMonitor = this.onMonitor.bind(this);
+    this.onChangeAging = this.onChangeAging.bind(this);
 
     this.state = {
       showMonitor: false,
+      monitorAging: 'old',
       doRenderMonitor: false,
     };
 
@@ -34,6 +36,16 @@ class DesktopMonitors extends Widget {
   set showMonitor(value) {
     this.setState({
       showMonitor: value,
+    });
+  }
+
+  get monitorAging() {
+    return this.state.monitorAging;
+  }
+
+  set monitorAging(value) {
+    this.setState({
+      monitorAging: value,
     });
   }
 
@@ -59,6 +71,10 @@ class DesktopMonitors extends Widget {
     this.showMonitor = !this.showMonitor;
   }
 
+  onChangeAging(aging) {
+    this.monitorAging = aging;
+  }
+
   /******************************************************************************/
 
   renderMonitor() {
@@ -75,7 +91,9 @@ class DesktopMonitors extends Widget {
           channels={this.props.channels}
           width="600px"
           height="450px"
+          aging={this.monitorAging}
           onOff={this.onMonitor}
+          onChangeAging={this.onChangeAging}
         />
       </div>
     );
