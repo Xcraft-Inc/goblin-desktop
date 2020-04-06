@@ -3,6 +3,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import importer from 'goblin_importer';
 import Container from 'goblin-gadgets/widgets/container/widget';
+import AnalogClock from 'goblin-gadgets/widgets/analog-clock/widget';
 import DesktopTaskbar from 'goblin-desktop/widgets/desktop-taskbar/widget';
 import DesktopTopbar from 'goblin-desktop/widgets/desktop-topbar/widget';
 import DesktopNotifications from 'goblin-desktop/widgets/desktop-notifications/widget';
@@ -91,9 +92,17 @@ export default class Desktop extends Widget {
     return <DesktopFooter id={this.props.id} showFooter={this.showFooter} />;
   }
 
+  renderAnalogClock() {
+    return (
+      <div className={this.styles.classNames.clock}>
+        <AnalogClock size="150px" />
+      </div>
+    );
+  }
+
   renderRetroPanel() {
-    if (this.context.theme.look.name !== 'retro') {
-      return null;
+    if (this.context.theme.look.homeGadget === 'analog-clock') {
+      return this.renderAnalogClock();
     }
 
     const c1 = ColorManipulator.darken(this.context.theme.palette.base, 0.1);
@@ -105,7 +114,7 @@ export default class Desktop extends Widget {
         kind="metal-plate"
         title={this.context.theme.look.themeTitle}
         subtitle={this.context.theme.look.themeSubtitle}
-        gears="four"
+        homeGadget={this.context.theme.look.homeGadget}
         top="0px"
         bottom="0px"
         left="0px"
