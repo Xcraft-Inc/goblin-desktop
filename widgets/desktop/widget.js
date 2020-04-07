@@ -95,7 +95,7 @@ export default class Desktop extends Widget {
   renderAnalogClock() {
     return (
       <div className={this.styles.classNames.clock}>
-        <AnalogClock size="150px" />
+        <AnalogClock size="180px" />
       </div>
     );
   }
