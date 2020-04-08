@@ -24,7 +24,7 @@ export default class DesktopClock extends Widget {
         ? this.context.theme.look.clockParams.initialVisibility
         : false,
       clockLook: this.context.theme.look.clockParams
-        ? this.context.theme.look.clockParams.look
+        ? this.context.theme.look.clockParams.initialLook
         : null,
     };
   }
@@ -56,15 +56,7 @@ export default class DesktopClock extends Widget {
   }
 
   changeClockLook() {
-    const looks = [
-      'cff',
-      'classic',
-      'tiny',
-      'smoothy',
-      'transparent',
-      'light',
-      'royal',
-    ];
+    const looks = this.context.theme.look.clockParams.looks;
     const i = looks.indexOf(this.clockLook);
     this.clockLook = looks[(i + 1) % looks.length];
   }
@@ -120,7 +112,12 @@ export default class DesktopClock extends Widget {
           onChange={this.toggleClock}
         />
         <div className={miniClockStyle}>
-          {this.showClock ? null : <AnalogClock size="32px" look="tiny" />}
+          {this.showClock ? null : (
+            <AnalogClock
+              size="32px"
+              look={this.context.theme.look.clockParams.miniLook}
+            />
+          )}
         </div>
       </RetroPanel>
     );
@@ -144,7 +141,7 @@ export default class DesktopClock extends Widget {
         >
           <AnalogClock
             size={Unit.sub(this.context.theme.shapes.footerHeight, '20px')}
-            look="tiny"
+            look={this.context.theme.look.clockParams.miniLook}
           />
         </div>
       );
