@@ -19,9 +19,9 @@
     "xcraft-core-utils": "^2.0.0"
   },
   "devDependencies": {
-    "prettier": "1.18.2",
-    "xcraft-dev-prettier": "^1.0.0",
-    "xcraft-dev-rules": "^1.0.2"
+    "prettier": "2.0.4",
+    "xcraft-dev-prettier": "^2.0.0",
+    "xcraft-dev-rules": "^2.0.0"
   },
   "prettier": "xcraft-dev-prettier"
 }
