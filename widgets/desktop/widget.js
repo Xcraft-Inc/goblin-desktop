@@ -92,17 +92,9 @@ export default class Desktop extends Widget {
     return <DesktopFooter id={this.props.id} showFooter={this.showFooter} />;
   }
 
-  renderAnalogClock() {
-    return (
-      <div className={this.styles.classNames.clock}>
-        <AnalogClock size="180px" />
-      </div>
-    );
-  }
-
   renderRetroPanel() {
-    if (this.context.theme.look.homeGadget === 'analog-clock') {
-      return this.renderAnalogClock();
+    if (!this.context.theme.look.homeGadget) {
+      return null;
     }
 
     const c1 = ColorManipulator.darken(this.context.theme.palette.base, 0.1);

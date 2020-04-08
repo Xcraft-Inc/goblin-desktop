@@ -20,11 +20,16 @@ export default function styles(theme) {
     top: theme.shapes.footerHeight,
   };
 
+  const sajex = {
+    flexGrow: 1,
+  };
+
   /******************************************************************************/
 
   return {
     footer,
     footerHidden,
+    sajex,
   };
 }
 

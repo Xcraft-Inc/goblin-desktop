@@ -17,23 +17,11 @@ export default function styles(theme) {
     marginBottom: '-' + theme.shapes.footerHeight,
   };
 
-  const clock = {
-    'position': 'absolute',
-    'right': '50px',
-    'bottom': '50px',
-    'transformOrigin': 'right bottom',
-    'transition': 'all 0.5s ease',
-    ':hover': {
-      transform: 'scale(2)',
-    },
-  };
-
   /******************************************************************************/
 
   return {
     content,
     contentWithoutfooter,
-    clock,
   };
 }
 

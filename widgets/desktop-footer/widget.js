@@ -4,6 +4,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import MouseTrap from 'mousetrap';
 import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
 import DesktopMonitors from 'goblin-desktop/widgets/desktop-monitors/widget';
+import DesktopClock from 'goblin-desktop/widgets/desktop-clock/widget';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
 import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
 import IMG_GOBLIN from './goblin.png';
@@ -96,6 +97,8 @@ export default class DesktopFooter extends Widget {
           id={this.props.id + '$widget-doc-caller'}
         />
         <CommandsPrompt />
+        <div className={this.styles.classNames.sajex} />
+        <DesktopClock />
         <DesktopMonitors id={`activity-monitor@${this.props.id}`} />
       </div>
     );

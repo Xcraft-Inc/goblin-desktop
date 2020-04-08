@@ -7,10 +7,9 @@ export default function styles(theme) {
 
   const desktopMonitors = {
     position: 'relative',
-    height: theme.spacing.footerHeight,
+    height: theme.shapes.footerHeight,
     display: 'flex',
     flexDirection: 'row',
-    flexGrow: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
   };
