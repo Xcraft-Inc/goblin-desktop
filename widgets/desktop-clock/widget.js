@@ -56,7 +56,15 @@ export default class DesktopClock extends Widget {
   }
 
   changeClockLook() {
-    const looks = ['cff', 'classic', 'tiny', 'smoothy', 'transparent', 'royal'];
+    const looks = [
+      'cff',
+      'classic',
+      'tiny',
+      'smoothy',
+      'transparent',
+      'light',
+      'royal',
+    ];
     const i = looks.indexOf(this.clockLook);
     this.clockLook = looks[(i + 1) % looks.length];
   }
