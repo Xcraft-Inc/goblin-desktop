@@ -311,7 +311,7 @@ class EntityView extends Widget {
           fixedColumns={[0]}
           widthChanged={(index, width) => this.onWidthChanged(index, width)}
           columnMoved={(src, dst) => this.onColumnMoved(src, dst)}
-          columnClicked={index => this.onSortColumn(index, columns)}
+          columnClicked={(index) => this.onSortColumn(index, columns)}
         />
       </div>
     );

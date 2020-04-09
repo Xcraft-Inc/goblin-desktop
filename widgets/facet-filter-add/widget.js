@@ -81,7 +81,7 @@ export default class FacetFilterAdd extends Widget {
 
   render() {
     return (
-      <div ref={node => (this.buttonNode = node)}>
+      <div ref={(node) => (this.buttonNode = node)}>
         {this.renderButton()}
         {this.renderDialog()}
       </div>

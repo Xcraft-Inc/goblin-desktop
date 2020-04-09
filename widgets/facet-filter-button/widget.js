@@ -67,7 +67,7 @@ class FacetFilterButton extends Widget {
 
   renderFilter(glyph, array) {
     const type = FacetHelpers.getType(array);
-    const text = array.map(t => FacetHelpers.format(t, type)).join('\n');
+    const text = array.map((t) => FacetHelpers.format(t, type)).join('\n');
 
     return <Label fontSize="80%" glyph={glyph} text={text} />;
   }

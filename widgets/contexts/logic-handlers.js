@@ -1,6 +1,6 @@
 //T:2019-02-27
 module.exports = {
-  create: (state, action) => {
+  'create': (state, action) => {
     const id = action.get('id');
     const desktopId = action.get('desktopId');
     return state.set('', {
@@ -10,7 +10,7 @@ module.exports = {
       current: null,
     });
   },
-  add: (state, action) => {
+  'add': (state, action) => {
     const name = action.get('name');
     const contextId = action.get('contextId');
     const current = state.get('current');
@@ -21,7 +21,7 @@ module.exports = {
     }
     return state.set(`contexts.${contextId}`, {contextId, name});
   },
-  remove: (state, action) => {
+  'remove': (state, action) => {
     const widgetId = action.get('widgetId');
     return state.del(`contexts.${widgetId}`);
   },
@@ -29,7 +29,7 @@ module.exports = {
     const contextId = action.get('contextId');
     return state.set('current', contextId);
   },
-  delete: state => {
+  'delete': (state) => {
     return state.set('', {});
   },
 };

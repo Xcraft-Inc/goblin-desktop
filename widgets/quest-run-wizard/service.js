@@ -13,19 +13,19 @@ const config = {
   steps: {
     prepare: {
       form: {payload: '{}', quest: 'workshop.trash-entities'},
-      quest: function() {},
+      quest: function () {},
     },
     finish: {
       form: {},
-      quest: function*(quest, form) {
+      quest: function* (quest, form) {
         const formatted = form.payload
           .replace(
             /(\w+:)|(\w+ :)/g,
-            match => `"${match.substring(0, match.length - 1)}":`
+            (match) => `"${match.substring(0, match.length - 1)}":`
           )
           .replace(
             /('\w+')/g,
-            match => `"${match.substring(1, match.length - 1)}"`
+            (match) => `"${match.substring(1, match.length - 1)}"`
           );
         const payload = Object.assign(
           {
@@ -39,7 +39,7 @@ const config = {
       },
     },
     close: {
-      quest: function*(quest) {
+      quest: function* (quest) {
         yield quest.me.next();
       },
     },

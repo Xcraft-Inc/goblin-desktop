@@ -52,13 +52,13 @@ const config = {
         deselectAll: (state, action) => {
           return state.set('form.selectedTables', action.get('selectedIds'));
         },
-        doubleClick: state => state,
+        doubleClick: (state) => state,
       },
     },
   },
   steps: {
     initialize: {
-      quest: function*(quest) {
+      quest: function* (quest) {
         const r = quest.getStorage(entityStorage);
         const tableList = yield r.listTableFromDb({fromDb: quest.getSession()});
         yield quest.me.useTablesTable({
@@ -71,7 +71,7 @@ const config = {
     },
     prepare: {
       updateButtonsMode: 'onChange',
-      buttons: function(quest, buttons, form) {
+      buttons: function (quest, buttons, form) {
         const selectedTables = form.get('selectedTables');
         const disabled =
           !selectedTables || (selectedTables && selectedTables.length < 1);
@@ -83,11 +83,11 @@ const config = {
         });
       },
       form: {},
-      quest: function*(quest, form) {},
+      quest: function* (quest, form) {},
     },
     finish: {
       form: {},
-      quest: function*(quest, form, next) {
+      quest: function* (quest, form, next) {
         const desktopId = quest.getDesktop();
         //const desktop = quest.getAPI(desktopId).noThrow();
         const workshopAPI = quest.getAPI('workshop');

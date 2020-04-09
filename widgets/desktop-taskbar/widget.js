@@ -23,9 +23,10 @@ export default class DesktopTaskbar extends Widget {
   render() {
     const routes = this.props.routes;
     const taskView = viewImporter(routes['/task-bar/'].component);
-    const Tasks = Widget.WithRoute(taskView, 'context')(
-      routes['/task-bar/'].path
-    );
+    const Tasks = Widget.WithRoute(
+      taskView,
+      'context'
+    )(routes['/task-bar/'].path);
 
     return (
       <Container kind="left-bar">

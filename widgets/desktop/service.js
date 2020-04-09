@@ -32,7 +32,7 @@ const logicHandlers = require('./logic-handlers.js');
 Goblin.registerQuest(
   goblinName,
   'create',
-  function*(
+  function* (
     quest,
     clientSessionId,
     labId,
@@ -84,14 +84,14 @@ Goblin.registerQuest(
         `*::*.${
           quest.goblin.id.split('@')[1]
         }.desktop-notification-broadcasted`,
-        function*(err, {msg, resp}) {
+        function* (err, {msg, resp}) {
           yield resp.cmd(`${goblinName}.add-notification`, {id, ...msg.data});
         }
       )
     );
 
     quest.goblin.defer(
-      quest.sub(`*::*.${quest.goblin.id}.add-workitem-requested`, function*(
+      quest.sub(`*::*.${quest.goblin.id}.add-workitem-requested`, function* (
         err,
         {msg, resp}
       ) {
@@ -100,7 +100,7 @@ Goblin.registerQuest(
     );
 
     quest.goblin.defer(
-      quest.sub(`*::*.${quest.goblin.id}.remove-workitem-requested`, function*(
+      quest.sub(`*::*.${quest.goblin.id}.remove-workitem-requested`, function* (
         err,
         {msg, resp}
       ) {
@@ -115,20 +115,23 @@ Goblin.registerQuest(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'change-locale', function(quest, locale) {
+Goblin.registerQuest(goblinName, 'change-locale', function (quest, locale) {
   const clientSessionId = quest.goblin.getX('clientSessionId');
   quest.evt(`${clientSessionId}.user-locale-changed`, {locale});
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'clean-workitem', function(quest, workitemId) {
+Goblin.registerQuest(goblinName, 'clean-workitem', function (
+  quest,
+  workitemId
+) {
   quest.dispatch('remove-workitem', {widgetId: workitemId});
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'remove-workitem', function*(
+Goblin.registerQuest(goblinName, 'remove-workitem', function* (
   quest,
   workitem,
   close
@@ -174,7 +177,7 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function*(
 Goblin.registerQuest(
   goblinName,
   'add-workitem',
-  function*(quest, workitem, navigate) {
+  function* (quest, workitem, navigate) {
     const desk = quest.me;
 
     if (!workitem.payload) {
@@ -256,7 +259,7 @@ Goblin.registerQuest(
 
     /* FIXME: handle wizard lifetime properly */
     if (workitem.name.endsWith('-wizard')) {
-      const unsub = quest.sub(`*::${widgetId}.done`, function*(_, {resp}) {
+      const unsub = quest.sub(`*::${widgetId}.done`, function* (_, {resp}) {
         unsub();
         yield quest.kill(widgetId);
         if (workitem.kind === 'tab') {
@@ -312,7 +315,7 @@ Goblin.registerQuest(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'add-context', function*(
+Goblin.registerQuest(goblinName, 'add-context', function* (
   quest,
   contextId,
   name
@@ -327,7 +330,7 @@ Goblin.registerQuest(goblinName, 'add-context', function*(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'add-tab', function*(
+Goblin.registerQuest(goblinName, 'add-tab', function* (
   quest,
   name,
   contextId,
@@ -378,7 +381,7 @@ Goblin.registerQuest(goblinName, 'add-tab', function*(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'remove-tab', function*(
+Goblin.registerQuest(goblinName, 'remove-tab', function* (
   quest,
   contextId,
   workitemId,
@@ -428,7 +431,7 @@ const buildDialogNavRequest = (state, newArg) => {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'add-dialog', function(quest, dialogId) {
+Goblin.registerQuest(goblinName, 'add-dialog', function (quest, dialogId) {
   const state = quest.goblin.getState();
   quest.evt(`nav.requested`, {
     route: buildDialogNavRequest(state, `did=${dialogId}`),
@@ -437,7 +440,7 @@ Goblin.registerQuest(goblinName, 'add-dialog', function(quest, dialogId) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'hide-dialogs', function(quest) {
+Goblin.registerQuest(goblinName, 'hide-dialogs', function (quest) {
   const state = quest.goblin.getState();
   quest.evt(`nav.requested`, {
     route: buildDialogNavRequest(state),
@@ -446,14 +449,14 @@ Goblin.registerQuest(goblinName, 'hide-dialogs', function(quest) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'remove-dialog', function*(quest, dialogId) {
+Goblin.registerQuest(goblinName, 'remove-dialog', function* (quest, dialogId) {
   yield quest.me.closeDialog({dialogId});
   yield quest.kill([dialogId]);
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'close-dialog', function*(quest, dialogId) {
+Goblin.registerQuest(goblinName, 'close-dialog', function* (quest, dialogId) {
   const state = quest.goblin.getState();
   quest.evt(`nav.requested`, {
     route: buildDialogNavRequest(state),
@@ -463,7 +466,7 @@ Goblin.registerQuest(goblinName, 'close-dialog', function*(quest, dialogId) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {
+Goblin.registerQuest(goblinName, 'change-theme', function (quest, name) {
   quest.evt(`change-theme.requested`, {
     name,
   });
@@ -471,19 +474,19 @@ Goblin.registerQuest(goblinName, 'change-theme', function(quest, name) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'change-team', function(quest, teamId) {
+Goblin.registerQuest(goblinName, 'change-team', function (quest, teamId) {
   quest.do();
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'get-current-context', function(quest) {
+Goblin.registerQuest(goblinName, 'get-current-context', function (quest) {
   return quest.goblin.getState().get('current.workcontext');
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'nav-to-context', function*(
+Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   quest,
   contextId,
   currentLocation
@@ -521,7 +524,7 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function*(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'nav-to-workitem', function(
+Goblin.registerQuest(goblinName, 'nav-to-workitem', function (
   quest,
   contextId,
   view,
@@ -544,7 +547,7 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function(quest) {
+Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function (quest) {
   const last = quest.goblin.getState().get('last');
   if (!last) {
     return;
@@ -569,7 +572,7 @@ Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function(quest) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'clear-workitem', function(quest, contextId) {
+Goblin.registerQuest(goblinName, 'clear-workitem', function (quest, contextId) {
   quest.dispatch('setCurrentWorkitemByContext', {
     contextId,
     view: null,
@@ -582,7 +585,7 @@ Goblin.registerQuest(goblinName, 'clear-workitem', function(quest, contextId) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'dispatch', function(quest, action) {
+Goblin.registerQuest(goblinName, 'dispatch', function (quest, action) {
   quest.evt(`dispatch.requested`, {
     action,
   });
@@ -590,7 +593,7 @@ Goblin.registerQuest(goblinName, 'dispatch', function(quest, action) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'add-notification', function(
+Goblin.registerQuest(goblinName, 'add-notification', function (
   quest,
   notificationId,
   glyph,
@@ -646,7 +649,7 @@ Goblin.registerQuest(goblinName, 'add-notification', function(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'remove-notification', function(
+Goblin.registerQuest(goblinName, 'remove-notification', function (
   quest,
   notification
 ) {
@@ -656,14 +659,14 @@ Goblin.registerQuest(goblinName, 'remove-notification', function(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'remove-notifications', function(quest) {
+Goblin.registerQuest(goblinName, 'remove-notifications', function (quest) {
   quest.do();
   quest.dispatch('update-not-read-count');
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'click-notification', function*(
+Goblin.registerQuest(goblinName, 'click-notification', function* (
   quest,
   notification
 ) {
@@ -674,19 +677,19 @@ Goblin.registerQuest(goblinName, 'click-notification', function*(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'set-dnd', function(quest, show) {
+Goblin.registerQuest(goblinName, 'set-dnd', function (quest, show) {
   quest.do();
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'set-only-news', function(quest, show) {
+Goblin.registerQuest(goblinName, 'set-only-news', function (quest, show) {
   quest.do();
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'set-notifications', function(quest, show) {
+Goblin.registerQuest(goblinName, 'set-notifications', function (quest, show) {
   quest.do();
   if (!show) {
     quest.dispatch('read-all');
@@ -696,7 +699,7 @@ Goblin.registerQuest(goblinName, 'set-notifications', function(quest, show) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'download-file', function(
+Goblin.registerQuest(goblinName, 'download-file', function (
   quest,
   filePath,
   openFile
@@ -719,44 +722,44 @@ Goblin.registerQuest(goblinName, 'download-file', function(
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'change-mandate', function(quest) {
+Goblin.registerQuest(goblinName, 'change-mandate', function (quest) {
   quest.evt(`mandate.changed`);
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'change-screen', function(quest) {
+Goblin.registerQuest(goblinName, 'change-screen', function (quest) {
   quest.evt(`screen.changed`);
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'get-configuration', function(quest) {
+Goblin.registerQuest(goblinName, 'get-configuration', function (quest) {
   const conf = quest.goblin.getX('configuration');
   return conf;
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'get-user-info', function(quest) {
+Goblin.registerQuest(goblinName, 'get-user-info', function (quest) {
   return quest.goblin.getState().get('username');
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'get-lab-id', function(quest) {
+Goblin.registerQuest(goblinName, 'get-lab-id', function (quest) {
   return quest.goblin.getX('labId');
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'get-client-session-id', function(quest) {
+Goblin.registerQuest(goblinName, 'get-client-session-id', function (quest) {
   return quest.goblin.getX('clientSessionId');
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'get-workitems', function(quest) {
+Goblin.registerQuest(goblinName, 'get-workitems', function (quest) {
   const state = quest.goblin.getState();
   const wks = state.get('workitems');
   return wks ? wks.toJS() : {};
@@ -764,7 +767,7 @@ Goblin.registerQuest(goblinName, 'get-workitems', function(quest) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'close', function*(quest, closeIn) {
+Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
   let count = closeIn ? closeIn : 0;
   quest.log.info(`Closing desktop in ${count}sec...`);
   const message = T(
@@ -779,7 +782,7 @@ Goblin.registerQuest(goblinName, 'close', function*(quest, closeIn) {
     message,
   });
   const countdown = setInterval(
-    watt(function*() {
+    watt(function* () {
       count--;
       const message = T(
         'Un administrateur à demandé la fermeture de votre session dans {count}sec',
@@ -805,7 +808,7 @@ Goblin.registerQuest(goblinName, 'close', function*(quest, closeIn) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'delete', function(quest) {
+Goblin.registerQuest(goblinName, 'delete', function (quest) {
   quest.log.info('Deleting desktop...');
 });
 

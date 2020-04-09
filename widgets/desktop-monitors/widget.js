@@ -172,7 +172,7 @@ class DesktopMonitors extends Widget {
 
 /******************************************************************************/
 
-export default Widget.connect(state => {
+export default Widget.connect((state) => {
   const s = state.get('backend.activity-monitor.channels');
   const channels = s
     ? Array.from(s.entries()).map(([channel, data]) => {

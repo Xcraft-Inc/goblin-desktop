@@ -43,7 +43,7 @@ class WidgetDocCaller extends Widget {
   }
 }
 
-export default Widget.connectWidget(state => {
+export default Widget.connectWidget((state) => {
   return {
     enabled: state ? state.get('enabled') : false,
   };

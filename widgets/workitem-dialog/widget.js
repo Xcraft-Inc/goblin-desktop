@@ -56,9 +56,10 @@ class WorkitemDialog extends Widget {
 
     this.initializeEntity();
 
-    let DialogUI = this.WithState(this.entityUI.panel.edit, 'entityId')(
-      '.entityId'
-    );
+    let DialogUI = this.WithState(
+      this.entityUI.panel.edit,
+      'entityId'
+    )('.entityId');
 
     return (
       <DialogModal

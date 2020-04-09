@@ -75,7 +75,7 @@ class Tabs extends Widget {
             const name = v.get('name');
             const entityId = v.get('entityId');
             if (entityId) {
-              const Loader = props => {
+              const Loader = (props) => {
                 if (props.loaded) {
                   return (
                     <Button
@@ -105,7 +105,7 @@ class Tabs extends Widget {
 
               const EntityTab = this.mapWidget(
                 Loader,
-                info => {
+                (info) => {
                   switch (info) {
                     case undefined:
                     case null:

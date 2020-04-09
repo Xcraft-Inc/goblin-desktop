@@ -208,7 +208,7 @@ class Plugin extends Widget {
     if (list.length > 0) {
       return (
         <Button
-          ref={x => (this.comboButton = x)}
+          ref={(x) => (this.comboButton = x)}
           glyph="solid/ellipsis-h"
           horizontalSpacing="large"
           active={this.showActionMenu}
@@ -315,9 +315,10 @@ class Plugin extends Widget {
     const key1 = this.props.readonly ? 'readonly' : 'edit';
     const key2 = extended ? 'extend' : 'compact';
 
-    let UI = this.WithState(workitemUI.plugin[key1][key2], 'entityId')(
-      '.entityId'
-    );
+    let UI = this.WithState(
+      workitemUI.plugin[key1][key2],
+      'entityId'
+    )('.entityId');
 
     if (
       workitemUI.mappers &&
@@ -332,7 +333,7 @@ class Plugin extends Widget {
       );
     }
 
-    const Loader = props => {
+    const Loader = (props) => {
       if (props.loaded) {
         return (
           <Workitem
@@ -366,7 +367,7 @@ class Plugin extends Widget {
 
     const LoadedWorkitem = this.mapWidget(
       Loader,
-      wid => ({loaded: !!wid}),
+      (wid) => ({loaded: !!wid}),
       `backend.${workitemId}.id`
     );
 
@@ -487,7 +488,7 @@ class Plugin extends Widget {
       <Container
         kind="row-draggable"
         key={index}
-        ref={n => {
+        ref={(n) => {
           if (n) {
             this._refs[entityId] = ReactDOM.findDOMNode(n);
           }
@@ -533,7 +534,7 @@ class Plugin extends Widget {
 
     let index = 0;
 
-    return entityIds.map(entityId => {
+    return entityIds.map((entityId) => {
       const extended = entityId === this.props.extendedId;
       return this.renderRow(
         entityId,
@@ -594,7 +595,7 @@ class Plugin extends Widget {
 
 /******************************************************************************/
 
-const select = root => (state, id) => prop => {
+const select = (root) => (state, id) => (prop) => {
   if (!id) {
     return null;
   }

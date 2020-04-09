@@ -34,7 +34,7 @@ function renderBool(item, index) {
 
 function renderBools(position) {
   return DataCheckHelpers.items
-    .filter(item => item.position === position)
+    .filter((item) => item.position === position)
     .map((item, index) => renderBool(item, index));
 }
 

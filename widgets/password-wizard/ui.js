@@ -50,7 +50,7 @@ function renderMain(props) {
 
 /******************************************************************************/
 
-const mapProps = entity => {
+const mapProps = (entity) => {
   return {
     showPassword: entity.get('form.showPassword'),
     passwordLength: entity.get('form.passwordLength'),

@@ -13,21 +13,21 @@ const logicHandlers = require('./logic-handlers.js');
 
 // Register quest's according rc.json
 
-Goblin.registerQuest(goblinName, 'create', function(quest, id, desktopId) {
+Goblin.registerQuest(goblinName, 'create', function (quest, id, desktopId) {
   quest.goblin.setX('desktopId', desktopId);
   quest.do({id, desktopId});
   return quest.goblin.id;
 });
 
-Goblin.registerQuest(goblinName, 'delete', function(quest) {
+Goblin.registerQuest(goblinName, 'delete', function (quest) {
   quest.log.info('deleting contexts...');
 });
 
-Goblin.registerQuest(goblinName, 'set-current', function(quest, contextId) {
+Goblin.registerQuest(goblinName, 'set-current', function (quest, contextId) {
   quest.do({contextId});
 });
 
-Goblin.registerQuest(goblinName, 'add', function(quest, contextId, name) {
+Goblin.registerQuest(goblinName, 'add', function (quest, contextId, name) {
   const deskId = quest.goblin.getX('desktopId');
   const useId = uuidV4();
 
@@ -40,7 +40,7 @@ Goblin.registerQuest(goblinName, 'add', function(quest, contextId, name) {
   quest.do({contextId, name});
 });
 
-Goblin.registerQuest(goblinName, 'remove', function(quest, widgetId) {
+Goblin.registerQuest(goblinName, 'remove', function (quest, widgetId) {
   //TODO: look for widgetId
   quest.do({widgetId});
 });

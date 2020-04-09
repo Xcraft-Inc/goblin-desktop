@@ -89,7 +89,7 @@ class Wizard extends Form {
 
     const hasStep = !!wizardUI[this.props.step];
     if (!hasStep) {
-      Step = props => {
+      Step = (props) => {
         return null;
       };
     } else {

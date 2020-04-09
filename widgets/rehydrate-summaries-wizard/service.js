@@ -52,13 +52,13 @@ const config = {
         deselectAll: (state, action) => {
           return state.set('form.selectedTables', action.get('selectedIds'));
         },
-        doubleClick: state => state,
+        doubleClick: (state) => state,
       },
     },
   },
   steps: {
     initialize: {
-      quest: function*(quest) {
+      quest: function* (quest) {
         const r = quest.getStorage(entityStorage);
         const tableList = yield r.listTableFromDb({fromDb: quest.getSession()});
         yield quest.me.useTablesTable({
@@ -71,7 +71,7 @@ const config = {
     },
     prepare: {
       updateButtonsMode: 'onChange',
-      buttons: function(quest, buttons, form) {
+      buttons: function (quest, buttons, form) {
         const selectedTables = form.get('selectedTables');
         const disabled =
           !selectedTables || (selectedTables && selectedTables.length < 1);
@@ -90,11 +90,11 @@ const config = {
         emitHydrated: false,
         onlyPublished: true,
       },
-      quest: function*(quest, form) {},
+      quest: function* (quest, form) {},
     },
     finish: {
       form: {},
-      quest: function*(quest, form, next) {
+      quest: function* (quest, form, next) {
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
         const r = quest.getStorage(entityStorage);
@@ -124,7 +124,7 @@ const config = {
               .pluck('id', {
                 meta: ['rootAggregateId', 'rootAggregatePath', 'type'],
               })
-              .map(function(doc) {
+              .map(function (doc) {
                 return {
                   id: doc('id'),
                   root: doc('meta')('rootAggregateId'),
@@ -142,8 +142,8 @@ const config = {
         const forRehydrate = yield next.sync();
         const hydrateClassifier = forRehydrate.reduce(
           (state, entities) => {
-            const roots = entities.filter(entity => entity.path.length === 0);
-            const leefs = entities.filter(entity => entity.path.length > 0);
+            const roots = entities.filter((entity) => entity.path.length === 0);
+            const leefs = entities.filter((entity) => entity.path.length > 0);
             state[0] = state[0].concat(roots);
             leefs.reduce((state, leef) => {
               const lvl = leef.path.length;

@@ -1,4 +1,3 @@
-
 # Goblin Desktop
 
 > "It is not for gnomes..."
@@ -28,15 +27,16 @@ The famouse laboratory identifier looks like: `laboratory@some-long-uuid-v4`
 ### addContext (context)
 
 Adding context:
+
 ```js
 const docContext = {contextId: 'doc', name: 'Doc'};
-desktop.addContext (docContext);
+desktop.addContext(docContext);
 ```
 
 #### context (context object)
 
 - contextId: a context identifier, lower-case, used
-for retreiving context tasks js files
+  for retreiving context tasks js files
 
 - name: the displayed name
 
@@ -75,13 +75,14 @@ export default [
 Minimal tab API:
 
 ```js
-desktop.addTab ({
-    name: 'New tab',
-    contextId: 'some-context',
-    view: 'default',
-    workitemId: 'content@exemple-uuid-v4',
+desktop.addTab({
+  name: 'New tab',
+  contextId: 'some-context',
+  view: 'default',
+  workitemId: 'content@exemple-uuid-v4',
 });
 ```
+
 ### addTab (tab)
 
 #### tab (tab object)
@@ -104,7 +105,4 @@ desktop.addTab ({
 
 todo
 
-
 ## Navigating
-
-

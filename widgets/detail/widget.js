@@ -70,9 +70,10 @@ class Detail extends Widget {
     );
 
     return this.buildLoader(entityId, () => {
-      let DetailUI = this.WithState(workitemUI.panel.readonly, 'entityId')(
-        '.entityId'
-      );
+      let DetailUI = this.WithState(
+        workitemUI.panel.readonly,
+        'entityId'
+      )('.entityId');
 
       if (
         workitemUI.mappers &&

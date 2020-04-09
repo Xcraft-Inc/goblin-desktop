@@ -40,9 +40,10 @@ class Editor extends Widget {
       const workitem = this.props.id.split('@')[0];
 
       const workitemUI = uiImporter(workitem);
-      let EditorUI = this.WithState(workitemUI.panel.edit, 'entityId')(
-        '.entityId'
-      );
+      let EditorUI = this.WithState(
+        workitemUI.panel.edit,
+        'entityId'
+      )('.entityId');
       if (
         workitemUI.mappers &&
         workitemUI.mappers.panel &&

@@ -47,7 +47,7 @@ module.exports = {
     };
     return state.set(`notifications.${notificationId}`, notification);
   },
-  'update-not-read-count': state => {
+  'update-not-read-count': (state) => {
     const notifications = state.get('notifications').select((i, v) => v.toJS());
     const count = notifications.reduce((acc, n) => {
       if (n.status === 'not-read') {
@@ -57,10 +57,10 @@ module.exports = {
     }, 0);
     return state.set('notReadCount', count);
   },
-  'read-all': state => {
+  'read-all': (state) => {
     const notifications = state.get('notifications');
     const newNotifications = notifications.transform(
-      i => i,
+      (i) => i,
       (i, v) => v.set('status', 'read')
     );
     return state.set('notifications', newNotifications);
@@ -69,7 +69,7 @@ module.exports = {
     const id = action.get('notification').id;
     return state.del(`notifications.${id}`);
   },
-  'remove-notifications': state => {
+  'remove-notifications': (state) => {
     return state.set(`notifications`, {});
   },
   'nav-to-context': (state, action) => {

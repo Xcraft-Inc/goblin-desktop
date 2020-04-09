@@ -8,7 +8,7 @@ const config = {
   name: 'password',
   title: T('Choisir le nouveau mot de passe'),
   quests: {
-    setRandomPassword: function*(quest) {
+    setRandomPassword: function* (quest) {
       const state = quest.goblin.getState();
       const passwordLength = state.get('form.passwordLength');
       const password = crypto.randomPassword(passwordLength);
@@ -20,7 +20,7 @@ const config = {
   },
   steps: {
     main: {
-      buttons: function(quest, buttons) {
+      buttons: function (quest, buttons) {
         return buttons.set('main', {
           glyph: 'solid/arrow-right',
           text: T('Valider'),
@@ -30,7 +30,7 @@ const config = {
       form: {
         showPassword: true,
       },
-      quest: function*(quest) {
+      quest: function* (quest) {
         const state = quest.goblin.getState();
         const passwordLength = state.get('form.passwordLength');
         if (!passwordLength) {
@@ -43,7 +43,7 @@ const config = {
     },
     finish: {
       form: {},
-      quest: function*(quest, form) {
+      quest: function* (quest, form) {
         yield quest.me.next({result: form.password});
       },
     },

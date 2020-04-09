@@ -181,12 +181,12 @@ class Workitem extends Form {
       return null;
     }
 
-    const primaryButtons = this.props.buttons.filter(b => {
+    const primaryButtons = this.props.buttons.filter((b) => {
       const layout = b.get('layout');
       return !layout || layout === 'primary';
     });
     const secondaryButtons = this.props.buttons.filter(
-      b => b.get('layout') === 'secondary'
+      (b) => b.get('layout') === 'secondary'
     );
 
     if (secondaryButtons.size > 0) {
@@ -361,8 +361,9 @@ class Workitem extends Form {
       `backend.${this.props.entityId}.meta.summaries.info`
     );
 
-    const scrollableId = `workitem-readonly@${this.props.entityId ||
-      'generic'}`;
+    const scrollableId = `workitem-readonly@${
+      this.props.entityId || 'generic'
+    }`;
 
     return (
       <Container kind="column-full">

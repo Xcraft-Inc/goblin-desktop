@@ -156,9 +156,10 @@ export default class Desktop extends Widget {
     )(routes['/content/'].path);
 
     const beforeView = viewImporter(routes['/before-content/'].component);
-    const BeforeContent = Widget.WithRoute(beforeView, 'context')(
-      routes['/before-content/'].path
-    );
+    const BeforeContent = Widget.WithRoute(
+      beforeView,
+      'context'
+    )(routes['/before-content/'].path);
 
     const contentClass = this.showFooter
       ? this.styles.classNames.content

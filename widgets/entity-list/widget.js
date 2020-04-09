@@ -148,7 +148,7 @@ class EntityList extends Widget {
         <div className={this.styles.classNames.content} style={widthStyle}>
           <div className={this.styles.classNames.header}>
             <TableCell isLast={false} isHeader={true} width="50px" text="n°" />
-            {columns.map(c => {
+            {columns.map((c) => {
               return (
                 <TableCell
                   key={c}

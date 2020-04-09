@@ -37,7 +37,7 @@ class _Row extends React.PureComponent {
     };
     return (
       <div
-        ref={node => {
+        ref={(node) => {
           this._ref = node;
         }}
         className={
@@ -168,7 +168,7 @@ class Hinter extends Widget {
   handleOutsideClick(e) {
     const target = e.target;
     const containers = [...document.getElementsByClassName('hinter-container')];
-    if (!containers.some(container => container.contains(target))) {
+    if (!containers.some((container) => container.contains(target))) {
       this.hideHinter();
       this.removeOutsideClickListener();
     }
@@ -215,9 +215,7 @@ class Hinter extends Widget {
   }
 
   onNew() {
-    const model = this.getRouting()
-      .get('location.hash')
-      .substring(1);
+    const model = this.getRouting().get('location.hash').substring(1);
     const value = this.getModelValue(model, true);
     this.do('create-new', {value});
   }
@@ -233,9 +231,7 @@ class Hinter extends Widget {
   }
 
   validateRow(index, value) {
-    const model = this.getRouting()
-      .get('location.hash')
-      .substring(1);
+    const model = this.getRouting().get('location.hash').substring(1);
     this.do('validate-row', {index, text: value, model});
     this.hideHinter();
   }

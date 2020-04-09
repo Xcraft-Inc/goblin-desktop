@@ -166,7 +166,7 @@ class DesktopNotifications extends Widget {
     let index = 0;
     return nn
       .sort((a, b) => b.get('order') - a.get('order'))
-      .map(n => {
+      .map((n) => {
         if (n && n.toJS) {
           return this.renderNotification(n.toJS(), index++);
         }
@@ -179,7 +179,7 @@ class DesktopNotifications extends Widget {
       return null;
     }
     const notifications = this.props.data.filter(
-      n => !this.props.onlyNews || n.get('status') === 'not-read'
+      (n) => !this.props.onlyNews || n.get('status') === 'not-read'
     );
     if (notifications.size === 0) {
       return null;

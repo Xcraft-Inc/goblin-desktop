@@ -25,7 +25,7 @@ const defaultButtons = OrderedMap()
     })
   );
 
-module.exports = config => {
+module.exports = (config) => {
   const {
     name,
     title,
@@ -71,10 +71,10 @@ module.exports = config => {
     next: (state, action) => {
       return state.set('step', action.get('step'));
     },
-    busy: state => {
+    busy: (state) => {
       return state.set('busy', true);
     },
-    idle: state => {
+    idle: (state) => {
       return state.set('busy', false);
     },
   };
@@ -82,7 +82,7 @@ module.exports = config => {
   Goblin.registerQuest(
     goblinName,
     'create',
-    function*(quest, desktopId, form) {
+    function* (quest, desktopId, form) {
       const id = quest.goblin.id;
       quest.goblin.setX('desktopId', desktopId);
       const wizardGadgets = {};
@@ -97,7 +97,7 @@ module.exports = config => {
           if (gadgets[key].onActions) {
             for (const handler of Object.keys(gadgets[key].onActions)) {
               quest.goblin.defer(
-                quest.sub(`${newGadgetId}.${handler}`, function*(
+                quest.sub(`${newGadgetId}.${handler}`, function* (
                   err,
                   {msg, resp}
                 ) {
@@ -123,7 +123,7 @@ module.exports = config => {
       }
 
       quest.goblin.defer(
-        quest.sub(`*::${quest.goblin.id}.step`, function*(err, {msg, resp}) {
+        quest.sub(`*::${quest.goblin.id}.step`, function* (err, {msg, resp}) {
           const {action, ...other} = msg.data;
           yield resp.cmd(`${goblinName}.${action}`, Object.assign({id}, other));
         })
@@ -137,11 +137,11 @@ module.exports = config => {
     ['*::*.step']
   );
 
-  Goblin.registerQuest(goblinName, 'create-hinters', function*(quest, next) {
+  Goblin.registerQuest(goblinName, 'create-hinters', function* (quest, next) {
     const desktopId = quest.goblin.getX('desktopId');
 
     if (hinters) {
-      Object.keys(hinters).forEach(h => {
+      Object.keys(hinters).forEach((h) => {
         let detailWidget = null;
         let hName = h;
         if (hinters[h].hinter) {
@@ -169,18 +169,18 @@ module.exports = config => {
 
   common.registerHinters(goblinName, hinters);
 
-  Goblin.registerQuest(goblinName, 'busy', function(quest) {
+  Goblin.registerQuest(goblinName, 'busy', function (quest) {
     quest.do();
   });
 
-  Goblin.registerQuest(goblinName, 'idle', function(quest) {
+  Goblin.registerQuest(goblinName, 'idle', function (quest) {
     quest.do();
   });
 
   if (gadgets) {
     for (const key of Object.keys(gadgets)) {
       //Gogo gadgeto stylo!
-      Goblin.registerQuest(goblinName, `use-${key}`, function*(
+      Goblin.registerQuest(goblinName, `use-${key}`, function* (
         quest,
         action,
         payload
@@ -196,7 +196,7 @@ module.exports = config => {
         for (const handler of Object.keys(gadgets[key].onActions)) {
           logicHandlers[`${key}-${handler}`] = gadgets[key].onActions[handler];
 
-          Goblin.registerQuest(goblinName, `${key}-${handler}`, function*(
+          Goblin.registerQuest(goblinName, `${key}-${handler}`, function* (
             quest
           ) {
             quest.do();
@@ -208,17 +208,17 @@ module.exports = config => {
   }
 
   if (quests) {
-    Object.keys(quests).forEach(q => {
+    Object.keys(quests).forEach((q) => {
       Goblin.registerQuest(goblinName, q, quests[q]);
     });
   }
 
-  Goblin.registerQuest(goblinName, 'init-wizard', function(quest) {
+  Goblin.registerQuest(goblinName, 'init-wizard', function (quest) {
     const nextStep = wizardFlow[1];
     quest.evt('step', {action: 'goto', step: nextStep});
   });
 
-  Goblin.registerQuest(goblinName, 'next', function(quest, result) {
+  Goblin.registerQuest(goblinName, 'next', function (quest, result) {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === wizardFlow.length - 1) {
@@ -231,7 +231,7 @@ module.exports = config => {
     return result;
   });
 
-  Goblin.registerQuest(goblinName, 'back', function(quest) {
+  Goblin.registerQuest(goblinName, 'back', function (quest) {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === 0) {
@@ -242,15 +242,12 @@ module.exports = config => {
     quest.evt('step', {action: 'goto', step: nextStep});
   });
 
-  Goblin.registerQuest(goblinName, 'goto', function*(quest, step) {
+  Goblin.registerQuest(goblinName, 'goto', function* (quest, step) {
     yield quest.me.busy(); // Set busy
 
     quest.dispatch('next', {step});
 
-    let form = quest.goblin
-      .getState()
-      .get('form')
-      .toJS();
+    let form = quest.goblin.getState().get('form').toJS();
 
     quest.dispatch(`init-${step}`);
 
@@ -268,21 +265,21 @@ module.exports = config => {
     yield quest.me.idle(); // Clear busy
   });
 
-  Goblin.registerQuest(goblinName, 'done', function*(quest, result) {
+  Goblin.registerQuest(goblinName, 'done', function* (quest, result) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
     yield desk.closeDialog({dialogId: quest.goblin.id});
     quest.evt('done', {finished: true, result});
   });
 
-  Goblin.registerQuest(goblinName, 'cancel', function*(quest) {
+  Goblin.registerQuest(goblinName, 'cancel', function* (quest) {
     const desktopId = quest.goblin.getX('desktopId');
     const desk = quest.getAPI(desktopId);
     yield desk.closeDialog({dialogId: quest.goblin.id});
     quest.evt('done', quest.cancel());
   });
 
-  Goblin.registerQuest(goblinName, 'change', function*(quest, path, newValue) {
+  Goblin.registerQuest(goblinName, 'change', function* (quest, path, newValue) {
     if (hinters && hinters[path]) {
       return;
     }
@@ -290,12 +287,12 @@ module.exports = config => {
     yield quest.me.update();
   });
 
-  Goblin.registerQuest(goblinName, 'apply', function*(quest) {
+  Goblin.registerQuest(goblinName, 'apply', function* (quest) {
     quest.do();
     yield quest.me.update();
   });
 
-  Goblin.registerQuest(goblinName, 'update', function*(quest) {
+  Goblin.registerQuest(goblinName, 'update', function* (quest) {
     const state = quest.goblin.getState();
     const stepName = state.get('step');
     const step = steps[stepName];
@@ -315,7 +312,7 @@ module.exports = config => {
     yield quest.me.idle();
   });
 
-  Goblin.registerQuest(goblinName, 'update-buttons', function*(quest) {
+  Goblin.registerQuest(goblinName, 'update-buttons', function* (quest) {
     const state = quest.goblin.getState();
     const stepName = state.get('step');
     const step = steps[stepName];
@@ -334,7 +331,7 @@ module.exports = config => {
   // configure steps
   for (const stepName of wizardSteps) {
     const step = steps[stepName];
-    logicHandlers[`init-${stepName}`] = state => {
+    logicHandlers[`init-${stepName}`] = (state) => {
       if (step.form) {
         return state.mergeDeep('form', step.form);
       }
@@ -359,7 +356,7 @@ module.exports = config => {
     for (const action in step.actions) {
       const actionQuest = `${stepName}-${action}`;
       logicHandlers[actionQuest] = step.actions[action];
-      Goblin.registerQuest(goblinName, actionQuest, function(quest) {
+      Goblin.registerQuest(goblinName, actionQuest, function (quest) {
         quest.do();
       });
     }
@@ -369,7 +366,7 @@ module.exports = config => {
   Goblin.registerQuest(goblinName, 'load-entity', common.loadEntityQuest);
   Goblin.registerQuest(goblinName, 'open-wizard', common.openWizard);
 
-  Goblin.registerQuest(goblinName, 'delete', function(quest) {
+  Goblin.registerQuest(goblinName, 'delete', function (quest) {
     quest.evt('done', {finished: true});
   });
 

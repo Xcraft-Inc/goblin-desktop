@@ -27,6 +27,9 @@ class DetailView extends View {
   }
 }
 
-export default Widget.WithRoute(DetailView, ['context', 'hinter'], null, true)(
-  '/:context/:view/:hinter'
-);
+export default Widget.WithRoute(
+  DetailView,
+  ['context', 'hinter'],
+  null,
+  true
+)('/:context/:view/:hinter');

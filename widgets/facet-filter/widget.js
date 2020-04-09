@@ -58,7 +58,7 @@ export default class FacetFilter extends Widget {
     }
 
     return (
-      <div ref={node => (this.buttonNode = node)}>
+      <div ref={(node) => (this.buttonNode = node)}>
         <FacetFilterButton
           text={name}
           {...this.props}

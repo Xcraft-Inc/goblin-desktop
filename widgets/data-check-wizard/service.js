@@ -20,7 +20,7 @@ function buildTypesTable() {
         textAlign: 'left',
       },
     ],
-    rows: DataCheckHelpers.types.map(t => {
+    rows: DataCheckHelpers.types.map((t) => {
       return {id: t.type, description: t.description};
     }),
   };
@@ -98,7 +98,7 @@ function* addFinalNotification(quest, desktop, form, cleaning) {
       {
         action,
         length: tablesNumber,
-        tables: form.selectedEntities.map(t => `'${t}'`).join(', '),
+        tables: form.selectedEntities.map((t) => `'${t}'`).join(', '),
       }
     );
 
@@ -133,7 +133,7 @@ const config = {
         deselectAll: (state, action) => {
           return state.set('form.selectedTypes', action.get('selectedIds'));
         },
-        doubleClick: state => state,
+        doubleClick: (state) => state,
       },
     },
     entitiesTable: {
@@ -148,14 +148,14 @@ const config = {
         deselectAll: (state, action) => {
           return state.set('form.selectedEntities', action.get('selectedIds'));
         },
-        doubleClick: state => state,
+        doubleClick: (state) => state,
       },
     },
   },
 
   steps: {
     initialize: {
-      quest: function*(quest) {
+      quest: function* (quest) {
         yield quest.me.useTypesTable({
           action: 'setData',
           payload: {data: buildTypesTable()},
@@ -174,7 +174,7 @@ const config = {
 
     prepare: {
       updateButtonsMode: 'onChange',
-      buttons: function(quest, buttons, form) {
+      buttons: function (quest, buttons, form) {
         const selectedTypes = form.get('selectedTypes', []);
         const selectedEntities = form.get('selectedEntities', []);
         const r = DataCheckHelpers.getCleaning(selectedTypes, form);
@@ -188,12 +188,12 @@ const config = {
         });
       },
       form: {},
-      quest: function*(quest, form) {},
+      quest: function* (quest, form) {},
     },
 
     finish: {
       form: {},
-      quest: function*(quest, form, next) {
+      quest: function* (quest, form, next) {
         const selectedTypes = form.selectedTypes || [];
         const options = DataCheckHelpers.getOptions(form);
         const r = DataCheckHelpers.getCleaning(selectedTypes, form);

@@ -52,13 +52,13 @@ const config = {
         deselectAll: (state, action) => {
           return state.set('form.selectedTables', action.get('selectedIds'));
         },
-        doubleClick: state => state,
+        doubleClick: (state) => state,
       },
     },
   },
   steps: {
     prepare: {
-      onChange: function*(quest, form) {
+      onChange: function* (quest, form) {
         const r = quest.getStorage(entityStorage);
         if (form.get('fromDb')) {
           const tableList = yield r.listTableFromDb({
@@ -71,7 +71,7 @@ const config = {
         }
       },
       updateButtonsMode: 'onChange',
-      buttons: function(quest, buttons, form) {
+      buttons: function (quest, buttons, form) {
         const selectedTables = form.get('selectedTables');
         const disabled =
           !selectedTables || (selectedTables && selectedTables.length < 1);
@@ -83,7 +83,7 @@ const config = {
         });
       },
       form: {selectedIds: []},
-      quest: function*(quest, form) {
+      quest: function* (quest, form) {
         const r = quest.getStorage(entityStorage);
         const databases = yield r.listDb();
         quest.do({
@@ -93,7 +93,7 @@ const config = {
     },
     finish: {
       form: {},
-      quest: function*(quest, form, next) {
+      quest: function* (quest, form, next) {
         const r = quest.getStorage(entityStorage);
         for (const table of form.selectedTables) {
           r.copyTableFromDb(

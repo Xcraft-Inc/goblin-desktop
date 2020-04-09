@@ -21,7 +21,7 @@ class Monitor extends Widget {
 
   connectLocalStateMonitor() {
     return this.mapWidget(
-      props => {
+      (props) => {
         const size = props.state.size;
         if (size > 1000 && this.collectRequested === false) {
           this.collectRequested = true;
@@ -42,7 +42,7 @@ class Monitor extends Widget {
 
   connectWarehouseInfosMonitor() {
     return this.mapWidget(
-      props => {
+      (props) => {
         if (!props.infos) {
           return <div style={{fontWeight: 900}}>WarehouseInfos: N/A</div>;
         }
@@ -85,7 +85,7 @@ class Monitor extends Widget {
   }
 }
 
-export default Widget.connectWidget(state => {
+export default Widget.connectWidget((state) => {
   return {
     enabled: state ? state.get('enabled') : false,
   };

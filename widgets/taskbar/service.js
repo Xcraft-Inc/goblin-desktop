@@ -20,21 +20,21 @@ const logicHandlers = {
 
 // Register quest's according rc.json
 
-Goblin.registerQuest(goblinName, 'create', function(quest, desktopId) {
+Goblin.registerQuest(goblinName, 'create', function (quest, desktopId) {
   quest.goblin.setX('desktopId', desktopId);
   quest.do();
   return quest.goblin.id;
 });
 
-Goblin.registerQuest(goblinName, 'change-mandate', function(quest) {
+Goblin.registerQuest(goblinName, 'change-mandate', function (quest) {
   quest.evt(`mandate.changed`);
 });
 
-Goblin.registerQuest(goblinName, 'delete', function(quest) {
+Goblin.registerQuest(goblinName, 'delete', function (quest) {
   quest.log.info('deleting tasks...');
 });
 
-Goblin.registerQuest(goblinName, 'run', function*(quest, workitem, contextId) {
+Goblin.registerQuest(goblinName, 'run', function* (quest, workitem, contextId) {
   const desk = quest.getAPI(quest.goblin.getX('desktopId'));
   workitem.id = uuidV4();
   workitem.isDone = false;

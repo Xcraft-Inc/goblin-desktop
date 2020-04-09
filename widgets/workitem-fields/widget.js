@@ -5,9 +5,9 @@ import Field from 'goblin-gadgets/widgets/field/widget';
 
 /******************************************************************************/
 
-const CustomField = Widget.connectBackend(state => {
+const CustomField = Widget.connectBackend((state) => {
   return {field: state};
-})(props => {
+})((props) => {
   const {field} = props;
   if (!field) {
     return null;

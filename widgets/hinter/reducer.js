@@ -11,14 +11,14 @@ const actions = {
   'select-row': (state, action) => {
     return state.set('selectedIndex', parseInt(action.index));
   },
-  'next-row': state => {
+  'next-row': (state) => {
     const index = parseInt(state.get('selectedIndex'));
     if (index === state.get('rowCount') - 1) {
       return state;
     }
     return state.set('selectedIndex', parseInt(index) + 1);
   },
-  'prev-row': state => {
+  'prev-row': (state) => {
     const index = state.get('selectedIndex');
     if (index === 0) {
       return state;

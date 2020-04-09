@@ -38,9 +38,7 @@ class HinterNewButton extends Widget {
   }
 
   onNew() {
-    const model = this.getRouting()
-      .get('location.hash')
-      .substring(1);
+    const model = this.getRouting().get('location.hash').substring(1);
     const value = this.getModelValue(model, true);
     this.doAs('hinter', 'create-new', {value});
   }

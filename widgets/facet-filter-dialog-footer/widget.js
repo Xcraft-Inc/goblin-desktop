@@ -41,10 +41,10 @@ class FacetFilterDialogFooter extends Widget {
   render() {
     let enableClearAll = this.props.flags
       .toArray()
-      .some(flag => flag.get('checked'));
+      .some((flag) => flag.get('checked'));
     let enableSetAll = this.props.flags
       .toArray()
-      .some(flag => !flag.get('checked'));
+      .some((flag) => !flag.get('checked'));
 
     return (
       <div className={this.styles.classNames.footer}>

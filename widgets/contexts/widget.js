@@ -49,7 +49,7 @@ export default class Contexts extends Widget {
       return null;
     }
     return this.props.contexts
-      .map(context => this.renderContext(context))
+      .map((context) => this.renderContext(context))
       .toArray();
   }
 
