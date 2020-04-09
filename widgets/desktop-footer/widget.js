@@ -35,7 +35,7 @@ export default class DesktopFooter extends Widget {
   connectCommandsPrompt() {
     MouseTrap.bind('ctrl+p', this.togglePrompt);
     return this.mapWidget(
-      props => {
+      (props) => {
         return (
           <div
             style={{

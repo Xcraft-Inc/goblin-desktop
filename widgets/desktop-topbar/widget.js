@@ -28,6 +28,7 @@ const themes = [
 ];
 const eggsThemes = [
   ...themes,
+  {separator: true, separatorKind: 'menu-line'},
   {text: T('Royal'), value: 'royal'},
   {text: T('Clock'), value: 'clock'},
   {text: T('Oldtimer'), value: 'oldtimer'},

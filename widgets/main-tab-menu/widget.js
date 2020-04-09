@@ -68,7 +68,7 @@ export default class MainTabMenu extends Widget {
         this.context.theme.shapes.flyingBalloonTriangleSize
       );
 
-      const list = this.props.items.map(item => {
+      const list = this.props.items.map((item) => {
         const text = this.props.itemsTextKey
           ? item.get(this.props.itemsTextKey)
           : item.text;
@@ -77,6 +77,8 @@ export default class MainTabMenu extends Widget {
           : item.value;
         return {
           text,
+          separator: item.separator,
+          separatorKind: item.separatorKind,
           active: value === this.currentItem,
           action: () => this.onChange(value, text),
         };
@@ -111,7 +113,7 @@ export default class MainTabMenu extends Widget {
     return (
       <div>
         <Button
-          ref={x => (this.comboButton = x)}
+          ref={(x) => (this.comboButton = x)}
           active={this.showMenu}
           onClick={this.onClick}
           {...otherProps}
