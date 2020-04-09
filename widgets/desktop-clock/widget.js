@@ -70,10 +70,7 @@ export default class DesktopClock extends Widget {
       : this.styles.classNames.clockHidden;
 
     return (
-      <div
-        className={style}
-        onClick={this.showClock ? this.changeClockLook : this.toggleClock}
-      >
+      <div className={style} onClick={this.toggleClock}>
         <AnalogClock
           size={this.context.theme.look.clockParams.size}
           look={
@@ -115,9 +112,13 @@ export default class DesktopClock extends Widget {
           checked={this.showClock}
           onChange={this.toggleClock}
         />
-        <div
-          className={this.styles.classNames.miniClockRetro}
-          onClick={this.toggleClock}
+        <div className={this.styles.classNames.sajexRetro} />
+        <Button
+          kind="round"
+          width="36px"
+          height="36px"
+          glyph={this.showClock ? 'solid/ellipsis-h' : null}
+          onClick={this.showClock ? this.changeClockLook : this.toggleClock}
         />
       </RetroPanel>
     );
@@ -128,8 +129,8 @@ export default class DesktopClock extends Widget {
       <Button
         kind="button-footer"
         width={this.context.theme.shapes.footerHeight}
-        glyph={this.showClock ? 'solid/eye-slash' : null}
-        onClick={this.toggleClock}
+        glyph={this.showClock ? 'solid/ellipsis-h' : null}
+        onClick={this.showClock ? this.changeClockLook : this.toggleClock}
       />
     );
   }

@@ -29,10 +29,10 @@ const themes = [
 const eggsThemes = [
   ...themes,
   {separator: true, separatorKind: 'menu-line'},
-  {text: T('Royal'), value: 'royal'},
-  {text: T('Clock'), value: 'clock'},
-  {text: T('Oldtimer'), value: 'oldtimer'},
-  {text: T('Steampunk'), value: 'steampunk'},
+  {glyph: 'solid/crown', text: T('Royal'), value: 'royal'},
+  {glyph: 'solid/clock', text: T('Clock'), value: 'clock'},
+  {glyph: 'solid/car', text: T('Oldtimer'), value: 'oldtimer'},
+  {glyph: 'solid/tachometer', text: T('Steampunk'), value: 'steampunk'},
 ];
 
 /******************************************************************************/

@@ -77,6 +77,7 @@ export default class MainTabMenu extends Widget {
           : item.value;
         return {
           text,
+          glyph: item.glyph,
           separator: item.separator,
           separatorKind: item.separatorKind,
           active: value === this.currentItem,

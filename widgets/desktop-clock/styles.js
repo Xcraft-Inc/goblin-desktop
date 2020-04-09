@@ -63,18 +63,8 @@ export default function styles(theme) {
     },
   };
 
-  const miniClockRetro = {
-    width: '36px',
-    height: '36px',
-    marginLeft: '16px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    boxShadow: '5px 5px 10px black',
-    borderRadius: '18px',
-    backgroundColor: '#bbb',
-    boxSizing: 'border-box',
-    border: '3px solid #888',
+  const sajexRetro = {
+    width: '16px',
   };
 
   /******************************************************************************/
@@ -84,7 +74,7 @@ export default function styles(theme) {
     clockShowed,
     clockHidden,
     miniClock,
-    miniClockRetro,
+    sajexRetro,
   };
 }
 
