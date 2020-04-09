@@ -25,8 +25,8 @@ export default function styles(theme) {
 
   const s = Unit.parse(theme.look.clockParams.size).value;
 
-  const bw = theme.look.name === 'retro' ? 65 * 2 : 84;
   const bh = Unit.parse(theme.shapes.footerHeight).value;
+  const bw = theme.look.name === 'retro' ? 65 * 2 : bh * 2;
 
   const clockShowed = {
     position: 'fixed',
@@ -46,21 +46,26 @@ export default function styles(theme) {
     transform: `scale(${ss})`,
   };
 
-  const miniClock = {
+  const simpleButton = {
     'width': theme.shapes.footerHeight,
     'height': theme.shapes.footerHeight,
-    'marginRight': '1px',
-    'paddingRight': m,
-    'paddingLeft': m,
     'display': 'flex',
     'justifyContent': 'center',
     'alignItems': 'center',
+    'fontSize': '120%',
+    'color': ColorManipulator.emphasize(theme.palette.footerBackground, 0.9),
+    'backgroundColor': theme.palette.footerBackground,
     ':hover': {
       backgroundColor: ColorManipulator.emphasize(
         theme.palette.footerBackground,
         0.2
       ),
     },
+  };
+
+  const doubleButton = {
+    ...simpleButton,
+    width: Unit.multiply(theme.shapes.footerHeight, 2),
   };
 
   const sajexRetro = {
@@ -73,7 +78,8 @@ export default function styles(theme) {
     desktopClock,
     clockShowed,
     clockHidden,
-    miniClock,
+    simpleButton,
+    doubleButton,
     sajexRetro,
   };
 }

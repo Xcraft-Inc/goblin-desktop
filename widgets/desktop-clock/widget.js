@@ -8,6 +8,7 @@ import AnalogClock from 'goblin-gadgets/widgets/analog-clock/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import {Unit} from 'electrum-theme';
 import {ColorManipulator} from 'electrum-theme';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 /******************************************************************************/
 
@@ -125,14 +126,31 @@ export default class DesktopClock extends Widget {
   }
 
   renderButtonModern() {
-    return (
-      <Button
-        kind="button-footer"
-        width={this.context.theme.shapes.footerHeight}
-        glyph={this.showClock ? 'solid/ellipsis-h' : null}
-        onClick={this.showClock ? this.changeClockLook : this.toggleClock}
-      />
-    );
+    if (this.showClock) {
+      return (
+        <React.Fragment>
+          <div
+            className={this.styles.classNames.simpleButton}
+            onClick={this.toggleClock}
+          >
+            <FontAwesomeIcon icon={['fas', 'eye-slash']} />
+          </div>
+          <div
+            className={this.styles.classNames.simpleButton}
+            onClick={this.changeClockLook}
+          >
+            <FontAwesomeIcon icon={['fas', 'ellipsis-h']} />
+          </div>
+        </React.Fragment>
+      );
+    } else {
+      return (
+        <div
+          className={this.styles.classNames.doubleButton}
+          onClick={this.toggleClock}
+        ></div>
+      );
+    }
   }
 
   renderButton() {
