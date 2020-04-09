@@ -27,21 +27,11 @@ const themes = [
   {text: T('Dragula'), value: 'default-dragula'},
 ];
 const eggsThemes = [
-  {text: T('Standard'), value: 'default'},
-  {text: T('Standard compact'), value: 'default-compact'},
-  {text: T('Vert'), value: 'default-green'},
-  {text: T('Vert spécial'), value: 'special-green'},
-  {text: T('Vert arrondi'), value: 'smooth-green'},
-  {text: T('Rouge'), value: 'default-red'},
-  {text: T('Rose'), value: 'default-pink'},
-  {text: T('Rose compact'), value: 'compact-pink'},
-  {text: T('Monochrome compact'), value: 'compact-mono'},
-  {text: T('Retro Royal'), value: 'default-retro'},
-  {text: T('Retro Clock'), value: 'clock-retro'},
-  {text: T('Oldtimer'), value: 'old-retro'},
-  {text: T('Steampunk'), value: 'steampunk-retro'},
-  {text: T('Foncé'), value: 'default-dark'},
-  {text: T('Dragula'), value: 'default-dragula'},
+  ...themes,
+  {text: T('Royal'), value: 'royal'},
+  {text: T('Clock'), value: 'clock'},
+  {text: T('Oldtimer'), value: 'oldtimer'},
+  {text: T('Steampunk'), value: 'steampunk'},
 ];
 
 /******************************************************************************/
@@ -258,9 +248,10 @@ export default class DesktopTopbar extends Widget {
   render() {
     const routes = this.props.routes;
     const topbarView = viewImporter(routes['/top-bar/'].component);
-    const TopBar = Widget.WithRoute(topbarView, 'context')(
-      routes['/top-bar/'].path
-    );
+    const TopBar = Widget.WithRoute(
+      topbarView,
+      'context'
+    )(routes['/top-bar/'].path);
 
     return (
       <Container kind="top-bar">
