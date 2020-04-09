@@ -98,8 +98,8 @@ export default class DesktopFooter extends Widget {
         />
         <CommandsPrompt />
         <div className={this.styles.classNames.sajex} />
-        <DesktopClock />
         <DesktopMonitors id={`activity-monitor@${this.props.id}`} />
+        <DesktopClock />
       </div>
     );
   }

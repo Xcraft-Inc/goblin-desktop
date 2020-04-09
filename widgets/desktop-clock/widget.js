@@ -70,25 +70,28 @@ export default class DesktopClock extends Widget {
       : this.styles.classNames.clockHidden;
 
     return (
-      <div className={style} onClick={this.changeClockLook}>
+      <div
+        className={style}
+        onClick={this.showClock ? this.changeClockLook : this.toggleClock}
+      >
         <AnalogClock
           size={this.context.theme.look.clockParams.size}
-          look={this.clockLook}
+          look={
+            this.showClock
+              ? this.clockLook
+              : this.context.theme.look.clockParams.miniLook
+          }
         />
       </div>
     );
   }
 
   renderButtonRetro() {
-    const miniClockStyle = this.showClock
-      ? this.styles.classNames.miniClockRetroWithout
-      : this.styles.classNames.miniClockRetroWith;
-
     return (
       <RetroPanel
         position="relative"
         height="54px"
-        width="400px"
+        width="250px"
         kind="metal-plate"
         margin="3px"
         radius="12px"
@@ -101,51 +104,34 @@ export default class DesktopClock extends Widget {
         )}
       >
         <Label
+          width="80px"
           text="Time"
+          wrap="no"
           fontSize="150%"
           textColor="#ccc"
-          horizontalSpacing="large"
         />
         <Checkbox
           backgroundBrigtness="dark"
           checked={this.showClock}
           onChange={this.toggleClock}
         />
-        <div className={miniClockStyle}>
-          {this.showClock ? null : (
-            <AnalogClock
-              size="32px"
-              look={this.context.theme.look.clockParams.miniLook}
-            />
-          )}
-        </div>
+        <div
+          className={this.styles.classNames.miniClockRetro}
+          onClick={this.toggleClock}
+        />
       </RetroPanel>
     );
   }
 
   renderButtonModern() {
-    if (this.showClock) {
-      return (
-        <Button
-          kind="button-footer"
-          width={this.context.theme.shapes.footerHeight}
-          glyph="solid/chevron-down"
-          onClick={this.toggleClock}
-        />
-      );
-    } else {
-      return (
-        <div
-          className={this.styles.classNames.miniClock}
-          onClick={this.toggleClock}
-        >
-          <AnalogClock
-            size={Unit.sub(this.context.theme.shapes.footerHeight, '20px')}
-            look={this.context.theme.look.clockParams.miniLook}
-          />
-        </div>
-      );
-    }
+    return (
+      <Button
+        kind="button-footer"
+        width={this.context.theme.shapes.footerHeight}
+        glyph={this.showClock ? 'solid/eye-slash' : null}
+        onClick={this.toggleClock}
+      />
+    );
   }
 
   renderButton() {
