@@ -28,7 +28,7 @@ export default function styles(theme) {
   const bh = Unit.parse(theme.shapes.footerHeight).value;
   const bw = theme.look.name === 'retro' ? 65 * 2 : bh * 2;
 
-  const clockShowed = {
+  const clockLarge = {
     position: 'fixed',
     width: px(s),
     height: px(s),
@@ -39,12 +39,14 @@ export default function styles(theme) {
   };
 
   const ss = theme.look.name === 'retro' ? 32 / s : (bh - 20) / s;
-  const clockHidden = {
-    ...clockShowed,
+  const clockMiniature = {
+    ...clockLarge,
     right: px(-(s / 2 - bw / 2)),
     bottom: px(-(s / 2 - bh / 2)),
     transform: `scale(${ss})`,
   };
+
+  /******************************************************************************/
 
   const simpleButton = {
     'width': theme.shapes.footerHeight,
@@ -68,6 +70,14 @@ export default function styles(theme) {
     width: Unit.multiply(theme.shapes.footerHeight, 2),
   };
 
+  const doubleButtonHover = {
+    ...doubleButton,
+    backgroundColor: ColorManipulator.emphasize(
+      theme.palette.footerBackground,
+      0.2
+    ),
+  };
+
   const sajexRetro = {
     width: '16px',
   };
@@ -76,10 +86,11 @@ export default function styles(theme) {
 
   return {
     desktopClock,
-    clockShowed,
-    clockHidden,
+    clockLarge,
+    clockMiniature,
     simpleButton,
     doubleButton,
+    doubleButtonHover,
     sajexRetro,
   };
 }

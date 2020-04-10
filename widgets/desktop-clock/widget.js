@@ -6,7 +6,6 @@ import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import AnalogClock from 'goblin-gadgets/widgets/analog-clock/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
-import {Unit} from 'electrum-theme';
 import {ColorManipulator} from 'electrum-theme';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
@@ -19,6 +18,8 @@ export default class DesktopClock extends Widget {
 
     this.toggleClock = this.toggleClock.bind(this);
     this.changeClockLook = this.changeClockLook.bind(this);
+    this.clockMouseOver = this.clockMouseOver.bind(this);
+    this.clockMouseOut = this.clockMouseOut.bind(this);
 
     this.state = {
       showClock: this.context.theme.look.clockParams
@@ -27,6 +28,7 @@ export default class DesktopClock extends Widget {
       clockLook: this.context.theme.look.clockParams
         ? this.context.theme.look.clockParams.initialLook
         : null,
+      mouseInClock: false,
     };
   }
 
@@ -50,6 +52,16 @@ export default class DesktopClock extends Widget {
       clockLook: value,
     });
   }
+
+  get mouseInClock() {
+    return this.state.mouseInClock;
+  }
+
+  set mouseInClock(value) {
+    this.setState({
+      mouseInClock: value,
+    });
+  }
   //#endregion
 
   toggleClock() {
@@ -62,13 +74,21 @@ export default class DesktopClock extends Widget {
     this.clockLook = looks[(i + 1) % looks.length];
   }
 
+  clockMouseOver() {
+    this.mouseInClock = true;
+  }
+
+  clockMouseOut() {
+    this.mouseInClock = false;
+  }
+
   /******************************************************************************/
 
   renderClock() {
     const showed = this.showClock;
     const style = showed
-      ? this.styles.classNames.clockShowed
-      : this.styles.classNames.clockHidden;
+      ? this.styles.classNames.clockLarge
+      : this.styles.classNames.clockMiniature;
 
     return (
       <div className={style} onClick={this.toggleClock}>
@@ -79,6 +99,8 @@ export default class DesktopClock extends Widget {
               ? this.clockLook
               : this.context.theme.look.clockParams.miniLook
           }
+          mouseOver={this.clockMouseOver}
+          mouseOut={this.clockMouseOut}
         />
       </div>
     );
@@ -146,7 +168,11 @@ export default class DesktopClock extends Widget {
     } else {
       return (
         <div
-          className={this.styles.classNames.doubleButton}
+          className={
+            this.mouseInClock && !this.showClock
+              ? this.styles.classNames.doubleButtonHover
+              : this.styles.classNames.doubleButton
+          }
           onClick={this.toggleClock}
         ></div>
       );
