@@ -57,6 +57,7 @@ export default function styles(theme) {
     'fontSize': '120%',
     'color': ColorManipulator.emphasize(theme.palette.footerBackground, 0.9),
     'backgroundColor': theme.palette.footerBackground,
+    'transition': 'all 0.3s ease',
     ':hover': {
       backgroundColor: ColorManipulator.emphasize(
         theme.palette.footerBackground,

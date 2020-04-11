@@ -6,6 +6,7 @@ import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import AnalogClock from 'goblin-gadgets/widgets/analog-clock/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
+import DesktopClockMenu from 'goblin-desktop/widgets/desktop-clock-menu/widget';
 import {ColorManipulator} from 'electrum-theme';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
@@ -29,6 +30,7 @@ export default class DesktopClock extends Widget {
         ? this.context.theme.look.clockParams.initialLook
         : null,
       mouseInClock: false,
+      showMenu: false,
     };
   }
 
@@ -60,6 +62,16 @@ export default class DesktopClock extends Widget {
   set mouseInClock(value) {
     this.setState({
       mouseInClock: value,
+    });
+  }
+
+  get showMenu() {
+    return this.state.showMenu;
+  }
+
+  set showMenu(value) {
+    this.setState({
+      showMenu: value,
     });
   }
   //#endregion
@@ -141,7 +153,9 @@ export default class DesktopClock extends Widget {
           width="36px"
           height="36px"
           glyph={this.showClock ? 'solid/ellipsis-h' : null}
-          onClick={this.showClock ? this.changeClockLook : this.toggleClock}
+          onClick={
+            this.showClock ? () => (this.showMenu = true) : this.toggleClock
+          }
         />
       </RetroPanel>
     );
@@ -159,7 +173,7 @@ export default class DesktopClock extends Widget {
           </div>
           <div
             className={this.styles.classNames.simpleButton}
-            onClick={this.changeClockLook}
+            onClick={() => (this.showMenu = true)}
           >
             <FontAwesomeIcon icon={['fas', 'ellipsis-h']} />
           </div>
@@ -187,6 +201,26 @@ export default class DesktopClock extends Widget {
     }
   }
 
+  renderMenu() {
+    if (!this.showMenu) {
+      return null;
+    }
+
+    return (
+      <DesktopClockMenu
+        right="0px"
+        bottom={this.context.theme.shapes.footerHeight}
+        looks={this.context.theme.look.clockParams.looks}
+        selected={this.clockLook}
+        onSelect={(look) => {
+          this.showMenu = false;
+          this.clockLook = look;
+        }}
+        onClose={() => (this.showMenu = false)}
+      />
+    );
+  }
+
   render() {
     if (this.context.theme.look.clock !== 'analog-clock') {
       return null;
@@ -196,6 +230,7 @@ export default class DesktopClock extends Widget {
       <div className={this.styles.classNames.desktopClock}>
         {this.renderButton()}
         {this.renderClock()}
+        {this.renderMenu()}
       </div>
     );
   }
