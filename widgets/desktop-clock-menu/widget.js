@@ -43,7 +43,7 @@ export default class DesktopClockMenu extends Widget {
         }
         onClick={() => this.props.onSelect(look)}
       >
-        <AnalogClock size="200px" look={look} />
+        <AnalogClock size="180px" look={look} />
       </div>
     );
   }

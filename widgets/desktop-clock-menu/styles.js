@@ -24,7 +24,8 @@ export default function styles(theme, props) {
       12: 4,
     }[looks.length] || 5;
 
-  const size = '250px';
+  const size = '220px';
+  const m = '5px';
 
   const fullScreen = {
     visibility: 'visible',
@@ -43,17 +44,19 @@ export default function styles(theme, props) {
     position: 'absolute',
     right: right,
     bottom: bottom,
-    width: Unit.multiply(size, nx),
+    padding: m,
+    width: Unit.multiply(Unit.add(size, Unit.multiply(m, 2)), nx),
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: '#222',
+    backgroundColor: theme.palette.menuItemInactiveBackground,
     boxShadow: '0px 0px 200px 50px black',
   };
 
   const menuItem = {
     'width': size,
     'height': size,
+    'margin': m,
     'display': 'flex',
     'justifyContent': 'center',
     'alignItems': 'center',
@@ -64,6 +67,7 @@ export default function styles(theme, props) {
         theme.palette.menuItemInactiveBackground,
         0.1
       ),
+      transform: 'scale(1.05)',
     },
   };
 
@@ -75,6 +79,8 @@ export default function styles(theme, props) {
         theme.palette.menuItemActiveBackground,
         0.1
       ),
+      transform: 'scale(1.05)',
+      zIndex: 1,
     },
   };
 
