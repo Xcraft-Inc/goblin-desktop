@@ -106,6 +106,7 @@ export default class DesktopClock extends Widget {
       <div className={style} onClick={this.toggleClock}>
         <AnalogClock
           size={this.context.theme.look.clockParams.size}
+          limit={this.showClock ? 1 : 3}
           look={
             this.showClock
               ? this.clockLook
