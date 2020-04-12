@@ -30,7 +30,7 @@ export default function styles(theme, props) {
   const fullScreen = {
     visibility: 'visible',
     position: 'fixed',
-    zIndex: 11,
+    zIndex: 20,
     top: '0px',
     left: '0px',
     width: '100%',

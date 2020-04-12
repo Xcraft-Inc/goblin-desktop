@@ -38,7 +38,7 @@ export default function styles(theme) {
     transition: 'all 0.5s ease',
   };
 
-  const ss = theme.look.name === 'retro' ? 32 / s : (bh - 20) / s;
+  const ss = theme.look.name === 'retro' ? 50 / s : (bh - 20) / s;
   const clockMiniature = {
     ...clockLarge,
     right: px(-(s / 2 - bw / 2)),

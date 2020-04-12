@@ -107,11 +107,7 @@ export default class DesktopClock extends Widget {
         <AnalogClock
           size={this.context.theme.look.clockParams.size}
           limit={this.showClock ? 1 : 3}
-          look={
-            this.showClock
-              ? this.clockLook
-              : this.context.theme.look.clockParams.miniLook
-          }
+          look={this.clockLook}
           mouseOver={this.clockMouseOver}
           mouseOut={this.clockMouseOut}
         />
