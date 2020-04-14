@@ -53,6 +53,17 @@ export default function styles(theme, props) {
     boxShadow: '0px 0px 200px 50px black',
   };
 
+  const hc1 = ColorManipulator.emphasize(
+    theme.palette.menuItemInactiveBackground,
+    0.1
+  );
+  const hc2 = ColorManipulator.emphasize(
+    theme.palette.menuItemInactiveBackground,
+    0.3
+  );
+  const hs = '20px';
+  const ht = Unit.multiply(hs, 2);
+
   const menuItem = {
     'width': size,
     'height': size,
@@ -63,10 +74,7 @@ export default function styles(theme, props) {
     'backgroundColor': theme.palette.menuItemInactiveBackground,
     'transition': 'all 0.5s ease',
     ':hover': {
-      backgroundColor: ColorManipulator.emphasize(
-        theme.palette.menuItemInactiveBackground,
-        0.1
-      ),
+      background: `repeating-linear-gradient(-45deg, ${hc1}, ${hc1} ${hs}, ${hc2} 0px, ${hc2} ${ht})`,
       transform: 'scale(1.05)',
     },
   };
@@ -75,12 +83,8 @@ export default function styles(theme, props) {
     ...menuItem,
     'backgroundColor': theme.palette.menuItemActiveBackground,
     ':hover': {
-      backgroundColor: ColorManipulator.emphasize(
-        theme.palette.menuItemActiveBackground,
-        0.1
-      ),
+      background: `repeating-linear-gradient(-45deg, ${hc1}, ${hc1} ${hs}, ${hc2} 0px, ${hc2} ${ht})`,
       transform: 'scale(1.05)',
-      zIndex: 1,
     },
   };
 
