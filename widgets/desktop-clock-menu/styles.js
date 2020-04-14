@@ -3,10 +3,10 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-export const propNames = ['right', 'bottom', 'looks'];
+export const propNames = ['right', 'bottom', 'looks', 'clockSize'];
 
 export default function styles(theme, props) {
-  const {right, bottom, looks} = props;
+  const {right, bottom, looks, clockSize} = props;
 
   const nx =
     {
@@ -24,7 +24,7 @@ export default function styles(theme, props) {
       12: 4,
     }[looks.length] || 5;
 
-  const size = '220px';
+  const size = Unit.multiply(clockSize, 1.2);
   const m = '5px';
 
   const fullScreen = {

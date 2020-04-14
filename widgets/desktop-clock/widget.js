@@ -208,6 +208,7 @@ export default class DesktopClock extends Widget {
         right="0px"
         bottom={this.context.theme.shapes.footerHeight}
         looks={this.context.theme.look.clockParams.looks}
+        clockSize={this.context.theme.look.clockParams.size}
         selected={this.clockLook}
         onSelect={(look) => {
           this.showMenu = false;
