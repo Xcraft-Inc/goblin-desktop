@@ -3,6 +3,13 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
+function getHatching(d, color1, color2) {
+  const dd = Unit.multiply(d, 2);
+  return `repeating-linear-gradient(-45deg, ${color1}, ${color1} ${d}, ${color2} 0px, ${color2} ${dd})`;
+}
+
+/******************************************************************************/
+
 export const propNames = ['right', 'bottom', 'looks', 'clockSize'];
 
 export default function styles(theme, props) {
@@ -61,8 +68,6 @@ export default function styles(theme, props) {
     theme.palette.menuItemInactiveBackground,
     0.3
   );
-  const hs = '20px';
-  const ht = Unit.multiply(hs, 2);
 
   const menuItem = {
     'width': size,
@@ -71,10 +76,15 @@ export default function styles(theme, props) {
     'display': 'flex',
     'justifyContent': 'center',
     'alignItems': 'center',
-    'backgroundColor': theme.palette.menuItemInactiveBackground,
+    //'backgroundColor': theme.palette.menuItemInactiveBackground,
+    'background': getHatching(
+      '20px',
+      theme.palette.menuItemInactiveBackground,
+      theme.palette.menuItemInactiveBackground
+    ),
     'transition': 'all 0.5s ease',
     ':hover': {
-      background: `repeating-linear-gradient(-45deg, ${hc1}, ${hc1} ${hs}, ${hc2} 0px, ${hc2} ${ht})`,
+      background: getHatching('20px', hc1, hc2),
       transform: 'scale(1.05)',
     },
   };
@@ -83,7 +93,7 @@ export default function styles(theme, props) {
     ...menuItem,
     'backgroundColor': theme.palette.menuItemActiveBackground,
     ':hover': {
-      background: `repeating-linear-gradient(-45deg, ${hc1}, ${hc1} ${hs}, ${hc2} 0px, ${hc2} ${ht})`,
+      background: getHatching('20px', hc1, hc2),
       transform: 'scale(1.05)',
     },
   };
