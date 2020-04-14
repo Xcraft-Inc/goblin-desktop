@@ -31,8 +31,8 @@ export default function styles(theme, props) {
       12: 4,
     }[looks.length] || 5;
 
-  const size = Unit.multiply(clockSize, 1.2);
-  const m = '5px';
+  const size = Unit.multiply(clockSize, 1.3);
+  const m = '10px';
 
   const fullScreen = {
     visibility: 'visible',
@@ -47,17 +47,38 @@ export default function styles(theme, props) {
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   };
 
-  const menu = {
+  const desktopClockMenu = {
     position: 'absolute',
     right: right,
     bottom: bottom,
     padding: m,
-    width: Unit.multiply(Unit.add(size, Unit.multiply(m, 2)), nx),
+    width: Unit.multiply(size, nx),
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     backgroundColor: theme.palette.menuItemInactiveBackground,
     boxShadow: '0px 0px 200px 50px black',
+  };
+
+  // Use + for dispatch the style to next brother (only one).
+  // Use ~ for dispatch the style to all the following brothers.
+  // Use nothing for dispatch the style to children.
+  const menuItem = {
+    'position': 'relative',
+    'width': size,
+    'height': size,
+    'backgroundColor': theme.palette.menuItemInactiveBackground,
+    ':hover .background-hover': {
+      opacity: 1,
+    },
+    ':hover .clock-hover': {
+      transform: 'scale(1.05)',
+    },
+  };
+
+  const menuItemSelected = {
+    ...menuItem,
+    backgroundColor: theme.palette.menuItemActiveBackground,
   };
 
   const hc1 = ColorManipulator.emphasize(
@@ -69,42 +90,39 @@ export default function styles(theme, props) {
     0.3
   );
 
-  const menuItem = {
-    'width': size,
-    'height': size,
-    'margin': m,
-    'display': 'flex',
-    'justifyContent': 'center',
-    'alignItems': 'center',
-    //'backgroundColor': theme.palette.menuItemInactiveBackground,
-    'background': getHatching(
-      '20px',
-      theme.palette.menuItemInactiveBackground,
-      theme.palette.menuItemInactiveBackground
-    ),
-    'transition': 'all 0.5s ease',
-    ':hover': {
-      background: getHatching('20px', hc1, hc2),
-      transform: 'scale(1.05)',
-    },
+  const background = {
+    position: 'absolute',
+    left: '0px',
+    right: '0px',
+    top: '0px',
+    bottom: '0px',
+    background: getHatching('20px', hc1, hc2),
+    opacity: 0,
+    transition: 'all 1.2s ease',
   };
 
-  const menuItemSelected = {
-    ...menuItem,
-    'backgroundColor': theme.palette.menuItemActiveBackground,
-    ':hover': {
-      background: getHatching('20px', hc1, hc2),
-      transform: 'scale(1.05)',
-    },
+  const clock = {
+    position: 'absolute',
+    left: '0px',
+    right: '0px',
+    top: '0px',
+    bottom: '0px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transition: 'all 0.5s ease',
   };
 
   /******************************************************************************/
 
   return {
     fullScreen,
-    menu,
+    desktopClockMenu,
+
     menuItem,
     menuItemSelected,
+    background,
+    clock,
   };
 }
 

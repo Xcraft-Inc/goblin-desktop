@@ -22,7 +22,12 @@ export default class DesktopClockMenu extends Widget {
         }
         onClick={() => this.props.onSelect(look)}
       >
-        <AnalogClock size={this.props.clockSize} look={look} />
+        <div
+          className={`background-hover ${this.styles.classNames.background}`}
+        />
+        <div className={`clock-hover ${this.styles.classNames.clock}`}>
+          <AnalogClock size={this.props.clockSize} look={look} />
+        </div>
       </div>
     );
   }
@@ -42,7 +47,7 @@ export default class DesktopClockMenu extends Widget {
         className={this.styles.classNames.fullScreen}
         onClick={this.props.onClose}
       >
-        <div className={this.styles.classNames.menu}>
+        <div className={this.styles.classNames.desktopClockMenu}>
           {this.renderMenuItems()}
         </div>
       </div>
