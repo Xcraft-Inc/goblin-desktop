@@ -26,7 +26,11 @@ export default class DesktopClockMenu extends Widget {
           className={`background-hover ${this.styles.classNames.background}`}
         />
         <div className={`clock-hover ${this.styles.classNames.clock}`}>
-          <AnalogClock size={this.props.clockSize} look={look} />
+          <AnalogClock
+            size={this.props.clockSize}
+            look={look}
+            transition="none"
+          />
         </div>
       </div>
     );

@@ -4,11 +4,14 @@ import * as styles from './styles';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
-import AnalogClock from 'goblin-gadgets/widgets/analog-clock/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
+import Combo from 'goblin-gadgets/widgets/combo/widget';
+import DesktopClockClock from 'goblin-desktop/widgets/desktop-clock-clock/widget';
 import DesktopClockMenu from 'goblin-desktop/widgets/desktop-clock-menu/widget';
 import {ColorManipulator} from 'electrum-theme';
+import {Unit} from 'electrum-theme';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import T from 't';
 
 /******************************************************************************/
 
@@ -26,11 +29,15 @@ export default class DesktopClock extends Widget {
       showClock: this.context.theme.look.clockParams
         ? this.context.theme.look.clockParams.initialVisibility
         : false,
+      clockSize: this.context.theme.look.clockParams
+        ? this.context.theme.look.clockParams.size
+        : null,
       clockLook: this.context.theme.look.clockParams
         ? this.context.theme.look.clockParams.initialLook
         : null,
       mouseInClock: false,
-      showMenu: false,
+      showMenuSize: false,
+      showMenuLook: false,
     };
   }
 
@@ -42,6 +49,16 @@ export default class DesktopClock extends Widget {
   set showClock(value) {
     this.setState({
       showClock: value,
+    });
+  }
+
+  get clockSize() {
+    return this.state.clockSize;
+  }
+
+  set clockSize(value) {
+    this.setState({
+      clockSize: value,
     });
   }
 
@@ -65,13 +82,23 @@ export default class DesktopClock extends Widget {
     });
   }
 
-  get showMenu() {
-    return this.state.showMenu;
+  get showMenuSize() {
+    return this.state.showMenuSize;
   }
 
-  set showMenu(value) {
+  set showMenuSize(value) {
     this.setState({
-      showMenu: value,
+      showMenuSize: value,
+    });
+  }
+
+  get showMenuLook() {
+    return this.state.showMenuLook;
+  }
+
+  set showMenuLook(value) {
+    this.setState({
+      showMenuLook: value,
     });
   }
   //#endregion
@@ -94,24 +121,33 @@ export default class DesktopClock extends Widget {
     this.mouseInClock = false;
   }
 
+  getMenuSizeItem(text, factor) {
+    const size = Unit.multiply(
+      this.context.theme.look.clockParams.size,
+      factor
+    );
+    return {
+      text: text,
+      active: this.clockSize === size,
+      action: () => {
+        this.showMenuSize = false;
+        this.clockSize = size;
+      },
+    };
+  }
+
   /******************************************************************************/
 
   renderClock() {
-    const showed = this.showClock;
-    const style = showed
-      ? this.styles.classNames.clockLarge
-      : this.styles.classNames.clockMiniature;
-
     return (
-      <div className={style} onClick={this.toggleClock}>
-        <AnalogClock
-          size={this.context.theme.look.clockParams.size}
-          limit={this.showClock ? 1 : 3}
-          look={this.clockLook}
-          mouseOver={this.clockMouseOver}
-          mouseOut={this.clockMouseOut}
-        />
-      </div>
+      <DesktopClockClock
+        size={this.clockSize}
+        look={this.clockLook}
+        showClock={this.showClock}
+        onClick={this.toggleClock}
+        mouseOver={this.clockMouseOver}
+        mouseOut={this.clockMouseOut}
+      />
     );
   }
 
@@ -151,7 +187,7 @@ export default class DesktopClock extends Widget {
           height="36px"
           glyph={this.showClock ? 'solid/ellipsis-h' : null}
           onClick={
-            this.showClock ? () => (this.showMenu = true) : this.toggleClock
+            this.showClock ? () => (this.showMenuLook = true) : this.toggleClock
           }
         />
       </RetroPanel>
@@ -169,8 +205,15 @@ export default class DesktopClock extends Widget {
             <FontAwesomeIcon icon={['fas', 'eye-slash']} />
           </div>
           <div
+            ref={(x) => (this.sizeButton = x)}
             className={this.styles.classNames.simpleButton}
-            onClick={() => (this.showMenu = true)}
+            onClick={() => (this.showMenuSize = true)}
+          >
+            <FontAwesomeIcon icon={['fas', 'circle']} />
+          </div>
+          <div
+            className={this.styles.classNames.simpleButton}
+            onClick={() => (this.showMenuLook = true)}
           >
             <FontAwesomeIcon icon={['fas', 'ellipsis-h']} />
           </div>
@@ -181,8 +224,8 @@ export default class DesktopClock extends Widget {
         <div
           className={
             this.mouseInClock && !this.showClock
-              ? this.styles.classNames.doubleButtonHover
-              : this.styles.classNames.doubleButton
+              ? this.styles.classNames.tripleButtonHover
+              : this.styles.classNames.tripleButton
           }
           onClick={this.toggleClock}
         ></div>
@@ -198,8 +241,38 @@ export default class DesktopClock extends Widget {
     }
   }
 
-  renderMenu() {
-    if (!this.showMenu) {
+  renderMenuSize() {
+    if (!this.showMenuSize) {
+      return null;
+    }
+
+    const list = [
+      this.getMenuSizeItem(T('Petite horloge'), 0.5),
+      this.getMenuSizeItem(T('Horloge standard'), 1.0),
+      this.getMenuSizeItem(T('Grande horloge'), 1.5),
+      this.getMenuSizeItem(T('Immense horloge'), 2.0),
+    ];
+
+    const rect = this.sizeButton.getBoundingClientRect();
+    const bottom = Unit.add(
+      this.context.theme.shapes.footerHeight,
+      this.context.theme.shapes.flyingBalloonTriangleSize
+    );
+
+    return (
+      <Combo
+        menuType="wrap"
+        width="150px"
+        left={(rect.left + rect.right) / 2}
+        bottom={bottom}
+        list={list}
+        close={() => (this.showMenuSize = false)}
+      />
+    );
+  }
+
+  renderMenuLook() {
+    if (!this.showMenuLook) {
       return null;
     }
 
@@ -211,10 +284,10 @@ export default class DesktopClock extends Widget {
         clockSize={this.context.theme.look.clockParams.size}
         selected={this.clockLook}
         onSelect={(look) => {
-          this.showMenu = false;
+          this.showMenuLook = false;
           this.clockLook = look;
         }}
-        onClose={() => (this.showMenu = false)}
+        onClose={() => (this.showMenuLook = false)}
       />
     );
   }
@@ -228,7 +301,8 @@ export default class DesktopClock extends Widget {
       <div className={this.styles.classNames.desktopClock}>
         {this.renderButton()}
         {this.renderClock()}
-        {this.renderMenu()}
+        {this.renderMenuSize()}
+        {this.renderMenuLook()}
       </div>
     );
   }

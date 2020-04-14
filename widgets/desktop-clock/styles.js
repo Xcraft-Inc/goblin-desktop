@@ -3,15 +3,7 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-function px(value) {
-  return value + 'px';
-}
-
-/******************************************************************************/
-
 export default function styles(theme) {
-  const m = Unit.multiply(theme.shapes.containerMargin, 0.5);
-
   const desktopClock = {
     position: 'relative',
     height: theme.shapes.footerHeight,
@@ -19,31 +11,6 @@ export default function styles(theme) {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-  };
-
-  /******************************************************************************/
-
-  const s = Unit.parse(theme.look.clockParams.size).value;
-
-  const bh = Unit.parse(theme.shapes.footerHeight).value;
-  const bw = theme.look.name === 'retro' ? 65 * 2 : bh * 2;
-
-  const clockLarge = {
-    position: 'fixed',
-    width: px(s),
-    height: px(s),
-    borderRadius: px(s / 2),
-    right: px(20),
-    bottom: px(bh + 20),
-    transition: 'all 0.5s ease',
-  };
-
-  const ss = theme.look.name === 'retro' ? 50 / s : (bh - 20) / s;
-  const clockMiniature = {
-    ...clockLarge,
-    right: px(-(s / 2 - bw / 2)),
-    bottom: px(-(s / 2 - bh / 2)),
-    transform: `scale(${ss})`,
   };
 
   /******************************************************************************/
@@ -66,13 +33,13 @@ export default function styles(theme) {
     },
   };
 
-  const doubleButton = {
+  const tripleButton = {
     ...simpleButton,
-    width: Unit.multiply(theme.shapes.footerHeight, 2),
+    width: Unit.multiply(theme.shapes.footerHeight, 3),
   };
 
-  const doubleButtonHover = {
-    ...doubleButton,
+  const tripleButtonHover = {
+    ...tripleButton,
     backgroundColor: ColorManipulator.emphasize(
       theme.palette.footerBackground,
       0.2
@@ -87,11 +54,9 @@ export default function styles(theme) {
 
   return {
     desktopClock,
-    clockLarge,
-    clockMiniature,
     simpleButton,
-    doubleButton,
-    doubleButtonHover,
+    tripleButton,
+    tripleButtonHover,
     sajexRetro,
   };
 }
