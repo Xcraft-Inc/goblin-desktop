@@ -35,6 +35,7 @@ export default class DesktopClock extends Widget {
       clockLook: this.context.theme.look.clockParams
         ? this.context.theme.look.clockParams.initialLook
         : null,
+      clockMode: 'stealth',
       mouseInClock: false,
       showMenuSize: false,
       showMenuLook: false,
@@ -69,6 +70,16 @@ export default class DesktopClock extends Widget {
   set clockLook(value) {
     this.setState({
       clockLook: value,
+    });
+  }
+
+  get clockMode() {
+    return this.state.clockMode;
+  }
+
+  set clockMode(value) {
+    this.setState({
+      clockMode: value,
     });
   }
 
@@ -143,6 +154,7 @@ export default class DesktopClock extends Widget {
       <DesktopClockClock
         size={this.clockSize}
         look={this.clockLook}
+        mode={this.clockMode}
         showClock={this.showClock}
         onClick={this.toggleClock}
         mouseOver={this.clockMouseOver}
@@ -247,6 +259,30 @@ export default class DesktopClock extends Widget {
     }
 
     const list = [
+      {
+        glyph:
+          this.clockMode === 'fix' ? 'regular/dot-circle' : 'regular/circle',
+        text: T('Mode fixe'),
+        action: () => {
+          this.showMenuSize = false;
+          this.clockMode = 'fix';
+        },
+      },
+      {
+        glyph:
+          this.clockMode === 'stealth'
+            ? 'regular/dot-circle'
+            : 'regular/circle',
+        text: T('Mode furtif'),
+        action: () => {
+          this.showMenuSize = false;
+          this.clockMode = 'stealth';
+        },
+      },
+      {
+        separator: true,
+        kind: 'menu-line',
+      },
       this.getMenuSizeItem(T('Petite horloge'), 0.5),
       this.getMenuSizeItem(T('Horloge standard'), 1.0),
       this.getMenuSizeItem(T('Grande horloge'), 1.5),
@@ -286,6 +322,9 @@ export default class DesktopClock extends Widget {
         onSelect={(look) => {
           this.showMenuLook = false;
           this.clockLook = look;
+          this.clockMode = ['ring', 'transparent', 'light'].includes(look)
+            ? 'fix'
+            : 'stealth';
         }}
         onClose={() => (this.showMenuLook = false)}
       />

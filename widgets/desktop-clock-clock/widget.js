@@ -40,7 +40,7 @@ export default class DesktopClockClock extends Widget {
   }
 
   onMouseOver() {
-    if (!this.props.showClock || this.lock) {
+    if (!this.props.showClock || this.lock || this.props.mode === 'fix') {
       return;
     }
 
@@ -69,7 +69,9 @@ export default class DesktopClockClock extends Widget {
     return (
       <div
         className={
-          clockHidden
+          this.props.mode === 'fix'
+            ? this.styles.classNames.desktopClockClockFix
+            : clockHidden
             ? this.styles.classNames.desktopClockClockHidden
             : this.styles.classNames.desktopClockClock
         }
