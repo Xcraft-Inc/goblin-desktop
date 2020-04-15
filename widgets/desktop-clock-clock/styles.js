@@ -34,13 +34,21 @@ export default function styles(theme, props) {
     right: px(cx - s / 2),
     bottom: px(cy - s / 2),
     transform: `scale(${scale})`,
-    transition: '1.0s ease-out',
+    //? 'transition': '1.0s ease-out',
+    transition: '1s ease-out',
+  };
+
+  const desktopClockClockHidden = {
+    ...desktopClockClock,
+    right: px(-s * 1.2),
+    transition: '0.3s ease-out', // transition for hidden to bottom
   };
 
   /******************************************************************************/
 
   return {
     desktopClockClock,
+    desktopClockClockHidden,
   };
 }
 
