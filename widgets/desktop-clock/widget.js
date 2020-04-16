@@ -261,15 +261,6 @@ export default class DesktopClock extends Widget {
     const list = [
       {
         glyph:
-          this.clockMode === 'fix' ? 'regular/dot-circle' : 'regular/circle',
-        text: T('Mode fixe'),
-        action: () => {
-          this.showMenuSize = false;
-          this.clockMode = 'fix';
-        },
-      },
-      {
-        glyph:
           this.clockMode === 'stealth'
             ? 'regular/dot-circle'
             : 'regular/circle',
@@ -277,6 +268,15 @@ export default class DesktopClock extends Widget {
         action: () => {
           this.showMenuSize = false;
           this.clockMode = 'stealth';
+        },
+      },
+      {
+        glyph:
+          this.clockMode === 'fix' ? 'regular/dot-circle' : 'regular/circle',
+        text: T('Mode fixe'),
+        action: () => {
+          this.showMenuSize = false;
+          this.clockMode = 'fix';
         },
       },
       {
