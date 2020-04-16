@@ -322,7 +322,12 @@ export default class DesktopClock extends Widget {
         onSelect={(look) => {
           this.showMenuLook = false;
           this.clockLook = look;
-          this.clockMode = ['ring', 'transparent', 'light'].includes(look)
+          this.clockMode = [
+            'ring',
+            'transparent',
+            'light',
+            'discreet',
+          ].includes(look)
             ? 'fix'
             : 'stealth';
         }}
