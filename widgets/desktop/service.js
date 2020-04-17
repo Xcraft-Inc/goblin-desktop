@@ -808,6 +808,14 @@ Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
 
 /******************************************************************************/
 
+Goblin.registerQuest(goblinName, 'open-entity-wizard', function* (quest) {
+  yield quest.me.addWorkitem({
+    workitem: {name: 'open-entity-wizard', kind: 'dialog'},
+  });
+});
+
+/******************************************************************************/
+
 Goblin.registerQuest(goblinName, 'delete', function (quest) {
   quest.log.info('Deleting desktop...');
 });

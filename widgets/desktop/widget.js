@@ -2,8 +2,8 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import importer from 'goblin_importer';
+import MouseTrap from 'mousetrap';
 import Container from 'goblin-gadgets/widgets/container/widget';
-import AnalogClock from 'goblin-gadgets/widgets/analog-clock/widget';
 import DesktopTaskbar from 'goblin-desktop/widgets/desktop-taskbar/widget';
 import DesktopTopbar from 'goblin-desktop/widgets/desktop-topbar/widget';
 import DesktopNotifications from 'goblin-desktop/widgets/desktop-notifications/widget';
@@ -23,19 +23,25 @@ export default class Desktop extends Widget {
     };
 
     this.toggleFooter = this.toggleFooter.bind(this);
+    this.openWorkitemWizard = this.openWorkitemWizard.bind(this);
+  }
+
+  openWorkitemWizard() {
+    this.do('open-entity-wizard');
   }
 
   componentDidMount() {
     super.componentDidMount();
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
+    MouseTrap.bind('ctrl+o', this.openWorkitemWizard);
   }
 
   componentWillUnmount() {
     super.componentWillUnmount();
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
-    clearInterval(this.timer);
+    MouseTrap.unbind('ctrl+o', this.openWorkitemWizard);
   }
 
   //#region get/set
