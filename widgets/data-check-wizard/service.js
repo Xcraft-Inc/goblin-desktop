@@ -1,6 +1,7 @@
 'use strict';
 
 const T = require('goblin-nabu');
+const watt = require('gigawatts');
 const {buildWizard} = require('goblin-desktop');
 const workshopConfig = require('xcraft-core-etc')().load('goblin-workshop');
 const DataCheckHelpers = require('../helpers/data-check-helpers');
@@ -201,7 +202,7 @@ const config = {
         const desktopId = quest.getDesktop();
         const desktop = quest.getAPI(desktopId).noThrow();
 
-        for (const entityType of form.selectedEntities) {
+        const checkType = watt(function* (entityType, next) {
           const schemaAPI = quest.getAPI(`entity-schema@${entityType}`);
           const countErrors = yield schemaAPI.checkEntities({
             desktopId,
@@ -216,8 +217,11 @@ const config = {
             countErrors,
             r.cleaning
           );
+        });
+        for (const entityType of form.selectedEntities) {
+          checkType(entityType, next.parallel());
         }
-
+        yield next.sync();
         yield* addFinalNotification(quest, desktop, form, r.cleaning);
         yield quest.me.next();
       },
