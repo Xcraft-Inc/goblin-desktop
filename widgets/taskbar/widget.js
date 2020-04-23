@@ -11,6 +11,8 @@ const tasksImporter = importer('tasks');
 class Taskbar extends Widget {
   constructor() {
     super(...arguments);
+    this.runApp = this.runApp.bind(this);
+    this.runWorkitem = this.runWorkitem.bind(this);
   }
 
   static get wiring() {
@@ -20,22 +22,46 @@ class Taskbar extends Widget {
     };
   }
 
+  runApp(app) {
+    this.do('run-app', {
+      app,
+    });
+  }
+
+  runWorkitem(workitem, context) {
+    this.do('run-workitem', {
+      workitem,
+      context,
+    });
+  }
+
   renderButton(context, task, index) {
-    return (
-      <Button
-        key={index}
-        kind="task-bar"
-        text={task.text}
-        glyph={task.glyph}
-        tooltip={task.workitem.description}
-        onClick={() =>
-          this.do('run', {
-            workitem: task.workitem,
-            contextId: context,
-          })
-        }
-      />
-    );
+    if (task.workitem) {
+      const runWorkitem = () => this.runWorkitem(task.workitem, task.context);
+      return (
+        <Button
+          key={index}
+          kind="task-bar"
+          text={task.text}
+          glyph={task.glyph}
+          tooltip={task.workitem.description}
+          onClick={runWorkitem}
+        />
+      );
+    }
+    if (task.app) {
+      const runApp = () => this.runApp(task.app);
+      return (
+        <Button
+          key={index}
+          kind="task-bar"
+          text={task.text}
+          glyph={task.glyph}
+          tooltip={task.app.description}
+          onClick={runApp}
+        />
+      );
+    }
   }
 
   renderSeparator(index) {
