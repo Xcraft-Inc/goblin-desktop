@@ -36,6 +36,7 @@ export default class DesktopClock extends Widget {
         ? this.context.theme.look.clockParams.initialLook
         : null,
       clockMode: 'stealth',
+      clockDigital: false,
       mouseInClock: false,
       showMenuSize: false,
       showMenuLook: false,
@@ -46,7 +47,6 @@ export default class DesktopClock extends Widget {
   get showClock() {
     return this.state.showClock;
   }
-
   set showClock(value) {
     this.setState({
       showClock: value,
@@ -56,7 +56,6 @@ export default class DesktopClock extends Widget {
   get clockSize() {
     return this.state.clockSize;
   }
-
   set clockSize(value) {
     this.setState({
       clockSize: value,
@@ -66,7 +65,6 @@ export default class DesktopClock extends Widget {
   get clockLook() {
     return this.state.clockLook;
   }
-
   set clockLook(value) {
     this.setState({
       clockLook: value,
@@ -76,17 +74,24 @@ export default class DesktopClock extends Widget {
   get clockMode() {
     return this.state.clockMode;
   }
-
   set clockMode(value) {
     this.setState({
       clockMode: value,
     });
   }
 
+  get clockDigital() {
+    return this.state.clockDigital;
+  }
+  set clockDigital(value) {
+    this.setState({
+      clockDigital: value,
+    });
+  }
+
   get mouseInClock() {
     return this.state.mouseInClock;
   }
-
   set mouseInClock(value) {
     this.setState({
       mouseInClock: value,
@@ -96,7 +101,6 @@ export default class DesktopClock extends Widget {
   get showMenuSize() {
     return this.state.showMenuSize;
   }
-
   set showMenuSize(value) {
     this.setState({
       showMenuSize: value,
@@ -106,7 +110,6 @@ export default class DesktopClock extends Widget {
   get showMenuLook() {
     return this.state.showMenuLook;
   }
-
   set showMenuLook(value) {
     this.setState({
       showMenuLook: value,
@@ -155,6 +158,7 @@ export default class DesktopClock extends Widget {
         size={this.clockSize}
         look={this.clockLook}
         mode={this.clockMode}
+        digital={this.clockDigital}
         showClock={this.showClock}
         onClick={this.toggleClock}
         mouseOver={this.clockMouseOver}
@@ -277,6 +281,18 @@ export default class DesktopClock extends Widget {
         action: () => {
           this.showMenuSize = false;
           this.clockMode = 'fix';
+        },
+      },
+      {
+        separator: true,
+        kind: 'menu-line',
+      },
+      {
+        glyph: this.clockDigital ? 'solid/check' : 'solid/times',
+        text: T('Digital'),
+        action: () => {
+          this.showMenuSize = false;
+          this.clockDigital = !this.clockDigital;
         },
       },
       {

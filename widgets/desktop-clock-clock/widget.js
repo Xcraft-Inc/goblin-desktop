@@ -82,6 +82,7 @@ export default class DesktopClockClock extends Widget {
           size={this.props.size}
           look={this.props.look}
           limit={this.props.showClock ? 1 : 3}
+          digitalTime={this.props.digital}
           transition="1.0s ease-out"
           mouseOver={this.props.mouseOver}
           mouseOut={this.props.mouseOut}
