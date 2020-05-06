@@ -17,32 +17,25 @@ class Tabs extends Widget {
       id: 'id',
       tabs: 'tabs',
       desktopId: 'desktopId',
-      current: 'current',
     };
   }
 
   navToWorkItem(contextId, view, workitemId) {
-    this.nav(`/${contextId}/${view}?wid=${workitemId}`);
     this.cmd('desktop.nav-to-workitem', {
       id: this.props.desktopId,
       contextId,
       view,
       workitemId,
-      skipNav: true,
+      skipNav: false,
+      currentLocation: this.getRouting().get('location'),
     });
   }
 
-  navToContext(contextId) {
-    this.nav(`/${contextId}/?wid=null`);
-  }
-
   goToWorkItem(contextId, view, workitemId) {
-    this.do('set-current', {contextId, workitemId});
     this.navToWorkItem(contextId, view, workitemId);
   }
 
   clearWorkitem(contextId) {
-    this.do('set-current', {contextId, workitemId: null});
     this.cmd('desktop.clear-workitem', {
       id: this.props.desktopId,
       contextId,
@@ -50,12 +43,7 @@ class Tabs extends Widget {
   }
 
   render() {
-    const {context, current, tabs, desktopId} = this.props;
-
-    let currentTab = null;
-    if (current) {
-      currentTab = current.get(context, null);
-    }
+    const {context, currentTab, tabs, desktopId} = this.props;
 
     const WiredNotificationsButton = wireNotifsButton(desktopId);
 
@@ -174,4 +162,11 @@ class Tabs extends Widget {
   }
 }
 
-export default Widget.Wired(Tabs)();
+const TabsWithCurrent = Widget.connect((state, props) => {
+  const currentTab = state.get(
+    `backend.${props.desktopId}.current.workitems.${props.context}`
+  );
+  return {currentTab};
+})(Tabs);
+
+export default Widget.Wired(TabsWithCurrent)();

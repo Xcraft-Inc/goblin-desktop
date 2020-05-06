@@ -10,6 +10,7 @@ const xUtils = require('xcraft-core-utils');
 const locks = require('xcraft-core-utils/lib/locks');
 const {getFileFilter} = xUtils.files;
 const T = require('goblin-nabu/widgets/helpers/t.js');
+const {getParameter} = require('goblin-laboratory/lib/helpers.js');
 
 // Default route/view mapping
 // /mountpoint/:context/:view/:hinter
@@ -488,12 +489,14 @@ Goblin.registerQuest(goblinName, 'get-current-context', function (quest) {
 /******************************************************************************/
 
 const navLock = locks.getMutex;
+const questLock = (quest) => `${quest.questName}/${quest.goblin.id}`;
+
 Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   quest,
   contextId,
   currentLocation
 ) {
-  yield navLock.lock('nav-to-context');
+  yield navLock.lock(questLock(quest));
   const contextsAPI = quest.getAPI(`contexts@${quest.goblin.id}`);
   const state = quest.goblin.getState();
   const location = state.get(`current.location.${contextId}`, null);
@@ -522,37 +525,65 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
     contextId,
   });
   yield quest.doSync();
-  navLock.unlock('nav-to-context');
+  navLock.unlock(questLock(quest));
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'nav-to-workitem', function (
+Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
   quest,
   contextId,
   view,
   workitemId,
-  skipNav
+  skipNav,
+  currentLocation
 ) {
+  yield navLock.lock(questLock(quest));
+  const state = quest.goblin.getState();
+
   if (!contextId) {
-    contextId = quest.goblin.GetState().get(`current.workcontext`, null);
+    contextId = state.get(`current.workcontext`, null);
   }
+
   quest.dispatch('setCurrentWorkitemByContext', {contextId, view, workitemId});
-  const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
-  tabs.setCurrent({contextId, workitemId});
-  if (skipNav) {
-    return;
+
+  if (!skipNav) {
+    const location = state.get(`current.location.${contextId}`, null);
+    if (currentLocation) {
+      quest.dispatch('setCurrentLocationByWorkitem', {
+        path: currentLocation.get('pathname'),
+        hash: currentLocation.get('hash'),
+        search: currentLocation.get('search'),
+      });
+    }
+
+    let route = `/${contextId}/${view}?wid=${workitemId}`;
+
+    if (location) {
+      const search = location.get('search');
+      const wid = getParameter(search, 'wid');
+
+      if (workitemId === wid) {
+        const path = location.get('path');
+        const hash = location.get('hash');
+        route = `${path}${search}${hash}`;
+      }
+    }
+    quest.evt(`nav.requested`, {
+      route,
+    });
   }
-  quest.evt(`nav.requested`, {
-    route: `/${contextId}/${view}?wid=${workitemId}`,
-  });
+
+  navLock.unlock(questLock(quest));
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function (quest) {
+Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function* (quest) {
+  yield navLock.lock(questLock(quest));
   const last = quest.goblin.getState().get('last');
   if (!last) {
+    navLock.unlock(questLock(quest));
     return;
   }
 
@@ -565,12 +596,11 @@ Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function (quest) {
       view,
       workitemId,
     });
-    const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
-    tabs.setCurrent({contextId, workitemId});
     quest.evt(`nav.requested`, {
       route: `/${contextId}/${view}?wid=${workitemId}`,
     });
   }
+  navLock.unlock(questLock(quest));
 });
 
 /******************************************************************************/

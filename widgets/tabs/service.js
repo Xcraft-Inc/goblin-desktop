@@ -18,14 +18,6 @@ Goblin.registerQuest(goblinName, 'create', function (quest, id, desktopId) {
 
 Goblin.registerQuest(goblinName, 'delete', function (quest) {});
 
-Goblin.registerQuest(goblinName, 'set-current', function (
-  quest,
-  contextId,
-  workitemId
-) {
-  quest.do({contextId, workitemId});
-});
-
 Goblin.registerQuest(goblinName, 'add', function (quest, workitemId) {
   quest.do({
     tabId: workitemId,
