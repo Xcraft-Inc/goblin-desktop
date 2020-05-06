@@ -7,6 +7,7 @@ const uuidV4 = require('uuid/v4');
 const goblinName = path.basename(module.parent.filename, '.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
 const xUtils = require('xcraft-core-utils');
+const locks = require('xcraft-core-utils/lib/locks');
 const {getFileFilter} = xUtils.files;
 const T = require('goblin-nabu/widgets/helpers/t.js');
 
@@ -486,11 +487,13 @@ Goblin.registerQuest(goblinName, 'get-current-context', function (quest) {
 
 /******************************************************************************/
 
+const navLock = locks.getMutex;
 Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   quest,
   contextId,
   currentLocation
 ) {
+  yield navLock.lock('nav-to-context');
   const contextsAPI = quest.getAPI(`contexts@${quest.goblin.id}`);
   const state = quest.goblin.getState();
   const location = state.get(`current.location.${contextId}`, null);
@@ -518,8 +521,8 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   yield contextsAPI.setCurrent({
     contextId,
   });
-
-  quest.do();
+  yield quest.doSync();
+  navLock.unlock('nav-to-context');
 });
 
 /******************************************************************************/
