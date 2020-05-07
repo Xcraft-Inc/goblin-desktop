@@ -71,7 +71,6 @@ Goblin.registerQuest(goblinName, 'run-app', function* (quest, app) {
 
 Goblin.registerQuest(goblinName, 'run-workitem', function* (
   quest,
-  app,
   workitem,
   contextId,
   currentLocation
