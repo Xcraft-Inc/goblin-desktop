@@ -82,7 +82,18 @@ module.exports = {
   },
   'remove-workitem': (state, action) => {
     const wid = action.get('widgetId');
-    return state.del(`workitems.${wid}`).del(`current.location.${wid}`);
+    state = state.del(`workitems.${wid}`).del(`current.location.${wid}`);
+    const last = state.get('last.workitem');
+    const workcontext = state.get('current.workcontext');
+    const current = state.get(`current.workitems.${workcontext}`);
+    if (last === wid) {
+      state = state.set('last.workitem', null).set('last.view', null);
+    }
+    if (current === wid) {
+      state = state.set(`current.workitems.${workcontext}`, null);
+      state = state.set(`current.views.${workcontext}`, null);
+    }
+    return state;
   },
   'change-team': (state, action) => {
     return state.set('teamId', action.get('teamId'));

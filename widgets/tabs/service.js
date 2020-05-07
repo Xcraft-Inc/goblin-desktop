@@ -16,8 +16,6 @@ Goblin.registerQuest(goblinName, 'create', function (quest, id, desktopId) {
   return quest.goblin.id;
 });
 
-Goblin.registerQuest(goblinName, 'delete', function (quest) {});
-
 Goblin.registerQuest(goblinName, 'add', function (quest, workitemId) {
   quest.do({
     tabId: workitemId,
@@ -35,63 +33,33 @@ Goblin.registerQuest(goblinName, 'remove', function* (
 ) {
   const desktopId = quest.getDesktop();
   const deskAPI = quest.getAPI(desktopId);
-  const wi = quest.getAPI(workitemId);
-  let closed = false;
+
   try {
-    if (close && wi) {
-      if (wi.close) {
-        yield wi.close({kind: 'terminate', desktopId});
-        closed = true;
-      } else {
-        const nameId = workitemId.split('@');
-        yield deskAPI.removeWorkitem({
-          workitem: {
-            id: workitemId.replace(nameId[0] + '@', ''),
-            name: nameId[0],
-            kind: 'tab',
-            contextId: contextId,
-          },
-          close: false,
-        });
-      }
-    }
+    const nameId = workitemId.split('@');
+    yield deskAPI.removeWorkitem({
+      workitem: {
+        id: workitemId.replace(nameId[0] + '@', ''),
+        name: nameId[0],
+        kind: 'tab',
+        contextId: contextId,
+      },
+      close,
+      navToLastWorkitem,
+    });
   } catch (ex) {
     quest.log.warn(ex.message || ex.stack || ex);
   }
 
-  if (tabId) {
-    quest.do();
-  }
+  yield quest.me.clean({contextId, tabId});
 
   quest.evt('removed', {workitemId});
-
-  if (closed) {
-    return;
-  }
-  const desk = quest.getAPI(desktopId);
-  yield desk.cleanWorkitem({workitemId});
-
-  if (navToLastWorkitem) {
-    yield desk.navToLastWorkitem();
-  } else {
-    // Navigate last tab
-    const contextTabs = quest.goblin.getState().get(`tabs.${contextId}`);
-    if (!contextTabs) {
-      return;
-    }
-    const newLast = contextTabs.state.last();
-
-    if (newLast) {
-      yield desk.navToWorkitem({
-        contextId: contextId,
-        view: newLast.get('view'),
-        workitemId: newLast.get('workitemId'),
-      });
-    } else {
-      yield desk.clearWorkitem({contextId});
-    }
-  }
 });
+
+Goblin.registerQuest(goblinName, 'clean', function* (quest, tabId, contextId) {
+  yield quest.doSync({tabId, contextId});
+});
+
+Goblin.registerQuest(goblinName, 'delete', function (quest) {});
 
 // Create a Goblin with initial state and handlers
 module.exports = Goblin.configure(goblinName, logicState, logicHandlers);

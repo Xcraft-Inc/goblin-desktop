@@ -22,7 +22,7 @@ module.exports = {
     };
     return state.set(`tabs.${contextId}.${tabId}`, tab);
   },
-  remove: (state, action) => {
+  clean: (state, action) => {
     const tabId = action.get('tabId');
     const contextId = action.get('contextId');
     return state.del(`tabs.${contextId}.${tabId}`);

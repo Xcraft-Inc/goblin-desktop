@@ -62,6 +62,7 @@ class Tabs extends Widget {
             const show = closable;
             const name = v.get('name');
             const entityId = v.get('entityId');
+            const tabIsActive = currentTab === wid;
             if (entityId) {
               const Loader = (props) => {
                 if (props.loaded) {
@@ -73,7 +74,7 @@ class Tabs extends Widget {
                       onClick={() =>
                         this.goToWorkItem(context, v.get('view'), wid)
                       }
-                      active={currentTab === wid}
+                      active={tabIsActive}
                     />
                   );
                 } else {
@@ -85,7 +86,7 @@ class Tabs extends Widget {
                       onClick={() =>
                         this.goToWorkItem(context, v.get('view'), wid)
                       }
-                      active={currentTab === wid}
+                      active={tabIsActive}
                     />
                   );
                 }
@@ -117,9 +118,10 @@ class Tabs extends Widget {
                         contextId: context,
                         workitemId: wid,
                         close: true,
+                        navToLastWorkitem: tabIsActive,
                       });
                     }}
-                    active={currentTab === wid}
+                    active={tabIsActive}
                   />
                 </Container>
               );
@@ -133,7 +135,7 @@ class Tabs extends Widget {
                     onClick={() =>
                       this.goToWorkItem(context, v.get('view'), wid)
                     }
-                    active={currentTab === wid}
+                    active={tabIsActive}
                   />
                   <Button
                     glyph="solid/times"
@@ -145,9 +147,10 @@ class Tabs extends Widget {
                         contextId: context,
                         workitemId: wid,
                         close: true,
+                        navToLastWorkitem: tabIsActive,
                       });
                     }}
-                    active={currentTab === wid}
+                    active={tabIsActive}
                   />
                 </Container>
               );
