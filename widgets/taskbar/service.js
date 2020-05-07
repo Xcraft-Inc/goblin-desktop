@@ -73,14 +73,15 @@ Goblin.registerQuest(goblinName, 'run-workitem', function* (
   quest,
   app,
   workitem,
-  contextId
+  contextId,
+  currentLocation
 ) {
   const desk = quest.getAPI(quest.goblin.getX('desktopId'));
 
   workitem.id = uuidV4();
   workitem.isDone = false;
   workitem.contextId = contextId;
-  return yield desk.addWorkitem({workitem, navigate: true});
+  return yield desk.addWorkitem({workitem, currentLocation, navigate: true});
 });
 
 // Create a Goblin with initial state and handlers

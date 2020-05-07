@@ -32,6 +32,7 @@ class Taskbar extends Widget {
     this.do('run-workitem', {
       workitem,
       context,
+      currentLocation: this.getRouting().get('location'),
     });
   }
 

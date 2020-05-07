@@ -179,7 +179,7 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function* (
 Goblin.registerQuest(
   goblinName,
   'add-workitem',
-  function* (quest, workitem, navigate) {
+  function* (quest, workitem, currentLocation, navigate) {
     const desk = quest.me;
 
     if (!workitem.payload) {
@@ -294,6 +294,7 @@ Goblin.registerQuest(
           glyph: workitem.icon,
           closable: true,
           navigate: !!navigate,
+          currentLocation,
         });
         quest.do({widgetId, tabId: widgetId});
         break;
@@ -341,7 +342,8 @@ Goblin.registerQuest(goblinName, 'add-tab', function* (
   entityId,
   closable,
   glyph,
-  navigate
+  navigate,
+  currentLocation
 ) {
   const state = quest.goblin.getState();
   if (!contextId) {
@@ -376,6 +378,7 @@ Goblin.registerQuest(goblinName, 'add-tab', function* (
       contextId,
       view,
       workitemId,
+      currentLocation,
     });
   }
   return tabId;
@@ -545,29 +548,27 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
     contextId = state.get(`current.workcontext`, null);
   }
 
+  //save current loc if provided
+  if (currentLocation) {
+    quest.dispatch('setCurrentLocationByWorkitem', {
+      path: currentLocation.get('pathname'),
+      hash: currentLocation.get('hash'),
+      search: currentLocation.get('search'),
+    });
+  }
+
+  //set new current workitem
   quest.dispatch('setCurrentWorkitemByContext', {contextId, view, workitemId});
 
   if (!skipNav) {
-    const location = state.get(`current.location.${contextId}`, null);
-    if (currentLocation) {
-      quest.dispatch('setCurrentLocationByContext', {
-        path: currentLocation.get('pathname'),
-        hash: currentLocation.get('hash'),
-        search: currentLocation.get('search'),
-      });
-    }
-
     let route = `/${contextId}/${view}?wid=${workitemId}`;
 
+    const location = state.get(`current.location.${workitemId}`, null);
     if (location) {
       const search = location.get('search');
-      const wid = getParameter(search, 'wid');
-
-      if (workitemId === wid) {
-        const path = location.get('path');
-        const hash = location.get('hash');
-        route = `${path}${search}${hash}`;
-      }
+      const path = location.get('path');
+      const hash = location.get('hash');
+      route = `${path}${search}${hash}`;
     }
     quest.evt(`nav.requested`, {
       route,
@@ -581,7 +582,8 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
 
 Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function* (quest) {
   yield navLock.lock(questLock(quest));
-  const last = quest.goblin.getState().get('last');
+  const state = quest.goblin.getState();
+  const last = state.get('last');
   if (!last) {
     navLock.unlock(questLock(quest));
     return;
@@ -596,8 +598,19 @@ Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function* (quest) {
       view,
       workitemId,
     });
+
+    let route = `/${contextId}/${view}?wid = ${workitemId}`;
+
+    const location = state.get(`current.location.${workitemId}`, null);
+    if (location) {
+      const search = location.get('search');
+      const path = location.get('path');
+      const hash = location.get('hash');
+      route = `${path}${search}${hash}`;
+    }
+
     quest.evt(`nav.requested`, {
-      route: `/${contextId}/${view}?wid=${workitemId}`,
+      route,
     });
   }
   navLock.unlock(questLock(quest));

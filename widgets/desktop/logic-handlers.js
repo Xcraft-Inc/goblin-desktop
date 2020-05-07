@@ -81,11 +81,13 @@ module.exports = {
     });
   },
   'remove-workitem': (state, action) => {
-    return state.del(`workitems.${action.get('widgetId')}`);
+    const wid = action.get('widgetId');
+    return state.del(`workitems.${wid}`).del(`current.location.${wid}`);
   },
   'change-team': (state, action) => {
     return state.set('teamId', action.get('teamId'));
   },
+
   'setCurrentWorkitemByContext': (state, action) => {
     const lastWorkcontext = state.get('current.workcontext');
     const lastWorkitem = state.get(`current.workitems.${lastWorkcontext}`);
@@ -108,6 +110,16 @@ module.exports = {
   'setCurrentLocationByContext': (state, action) => {
     const lastWorkcontext = state.get('current.workcontext');
     return state.set(`current.location.${lastWorkcontext}`, {
+      path: action.get('path'),
+      search: action.get('search'),
+      hash: action.get('hash'),
+    });
+  },
+
+  'setCurrentLocationByWorkitem': (state, action) => {
+    const currentContext = state.get('current.workcontext');
+    const currentWorkitem = state.get(`current.workitems.${currentContext}`);
+    return state.set(`current.location.${currentWorkitem}`, {
       path: action.get('path'),
       search: action.get('search'),
       hash: action.get('hash'),
