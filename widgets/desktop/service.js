@@ -550,7 +550,7 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
   if (!skipNav) {
     const location = state.get(`current.location.${contextId}`, null);
     if (currentLocation) {
-      quest.dispatch('setCurrentLocationByWorkitem', {
+      quest.dispatch('setCurrentLocationByContext', {
         path: currentLocation.get('pathname'),
         hash: currentLocation.get('hash'),
         search: currentLocation.get('search'),
