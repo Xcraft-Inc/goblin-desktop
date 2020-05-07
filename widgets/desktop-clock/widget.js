@@ -15,7 +15,7 @@ import T from 't';
 
 /******************************************************************************/
 
-export default class DesktopClock extends Widget {
+class DesktopClock extends Widget {
   constructor() {
     super(...arguments);
     this.styles = styles;
@@ -26,17 +26,6 @@ export default class DesktopClock extends Widget {
     this.clockMouseOut = this.clockMouseOut.bind(this);
 
     this.state = {
-      showClock: this.context.theme.look.clockParams
-        ? this.context.theme.look.clockParams.initialVisibility
-        : false,
-      clockSize: this.context.theme.look.clockParams
-        ? this.context.theme.look.clockParams.size
-        : null,
-      clockLook: this.context.theme.look.clockParams
-        ? this.context.theme.look.clockParams.initialLook
-        : null,
-      clockMode: 'stealth',
-      clockDigital: false,
       mouseInClock: false,
       showMenuSize: false,
       showMenuLook: false,
@@ -44,51 +33,6 @@ export default class DesktopClock extends Widget {
   }
 
   //#region get/set
-  get showClock() {
-    return this.state.showClock;
-  }
-  set showClock(value) {
-    this.setState({
-      showClock: value,
-    });
-  }
-
-  get clockSize() {
-    return this.state.clockSize;
-  }
-  set clockSize(value) {
-    this.setState({
-      clockSize: value,
-    });
-  }
-
-  get clockLook() {
-    return this.state.clockLook;
-  }
-  set clockLook(value) {
-    this.setState({
-      clockLook: value,
-    });
-  }
-
-  get clockMode() {
-    return this.state.clockMode;
-  }
-  set clockMode(value) {
-    this.setState({
-      clockMode: value,
-    });
-  }
-
-  get clockDigital() {
-    return this.state.clockDigital;
-  }
-  set clockDigital(value) {
-    this.setState({
-      clockDigital: value,
-    });
-  }
-
   get mouseInClock() {
     return this.state.mouseInClock;
   }
@@ -114,6 +58,74 @@ export default class DesktopClock extends Widget {
     this.setState({
       showMenuLook: value,
     });
+  }
+  //#endregion
+
+  //#region state in user session
+  getClockState(key, def) {
+    if (this.props.desktopClockState) {
+      return this.props.desktopClockState.get(key, def);
+    } else {
+      return def;
+    }
+  }
+
+  changeClockState(clockState) {
+    const currentState = this.props.desktopClockState
+      ? this.props.desktopClockState.toJS()
+      : {};
+    const newState = {...currentState, ...clockState};
+    this.doFor(this.props.clientSessionId, 'set-desktop-clock', {
+      theme: this.context.theme.name,
+      state: newState,
+    });
+  }
+
+  get showClock() {
+    const def = this.context.theme.look.clockParams
+      ? this.context.theme.look.clockParams.initialVisibility
+      : false;
+    return this.getClockState('show', def);
+  }
+  set showClock(value) {
+    this.changeClockState({show: value});
+  }
+
+  get clockSize() {
+    const def = this.context.theme.look.clockParams
+      ? this.context.theme.look.clockParams.size
+      : null;
+    return this.getClockState('size', def);
+  }
+  set clockSize(value) {
+    this.changeClockState({size: value});
+  }
+
+  get clockLook() {
+    const def = this.context.theme.look.clockParams
+      ? this.context.theme.look.clockParams.initialLook
+      : null;
+    return this.getClockState('look', def);
+  }
+  set clockLook(value) {
+    const mode = ['ring', 'transparent', 'light', 'discreet'].includes(value)
+      ? 'fix'
+      : 'stealth';
+    this.changeClockState({look: value, mode});
+  }
+
+  get clockMode() {
+    return this.getClockState('mode', 'stealth');
+  }
+  set clockMode(value) {
+    this.changeClockState({mode: value});
+  }
+
+  get clockDigital() {
+    return this.getClockState('digital', false);
+  }
+  set clockDigital(value) {
+    this.changeClockState({digital: value});
   }
   //#endregion
 
@@ -338,14 +350,6 @@ export default class DesktopClock extends Widget {
         onSelect={(look) => {
           this.showMenuLook = false;
           this.clockLook = look;
-          this.clockMode = [
-            'ring',
-            'transparent',
-            'light',
-            'discreet',
-          ].includes(look)
-            ? 'fix'
-            : 'stealth';
         }}
         onClose={() => (this.showMenuLook = false)}
       />
@@ -369,3 +373,12 @@ export default class DesktopClock extends Widget {
 }
 
 /******************************************************************************/
+
+export default Widget.connect((state) => {
+  const userSession = Widget.getUserSession(state);
+  const clientSessionId = userSession.get('id');
+  const theme = userSession.get('theme') || 'default';
+  const desktopClockState = userSession.get(`desktopClock.${theme}`);
+
+  return {clientSessionId, desktopClockState};
+})(DesktopClock);
