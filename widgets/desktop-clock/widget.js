@@ -213,7 +213,7 @@ class DesktopClock extends Widget {
           kind="round"
           width="36px"
           height="36px"
-          glyph={this.showClock ? 'solid/ellipsis-h' : null}
+          glyph={this.showClock ? 'regular/clock' : null}
           onClick={
             this.showClock ? () => (this.showMenuLook = true) : this.toggleClock
           }
@@ -237,13 +237,13 @@ class DesktopClock extends Widget {
             className={this.styles.classNames.simpleButton}
             onClick={() => (this.showMenuSize = true)}
           >
-            <FontAwesomeIcon icon={['fas', 'circle']} />
+            <FontAwesomeIcon icon={['fas', 'ellipsis-v']} />
           </div>
           <div
             className={this.styles.classNames.simpleButton}
             onClick={() => (this.showMenuLook = true)}
           >
-            <FontAwesomeIcon icon={['fas', 'ellipsis-h']} />
+            <FontAwesomeIcon icon={['far', 'clock']} />
           </div>
         </React.Fragment>
       );
