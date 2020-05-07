@@ -8,6 +8,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 export default class EntityRowButton extends Widget {
   constructor() {
     super(...arguments);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    this.props.onClick();
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   render() {
@@ -39,7 +46,7 @@ export default class EntityRowButton extends Widget {
         className={this.styles.classNames.entityRowButton}
         workitemId={this.context.desktopId || this.getNearestId()}
         title={this.props.tooltip}
-        onClick={this.props.onClick}
+        onClick={this.handleClick}
       >
         <FontAwesomeIcon icon={[`fa${prefix}`, glyph]} />
       </TranslatableDiv>
