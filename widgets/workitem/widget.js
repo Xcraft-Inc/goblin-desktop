@@ -82,7 +82,11 @@ class Workitem extends Form {
   onEdit() {
     const entity = this.getEntityById(this.props.entityId);
     if (entity) {
-      this.doAs(this.service, 'edit', {entity, desktopId: this.desktopId});
+      this.doAs(this.service, 'edit', {
+        entity,
+        desktopId: this.desktopId,
+        currentLocation: this.getRouting().get('location'),
+      });
     }
   }
 
