@@ -87,11 +87,22 @@ module.exports = {
   },
   'remove-workitem': (state, action) => {
     const wid = action.get('widgetId');
-
     const workcontext = state.get('current.workcontext');
 
     state = state.del(`workitems.${wid}`).del(`current.location.${wid}`);
     state = state.unpush(`workitemsByContext.${workcontext}`, wid);
+
+    const last = state.get(`last.workitem`);
+    if (last === wid) {
+      const newLast = state.get(`workitemsByContext.${workcontext}`).last();
+      if (newLast.state) {
+        state = state.set(`last.workitem`, newLast.state);
+        //TODO: handle last view
+      } else {
+        state = state.set(`last.workitem`, null);
+        state = state.set(`last.view`, null);
+      }
+    }
 
     return state;
   },
