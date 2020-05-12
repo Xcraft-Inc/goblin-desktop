@@ -27,7 +27,6 @@ class Tabs extends Widget {
       view,
       workitemId,
       skipNav: false,
-      currentLocation: this.getRouting().get('location'),
     });
   }
 

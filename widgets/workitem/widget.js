@@ -85,7 +85,6 @@ class Workitem extends Form {
       this.doAs(this.service, 'edit', {
         entity,
         desktopId: this.desktopId,
-        currentLocation: this.getRouting().get('location'),
       });
     }
   }

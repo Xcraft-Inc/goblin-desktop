@@ -42,7 +42,6 @@ class HinterNewButton extends Widget {
     const value = this.getModelValue(model, true);
     this.doAs('hinter', 'create-new', {
       value,
-      currentLocation: this.getRouting().get('location'),
     });
   }
 

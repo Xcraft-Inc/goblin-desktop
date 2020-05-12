@@ -868,9 +868,13 @@ Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'open-entity-wizard', function* (quest) {
+Goblin.registerQuest(goblinName, 'open-entity-wizard', function* (
+  quest,
+  currentLocation
+) {
   yield quest.me.addWorkitem({
     workitem: {name: 'open-entity-wizard', kind: 'dialog'},
+    currentLocation,
   });
 });
 
