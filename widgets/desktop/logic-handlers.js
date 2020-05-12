@@ -15,6 +15,7 @@ module.exports = {
       current: {
         workitems: {},
       },
+      workitemsByContext: {},
     });
   },
   'add-context': (state, action) => {
@@ -76,23 +77,22 @@ module.exports = {
     return state.set('current.workcontext', action.get('contextId'));
   },
   'add-workitem': (state, action) => {
-    return state.set(`workitems.${action.get('widgetId')}`, {
-      tabId: action.get('tabId'),
-    });
+    const wid = action.get('widgetId');
+    const workcontext = state.get('current.workcontext');
+    return state
+      .set(`workitems.${wid}`, {
+        tabId: action.get('tabId'),
+      })
+      .push(`workitemsByContext.${workcontext}`, wid);
   },
   'remove-workitem': (state, action) => {
     const wid = action.get('widgetId');
-    state = state.del(`workitems.${wid}`).del(`current.location.${wid}`);
-    const last = state.get('last.workitem');
+
     const workcontext = state.get('current.workcontext');
-    const current = state.get(`current.workitems.${workcontext}`);
-    if (last === wid) {
-      state = state.set('last.workitem', null).set('last.view', null);
-    }
-    if (current === wid) {
-      state = state.set(`current.workitems.${workcontext}`, null);
-      state = state.set(`current.views.${workcontext}`, null);
-    }
+
+    state = state.del(`workitems.${wid}`).del(`current.location.${wid}`);
+    state = state.unpush(`workitemsByContext.${workcontext}`, wid);
+
     return state;
   },
   'change-team': (state, action) => {
