@@ -296,7 +296,7 @@ Goblin.registerQuest(
         break;
       }
       case 'dialog': {
-        yield desk.addDialog({dialogId: widgetId});
+        yield desk.addDialog({dialogId: widgetId, currentLocation});
         quest.do({widgetId, tabId: null});
         break;
       }
@@ -432,7 +432,19 @@ const buildDialogNavRequest = (state, newArg) => {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'add-dialog', function (quest, dialogId) {
+Goblin.registerQuest(goblinName, 'add-dialog', function (
+  quest,
+  dialogId,
+  currentLocation
+) {
+  //save current loc if provided
+  if (currentLocation) {
+    quest.dispatch('setCurrentLocationByWorkitem', {
+      path: currentLocation.get('pathname'),
+      hash: currentLocation.get('hash'),
+      search: currentLocation.get('search'),
+    });
+  }
   const state = quest.goblin.getState();
   quest.evt(`nav.requested`, {
     route: buildDialogNavRequest(state, `did=${dialogId}`),
