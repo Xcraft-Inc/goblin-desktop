@@ -528,14 +528,15 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   } else {
     route = `/${contextId}`;
   }
-  quest.evt(`nav.requested`, {
-    route,
-  });
 
   yield contextsAPI.setCurrent({
     contextId,
   });
   yield quest.doSync();
+
+  quest.evt(`nav.requested`, {
+    route,
+  });
   navLock.unlock(questLock(quest));
 });
 
