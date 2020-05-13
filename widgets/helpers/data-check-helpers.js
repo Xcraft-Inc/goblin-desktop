@@ -104,6 +104,13 @@ const items = [
     withoutTypes: true,
     dangerous: true,
   },
+  {
+    position: 'right',
+    option: 'apply-business-rules',
+    description: T(`Appliquer les règles métiers (si définies dans l'entité)`),
+    cleaning: true,
+    rules: true,
+  },
 ];
 
 function getCleaning(selectedTypes, form) {
