@@ -595,7 +595,8 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
 Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function* (quest) {
   yield navLock.lock(questLock(quest));
   const state = quest.goblin.getState();
-  const last = state.get('last');
+  const currentWorkcontext = state.get('current.workcontext');
+  const last = state.get(`last.${currentWorkcontext}`);
   if (!last) {
     navLock.unlock(questLock(quest));
     return;

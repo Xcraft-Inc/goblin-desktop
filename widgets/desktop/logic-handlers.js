@@ -16,6 +16,7 @@ module.exports = {
         workitems: {},
       },
       workitemsByContext: {},
+      last: {},
     });
   },
   'add-context': (state, action) => {
@@ -86,11 +87,11 @@ module.exports = {
       .push(`workitemsByContext.${workcontext}`, wid);
   },
   'add-dialog': (state) => {
-    const lastWorkcontext = state.get('current.workcontext');
-    const lastWorkitem = state.get(`current.workitems.${lastWorkcontext}`);
-    const lastView = state.get(`current.views.${lastWorkcontext}`);
-    return state.set('last', {
-      workcontext: lastWorkcontext,
+    const workcontext = state.get('current.workcontext');
+    const lastWorkitem = state.get(`current.workitems.${workcontext}`);
+    const lastView = state.get(`current.views.${workcontext}`);
+    return state.set(`last.${workcontext}`, {
+      workcontext: workcontext,
       workitem: lastWorkitem,
       view: lastView,
     });
@@ -102,15 +103,15 @@ module.exports = {
     state = state.del(`workitems.${wid}`).del(`current.location.${wid}`);
     state = state.unpush(`workitemsByContext.${workcontext}`, wid);
 
-    const last = state.get(`last.workitem`);
+    const last = state.get(`last.${workcontext}.workitem`);
     if (last === wid) {
       const newLast = state.get(`workitemsByContext.${workcontext}`).last();
       if (newLast.state) {
-        state = state.set(`last.workitem`, newLast.state);
+        state = state.set(`last.${workcontext}.workitem`, newLast.state);
         //TODO: handle last view
       } else {
-        state = state.set(`last.workitem`, null);
-        state = state.set(`last.view`, null);
+        state = state.set(`last.${workcontext}.workitem`, null);
+        state = state.set(`last.${workcontext}.view`, null);
       }
     }
 
@@ -136,15 +137,12 @@ module.exports = {
     const lastWorkcontext = state.get('current.workcontext');
     const lastWorkitem = state.get(`current.workitems.${lastWorkcontext}`);
     const lastView = state.get(`current.views.${lastWorkcontext}`);
-
+    const workcontext = action.get('contextId');
     return state
-      .set('current.workcontext', action.get('contextId'))
-      .set(
-        `current.workitems.${action.get('contextId')}`,
-        action.get('workitemId')
-      )
-      .set(`current.views.${action.get('contextId')}`, action.get('view'))
-      .set('last', {
+      .set('current.workcontext', workcontext)
+      .set(`current.workitems.${workcontext}`, action.get('workitemId'))
+      .set(`current.views.${workcontext}`, action.get('view'))
+      .set(`last.${workcontext}`, {
         workcontext: lastWorkcontext,
         workitem: lastWorkitem,
         view: lastView,
