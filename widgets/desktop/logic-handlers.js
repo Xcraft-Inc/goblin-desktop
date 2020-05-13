@@ -88,8 +88,8 @@ module.exports = {
   },
   'add-dialog': (state) => {
     const workcontext = state.get('current.workcontext');
-    const lastWorkitem = state.get(`current.workitems.${workcontext}`);
-    const lastView = state.get(`current.views.${workcontext}`);
+    const lastWorkitem = state.get(`current.workitems.${workcontext}`, null);
+    const lastView = state.get(`current.views.${workcontext}`, null);
     return state.set(`last.${workcontext}`, {
       workcontext: workcontext,
       workitem: lastWorkitem,
@@ -121,6 +121,7 @@ module.exports = {
       if (newLast.state) {
         state = state.set(`current.workitems.${workcontext}`, newLast.state);
         //TODO: handle current view
+        state = state.set(`current.views.${workcontext}`, null);
       } else {
         state = state.set(`current.workitems.${workcontext}`, null);
         state = state.set(`current.views.${workcontext}`, null);
@@ -161,6 +162,9 @@ module.exports = {
   'setCurrentLocationByWorkitem': (state, action) => {
     const currentContext = state.get('current.workcontext');
     const currentWorkitem = state.get(`current.workitems.${currentContext}`);
+    if (!currentWorkitem) {
+      return state;
+    }
     return state.set(`current.location.${currentWorkitem}`, {
       path: action.get('path'),
       search: action.get('search'),
