@@ -85,6 +85,16 @@ module.exports = {
       })
       .push(`workitemsByContext.${workcontext}`, wid);
   },
+  'add-dialog': (state) => {
+    const lastWorkcontext = state.get('current.workcontext');
+    const lastWorkitem = state.get(`current.workitems.${lastWorkcontext}`);
+    const lastView = state.get(`current.views.${lastWorkcontext}`);
+    return state.set('last', {
+      workcontext: lastWorkcontext,
+      workitem: lastWorkitem,
+      view: lastView,
+    });
+  },
   'remove-workitem': (state, action) => {
     const wid = action.get('widgetId');
     const workcontext = state.get('current.workcontext');
@@ -101,6 +111,18 @@ module.exports = {
       } else {
         state = state.set(`last.workitem`, null);
         state = state.set(`last.view`, null);
+      }
+    }
+
+    const currentWorkitem = state.get(`current.workitems.${workcontext}`);
+    if (currentWorkitem === wid) {
+      const newLast = state.get(`workitemsByContext.${workcontext}`).last();
+      if (newLast.state) {
+        state = state.set(`current.workitems.${workcontext}`, newLast.state);
+        //TODO: handle current view
+      } else {
+        state = state.set(`current.workitems.${workcontext}`, null);
+        state = state.set(`current.views.${workcontext}`, null);
       }
     }
 

@@ -272,10 +272,18 @@ module.exports = (config) => {
     quest.evt('done', {finished: true, result});
   });
 
-  Goblin.registerQuest(goblinName, 'cancel', function* (quest) {
+  Goblin.registerQuest(goblinName, 'cancel', function (quest, currentLocation) {
     const desktopId = quest.goblin.getX('desktopId');
-    const desk = quest.getAPI(desktopId);
-    yield desk.closeDialog({dialogId: quest.goblin.id});
+    const nameId = quest.goblin.id.split('@');
+    quest.evt(`${desktopId}.remove-workitem-requested`, {
+      workitem: {
+        id: quest.goblin.id.replace(nameId[0] + '@', ''),
+        name: nameId[0],
+      },
+      close: false,
+      navToLastWorkitem: true,
+      currentLocation,
+    });
     quest.evt('done', quest.cancel());
   });
 
