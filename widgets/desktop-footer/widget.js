@@ -3,6 +3,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import MouseTrap from 'mousetrap';
 import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
+import DesktopState from 'goblin-desktop/widgets/desktop-state/widget';
 import DesktopMonitors from 'goblin-desktop/widgets/desktop-monitors/widget';
 import DesktopClock from 'goblin-desktop/widgets/desktop-clock/widget';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
@@ -98,6 +99,7 @@ export default class DesktopFooter extends Widget {
         />
         <CommandsPrompt />
         <div className={this.styles.classNames.sajex} />
+        <DesktopState />
         <DesktopMonitors id={`activity-monitor@${this.props.id}`} />
         <DesktopClock />
       </div>
