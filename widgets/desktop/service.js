@@ -658,6 +658,12 @@ Goblin.registerQuest(goblinName, 'dispatch', function (quest, action) {
 
 /******************************************************************************/
 
+Goblin.registerQuest(goblinName, 'gamepad-changed', function (quest, gamepad) {
+  console.dir(gamepad.toJS());
+});
+
+/******************************************************************************/
+
 Goblin.registerQuest(goblinName, 'add-notification', function (
   quest,
   notificationId,
