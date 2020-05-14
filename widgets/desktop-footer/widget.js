@@ -6,6 +6,7 @@ import NabuToolbar from 'goblin-nabu/widgets/nabu-toolbar/widget';
 import DesktopState from 'goblin-desktop/widgets/desktop-state/widget';
 import DesktopMonitors from 'goblin-desktop/widgets/desktop-monitors/widget';
 import DesktopClock from 'goblin-desktop/widgets/desktop-clock/widget';
+import GamePads from 'goblin-desktop/widgets/gamepad/widget.js';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
 import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
 import IMG_GOBLIN from './goblin.png';
@@ -102,6 +103,7 @@ export default class DesktopFooter extends Widget {
         <DesktopState />
         <DesktopMonitors id={`activity-monitor@${this.props.id}`} />
         <DesktopClock />
+        <GamePads id={this.props.id} />
       </div>
     );
   }
