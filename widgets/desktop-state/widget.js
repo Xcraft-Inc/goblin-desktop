@@ -72,6 +72,7 @@ class DesktopState extends Widget {
           state={this.props.state}
           width="1000px"
           height="500px"
+          onClose={() => (this.showState = false)}
         />
       </div>
     );
@@ -106,7 +107,9 @@ class DesktopState extends Widget {
       return (
         <Button
           kind="button-footer"
-          width="80px"
+          width="120px"
+          glyph="light/radar"
+          glyphColor={this.showState ? '#0f0' : null}
           text={T('State')}
           onClick={this.onState}
         />
