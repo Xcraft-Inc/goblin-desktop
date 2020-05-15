@@ -770,6 +770,24 @@ Goblin.registerQuest(goblinName, 'set-notifications', function (quest, show) {
 
 /******************************************************************************/
 
+Goblin.registerQuest(goblinName, 'show-state-monitor', function (quest) {
+  quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'add-state-monitor', function (quest) {
+  quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'back-state-monitor', function (quest) {
+  quest.do();
+});
+
+Goblin.registerQuest(goblinName, 'forward-state-monitor', function (quest) {
+  quest.do();
+});
+
+/******************************************************************************/
+
 Goblin.registerQuest(goblinName, 'download-file', function (
   quest,
   filePath,

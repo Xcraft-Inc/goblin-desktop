@@ -11,6 +11,11 @@ module.exports = {
       onlyNews: false,
       notReadCount: 0,
       notifications: {},
+      showStateMonitor: false,
+      stateMonitorHistory: {
+        stack: [],
+        index: -1,
+      },
       teamId: null,
       current: {
         workitems: {},
@@ -22,6 +27,10 @@ module.exports = {
   'add-context': (state, action) => {
     return state.set('current.workcontext', action.get('contextId'));
   },
+
+  //---------------//
+  // Notifications //
+  //---------------//
   'set-dnd': (state, action) => {
     return state.set('dnd', action.get('show'));
   },
@@ -74,6 +83,48 @@ module.exports = {
   'remove-notifications': (state) => {
     return state.set(`notifications`, {});
   },
+
+  //--------------//
+  // StateMonitor //
+  //--------------//
+  'show-state-monitor': (state, action) => {
+    const show = action.get('show');
+    return state.set('showStateMonitor', show);
+  },
+  'add-state-monitor': (state, action) => {
+    const key = action.get('key');
+    const h = state.get('stateMonitorHistory');
+    const stack = h.get('stack').toArray();
+    let index = h.get('index');
+
+    // Truncate keys after the current index in the history.
+    stack.splice(index + 1);
+    index = stack.length - 1;
+
+    // If key already exist in the history, remove it.
+    const i = stack.indexOf(key);
+    if (i !== -1) {
+      stack.splice(i, 1);
+      index = stack.length - 1;
+    }
+
+    // Insert the new key to the end of the history.
+    stack.push(key);
+    index = stack.length - 1;
+
+    return state.set('stateMonitorHistory', {stack, index});
+  },
+  'back-state-monitor': (state) => {
+    const index = state.get('stateMonitorHistory.index');
+    return state.set('stateMonitorHistory.index', index - 1);
+  },
+  'forward-state-monitor': (state) => {
+    const index = state.get('stateMonitorHistory.index');
+    return state.set('stateMonitorHistory.index', index + 1);
+  },
+
+  /******************************************************************************/
+
   'nav-to-context': (state, action) => {
     return state.set('current.workcontext', action.get('contextId'));
   },

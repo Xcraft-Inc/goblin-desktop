@@ -10,69 +10,32 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-class DesktopState extends Widget {
+class DesktopStateMonitor extends Widget {
   constructor() {
     super(...arguments);
     this.styles = styles;
 
-    this.onState = this.onState.bind(this);
-
-    this.state = {
-      showState: false,
-      doRenderState: false,
-    };
-
-    this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
+    this.onToggleStateMonitor = this.onToggleStateMonitor.bind(this);
   }
 
-  //#region get/set
-  get showState() {
-    return this.state.showState;
-  }
-  set showState(value) {
-    this.setState({
-      showState: value,
-    });
-  }
-
-  get doRenderState() {
-    return this.state.doRenderState;
-  }
-  set doRenderState(value) {
-    this.setState({
-      doRenderState: value,
-    });
-  }
-  //#endregion
-
-  handleTransitionEnd(e) {
-    if (e.propertyName === 'bottom') {
-      const showed = !!this.showState;
-      this.doRenderState = showed;
-    }
-  }
-
-  onState() {
-    this.showState = !this.showState;
+  onToggleStateMonitor() {
+    this.doAs('desktop', 'show-state-monitor', {show: !this.props.showed});
   }
 
   /******************************************************************************/
 
-  renderState() {
-    const showed = this.showState;
-    const style = showed
+  renderStateMonitor() {
+    const style = this.props.showed
       ? this.styles.classNames.stateShowed
       : this.styles.classNames.stateHidden;
 
     return (
-      <div className={style} onTransitionEnd={this.handleTransitionEnd}>
+      <div className={style}>
         <StateMonitor
           id={this.props.id}
-          showed={showed}
-          state={this.props.state}
           width="1000px"
           height="500px"
-          onClose={() => (this.showState = false)}
+          onClose={this.onToggleStateMonitor}
         />
       </div>
     );
@@ -98,8 +61,8 @@ class DesktopState extends Widget {
         >
           <Checkbox
             backgroundBrigtness="dark"
-            checked={this.showState}
-            onChange={this.onState}
+            checked={this.props.showed}
+            onChange={this.onToggleStateMonitor}
           />
         </RetroPanel>
       );
@@ -109,23 +72,19 @@ class DesktopState extends Widget {
           kind="button-footer"
           width="120px"
           glyph="light/radar"
-          glyphColor={this.showState ? '#0f0' : null}
+          glyphColor={this.props.showed ? '#0f0' : null}
           text={T('State')}
-          onClick={this.onState}
+          onClick={this.onToggleStateMonitor}
         />
       );
     }
   }
 
   render() {
-    if (!this.props.state) {
-      return null;
-    }
-
     return (
       <div className={this.styles.classNames.desktopState}>
         {this.renderButton()}
-        {this.renderState()}
+        {this.renderStateMonitor()}
       </div>
     );
   }
@@ -133,9 +92,10 @@ class DesktopState extends Widget {
 
 /******************************************************************************/
 
-export default Widget.connect((state) => {
-  const backendState = state.get('backend');
+export default Widget.connect((state, props) => {
+  const desktopState = state.get(`backend.${props.id}`);
   return {
-    state: backendState,
+    showed: desktopState.get('showStateMonitor'),
+    history: desktopState.get('stateMonitorHistory'),
   };
-})(DesktopState);
+})(DesktopStateMonitor);
