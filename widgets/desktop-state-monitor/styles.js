@@ -34,7 +34,7 @@ export default function styles(theme) {
 
     stateHidden = {
       ...stateShowed,
-      bottom: '-600px',
+      bottom: '-700px',
     };
   }
 
@@ -54,7 +54,7 @@ export default function styles(theme) {
 
     stateHidden = {
       ...stateShowed,
-      bottom: '-600px',
+      bottom: '-700px',
       transition: theme.transitions.retroCloseTransition,
       transitionTimingFunction: theme.transitions.retroCloseFunction,
     };

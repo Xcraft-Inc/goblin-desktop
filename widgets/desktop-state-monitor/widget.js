@@ -34,7 +34,7 @@ class DesktopStateMonitor extends Widget {
         <StateMonitor
           id={this.props.id}
           width="1000px"
-          height="500px"
+          height="600px"
           onClose={this.onToggleStateMonitor}
         />
       </div>
