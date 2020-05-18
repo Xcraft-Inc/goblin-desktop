@@ -115,6 +115,10 @@ class Workitem extends Form {
 
   onCopyInfoToClipboard() {
     Form.copyTextToClipboard(this.props.entityId);
+
+    this.doAs(this.service, 'add-state-monitor', {
+      key: this.props.entityId,
+    });
   }
 
   editSettings() {
@@ -273,8 +277,8 @@ class Workitem extends Form {
         <div className={this.styles.classNames.statusButtons}>
           <Button
             kind="pane-warning"
-            glyph="solid/copy"
-            tooltip={T("Copier l'identifiant")}
+            glyph="light/radar"
+            tooltip={T('Voir dans le State Monitor')}
             onClick={this.onCopyInfoToClipboard}
           />
           <Button

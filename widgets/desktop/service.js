@@ -664,6 +664,10 @@ Goblin.registerQuest(goblinName, 'gamepad-changed', function (quest, gamepad) {
 
 /******************************************************************************/
 
+//---------------//
+// Notifications //
+//---------------//
+
 Goblin.registerQuest(goblinName, 'add-notification', function (
   quest,
   notificationId,
@@ -718,8 +722,6 @@ Goblin.registerQuest(goblinName, 'add-notification', function (
     .toJS();
 });
 
-/******************************************************************************/
-
 Goblin.registerQuest(goblinName, 'remove-notification', function (
   quest,
   notification
@@ -728,14 +730,10 @@ Goblin.registerQuest(goblinName, 'remove-notification', function (
   quest.dispatch('update-not-read-count');
 });
 
-/******************************************************************************/
-
 Goblin.registerQuest(goblinName, 'remove-notifications', function (quest) {
   quest.do();
   quest.dispatch('update-not-read-count');
 });
-
-/******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'click-notification', function* (
   quest,
@@ -746,19 +744,13 @@ Goblin.registerQuest(goblinName, 'click-notification', function* (
   }
 });
 
-/******************************************************************************/
-
 Goblin.registerQuest(goblinName, 'set-dnd', function (quest, show) {
   quest.do();
 });
 
-/******************************************************************************/
-
 Goblin.registerQuest(goblinName, 'set-only-news', function (quest, show) {
   quest.do();
 });
-
-/******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'set-notifications', function (quest, show) {
   quest.do();
@@ -769,6 +761,10 @@ Goblin.registerQuest(goblinName, 'set-notifications', function (quest, show) {
 });
 
 /******************************************************************************/
+
+//--------------//
+// StateMonitor //
+//--------------//
 
 Goblin.registerQuest(goblinName, 'show-state-monitor', function (quest) {
   quest.do();
