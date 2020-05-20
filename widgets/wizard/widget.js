@@ -11,6 +11,9 @@ import Separator from 'goblin-gadgets/widgets/separator/widget';
 import WizardButtons from '../wizard-buttons/widget';
 
 const uiImporter = importer('ui');
+
+/******************************************************************************/
+
 class Wizard extends Form {
   constructor() {
     super(...arguments);
@@ -78,11 +81,180 @@ class Wizard extends Form {
     this.doAs(workitem, 'change', {path, newValue});
   }
 
+  /******************************************************************************/
+
+  renderDialogCustom(Step) {
+    const Form = this.Form;
+
+    return (
+      <Form {...this.formConfig}>
+        <Step
+          {...this.props}
+          theme={this.context.theme}
+          do={this.doProxy}
+          setForm={this.setForm}
+        />
+      </Form>
+    );
+  }
+
+  renderDialogSimple(Step) {
+    const Form = this.Form;
+
+    return (
+      <Form {...this.formConfig}>
+        <Step
+          {...this.props}
+          theme={this.context.theme}
+          do={this.doProxy}
+          setForm={this.setForm}
+        />
+      </Form>
+    );
+  }
+
+  renderDialogDefault(Step) {
+    const Form = this.Form;
+
+    return (
+      <DialogModal
+        resizable={this.props.dialog.get('resizable')}
+        id={this.props.dialog.get('id')}
+        title={this.props.dialog.get('title')}
+        width={this.props.dialog.get('width')}
+        height={this.props.dialog.get('height')}
+        minWidth={this.props.dialog.get('minWidth')}
+        minHeight={this.props.dialog.get('minHeight')}
+        zIndex={this.props.dialog.get('zIndex')}
+        backgroundClose={true}
+        close={this.onBackgroundClick}
+      >
+        <Form
+          {...this.formConfigWithoutStyle}
+          style={{
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Step
+            {...this.props}
+            theme={this.context.theme}
+            do={this.doProxy}
+            setForm={this.setForm}
+          />
+        </Form>
+        <Separator kind="space" height="20px" />
+        <WizardButtons
+          id={this.props.id}
+          containerKind="row"
+          onNext={this.onNext}
+          onCancel={this.onCancel}
+        />
+      </DialogModal>
+    );
+  }
+
+  renderSimple(Step, hasStep) {
+    const Form = this.Form;
+
+    return (
+      <Container
+        kind="view"
+        width={this.props.dialog.get('containerWidth') || '800px'}
+        horizontalSpacing="large"
+      >
+        <Form
+          {...this.formConfigWithComponent(
+            React.forwardRef(
+              (props, ref) =>
+                hasStep && (
+                  <Step
+                    ref={ref}
+                    {...this.props}
+                    theme={this.context.theme}
+                    do={this.doProxy}
+                    setForm={this.setForm}
+                  />
+                )
+            )
+          )}
+        />
+      </Container>
+    );
+  }
+
+  renderFull(Step, hasStep) {
+    const Form = this.Form;
+
+    return (
+      <Container kind="views">
+        <Form
+          {...this.formConfigWithComponent(
+            React.forwardRef(
+              (props, ref) =>
+                hasStep && (
+                  <Step
+                    ref={ref}
+                    {...this.props}
+                    theme={this.context.theme}
+                    do={this.doProxy}
+                    setForm={this.setForm}
+                  />
+                )
+            )
+          )}
+        />
+      </Container>
+    );
+  }
+
+  renderDefault(Step, hasStep) {
+    const Form = this.Form;
+
+    return (
+      <Container
+        kind="view"
+        width={this.props.dialog.get('containerWidth') || '800px'}
+        horizontalSpacing="large"
+      >
+        <Container kind="pane-header">
+          <Label text={this.props.title} kind="pane-header" />
+        </Container>
+        <Container kind="pane-wizard">
+          <Form
+            {...this.formConfigWithComponent(
+              React.forwardRef(
+                (props, ref) =>
+                  hasStep && (
+                    <Step
+                      ref={ref}
+                      {...this.props}
+                      theme={this.context.theme}
+                      do={this.doProxy}
+                      setForm={this.setForm}
+                    />
+                  )
+              )
+            )}
+          />
+        </Container>
+        <WizardButtons
+          id={this.props.id}
+          containerKind="actions"
+          onNext={this.onNext}
+          onCancel={this.onCancel}
+        />
+      </Container>
+    );
+  }
+
   render() {
-    const {id, dialog, title, kind} = this.props;
+    const {id, dialog, kind} = this.props;
     if (!id || !dialog) {
       return null;
     }
+
     let Step = null;
     const wizard = this.props.id.split('@')[0];
     const wizardUI = uiImporter(wizard);
@@ -103,155 +275,33 @@ class Wizard extends Form {
       }
     }
 
-    const Form = this.Form;
     const mode = dialog.get('mode');
     switch (kind) {
       case 'dialog': {
         switch (mode) {
           case 'custom':
-            return (
-              <Form {...this.formConfig}>
-                <Step
-                  {...this.props}
-                  theme={this.context.theme}
-                  do={this.doProxy}
-                  setForm={this.setForm}
-                />
-              </Form>
-            );
+            return this.renderDialogCustom(Step);
           case 'simple':
-            return (
-              <Form {...this.formConfig}>
-                <Step
-                  {...this.props}
-                  theme={this.context.theme}
-                  do={this.doProxy}
-                  setForm={this.setForm}
-                />
-              </Form>
-            );
+            return this.renderDialogSimple(Step);
           default:
-            return (
-              <DialogModal
-                width={this.props.dialog.get('width')}
-                height={this.props.dialog.get('height')}
-                zIndex={this.props.dialog.get('zIndex')}
-                backgroundClose={true}
-                close={this.onBackgroundClick}
-              >
-                <Form {...this.formConfig}>
-                  <Step
-                    {...this.props}
-                    theme={this.context.theme}
-                    do={this.doProxy}
-                    setForm={this.setForm}
-                  />
-                </Form>
-                <Separator kind="space" height="20px" />
-                <WizardButtons
-                  id={this.props.id}
-                  containerKind="row"
-                  onNext={this.onNext}
-                  onCancel={this.onCancel}
-                />
-              </DialogModal>
-            );
+            return this.renderDialogDefault(Step);
         }
       }
 
       default: {
         switch (mode) {
-          case 'simple': {
-            return (
-              <Container
-                kind="view"
-                width={this.props.dialog.get('containerWidth') || '800px'}
-                horizontalSpacing="large"
-              >
-                <Form
-                  {...this.formConfigWithComponent(
-                    React.forwardRef(
-                      (props, ref) =>
-                        hasStep && (
-                          <Step
-                            ref={ref}
-                            {...this.props}
-                            theme={this.context.theme}
-                            do={this.doProxy}
-                            setForm={this.setForm}
-                          />
-                        )
-                    )
-                  )}
-                />
-              </Container>
-            );
-          }
-
-          case 'full': {
-            return (
-              <Container kind="views">
-                <Form
-                  {...this.formConfigWithComponent(
-                    React.forwardRef(
-                      (props, ref) =>
-                        hasStep && (
-                          <Step
-                            ref={ref}
-                            {...this.props}
-                            theme={this.context.theme}
-                            do={this.doProxy}
-                            setForm={this.setForm}
-                          />
-                        )
-                    )
-                  )}
-                />
-              </Container>
-            );
-          }
-
-          default: {
-            return (
-              <Container
-                kind="view"
-                width={this.props.dialog.get('containerWidth') || '800px'}
-                horizontalSpacing="large"
-              >
-                <Container kind="pane-header">
-                  <Label text={title} kind="pane-header" />
-                </Container>
-                <Container kind="pane-wizard">
-                  <Form
-                    {...this.formConfigWithComponent(
-                      React.forwardRef(
-                        (props, ref) =>
-                          hasStep && (
-                            <Step
-                              ref={ref}
-                              {...this.props}
-                              theme={this.context.theme}
-                              do={this.doProxy}
-                              setForm={this.setForm}
-                            />
-                          )
-                      )
-                    )}
-                  />
-                </Container>
-                <WizardButtons
-                  id={this.props.id}
-                  containerKind="actions"
-                  onNext={this.onNext}
-                  onCancel={this.onCancel}
-                />
-              </Container>
-            );
-          }
+          case 'simple':
+            return this.renderSimple(Step, hasStep);
+          case 'full':
+            return this.renderFull(Step, hasStep);
+          default:
+            return this.renderDefault(Step, hasStep);
         }
       }
     }
   }
 }
+
+/******************************************************************************/
 
 export default Widget.Wired(Wizard)();

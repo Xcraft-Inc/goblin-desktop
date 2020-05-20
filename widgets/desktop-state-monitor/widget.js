@@ -4,6 +4,7 @@ const T = require('goblin-nabu');
 import * as styles from './styles';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
+import DialogResizable from 'goblin-gadgets/widgets/dialog-resizable/widget';
 import StateMonitor from 'goblin-gadgets/widgets/state-monitor/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import {ColorManipulator} from 'electrum-theme';
@@ -25,6 +26,35 @@ class DesktopStateMonitor extends Widget {
   /******************************************************************************/
 
   renderStateMonitor() {
+    if (!this.props.showed) {
+      return null;
+    }
+
+    const retro = this.context.theme.look.name === 'retro';
+
+    return (
+      <DialogResizable
+        id="goblin-desktop/state-monitor"
+        zIndex="20"
+        borderSize={retro ? '16px' : '8px'}
+        borderRadius={retro ? '16px' : '3px'}
+        titleBarHeight={retro ? '40px' : '32px'}
+        titleBarText="Radar ― Backend State Monitor"
+        minWidth="500px"
+        minHeight="300px"
+        width="1000px"
+        height="600px"
+        horizontal="0px"
+        vertical="0px"
+        drawChildrenWhileResizing={true}
+        onCloseDialog={this.onToggleStateMonitor}
+      >
+        <StateMonitor id={this.props.id} onClose={this.onToggleStateMonitor} />
+      </DialogResizable>
+    );
+  }
+
+  renderStateMonitor_OLD() {
     const style = this.props.showed
       ? this.styles.classNames.stateShowed
       : this.styles.classNames.stateHidden;
