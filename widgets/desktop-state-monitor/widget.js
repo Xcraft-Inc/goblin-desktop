@@ -30,15 +30,10 @@ class DesktopStateMonitor extends Widget {
       return null;
     }
 
-    const retro = this.context.theme.look.name === 'retro';
-
     return (
       <DialogResizable
         id="goblin-desktop/state-monitor"
         zIndex="20"
-        borderSize={retro ? '16px' : '8px'}
-        borderRadius={retro ? '16px' : '3px'}
-        titleBarHeight={retro ? '40px' : '32px'}
         titleBarText="Radar ― Backend State Monitor"
         minWidth="500px"
         minHeight="300px"
