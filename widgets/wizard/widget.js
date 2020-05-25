@@ -126,8 +126,7 @@ class Wizard extends Form {
         minWidth={this.props.dialog.get('minWidth')}
         minHeight={this.props.dialog.get('minHeight')}
         zIndex={this.props.dialog.get('zIndex')}
-        backgroundClose={true}
-        close={this.onBackgroundClick}
+        close={this.onCancel}
       >
         <Form
           {...this.formConfigWithoutStyle}
