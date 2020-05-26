@@ -465,23 +465,6 @@ Goblin.registerQuest(goblinName, 'hide-dialogs', function (quest) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'remove-dialog', function* (quest, dialogId) {
-  yield quest.me.closeDialog({dialogId});
-  yield quest.kill([dialogId]);
-});
-
-/******************************************************************************/
-
-Goblin.registerQuest(goblinName, 'close-dialog', function (quest, dialogId) {
-  const state = quest.goblin.getState();
-  quest.evt(`nav.requested`, {
-    route: buildDialogNavRequest(state),
-  });
-  quest.dispatch('remove-workitem', {widgetId: dialogId});
-});
-
-/******************************************************************************/
-
 Goblin.registerQuest(goblinName, 'change-theme', function (quest, name) {
   quest.evt(`change-theme.requested`, {
     name,

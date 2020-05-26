@@ -266,25 +266,13 @@ module.exports = (config) => {
   });
 
   Goblin.registerQuest(goblinName, 'done', function* (quest, result) {
-    const desktopId = quest.goblin.getX('desktopId');
-    const desk = quest.getAPI(desktopId);
-    yield desk.removeDialog({dialogId: quest.goblin.id});
     quest.evt('done', {finished: true, result});
+    yield quest.me.dispose();
   });
 
-  Goblin.registerQuest(goblinName, 'cancel', function (quest, currentLocation) {
-    const desktopId = quest.goblin.getX('desktopId');
-    const nameId = quest.goblin.id.split('@');
-    quest.evt(`${desktopId}.remove-workitem-requested`, {
-      workitem: {
-        id: quest.goblin.id.replace(nameId[0] + '@', ''),
-        name: nameId[0],
-      },
-      close: false,
-      navToLastWorkitem: true,
-      currentLocation,
-    });
+  Goblin.registerQuest(goblinName, 'cancel', function* (quest) {
     quest.evt('done', quest.cancel());
+    yield quest.me.dispose();
   });
 
   Goblin.registerQuest(goblinName, 'change', function* (quest, path, newValue) {
@@ -373,6 +361,20 @@ module.exports = (config) => {
   Goblin.registerQuest(goblinName, 'get-entity', common.getEntityQuest);
   Goblin.registerQuest(goblinName, 'load-entity', common.loadEntityQuest);
   Goblin.registerQuest(goblinName, 'open-wizard', common.openWizard);
+
+  Goblin.registerQuest(goblinName, 'dispose', function (quest) {
+    const desktopId = quest.goblin.getX('desktopId');
+    const nameId = quest.goblin.id.split('@');
+    quest.evt(`${desktopId}.remove-workitem-requested`, {
+      workitem: {
+        id: quest.goblin.id.replace(nameId[0] + '@', ''),
+        name: nameId[0],
+      },
+      close: false,
+      navToLastWorkitem: true,
+    });
+    quest.release(quest.goblin.id);
+  });
 
   Goblin.registerQuest(goblinName, 'delete', function (quest) {
     quest.evt('done', {finished: true});
