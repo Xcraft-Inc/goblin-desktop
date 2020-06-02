@@ -203,6 +203,10 @@ Goblin.registerQuest(
       );
     }
 
+    if (!workitem.view) {
+      workitem.view = 'default';
+    }
+
     if (!workitem.contextId) {
       const state = quest.goblin.getState();
       workitem.contextId = state.get(`current.workcontext`, null);
@@ -279,7 +283,7 @@ Goblin.registerQuest(
           navigate: !!navigate,
           currentLocation,
         });
-        quest.do({widgetId, tabId: widgetId});
+        quest.do({widgetId, tabId: widgetId, view: workitem.view});
         break;
       }
       case 'dialog': {
@@ -287,7 +291,7 @@ Goblin.registerQuest(
           dialogId: widgetId,
           currentLocation,
         });
-        quest.do({widgetId, tabId: null});
+        quest.do({widgetId, tabId: null, view: workitem.view});
         break;
       }
     }
@@ -336,7 +340,7 @@ Goblin.registerQuest(goblinName, 'add-tab', function* (
     contextId = state.get(`current.workcontext`, null);
   }
   if (!view) {
-    view = contextId;
+    view = 'default';
   }
 
   const workitem = state.get(`current.workitems.${contextId}`, null);

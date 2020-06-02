@@ -142,6 +142,7 @@ module.exports = {
     return state
       .set(`workitems.${wid}`, {
         tabId: action.get('tabId'),
+        view: action.get('view'),
       })
       .push(`workitemsByContext.${workcontext}`, wid);
   },
