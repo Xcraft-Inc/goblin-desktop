@@ -17,6 +17,7 @@ import T from 't';
 class Workitem extends Form {
   constructor() {
     super(...arguments);
+    this.doAction = this.doAction.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.onClose = this.onClose.bind(this);
@@ -89,28 +90,31 @@ class Workitem extends Form {
     }
   }
 
+  doAction(action) {
+    const kind = this.props.kind || 'editor';
+    switch (kind) {
+      case 'editor':
+        this.doAs(this.service, 'close', {
+          kind: action,
+          desktopId: this.desktopId,
+          contextId: this.contextId,
+        });
+        break;
+      default:
+        this.doAs(this.service, `${action}-entity`);
+    }
+  }
+
   onPublish() {
-    this.doAs(this.service, 'close', {
-      kind: 'publish',
-      desktopId: this.desktopId,
-      contextId: this.contextId,
-    });
+    this.doAction('publish');
   }
 
   onTrash() {
-    this.doAs(this.service, 'close', {
-      kind: 'trash',
-      desktopId: this.desktopId,
-      contextId: this.contextId,
-    });
+    this.doAction('trash');
   }
 
   onArchive() {
-    this.doAs(this.service, 'close', {
-      kind: 'archive',
-      desktopId: this.desktopId,
-      contextId: this.contextId,
-    });
+    this.doAction('archive');
   }
 
   onCopyInfoToClipboard() {
