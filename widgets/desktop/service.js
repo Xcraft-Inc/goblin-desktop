@@ -207,6 +207,10 @@ Goblin.registerQuest(
       workitem.view = 'default';
     }
 
+    if (!workitem.kind) {
+      workitem.kind = 'tab';
+    }
+
     if (!workitem.contextId) {
       const state = quest.goblin.getState();
       workitem.contextId = state.get(`current.workcontext`, null);
@@ -256,6 +260,7 @@ Goblin.registerQuest(
           desktopId,
           contextId: workitem.contextId,
           workflowId: workitem.workflowId,
+          isDialog: workitem.kind === 'dialog',
           mode: workitem.mode ? workitem.mode : false,
           level: 1,
         },

@@ -82,9 +82,10 @@ module.exports = (config) => {
   Goblin.registerQuest(
     goblinName,
     'create',
-    function* (quest, desktopId, form) {
+    function* (quest, desktopId, form, isDialog) {
       const id = quest.goblin.id;
       quest.goblin.setX('desktopId', desktopId);
+      quest.goblin.setX('isDialog', isDialog);
       const wizardGadgets = {};
 
       if (gadgets) {
@@ -365,13 +366,14 @@ module.exports = (config) => {
   Goblin.registerQuest(goblinName, 'dispose', function (quest) {
     const desktopId = quest.goblin.getX('desktopId');
     const nameId = quest.goblin.id.split('@');
+    const isDialog = quest.goblin.getX('isDialog');
     quest.evt(`${desktopId}.remove-workitem-requested`, {
       workitem: {
         id: quest.goblin.id.replace(nameId[0] + '@', ''),
         name: nameId[0],
       },
       close: false,
-      navToLastWorkitem: true,
+      navToLastWorkitem: isDialog ? false : true,
     });
     quest.release(quest.goblin.id);
   });
