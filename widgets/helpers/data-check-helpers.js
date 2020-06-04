@@ -14,42 +14,25 @@ function isChecked(form, option) {
 //-----------------------------------------------------------------------------
 
 const types = [
-  {
-    type: 'entityId',
-    description: T('entityId'),
-  },
-  {
-    type: 'string',
-    description: T('string'),
-  },
-  {
-    type: 'bool',
-    description: T('bool'),
-  },
-  {
-    type: 'enum',
-    description: T('enum'),
-  },
-  {
-    type: 'typed',
-    description: T('typed'),
-  },
-  {
-    type: 'array',
-    description: T('array'),
-  },
-  {
-    type: 'object',
-    description: T('object'),
-  },
-  {
-    type: 'pointer-reference',
-    description: T('reference (pointeur)'),
-  },
-  {
-    type: 'pointer-value',
-    description: T('value (pointeur)'),
-  },
+  {type: 'entityId', description: T('entityId')},
+  {type: 'string', description: T('string')},
+  {type: 'bool', description: T('bool')},
+  {type: 'enum', description: T('enum')},
+  {type: 'date', description: T('date')},
+  {type: 'time', description: T('time')},
+  {type: 'datetime', description: T('datetime')},
+  {type: 'price', description: T('price')},
+  {type: 'weight', description: T('weight')},
+  {type: 'length', description: T('length')},
+  {type: 'volume', description: T('volume')},
+  {type: 'bool', description: T('bool')},
+  {type: 'number', description: T('number')},
+  {type: 'percent', description: T('percent')},
+  {type: 'delay', description: T('delay')},
+  {type: 'array', description: T('array')},
+  {type: 'object', description: T('object')},
+  {type: 'pointer-reference', description: T('reference (pointeur)')},
+  {type: 'pointer-value', description: T('value (pointeur)')},
 ];
 
 const items = [
