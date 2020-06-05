@@ -31,7 +31,6 @@ function renderMain(props) {
         kind="number"
         labelText={T('Longueur du mot de passe aléatoire')}
         labelWidth="275px"
-        width="325px"
         model=".form.passwordLength"
       />
       <Button
