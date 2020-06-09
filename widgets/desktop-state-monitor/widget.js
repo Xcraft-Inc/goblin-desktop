@@ -49,23 +49,6 @@ class DesktopStateMonitor extends Widget {
     );
   }
 
-  renderStateMonitor_OLD() {
-    const style = this.props.showed
-      ? this.styles.classNames.stateShowed
-      : this.styles.classNames.stateHidden;
-
-    return (
-      <div className={style}>
-        <StateMonitor
-          id={this.props.id}
-          width="1000px"
-          height="600px"
-          onClose={this.onToggleStateMonitor}
-        />
-      </div>
-    );
-  }
-
   renderButton() {
     if (this.context.theme.look.name === 'retro') {
       return (
