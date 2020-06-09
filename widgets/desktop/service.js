@@ -473,15 +473,6 @@ Goblin.registerQuest(goblinName, 'add-dialog', function (
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'hide-dialogs', function (quest) {
-  const state = quest.goblin.getState();
-  quest.evt(`nav.requested`, {
-    route: buildDialogNavRequest(state),
-  });
-});
-
-/******************************************************************************/
-
 Goblin.registerQuest(goblinName, 'change-theme', function (quest, name) {
   quest.evt(`change-theme.requested`, {
     name,
