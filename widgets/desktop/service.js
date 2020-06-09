@@ -636,6 +636,24 @@ Goblin.registerQuest(goblinName, 'clear-workitem', function (quest, contextId) {
   });
 });
 
+Goblin.registerQuest(goblinName, 'update-current-location', function (
+  quest,
+  currentLocation
+) {
+  const search = currentLocation.get('search');
+  const hash = currentLocation.get('hash');
+  const path = currentLocation.get('pathname');
+  const route = `${path}${search}${hash}`;
+  quest.dispatch('setCurrentLocationByWorkitem', {
+    path,
+    hash,
+    search,
+  });
+  quest.evt(`nav.requested`, {
+    route,
+  });
+});
+
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'dispatch', function (quest, action) {

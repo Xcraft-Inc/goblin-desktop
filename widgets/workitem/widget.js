@@ -73,11 +73,18 @@ class Workitem extends Form {
   }
 
   onClose() {
-    this.doAs(this.service, 'close', {
-      kind: 'terminate',
-      desktopId: this.desktopId,
-      contextId: this.contextId,
-    });
+    const kind = this.props.kind || 'editor';
+    switch (kind) {
+      case 'editor':
+        this.doAs(this.service, 'close', {
+          kind: 'terminate',
+          desktopId: this.desktopId,
+          contextId: this.contextId,
+        });
+        break;
+      default:
+        this.doAs(this.service, 'hide');
+    }
   }
 
   onEdit() {
