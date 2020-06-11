@@ -58,14 +58,13 @@ function prepare(props) {
         <Container kind="column" grow="1">
           <Label text={T('Types des champs à traiter :')} />
           <Separator kind="exact" height="5px" />
-          <Container kind="row">
+          <Container kind="row" height="350px">
             <Field
               kind="gadget"
               name="typesTable"
               selectionMode="multi"
               frame={true}
               hasButtons={true}
-              height="300px"
               grow="1"
             />
           </Container>
@@ -74,14 +73,13 @@ function prepare(props) {
         <Container kind="column" grow="1">
           <Label text={T('Entités à traiter :')} />
           <Separator kind="exact" height="5px" />
-          <Container kind="row">
+          <Container kind="row" height="350px">
             <Field
               kind="gadget"
               name="entitiesTable"
               selectionMode="multi"
               frame={true}
               hasButtons={true}
-              height="300px"
               grow="1"
             />
           </Container>

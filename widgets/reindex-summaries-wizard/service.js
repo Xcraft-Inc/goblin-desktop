@@ -43,14 +43,8 @@ const config = {
     tablesTable: {
       type: 'table',
       onActions: {
-        select: (state, action) => {
-          return state.set('form.selectedTables', action.get('selectedIds'));
-        },
-        selectAll: (state, action) => {
-          return state.set('form.selectedTables', action.get('selectedIds'));
-        },
-        deselectAll: (state, action) => {
-          return state.set('form.selectedTables', action.get('selectedIds'));
+        syncSelect: (state, action) => {
+          return state.set('form.selectedIds', action.get('selectedIds'));
         },
         doubleClick: (state) => state,
       },
