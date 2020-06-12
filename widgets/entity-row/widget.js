@@ -112,6 +112,25 @@ const Driller = Widget.connect((state, props) => {
 
 /******************************************************************************/
 
+const TableCellWithHighlight = Widget.connect((state, props) => {
+  const highlights = state.get(`backend.${props.listId}.highlights`);
+  let text = props.text;
+  if (highlights.get(props.entityId, null) !== null) {
+    const auto = highlights.get(`${props.entityId}.auto`);
+    const phonetic = highlights.get(`${props.entityId}.phonetic`);
+    if (auto && !phonetic) {
+      text = auto;
+    }
+    if (!auto && phonetic) {
+      text = phonetic;
+    }
+    if (auto && phonetic) {
+      text = auto;
+    }
+  }
+  return {text};
+})(TableCell);
+
 class EntityRow extends Widget {
   constructor() {
     super(...arguments);
@@ -177,7 +196,9 @@ class EntityRow extends Widget {
     if (isFilter) {
       return (
         <div key={index} className={this.styles.classNames.filteredCell}>
-          <TableCell
+          <TableCellWithHighlight
+            entityId={this.props.id}
+            listId={this.props.listId}
             rowId={this.props.rowIndex}
             key={index}
             index={index}

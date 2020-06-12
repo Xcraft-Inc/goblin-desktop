@@ -25,6 +25,7 @@ class EntityListItem extends Widget {
         onSelect={this.props.onSelect}
         onEdit={this.props.onEdit}
         useView={this.props.useView}
+        listId={this.props.listId}
       />
     );
   }
