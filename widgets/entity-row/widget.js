@@ -210,19 +210,19 @@ class EntityRow extends Widget {
     const {type, width, ...otherProps} = props;
 
     if (isFilter) {
-      const w = Unit.sub(width, '20px');
+      const w = Unit.sub(width, '12px');
       return (
         <div key={index} className={this.styles.classNames.filteredCell}>
           <Score
             entityId={this.props.id}
             listId={this.props.listId}
-            kind="rounded"
+            kind="simple"
             gradient="red-yellow-green"
             direction="vertical"
-            width="10px"
+            width="6px"
             height="unset"
           />
-          <Label width="10px" />
+          <Label width="6px" />
           <TableCellWithHighlight
             entityId={this.props.id}
             listId={this.props.listId}
