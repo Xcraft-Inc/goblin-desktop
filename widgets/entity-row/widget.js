@@ -2,6 +2,8 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
+import Gauge from 'goblin-gadgets/widgets/gauge/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import EntityRowButton from 'goblin-desktop/widgets/entity-row-button/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import T from 't';
@@ -9,6 +11,7 @@ import {ListHelpers} from 'goblin-toolbox';
 import RetroGear from 'goblin-gadgets/widgets/retro-gear/widget';
 import {ColorManipulator} from 'electrum-theme';
 import Shredder from 'xcraft-core-shredder';
+import {Unit} from 'electrum-theme';
 
 /******************************************************************************/
 
@@ -112,6 +115,17 @@ const Driller = Widget.connect((state, props) => {
 
 /******************************************************************************/
 
+const Score = Widget.connect((state, props) => {
+  const highlights = state.get(`backend.${props.listId}.highlights`);
+  let score;
+  if (highlights.get(props.entityId, null) !== null) {
+    score = highlights.get(`${props.entityId}.score`);
+  }
+  return {value: score * 100};
+})(Gauge);
+
+/******************************************************************************/
+
 const TableCellWithHighlight = Widget.connect((state, props) => {
   const highlights = state.get(`backend.${props.listId}.highlights`);
   let text = props.text;
@@ -130,6 +144,8 @@ const TableCellWithHighlight = Widget.connect((state, props) => {
   }
   return {text};
 })(TableCell);
+
+/******************************************************************************/
 
 class EntityRow extends Widget {
   constructor() {
@@ -191,11 +207,22 @@ class EntityRow extends Widget {
 
   renderCellText(cell, text, isFilter, index) {
     const props = ListHelpers.getColumnProps(cell, this.props.settings);
-    const {type, ...otherProps} = props;
+    const {type, width, ...otherProps} = props;
 
     if (isFilter) {
+      const w = Unit.sub(width, '20px');
       return (
         <div key={index} className={this.styles.classNames.filteredCell}>
+          <Score
+            entityId={this.props.id}
+            listId={this.props.listId}
+            kind="rounded"
+            gradient="red-yellow-green"
+            direction="vertical"
+            width="10px"
+            height="unset"
+          />
+          <Label width="10px" />
           <TableCellWithHighlight
             entityId={this.props.id}
             listId={this.props.listId}
@@ -204,6 +231,7 @@ class EntityRow extends Widget {
             index={index}
             isLast={false}
             isHeader={false}
+            width={w}
             {...otherProps}
             maxHeight={this.props.maxHeight}
             cellFormat="original"

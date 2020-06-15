@@ -58,9 +58,8 @@ export default function styles(theme, props) {
   };
 
   const filteredCell = {
-    margin: '-100px 0px -100px -10px',
-    padding: '100px 0px 100px 10px',
-    backgroundColor: theme.palette.tableFilterCellBackground,
+    display: 'flex',
+    flexDirection: 'row',
   };
 
   /******************************************************************************/
