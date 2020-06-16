@@ -29,7 +29,9 @@ const logicState = {};
 
 // Define logic handlers according rc.json
 const logicHandlers = require('./logic-handlers.js');
-
+const extractContextIdFromCurrentLocation = (loc) => {
+  return `${loc.get('pathname').split('/')[1]}`;
+};
 /******************************************************************************/
 
 // Register quest's according rc.json
@@ -219,8 +221,12 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
   }
 
   if (!workitem.contextId) {
-    const state = quest.goblin.getState();
-    workitem.contextId = state.get(`current.workcontext`, null);
+    if (currentLocation) {
+      workitem.contextId = extractContextIdFromCurrentLocation(currentLocation);
+    } else {
+      const state = quest.goblin.getState();
+      workitem.contextId = state.get(`current.workcontext`, null);
+    }
   }
 
   //Manage collision with desktopId
@@ -349,8 +355,13 @@ Goblin.registerQuest(goblinName, 'add-tab', function* (
   currentLocation
 ) {
   const state = quest.goblin.getState();
+  const currentContext = state.get(`current.workcontext`, null);
   if (!contextId) {
-    contextId = state.get(`current.workcontext`, null);
+    if (currentLocation) {
+      contextId = extractContextIdFromCurrentLocation(currentLocation);
+    } else {
+      contextId = currentContext;
+    }
   }
   if (!view) {
     view = 'default';
@@ -375,8 +386,8 @@ Goblin.registerQuest(goblinName, 'add-tab', function* (
     closable: closable || false,
   });
 
-  if (navigate) {
-    quest.cmd('desktop.nav-to-workitem', {
+  if (navigate && currentContext === contextId) {
+    yield quest.cmd('desktop.nav-to-workitem', {
       id: quest.goblin.id,
       contextId,
       view,
