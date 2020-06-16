@@ -249,8 +249,21 @@ class Tabs extends Widget {
     );
   }
 
+  // prettier-ignore
+  renderButton(k, v) {
+    const workitemId = v.get('workitemId');
+    const entityId = v.get('entityId');
+    const tabIsActive = this.props.currentTab === workitemId;
+
+    if (entityId) {
+      return this.renderButtonForEntity(k, v, workitemId, tabIsActive, entityId);
+    } else {
+      return this.renderButtonForWorkitem(k, v, workitemId, tabIsActive);
+    }
+  }
+
   render() {
-    const {currentTab, tabs, desktopId} = this.props;
+    const {tabs, desktopId} = this.props;
 
     const WiredNotificationsButton = wireNotifsButton(desktopId);
 
@@ -264,27 +277,7 @@ class Tabs extends Widget {
     return (
       <Container kind="second-bar">
         <Container kind="view-tab">
-          {contextTabs.map((v, k) => {
-            const workitemId = v.get('workitemId');
-            const entityId = v.get('entityId');
-            const tabIsActive = currentTab === workitemId;
-            if (entityId) {
-              return this.renderButtonForEntity(
-                k,
-                v,
-                workitemId,
-                tabIsActive,
-                entityId
-              );
-            } else {
-              return this.renderButtonForWorkitem(
-                k,
-                v,
-                workitemId,
-                tabIsActive
-              );
-            }
-          })}
+          {contextTabs.map((v, k) => this.renderButton(k, v))}
         </Container>
         {this.renderMenu()}
         <Container kind="view-tab-right">
