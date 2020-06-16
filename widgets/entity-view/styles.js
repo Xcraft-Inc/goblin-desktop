@@ -65,6 +65,16 @@ export default function styles(theme) {
     right: '-2px',
   };
 
+  const variants = {
+    position: 'absolute',
+    bottom: '-1px',
+    left: '-1px',
+    display: 'flex',
+    flexDirection: 'row',
+  };
+
+  /******************************************************************************/
+
   return {
     entityView,
     list,
@@ -73,6 +83,7 @@ export default function styles(theme) {
     headerFilter,
     rows,
     button,
+    variants,
   };
 }
 

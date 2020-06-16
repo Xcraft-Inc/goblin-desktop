@@ -26,6 +26,7 @@ class EntityListItem extends Widget {
         onEdit={this.props.onEdit}
         useView={this.props.useView}
         listId={this.props.listId}
+        variant={this.props.variant}
       />
     );
   }
@@ -51,6 +52,7 @@ export default Widget.connect((state, props) => {
     onEdit: props.data.onEdit,
     rowIndex: props.index,
     useView: props.data.useView,
+    variant: props.data.variant,
     selected: `${selectedRowId}-item` === props.itemId,
   };
 })(EntityListItem);

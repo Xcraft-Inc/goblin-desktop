@@ -57,7 +57,13 @@ export default function styles(theme, props) {
     display: 'flex',
   };
 
-  const filteredCell = {
+  const filteredCellBarre = {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: '-5px 0px',
+  };
+
+  const filteredCellGauge = {
     display: 'flex',
     flexDirection: 'row',
   };
@@ -68,7 +74,8 @@ export default function styles(theme, props) {
     entityRow,
     buttons,
     busyBox,
-    filteredCell,
+    filteredCellBarre,
+    filteredCellGauge,
   };
 }
 

@@ -4,6 +4,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
 import Gauge from 'goblin-gadgets/widgets/gauge/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
+import ColoredContainer from 'goblin-gadgets/widgets/colored-container/widget';
 import EntityRowButton from 'goblin-desktop/widgets/entity-row-button/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import T from 't';
@@ -126,6 +127,17 @@ const Score = Widget.connect((state, props) => {
 
 /******************************************************************************/
 
+const Colored = Widget.connect((state, props) => {
+  const highlights = state.get(`backend.${props.listId}.highlights`);
+  let score;
+  if (highlights.get(props.entityId, null) !== null) {
+    score = highlights.get(`${props.entityId}.score`);
+  }
+  return {value: score * 100};
+})(ColoredContainer);
+
+/******************************************************************************/
+
 const TableCellWithHighlight = Widget.connect((state, props) => {
   const highlights = state.get(`backend.${props.listId}.highlights`);
   let text = props.text;
@@ -205,14 +217,116 @@ class EntityRow extends Widget {
     );
   }
 
-  renderCellText(cell, text, isFilter, index) {
+  renderCellTextBar(cell, text, isFilter, index) {
+    const props = ListHelpers.getColumnProps(cell, this.props.settings);
+    const {type, width, ...otherProps} = props;
+
+    if (isFilter) {
+      const w = Unit.sub(width, '15px');
+      return (
+        <div key={index} className={this.styles.classNames.filteredCellBarre}>
+          <Colored
+            key={index}
+            entityId={this.props.id}
+            listId={this.props.listId}
+            gradient="red-yellow-green"
+            width="5px"
+            alpha={0.9}
+          />
+          <Label width="10px" />
+          <TableCellWithHighlight
+            entityId={this.props.id}
+            listId={this.props.listId}
+            rowId={this.props.rowIndex}
+            key={index}
+            index={index}
+            isLast={false}
+            isHeader={false}
+            width={w}
+            {...otherProps}
+            maxHeight={this.props.maxHeight}
+            cellFormat="original"
+            text={text}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <TableCell
+          rowId={this.props.rowIndex}
+          key={index}
+          index={index}
+          isLast={false}
+          isHeader={false}
+          width={width}
+          {...otherProps}
+          maxHeight={this.props.maxHeight}
+          cellFormat="original"
+          text={text}
+        />
+      );
+    }
+  }
+
+  renderCellTextCarnaval(cell, text, isFilter, index) {
+    const props = ListHelpers.getColumnProps(cell, this.props.settings);
+    const {type, width, ...otherProps} = props;
+
+    if (isFilter) {
+      const w = Unit.sub(width, '15px');
+      return (
+        <Colored
+          key={index}
+          entityId={this.props.id}
+          listId={this.props.listId}
+          gradient="red-yellow-green"
+          margin="-2px 5px -2px 0px"
+          padding="0px 0px 0px 10px"
+          radius="5px"
+          alpha={this.context.theme.palette.isDarkTheme ? 0.3 : 0.8}
+        >
+          <TableCellWithHighlight
+            entityId={this.props.id}
+            listId={this.props.listId}
+            rowId={this.props.rowIndex}
+            key={index}
+            index={index}
+            isLast={false}
+            isHeader={false}
+            width={w}
+            {...otherProps}
+            maxHeight={this.props.maxHeight}
+            cellFormat="original"
+            text={text}
+          />
+        </Colored>
+      );
+    } else {
+      return (
+        <TableCell
+          rowId={this.props.rowIndex}
+          key={index}
+          index={index}
+          isLast={false}
+          isHeader={false}
+          width={width}
+          {...otherProps}
+          maxHeight={this.props.maxHeight}
+          cellFormat="original"
+          text={text}
+        />
+      );
+    }
+  }
+
+  renderCellTextGauge(cell, text, isFilter, index) {
     const props = ListHelpers.getColumnProps(cell, this.props.settings);
     const {type, width, ...otherProps} = props;
 
     if (isFilter) {
       const w = Unit.sub(width, '12px');
       return (
-        <div key={index} className={this.styles.classNames.filteredCell}>
+        <div key={index} className={this.styles.classNames.filteredCellGauge}>
           <Score
             entityId={this.props.id}
             listId={this.props.listId}
@@ -254,6 +368,18 @@ class EntityRow extends Widget {
           text={text}
         />
       );
+    }
+  }
+
+  renderCellText(cell, text, isFilter, index) {
+    switch (this.props.variant) {
+      default:
+      case 'gauge':
+        return this.renderCellTextGauge(cell, text, isFilter, index);
+      case 'bar':
+        return this.renderCellTextBar(cell, text, isFilter, index);
+      case 'carnaval':
+        return this.renderCellTextCarnaval(cell, text, isFilter, index);
     }
   }
 

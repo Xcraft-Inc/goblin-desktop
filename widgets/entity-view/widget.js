@@ -20,6 +20,10 @@ class EntityView extends Widget {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      variant: 'gauge',
+    };
+
     this._entityIds = [];
     this.selectedRowId = null; // TODO: Make better!
 
@@ -36,6 +40,18 @@ class EntityView extends Widget {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyValidate = this.onKeyValidate.bind(this);
   }
+
+  //#region get/set
+  get variant() {
+    return this.state.variant;
+  }
+
+  set variant(value) {
+    this.setState({
+      variant: value,
+    });
+  }
+  //#endregion
 
   componentWillMount() {
     MouseTrap.bind('up', this.onKeyUp, 'keydown');
@@ -337,6 +353,7 @@ class EntityView extends Widget {
             onEdit: this.editRow,
             useView: this.props.view ? true : false,
             serviceId: this.props.id,
+            variant: this.variant,
           }}
         />
       </div>
@@ -352,6 +369,43 @@ class EntityView extends Widget {
           glyph="solid/columns"
           tooltip={T('Choisir les colonnes')}
           onClick={this.onEditColumns}
+        />
+      </div>
+    );
+  }
+
+  renderVariants() {
+    return (
+      <div className={this.styles.classNames.variants}>
+        <Button
+          width="28px"
+          height="20px"
+          fontSize="75%"
+          text="J"
+          tooltip={T('Jauge verticale')}
+          horizontalSpacing="overlap"
+          active={this.variant === 'gauge'}
+          onClick={() => (this.variant = 'gauge')}
+        />
+        <Button
+          width="28px"
+          height="20px"
+          fontSize="75%"
+          text="B"
+          tooltip={T('Barre verticale')}
+          horizontalSpacing="overlap"
+          active={this.variant === 'bar'}
+          onClick={() => (this.variant = 'bar')}
+        />
+        <Button
+          width="28px"
+          height="20px"
+          fontSize="75%"
+          text="C"
+          tooltip={T('Carnaval')}
+          horizontalSpacing="overlap"
+          active={this.variant === 'carnaval'}
+          onClick={() => (this.variant = 'carnaval')}
         />
       </div>
     );
@@ -384,6 +438,7 @@ class EntityView extends Widget {
               </div>
             </div>
             {this.renderButton(columns)}
+            {this.renderVariants(columns)}
           </div>
         );
       },
