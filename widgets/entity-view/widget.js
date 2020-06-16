@@ -21,7 +21,7 @@ class EntityView extends Widget {
     super(...arguments);
 
     this.state = {
-      variant: 'gauge',
+      variant: 'bar',
     };
 
     this._entityIds = [];
