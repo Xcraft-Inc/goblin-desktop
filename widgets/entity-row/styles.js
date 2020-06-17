@@ -1,4 +1,5 @@
 import {ColorManipulator} from 'electrum-theme';
+import TableHelpers from 'gadgets/helpers/table-helpers';
 
 /******************************************************************************/
 
@@ -23,12 +24,14 @@ export default function styles(theme, props) {
     'overflow': 'hidden',
     'color': selected ? theme.palette.tableSelectedText : null,
     'backgroundColor': selected
-      ? theme.palette.tableSelectedBackground
-      : backgroundColor,
+      ? TableHelpers.getSelectedBackgroundColor(theme, 'none')
+      : TableHelpers.getBackgroundColor(theme, backgroundColor, 'none'),
     'borderBottom': `1px solid ${theme.palette.viewBackground}`,
     'cursor': 'default',
     ':hover': {
-      backgroundColor: theme.palette.tableHoverBackground,
+      backgroundColor: selected
+        ? TableHelpers.getSelectedBackgroundColor(theme, 'main')
+        : TableHelpers.getBackgroundColor(theme, backgroundColor, 'main'),
     },
     ':hover .buttons-hover': {
       transition: '0.4s ease-out', // delay for showing
