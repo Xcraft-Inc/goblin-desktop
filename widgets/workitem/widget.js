@@ -10,6 +10,7 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import ScrollableContainer from 'goblin-gadgets/widgets/scrollable-container/widget';
+import MouseTrap from 'mousetrap';
 import T from 't';
 
 /******************************************************************************/
@@ -27,6 +28,15 @@ class Workitem extends Form {
     this.onPublish = this.onPublish.bind(this);
     this.onCopyInfoToClipboard = this.onCopyInfoToClipboard.bind(this);
     this.editSettings = this.editSettings.bind(this);
+  }
+
+  componentWillMount() {
+    MouseTrap.bind('esc', this.onClose);
+  }
+
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    MouseTrap.unbind('esc');
   }
 
   getChildContext() {
