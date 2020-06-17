@@ -25,7 +25,6 @@ class EntityView extends Widget {
     };
 
     this._entityIds = [];
-    this.selectedRowId = null; // TODO: Make better!
 
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
@@ -121,6 +120,16 @@ class EntityView extends Widget {
     return state.get(`list@${this.props.id}.list.${rowId}-item`);
   }
 
+  getEntityCount() {
+    const state = new Shredder(this.getState().backend);
+    return state.get(`list@${this.props.id}.list`).size;
+  }
+
+  getSelectedRowId() {
+    const state = new Shredder(this.getState().widgets);
+    return state.get(`${this.props.id}.selectedRowId`);
+  }
+
   editRow(rowId, navigate) {
     const entityId = this.getEntityId(rowId);
     this.doFor(this.props.id, 'open-entity-workitem', {
@@ -131,45 +140,44 @@ class EntityView extends Widget {
 
   selectRow(rowId) {
     console.log(`EntityView.selectRow rowId='${rowId}'`);
-    this.selectedRowId = rowId;
+    if (rowId < 0 || rowId >= this.getEntityCount()) {
+      return;
+    }
     this.dispatch({type: 'select-row', rowId});
     const entityId = this.getEntityId(rowId);
-    if (this.props.hinter) {
+    if (entityId && this.props.hinter) {
       this.navToDetail(this.props.id, entityId, this.props.hinter);
     }
+  }
+
+  onKeyUp() {
+    let rowId = parseInt(this.getSelectedRowId());
+    if (isNaN(rowId)) {
+      rowId = 1;
+    }
+    this.selectRow(rowId - 1);
+  }
+
+  onKeyDown() {
+    let rowId = parseInt(this.getSelectedRowId());
+    if (isNaN(rowId)) {
+      rowId = -1;
+    }
+    this.selectRow(rowId + 1);
+  }
+
+  onKeyValidate() {
+    const rowId = parseInt(this.getSelectedRowId());
+    if (isNaN(rowId)) {
+      return;
+    }
+    this.editRow(rowId);
   }
 
   onEditColumns() {
     this.doFor(this.props.id, 'open-entity-workitem', {
       entityId: `view@${this.props.type}`,
     });
-  }
-
-  onKeyUp() {
-    // TODO: Make better!
-    const rowId = parseInt(this.selectedRowId);
-    if (isNaN(rowId)) {
-      return;
-    }
-    this.selectRow(rowId - 1);
-  }
-
-  onKeyDown() {
-    // TODO: Make better!
-    const rowId = parseInt(this.selectedRowId);
-    if (isNaN(rowId)) {
-      return;
-    }
-    this.selectRow(rowId + 1);
-  }
-
-  onKeyValidate() {
-    // TODO: Make better!
-    const rowId = parseInt(this.selectedRowId);
-    if (isNaN(rowId)) {
-      return;
-    }
-    this.editRow(rowId);
   }
 
   _drillDownInternal() {
