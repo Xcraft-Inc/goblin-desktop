@@ -14,7 +14,7 @@ import {ColorManipulator} from 'electrum-theme';
 
 /******************************************************************************/
 
-export default class Desktop extends Widget {
+class Desktop extends Widget {
   constructor() {
     super(...arguments);
 
@@ -192,3 +192,4 @@ export default class Desktop extends Widget {
 }
 
 /******************************************************************************/
+export default Widget.Wired(Desktop)();
