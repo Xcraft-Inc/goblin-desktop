@@ -12,7 +12,7 @@ const viewImporter = importer('view');
 
 /******************************************************************************/
 
-let currentTheme = 'default';
+/*let currentTheme = 'default';
 const themes = [
   {text: T('Standard'), value: 'default'},
   {text: T('Standard compact'), value: 'default-compact'},
@@ -33,7 +33,59 @@ const eggsThemes = [
   {glyph: 'solid/clock', text: T('Clock'), value: 'clock'},
   {glyph: 'solid/car', text: T('Oldtimer'), value: 'oldtimer'},
   {glyph: 'solid/tachometer', text: T('Steampunk'), value: 'steampunk'},
-];
+];*/
+
+class ThemesMenuNC extends Widget {
+  render() {
+    const {
+      currentTheme,
+      themes,
+      accessToEggsThemes,
+      onChangeTheme,
+    } = this.props;
+    const glyph = accessToEggsThemes ? 'regular/tint' : 'solid/tint';
+
+    return (
+      <MainTabMenu
+        glyph={glyph}
+        kind="main-tab-right"
+        tooltip={T('Choix du thème')}
+        items={themes}
+        currentItemValue={currentTheme}
+        onChange={onChangeTheme}
+      />
+    );
+  }
+}
+
+const ThemesMenu = Widget.connect((state, props) => {
+  const {accessToEggsThemes} = props;
+  const currentTheme = state.get(`backend.${window.labId}.theme`);
+  const themeContext = state.get(`backend.${window.labId}.themeContext`);
+  const themes = Array.from(
+    state.get(`backend.theme-composer@${themeContext}.themes`).keys()
+  )
+    .sort()
+    .map((theme) => {
+      const meta = state.get(
+        `backend.theme-composer@${themeContext}.themes.${theme}.meta`
+      );
+      const additionalInfo = {};
+      if (meta) {
+        const isEgg = meta.get('egg', false);
+        if (isEgg && !accessToEggsThemes) {
+          return null;
+        }
+        const glyph = meta.get('glyph', null);
+        if (glyph) {
+          additionalInfo.glyph = glyph;
+        }
+      }
+      return {text: theme, value: theme, ...additionalInfo};
+    })
+    .filter((t) => !!t);
+  return {themeContext, currentTheme, themes};
+})(ThemesMenuNC);
 
 /******************************************************************************/
 
@@ -131,7 +183,6 @@ export default class DesktopTopbar extends Widget {
   }
 
   onChangeTheme(name) {
-    currentTheme = name;
     this.doAs('desktop', 'change-theme', {name});
   }
 
@@ -163,13 +214,9 @@ export default class DesktopTopbar extends Widget {
           onChange={this.onChangeLocale}
           desktopId={this.props.id}
         />
-        <MainTabMenu
-          glyph={this.accessToEggsThemes ? 'regular/tint' : 'solid/tint'}
-          kind="main-tab-right"
-          tooltip={T('Choix du thème')}
-          items={this.accessToEggsThemes ? eggsThemes : themes}
-          currentItemValue={currentTheme}
-          onChange={this.onChangeTheme}
+        <ThemesMenu
+          accessToEggsTheme={this.accessToEggsThemes}
+          onChangeTheme={this.onChangeTheme}
         />
         <div
           className={this.styles.classNames.eggButton}
