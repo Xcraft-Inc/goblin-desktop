@@ -1,5 +1,5 @@
-import {Unit} from 'electrum-theme';
-import {ColorHelpers} from 'electrum-theme';
+import {Unit} from 'goblin-theme';
+import {ColorHelpers} from 'goblin-theme';
 
 /******************************************************************************/
 

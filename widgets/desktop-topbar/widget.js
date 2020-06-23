@@ -7,7 +7,7 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
-import {ColorManipulator} from 'electrum-theme';
+import {ColorManipulator} from 'goblin-theme';
 const viewImporter = importer('view');
 
 /******************************************************************************/

@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'goblin-laboratory/widgets/widget';
-import {Unit} from 'electrum-theme';
+import {Unit} from 'goblin-theme';
 
 import Workitem from 'goblin-desktop/widgets/workitem/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';

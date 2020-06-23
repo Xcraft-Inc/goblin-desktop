@@ -10,7 +10,7 @@ import DesktopNotifications from 'goblin-desktop/widgets/desktop-notifications/w
 import DesktopFooter from 'goblin-desktop/widgets/desktop-footer/widget';
 const viewImporter = importer('view');
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
-import {ColorManipulator} from 'electrum-theme';
+import {ColorManipulator} from 'goblin-theme';
 
 /******************************************************************************/
 

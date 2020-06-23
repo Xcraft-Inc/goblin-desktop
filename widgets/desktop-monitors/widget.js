@@ -7,7 +7,7 @@ import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
 import SamplesMonitor from 'goblin-gadgets/widgets/samples-monitor/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import RetroIlluminatedButton from 'goblin-gadgets/widgets/retro-illuminated-button/widget';
-import {ColorManipulator} from 'electrum-theme';
+import {ColorManipulator} from 'goblin-theme';
 
 /******************************************************************************/
 

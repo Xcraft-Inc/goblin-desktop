@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Widget from 'goblin-laboratory/widgets/widget';
 
-import {Unit} from 'electrum-theme';
+import {Unit} from 'goblin-theme';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Combo from 'goblin-gadgets/widgets/combo/widget';
 

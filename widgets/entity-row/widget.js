@@ -10,9 +10,9 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import T from 't';
 import {ListHelpers} from 'goblin-toolbox';
 import RetroGear from 'goblin-gadgets/widgets/retro-gear/widget';
-import {ColorManipulator} from 'electrum-theme';
+import {ColorManipulator} from 'goblin-theme';
 import Shredder from 'xcraft-core-shredder';
-import {Unit} from 'electrum-theme';
+import {Unit} from 'goblin-theme';
 
 /******************************************************************************/
 

@@ -8,8 +8,8 @@ import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import Combo from 'goblin-gadgets/widgets/combo/widget';
 import DesktopClockClock from 'goblin-desktop/widgets/desktop-clock-clock/widget';
 import DesktopClockMenu from 'goblin-desktop/widgets/desktop-clock-menu/widget';
-import {ColorManipulator} from 'electrum-theme';
-import {Unit} from 'electrum-theme';
+import {ColorManipulator} from 'goblin-theme';
+import {Unit} from 'goblin-theme';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import T from 't';
 

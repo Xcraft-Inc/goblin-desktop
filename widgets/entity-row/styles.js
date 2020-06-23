@@ -1,4 +1,4 @@
-import {ColorManipulator} from 'electrum-theme';
+import {ColorManipulator} from 'goblin-theme';
 import TableHelpers from 'gadgets/helpers/table-helpers';
 
 /******************************************************************************/
