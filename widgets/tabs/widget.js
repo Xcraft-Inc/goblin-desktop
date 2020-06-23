@@ -76,8 +76,11 @@ class Tabs extends Widget {
   }
 
   newWorkItem(k, v, isRightClick, workitemId) {
-    // TODO: Open new window...
-    this.navToWorkItem(this.props.context, v.get('view'), workitemId);
+    this.cmd('desktop.open-tab-to-window', {
+      id: this.props.desktopId,
+      contextId: this.props.context,
+      workitemId,
+    });
   }
 
   closeWorkItem(k, v, isRightClick, workitemId, tabIsActive) {
