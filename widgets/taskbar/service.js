@@ -83,5 +83,14 @@ Goblin.registerQuest(goblinName, 'run-workitem', function* (
   return yield desk.addWorkitem({workitem, currentLocation, navigate: true});
 });
 
+Goblin.registerQuest(goblinName, 'run-client-quest', function* (
+  quest,
+  clientSessionId,
+  clientQuest
+) {
+  const deskAPI = quest.getAPI(quest.goblin.getX('desktopId'));
+  yield deskAPI.runClientQuest({clientSessionId, ...clientQuest});
+});
+
 // Create a Goblin with initial state and handlers
 module.exports = Goblin.configure(goblinName, logicState, logicHandlers);

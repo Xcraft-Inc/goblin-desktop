@@ -647,7 +647,24 @@ Goblin.registerQuest(goblinName, 'clear-workitem', function (quest, contextId) {
   });
 });
 
-Goblin.registerQuest(goblinName, 'open-tab-to-window', function* (
+Goblin.registerQuest(goblinName, 'run-client-quest', function (
+  quest,
+  clientSessionId,
+  goblinName,
+  goblinId,
+  questName,
+  questArgs
+) {
+  quest.evt(`${clientSessionId}.run-client-quest-requested`, {
+    desktopId: quest.goblin.id,
+    goblinName,
+    goblinId,
+    questName,
+    questArgs,
+  });
+});
+
+Goblin.registerQuest(goblinName, 'open-window', function* (
   quest,
   contextId,
   workitemId
@@ -664,11 +681,11 @@ Goblin.registerQuest(goblinName, 'open-tab-to-window', function* (
     contextId: contextId,
     workitemId,
   });
-  const parts = workitemId.split('@');
+  /*const parts = workitemId.split('@');
   yield quest.me.removeWorkitem({
     workitem: {name: parts.shift(), id: parts.join('@'), contextId},
     navToLastWorkitem: true,
-  });
+  });*/
   quest.evt(`${clientSessionId}.open-window-requested`, {
     desktopId: quest.goblin.id,
     rootWidget: 'desktop-window',

@@ -28,6 +28,12 @@ class Taskbar extends Widget {
     });
   }
 
+  runClientQuest(clientQuest) {
+    this.do('run-client-quest', {
+      clientQuest,
+    });
+  }
+
   runWorkitem(workitem, context) {
     this.do('run-workitem', {
       workitem,
@@ -60,6 +66,19 @@ class Taskbar extends Widget {
           glyph={task.glyph}
           tooltip={task.app.description}
           onClick={runApp}
+        />
+      );
+    }
+    if (task.clientQuest) {
+      const runClientQuest = () => this.runClientQuest(task.clientQuest);
+      return (
+        <Button
+          key={index}
+          kind="task-bar"
+          text={task.text}
+          glyph={task.glyph}
+          tooltip={task.clientQuest.description}
+          onClick={runClientQuest}
         />
       );
     }
