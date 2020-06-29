@@ -10,7 +10,7 @@ function prepare(props) {
     <Container kind="column" grow="1">
       <Label kind="title" text={T('Quest Launcher')} />
       <Container kind="row">
-        <Field labelText="payload" grow="1" rows="4" model=".form.payload" />
+        <Field labelText="payload" grow="1" rows={4} model=".form.payload" />
       </Container>
       <Container kind="row">
         <Field labelText="quest" model=".form.quest" />
