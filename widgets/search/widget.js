@@ -11,7 +11,7 @@ import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import StatusFilters from 'goblin-desktop/widgets/status-filters/widget';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
-import TextFieldNew from 'goblin-gadgets/widgets/text-field-new/widget';
+import TextField from 'goblin-gadgets/widgets/text-field/widget';
 
 import EntityView from 'goblin-desktop/widgets/entity-view/widget';
 
@@ -184,7 +184,7 @@ class Search extends Widget {
           <div className={this.styles.classNames.separator} />
           <FrontendForm widgetId={this.props.id} initialState={{value: ''}}>
             <Container kind="row">
-              <TextFieldNew
+              <TextField
                 grow="1"
                 hintText={this.props.hintText || T('Chercher')}
                 value={C('.value')}
