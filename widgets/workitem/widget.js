@@ -30,7 +30,7 @@ class Workitem extends Form {
     this.editSettings = this.editSettings.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     MouseTrap.bind('esc', this.onClose);
   }
 

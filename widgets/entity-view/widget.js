@@ -52,7 +52,7 @@ class EntityView extends Widget {
   }
   //#endregion
 
-  componentWillMount() {
+  componentDidMount() {
     MouseTrap.bind('up', this.onKeyUp, 'keydown');
     MouseTrap.bind('down', this.onKeyDown, 'keydown');
     MouseTrap.bind('return', this.onKeyValidate);
