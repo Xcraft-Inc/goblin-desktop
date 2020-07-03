@@ -12,29 +12,6 @@ const viewImporter = importer('view');
 
 /******************************************************************************/
 
-/*let currentTheme = 'default';
-const themes = [
-  {text: T('Standard'), value: 'default'},
-  {text: T('Standard compact'), value: 'default-compact'},
-  {text: T('Vert'), value: 'default-green'},
-  {text: T('Vert spécial'), value: 'special-green'},
-  {text: T('Vert arrondi'), value: 'smooth-green'},
-  {text: T('Rouge'), value: 'default-red'},
-  {text: T('Rose'), value: 'default-pink'},
-  {text: T('Rose compact'), value: 'compact-pink'},
-  {text: T('Monochrome compact'), value: 'compact-mono'},
-  {text: T('Foncé'), value: 'default-dark'},
-  {text: T('Dragula'), value: 'default-dragula'},
-];
-const eggsThemes = [
-  ...themes,
-  {separator: true, separatorKind: 'menu-line'},
-  {glyph: 'solid/crown', text: T('Royal'), value: 'royal'},
-  {glyph: 'solid/clock', text: T('Clock'), value: 'clock'},
-  {glyph: 'solid/car', text: T('Oldtimer'), value: 'oldtimer'},
-  {glyph: 'solid/tachometer', text: T('Steampunk'), value: 'steampunk'},
-];*/
-
 class ThemesMenuNC extends Widget {
   render() {
     const {
@@ -66,11 +43,13 @@ const ThemesMenu = Widget.connect((state, props) => {
     state.get(`backend.theme-composer@${themeContext}.themes`).keys()
   )
     .sort()
-    .map((theme) => {
+    .map((key) => {
       const meta = state.get(
-        `backend.theme-composer@${themeContext}.themes.${theme}.meta`
+        `backend.theme-composer@${themeContext}.themes.${key}.meta`
       );
-      const additionalInfo = {};
+      const additionalInfo = {
+        glyph: key === currentTheme ? 'solid/tint' : 'regular/tint',
+      };
       if (meta) {
         const isEgg = meta.get('egg', false);
         if (isEgg && !accessToEggsThemes) {
@@ -81,15 +60,16 @@ const ThemesMenu = Widget.connect((state, props) => {
           additionalInfo.glyph = glyph;
         }
       }
-      return {text: theme, value: theme, ...additionalInfo};
+      return {text: key, value: key, ...additionalInfo};
     })
     .filter((t) => !!t);
+
   return {themeContext, currentTheme, themes};
 })(ThemesMenuNC);
 
 /******************************************************************************/
 
-const LocaleMenuConnected = Widget.connect((state, props) => {
+const LocaleMenuConnected = Widget.connect((state) => {
   const locales = state.get(`backend.nabu.locales`);
   const localeId = Widget.getUserSession(state).get('locale');
 
@@ -139,6 +119,7 @@ const UserInfo = Widget.connect((state, props) => {
     teamIds.get(0)
   );
   const team = state.get(`backend.${currentTeam}.alias`, '');
+
   return {
     text: `${props.user} ${team}`,
     kind: 'main-tab-right',
@@ -147,32 +128,15 @@ const UserInfo = Widget.connect((state, props) => {
 
 /******************************************************************************/
 
-export default class DesktopTopbar extends Widget {
+class DesktopTopbar extends Widget {
   constructor() {
     super(...arguments);
-
-    this.state = {
-      accessToEggsThemes: false,
-    };
 
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeLocale = this.onChangeLocale.bind(this);
     this.onChangeTheme = this.onChangeTheme.bind(this);
-    this.onChangeEggs = this.onChangeEggs.bind(this);
     this.onChangeTeam = this.onChangeTeam.bind(this);
   }
-
-  //#region get/set
-  get accessToEggsThemes() {
-    return this.state.accessToEggsThemes;
-  }
-
-  set accessToEggsThemes(value) {
-    this.setState({
-      accessToEggsThemes: value,
-    });
-  }
-  //#endregion
 
   onChangeScreen() {
     this.doAs('desktop', 'change-screen');
@@ -184,10 +148,6 @@ export default class DesktopTopbar extends Widget {
 
   onChangeTheme(name) {
     this.doAs('desktop', 'change-theme', {name});
-  }
-
-  onChangeEggs() {
-    this.accessToEggsThemes = true;
   }
 
   onChangeTeam(teamId) {
@@ -215,12 +175,8 @@ export default class DesktopTopbar extends Widget {
           desktopId={this.props.id}
         />
         <ThemesMenu
-          accessToEggsTheme={this.accessToEggsThemes}
+          accessToEggsThemes={this.props.accessToEggsThemes}
           onChangeTheme={this.onChangeTheme}
-        />
-        <div
-          className={this.styles.classNames.eggButton}
-          onClick={this.onChangeEggs}
         />
         <Button
           glyph="solid/tv"
@@ -311,3 +267,13 @@ export default class DesktopTopbar extends Widget {
 }
 
 /******************************************************************************/
+
+const ConnectedDesktopTopbar = Widget.connect((state) => {
+  const userSession = Widget.getUserSession(state);
+  const clientSessionId = userSession.get('id');
+  const accessToEggsThemes = userSession.get('accessToEggsThemes');
+
+  return {clientSessionId, accessToEggsThemes};
+})(DesktopTopbar);
+
+export default ConnectedDesktopTopbar;
