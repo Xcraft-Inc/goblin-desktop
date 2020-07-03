@@ -7,6 +7,7 @@ import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
 import DialogResizable from 'goblin-gadgets/widgets/dialog-resizable/widget';
 import StateMonitor from 'goblin-gadgets/widgets/state-monitor/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
+import Frame from 'goblin-laboratory/widgets/frame/widget';
 import {ColorManipulator} from 'goblin-theme';
 
 /******************************************************************************/
@@ -31,21 +32,31 @@ class DesktopStateMonitor extends Widget {
     }
 
     return (
-      <DialogResizable
-        id="goblin-desktop/state-monitor"
-        zIndex="20"
-        titleBarText="Radar ― Backend State Monitor"
-        minWidth="500px"
-        minHeight="300px"
-        width="1000px"
-        height="600px"
-        horizontal="0px"
-        vertical="0px"
-        drawChildrenWhileResizing={true}
-        onCloseDialog={this.onToggleStateMonitor}
+      <Frame
+        labId={this.context.labId}
+        store={this.context.store}
+        currentTheme="old-crt"
+        themeContext="polypheme"
       >
-        <StateMonitor id={this.props.id} onClose={this.onToggleStateMonitor} />
-      </DialogResizable>
+        <DialogResizable
+          id="goblin-desktop/state-monitor"
+          zIndex="20"
+          titleBarText="Radar ― Backend State Monitor"
+          minWidth="500px"
+          minHeight="300px"
+          width="1000px"
+          height="600px"
+          horizontal="0px"
+          vertical="0px"
+          drawChildrenWhileResizing={true}
+          onCloseDialog={this.onToggleStateMonitor}
+        >
+          <StateMonitor
+            id={this.props.id}
+            onClose={this.onToggleStateMonitor}
+          />
+        </DialogResizable>
+      </Frame>
     );
   }
 
