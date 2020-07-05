@@ -8,6 +8,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import DesktopThemesMenu from 'goblin-desktop/widgets/desktop-themes-menu/widget';
+import DesktopScale from 'goblin-desktop/widgets/desktop-scale/widget';
 import {ColorManipulator} from 'goblin-theme';
 const viewImporter = importer('view');
 
@@ -119,36 +120,7 @@ export default class DesktopTopbar extends Widget {
           kind="main-tab-right"
           onClick={this.onChangeScreen}
         />
-        {window.zoomable ? (
-          <Button
-            glyph="solid/plus"
-            kind="main-tab-right"
-            tooltip={T('Augmente le zoom')}
-            onClick={() => {
-              this.doFor(this.context.labId, 'zoom');
-            }}
-          />
-        ) : null}
-        {window.zoomable ? (
-          <Button
-            text="1"
-            kind="main-tab-right"
-            tooltip={T('Remet le zoom 100%')}
-            onClick={() => {
-              this.doFor(this.context.labId, 'default-zoom');
-            }}
-          />
-        ) : null}
-        {window.zoomable ? (
-          <Button
-            glyph="solid/minus"
-            kind="main-tab-right"
-            tooltip={T('Diminue le zoom')}
-            onClick={() => {
-              this.doFor(this.context.labId, 'un-zoom');
-            }}
-          />
-        ) : null}
+        <DesktopScale id={this.props.id} />
       </React.Fragment>
     );
   }
