@@ -42,7 +42,9 @@ class DesktopThemesMenuNC extends Widget {
 /******************************************************************************/
 
 const DesktopThemesMenu = Widget.connect((state, props) => {
-  const {accessToEggsThemes} = props;
+  const userSession = Widget.getUserSession(state);
+  const accessToEggsThemes = userSession.get('accessToEggsThemes') || false;
+
   const currentTheme = state.get(`backend.${window.labId}.theme`);
   const themeContext = state.get(`backend.${window.labId}.themeContext`);
 
