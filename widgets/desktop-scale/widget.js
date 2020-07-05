@@ -112,7 +112,7 @@ class DesktopScale extends Widget {
   renderButton() {
     return (
       <Button
-        glyph="solid/square"
+        glyph="solid/binoculars"
         kind="main-tab-right"
         tooltip={T('Choix du zoom')}
         onClick={this.onToggleDialog}
