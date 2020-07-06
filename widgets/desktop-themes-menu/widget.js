@@ -17,12 +17,7 @@ class DesktopThemesMenuNC extends Widget {
   }
 
   render() {
-    const {
-      currentTheme,
-      themes,
-      accessToEggsThemes,
-      onChangeTheme,
-    } = this.props;
+    const {currentTheme, themes, accessToEggsThemes} = this.props;
 
     const glyph = accessToEggsThemes ? 'regular/tint' : 'solid/tint';
 
@@ -33,7 +28,7 @@ class DesktopThemesMenuNC extends Widget {
         tooltip={T('Choix du thème')}
         items={themes}
         currentItemValue={currentTheme}
-        onChange={onChangeTheme}
+        onChange={this.onChangeTheme}
       />
     );
   }
@@ -41,7 +36,7 @@ class DesktopThemesMenuNC extends Widget {
 
 /******************************************************************************/
 
-const DesktopThemesMenu = Widget.connect((state, props) => {
+const DesktopThemesMenu = Widget.connect((state) => {
   const userSession = Widget.getUserSession(state);
   const accessToEggsThemes = userSession.get('accessToEggsThemes') || false;
 
