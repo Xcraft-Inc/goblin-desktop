@@ -8,14 +8,20 @@ export default function styles(theme) {
   const dialog = {
     zIndex: 20,
     position: 'fixed',
-    right: '0px',
-    top: '0px',
-    padding: '20px 0px 20px 20px',
+    padding: '20px 45px 20px 20px',
+    borderRadius: '10px',
     backgroundColor: theme.palette.flyingDialogBackground,
-    boxShadow: theme.shapes.floatingShadow,
+    boxShadow: 'rgba(0, 0, 0, 1) 0px 0px 40px 15px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    transformOrigin: 'top right',
+  };
+
+  const close = {
+    position: 'fixed',
+    right: '5px',
+    top: '5px',
   };
 
   /******************************************************************************/
@@ -23,6 +29,7 @@ export default function styles(theme) {
   return {
     desktopScale,
     dialog,
+    close,
   };
 }
 

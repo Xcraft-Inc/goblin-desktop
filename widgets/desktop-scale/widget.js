@@ -58,14 +58,22 @@ class DesktopScale extends Widget {
       return null;
     }
 
+    const style = {
+      top: `${10 / this.props.zoom}px`,
+      right: `${10 / this.props.zoom}px`,
+      transform: `scale(${1 / this.props.zoom})`,
+    };
+
     const z = `Zoom = ${this.props.zoom}`;
 
     return (
-      <div className={this.styles.classNames.dialog}>
+      <div className={this.styles.classNames.dialog} style={style}>
         <Label width="100px" text={z} />
         <Button
+          shape="rounded"
           glyph="solid/minus"
           tooltip={T('Diminue le zoom')}
+          disabled={this.props.zoom <= this.min}
           onClick={() => {
             this.doFor(this.context.labId, 'un-zoom');
           }}
@@ -75,7 +83,8 @@ class DesktopScale extends Widget {
           width="150px"
           direction="horizontal"
           value={this.valueToSlider(this.props.zoom)}
-          changeMode="blur"
+          changeMode="throttled"
+          throttleDelay={50}
           onChange={(value) =>
             this.doFor(this.context.labId, 'change-zoom', {
               zoom: this.sliderToValue(value),
@@ -84,14 +93,17 @@ class DesktopScale extends Widget {
         />
         <Label width="10px" />
         <Button
+          shape="rounded"
           glyph="solid/plus"
           tooltip={T('Augmente le zoom')}
+          disabled={this.props.zoom >= this.max}
           onClick={() => {
             this.doFor(this.context.labId, 'zoom');
           }}
         />
         <Label width="10px" />
         <Button
+          shape="rounded"
           text="1"
           tooltip={T('Remet le zoom 100%')}
           disabled={this.props.zoom === 1}
@@ -99,12 +111,13 @@ class DesktopScale extends Widget {
             this.doFor(this.context.labId, 'default-zoom');
           }}
         />
-        <Label width="20px" />
-        <Button
-          border="none"
-          glyph="solid/times"
-          onClick={this.onToggleDialog}
-        />
+        <div className={this.styles.classNames.close}>
+          <Button
+            border="none"
+            glyph="solid/times"
+            onClick={this.onToggleDialog}
+          />
+        </div>
       </div>
     );
   }
