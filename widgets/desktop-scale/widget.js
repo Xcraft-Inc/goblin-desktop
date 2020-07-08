@@ -116,8 +116,9 @@ class DesktopScale extends Widget {
         <Button
           shape="rounded"
           text="100%"
+          fontSize="60%"
           tooltip={T('Remet le zoom 100%')}
-          disabled={this.zoom === 1}
+          visibility={this.zoom !== 1}
           onClick={() => this.changeZoom(1)}
         />
         <div className={this.styles.classNames.close}>
