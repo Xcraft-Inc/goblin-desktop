@@ -48,16 +48,8 @@ class DesktopScale extends Widget {
     this.showDialog = !this.showDialog;
   }
 
-  valueToSlider(value) {
-    const s = this.min;
-    const d = this.max - this.min;
-    return ((value - s) / d) * 100;
-  }
-
-  sliderToValue(value) {
-    const s = this.min;
-    const d = this.max - this.min;
-    return s + (value / 100) * d;
+  getDisplayed(value) {
+    return `${Math.round(value * 100)}%`;
   }
 
   changeZoom(zoom) {
@@ -79,8 +71,6 @@ class DesktopScale extends Widget {
       transform: `scale(${1 / this.zoom})`,
     };
 
-    const z = `${Math.round(this.zoom * 100)}%`;
-
     // TODO: Use this mode for Slider!
     // changeMode="throttled"
     // throttleDelay={50}
@@ -88,7 +78,7 @@ class DesktopScale extends Widget {
     return (
       <div className={this.styles.classNames.dialog} style={style}>
         <Label width="50px" glyph="solid/binoculars" glyphSize="200%" />
-        <Label width="70px" text={z} />
+        <Label width="70px" text={this.getDisplayed(this.zoom)} />
         <Button
           shape="rounded"
           glyph="solid/minus"
@@ -100,9 +90,14 @@ class DesktopScale extends Widget {
         <Slider
           width="150px"
           direction="horizontal"
-          value={this.valueToSlider(this.zoom)}
+          min={this.min}
+          max={this.max}
+          step={0.1}
+          value={this.zoom}
+          displayTooltipWhileDragging={true}
+          formatTooltip={this.getDisplayed}
           changeMode="blur"
-          onChange={(value) => this.changeZoom(this.sliderToValue(value))}
+          onChange={(value) => this.changeZoom(value)}
         />
         <Label width="10px" />
         <Button
