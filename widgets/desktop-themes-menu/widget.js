@@ -11,9 +11,14 @@ function getEggsThemes(result, state, currentTheme, isEggs) {
     const additionalInfo = {
       glyph: key === currentTheme ? 'solid/tint' : 'regular/tint',
     };
-    const egg = state.get(`${key}.meta.egg`, false);
+    const meta = state.get(`${key}.meta`, null);
+    let egg = false;
+    let glyph = null;
+    if (meta) {
+      egg = meta.get('egg', false);
+      glyph = meta.get('glyph', null);
+    }
     if (egg === isEggs) {
-      const glyph = state.get(`${key}.meta.glyph`, null);
       if (glyph) {
         additionalInfo.glyph = glyph;
       }
