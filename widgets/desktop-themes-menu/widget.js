@@ -5,6 +5,41 @@ import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 
 /******************************************************************************/
 
+function getEggsThemes(result, state, currentTheme, isEggs) {
+  const arrayKeys = Array.from(state.keys());
+  for (const key of arrayKeys.sort()) {
+    const additionalInfo = {
+      glyph: key === currentTheme ? 'solid/tint' : 'regular/tint',
+    };
+    const egg = state.get(`${key}.meta.egg`, false);
+    if (egg === isEggs) {
+      const glyph = state.get(`${key}.meta.glyph`, null);
+      if (glyph) {
+        additionalInfo.glyph = glyph;
+      }
+      result.push({text: key, value: key, ...additionalInfo});
+    }
+  }
+}
+
+function getThemes(state, currentTheme, accessToEggsThemes) {
+  const result = [];
+
+  // Push standards themes.
+  getEggsThemes(result, state, currentTheme, false);
+
+  if (accessToEggsThemes) {
+    // Push horizontal separator...
+    result.push({separator: true, kind: 'menu-line'});
+    // ...then eggs themes.
+    getEggsThemes(result, state, currentTheme, true);
+  }
+
+  return result;
+}
+
+/******************************************************************************/
+
 class DesktopThemesMenuNC extends Widget {
   constructor() {
     super(...arguments);
@@ -37,36 +72,17 @@ class DesktopThemesMenuNC extends Widget {
 /******************************************************************************/
 
 const DesktopThemesMenu = Widget.connect((state) => {
+  const themeContext = state.get(`backend.${window.labId}.themeContext`);
+  const currentTheme = state.get(`backend.${window.labId}.theme`);
+
   const userSession = Widget.getUserSession(state);
   const accessToEggsThemes = userSession.get('accessToEggsThemes') || false;
 
-  const currentTheme = state.get(`backend.${window.labId}.theme`);
-  const themeContext = state.get(`backend.${window.labId}.themeContext`);
-
-  const themes = Array.from(
-    state.get(`backend.theme-composer@${themeContext}.themes`).keys()
-  )
-    .sort()
-    .map((key) => {
-      const meta = state.get(
-        `backend.theme-composer@${themeContext}.themes.${key}.meta`
-      );
-      const additionalInfo = {
-        glyph: key === currentTheme ? 'solid/tint' : 'regular/tint',
-      };
-      if (meta) {
-        const isEgg = meta.get('egg', false);
-        if (isEgg && !accessToEggsThemes) {
-          return null;
-        }
-        const glyph = meta.get('glyph', null);
-        if (glyph) {
-          additionalInfo.glyph = glyph;
-        }
-      }
-      return {text: key, value: key, ...additionalInfo};
-    })
-    .filter((t) => !!t);
+  const themes = getThemes(
+    state.get(`backend.theme-composer@${themeContext}.themes`),
+    currentTheme,
+    accessToEggsThemes
+  );
 
   return {themeContext, currentTheme, themes, accessToEggsThemes};
 })(DesktopThemesMenuNC);
