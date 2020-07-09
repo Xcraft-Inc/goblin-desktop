@@ -94,8 +94,8 @@ class DesktopScale extends Widget {
           max={this.max}
           step={0.1}
           value={this.zoom}
-          displayTooltipWhileDragging={true}
-          formatTooltip={this.getDisplayed}
+          displayValue="dragging"
+          getDisplayedValue={this.getDisplayed}
           changeMode="blur"
           onChange={(value) => this.changeZoom(value)}
         />
