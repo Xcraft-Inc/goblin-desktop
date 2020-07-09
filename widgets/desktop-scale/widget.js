@@ -1,10 +1,17 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-const T = require('goblin-nabu');
 import * as styles from './styles';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Slider from 'goblin-gadgets/widgets/slider/widget';
+import {percent as PercentConverters} from 'xcraft-core-converters';
+import T from 't';
+
+/******************************************************************************/
+
+function getDisplayed(value) {
+  return PercentConverters.getDisplayed(value);
+}
 
 /******************************************************************************/
 
@@ -48,10 +55,6 @@ class DesktopScale extends Widget {
     this.showDialog = !this.showDialog;
   }
 
-  getDisplayed(value) {
-    return `${Math.round(value * 100)}%`;
-  }
-
   changeZoom(zoom) {
     zoom = Math.round(zoom * 10) / 10;
     this.doFor(this.context.labId, 'change-zoom', {zoom});
@@ -78,7 +81,7 @@ class DesktopScale extends Widget {
     return (
       <div className={this.styles.classNames.dialog} style={style}>
         <Label width="50px" glyph="solid/binoculars" glyphSize="200%" />
-        <Label width="70px" text={this.getDisplayed(this.zoom)} />
+        <Label width="70px" text={getDisplayed(this.zoom)} />
         <Button
           shape="rounded"
           glyph="solid/minus"
@@ -95,7 +98,7 @@ class DesktopScale extends Widget {
           step={0.1}
           value={this.zoom}
           displayValue="dragging"
-          getDisplayedValue={this.getDisplayed}
+          getDisplayedValue={getDisplayed}
           changeMode="blur"
           onChange={(value) => this.changeZoom(value)}
         />
