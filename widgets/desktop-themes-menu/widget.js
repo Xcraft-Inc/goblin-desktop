@@ -22,7 +22,8 @@ function getEggsThemes(result, state, currentTheme, isEggs) {
       if (glyph) {
         additionalInfo.glyph = glyph;
       }
-      result.push({text: key, value: key, ...additionalInfo});
+      const displayName = state.get(`${key}.displayName`) || key;
+      result.push({text: displayName, value: key, ...additionalInfo});
     }
   }
 }
