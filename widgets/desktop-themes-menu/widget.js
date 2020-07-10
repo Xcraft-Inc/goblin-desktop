@@ -5,22 +5,27 @@ import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 
 /******************************************************************************/
 
-function getEggsThemes(result, state, currentTheme, isEggs) {
+function pushThemes(result, state, isEggs) {
   const arrayKeys = Array.from(state.keys());
   for (const key of arrayKeys.sort()) {
     const additionalInfo = {
-      glyph: key === currentTheme ? 'solid/tint' : 'regular/tint',
+      glyph: 'solid/tint',
     };
     const meta = state.get(`${key}.meta`, null);
     let egg = false;
     let glyph = null;
+    let glyphColor = null;
     if (meta) {
       egg = meta.get('egg', false);
       glyph = meta.get('glyph', null);
+      glyphColor = meta.get('glyphColor', null);
     }
     if (egg === isEggs) {
       if (glyph) {
         additionalInfo.glyph = glyph;
+      }
+      if (glyphColor) {
+        additionalInfo.glyphColor = glyphColor;
       }
       const displayName = state.get(`${key}.displayName`) || key;
       result.push({text: displayName, value: key, ...additionalInfo});
@@ -28,17 +33,17 @@ function getEggsThemes(result, state, currentTheme, isEggs) {
   }
 }
 
-function getThemes(state, currentTheme, accessToEggsThemes) {
+function getThemes(state, accessToEggsThemes) {
   const result = [];
 
   // Push standards themes.
-  getEggsThemes(result, state, currentTheme, false);
+  pushThemes(result, state, false);
 
   if (accessToEggsThemes) {
     // Push horizontal separator...
     result.push({separator: true, kind: 'menu-line'});
     // ...then eggs themes.
-    getEggsThemes(result, state, currentTheme, true);
+    pushThemes(result, state, true);
   }
 
   return result;
@@ -86,7 +91,6 @@ const DesktopThemesMenu = Widget.connect((state) => {
 
   const themes = getThemes(
     state.get(`backend.theme-composer@${themeContext}.themes`),
-    currentTheme,
     accessToEggsThemes
   );
 

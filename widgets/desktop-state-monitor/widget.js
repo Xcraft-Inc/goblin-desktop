@@ -35,7 +35,7 @@ class DesktopStateMonitor extends Widget {
       <Frame
         labId={this.context.labId}
         store={this.context.store}
-        currentTheme="old-crt"
+        currentTheme="matrix"
         themeContext="polypheme"
       >
         <DialogResizable
