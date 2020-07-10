@@ -76,7 +76,7 @@ class DesktopClock extends Widget {
       : {};
     const newState = {...currentState, ...clockState};
     this.doFor(this.props.clientSessionId, 'set-desktop-clock', {
-      theme: this.context.theme.baseName,
+      theme: this.context.theme.name,
       state: newState,
     });
   }
