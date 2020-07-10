@@ -5,9 +5,23 @@ import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 
 /******************************************************************************/
 
+function compareThemes(t1, t2) {
+  const s1 = t1.text;
+  const s2 = t2.text;
+
+  if (s1 < s2) {
+    return -1;
+  }
+  if (s1 > s2) {
+    return 1;
+  }
+  return 0;
+}
+
 function pushThemes(result, state, isEggs) {
-  const arrayKeys = Array.from(state.keys());
-  for (const key of arrayKeys.sort()) {
+  const a = [];
+
+  for (const key of Array.from(state.keys())) {
     const additionalInfo = {
       glyph: 'solid/tint',
     };
@@ -28,8 +42,14 @@ function pushThemes(result, state, isEggs) {
         additionalInfo.glyphColor = glyphColor;
       }
       const displayName = state.get(`${key}.displayName`) || key;
-      result.push({text: displayName, value: key, ...additionalInfo});
+      a.push({text: displayName, value: key, ...additionalInfo});
     }
+  }
+
+  a.sort((t1, t2) => compareThemes(t1, t2));
+
+  for (const item of a) {
+    result.push(item);
   }
 }
 
