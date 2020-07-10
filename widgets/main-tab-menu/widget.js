@@ -86,11 +86,17 @@ export default class MainTabMenu extends Widget {
         };
       });
 
+      var left = (rect.left + rect.right) / 2 + 'px';
+      if (this.props.horizontalShift) {
+        left = Unit.add(left, this.props.horizontalShift);
+      }
+
       return (
         <Combo
           menuType="wrap"
           width="200px"
-          left={(rect.left + rect.right) / 2}
+          left={left}
+          triangleShift={this.props.horizontalShift}
           top={top}
           list={list}
           close={this.close}

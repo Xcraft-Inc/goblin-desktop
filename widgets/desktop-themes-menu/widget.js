@@ -91,6 +91,7 @@ class DesktopThemesMenuNC extends Widget {
       <MainTabMenu
         glyph={glyph}
         kind="main-tab-right"
+        horizontalShift="-50px"
         tooltip={T('Choix du thème')}
         items={themes}
         currentItemValue={currentTheme}
