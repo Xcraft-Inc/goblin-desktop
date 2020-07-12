@@ -1,4 +1,6 @@
-import px from 'goblin-gadgets/widgets/helpers/px-helpers';
+import {Unit} from 'goblin-theme';
+const px = Unit.toPx;
+const n = Unit.toValue;
 
 /******************************************************************************/
 
@@ -7,9 +9,9 @@ export const propNames = ['size', 'showClock'];
 export default function styles(theme, props) {
   const {size, showClock} = props;
 
-  const s = px.toValue(size);
+  const s = n(size);
 
-  const bh = px.toValue(theme.shapes.footerHeight);
+  const bh = n(theme.shapes.footerHeight);
   const bw = theme.look.name === 'retro' ? 65 * 2 : bh * 3;
 
   const cx = showClock ? 20 + s / 2 : bw / 2;
@@ -23,17 +25,17 @@ export default function styles(theme, props) {
 
   const desktopClockClock = {
     position: 'fixed',
-    width: px.toPx(s),
-    height: px.toPx(s),
-    right: px.toPx(cx - s / 2),
-    bottom: px.toPx(cy - s / 2),
+    width: px(s),
+    height: px(s),
+    right: px(cx - s / 2),
+    bottom: px(cy - s / 2),
     transform: `scale(${scale})`,
     transition: '1s ease-out',
   };
 
   const desktopClockClockHidden = {
     ...desktopClockClock,
-    right: px.toPx(-s * 0.9),
+    right: px(-s * 0.9),
     transition: '0.3s ease-out', // transition for hidden to bottom
   };
 
