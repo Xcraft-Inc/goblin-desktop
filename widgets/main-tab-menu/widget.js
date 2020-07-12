@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Widget from 'goblin-laboratory/widgets/widget';
 
 import {Unit} from 'goblin-theme';
+const px = Unit.toPx;
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Combo from 'goblin-gadgets/widgets/combo/widget';
 
@@ -64,7 +65,7 @@ export default class MainTabMenu extends Widget {
     if (this.showMenu && this.props.items) {
       const rect = this.combo.getBoundingClientRect();
       const top = Unit.add(
-        rect.bottom + 'px',
+        px(rect.bottom),
         this.context.theme.shapes.flyingBalloonTriangleSize
       );
 
@@ -86,7 +87,7 @@ export default class MainTabMenu extends Widget {
         };
       });
 
-      var left = (rect.left + rect.right) / 2 + 'px';
+      var left = px((rect.left + rect.right) / 2);
       if (this.props.horizontalShift) {
         left = Unit.add(left, this.props.horizontalShift);
       }

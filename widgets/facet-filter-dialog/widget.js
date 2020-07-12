@@ -5,6 +5,8 @@ import Label from 'gadgets/label/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterDialogFooter from '../facet-filter-dialog-footer/widget.js';
 import * as FacetHelpers from '../helpers/facet-helpers';
+import {Unit} from 'goblin-theme';
+const px = Unit.toPx;
 
 /******************************************************************************/
 
@@ -134,10 +136,10 @@ class FacetFilterDialog extends Widget {
     return (
       <DialogModal
         width="520px"
-        height={height + 'px'}
-        left={r.right + 40 + 'px'}
-        center={centerY + 'px'}
-        triangleShift={shiftY + 'px'}
+        height={px(height)}
+        left={px(r.right + 40)}
+        center={px(centerY)}
+        triangleShift={px(shiftY)}
         backgroundClose={true}
         close={this.onClose}
       >

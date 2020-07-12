@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'goblin-laboratory/widgets/widget';
 import {Unit} from 'goblin-theme';
+const px = Unit.toPx;
 
 import Workitem from 'goblin-desktop/widgets/workitem/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
@@ -225,7 +226,7 @@ class Plugin extends Widget {
       const node = ReactDOM.findDOMNode(this.comboButton);
       const rect = node.getBoundingClientRect();
       const top = Unit.add(
-        rect.bottom + 'px',
+        px(rect.bottom),
         this.context.theme.shapes.flyingBalloonTriangleSize
       );
 
