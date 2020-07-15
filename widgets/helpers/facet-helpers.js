@@ -8,11 +8,13 @@ const StringBuilder = require('goblin-nabu/lib/string-builder.js');
 
 function getType(keys) {
   for (const key of keys) {
-    // Check only the first key.
-    if (DateTimeConverters.check(key)) {
-      return 'datetime';
-    } else {
-      break;
+    if (key !== '') {
+      // Check only the first not empty key.
+      if (DateTimeConverters.check(key)) {
+        return 'datetime';
+      } else {
+        break;
+      }
     }
   }
   return 'string';
