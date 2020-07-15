@@ -28,7 +28,11 @@ function format(text, type) {
 }
 
 function extractTab(text, type) {
-  if (text && typeof text === 'string' && text.length > 0) {
+  if (typeof text === 'string') {
+    if (text.length === 0) {
+      return {internal: '(vide)', displayed: '(vide)'};
+    }
+
     if (type === 'datetime') {
       const y = DateTimeConverters.getYear(text);
       const m = DateTimeConverters.getMonth(text);
