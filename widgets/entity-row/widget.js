@@ -226,7 +226,6 @@ class EntityRow extends Widget {
       return (
         <div key={index} className={this.styles.classNames.filteredCellBarre}>
           <Colored
-            key={index}
             entityId={this.props.id}
             listId={this.props.listId}
             gradient="red-yellow-green"
@@ -238,7 +237,6 @@ class EntityRow extends Widget {
             entityId={this.props.id}
             listId={this.props.listId}
             rowId={this.props.rowIndex}
-            key={index}
             index={index}
             isLast={false}
             isHeader={false}
@@ -289,7 +287,6 @@ class EntityRow extends Widget {
             entityId={this.props.id}
             listId={this.props.listId}
             rowId={this.props.rowIndex}
-            key={index}
             index={index}
             isLast={false}
             isHeader={false}
@@ -341,7 +338,6 @@ class EntityRow extends Widget {
             entityId={this.props.id}
             listId={this.props.listId}
             rowId={this.props.rowIndex}
-            key={index}
             index={index}
             isLast={false}
             isHeader={false}
@@ -469,7 +465,6 @@ class EntityRow extends Widget {
       <div className={this.styles.classNames.entityRow} {...divProps}>
         <TableCell
           rowId={rowIndex}
-          key={rowIndex}
           index={rowIndex}
           isLast={false}
           isHeader={false}
