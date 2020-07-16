@@ -7,7 +7,7 @@ import C from 'goblin-laboratory/widgets/connect-helpers/c';
 
 /******************************************************************************/
 
-export default class FacetFilterAdd extends Widget {
+class FacetFilterAdd extends Widget {
   constructor() {
     super(...arguments);
 
@@ -80,6 +80,10 @@ export default class FacetFilterAdd extends Widget {
   }
 
   render() {
+    if (!this.props.prototypeMode) {
+      return null;
+    }
+
     return (
       <div ref={(node) => (this.buttonNode = node)}>
         {this.renderButton()}
@@ -90,3 +94,12 @@ export default class FacetFilterAdd extends Widget {
 }
 
 /******************************************************************************/
+
+const FacetFilterAddConnected = Widget.connect((state) => {
+  const userSession = Widget.getUserSession(state);
+  const prototypeMode = userSession.get('prototypeMode');
+
+  return {prototypeMode};
+})(FacetFilterAdd);
+
+export default FacetFilterAddConnected;

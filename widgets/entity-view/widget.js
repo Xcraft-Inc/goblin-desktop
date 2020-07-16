@@ -369,6 +369,10 @@ class EntityView extends Widget {
   }
 
   renderButton() {
+    if (!this.props.prototypeMode) {
+      return null;
+    }
+
     return (
       <div className={this.styles.classNames.button}>
         <Button
@@ -383,6 +387,10 @@ class EntityView extends Widget {
   }
 
   renderVariants() {
+    if (!this.props.prototypeMode) {
+      return null;
+    }
+
     return (
       <div className={this.styles.classNames.variants}>
         <Button
@@ -479,7 +487,16 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
     }
   }
 
-  return {hasFilter, columns, view: view.get('query'), settings: userView};
+  const userSession = Widget.getUserSession(state);
+  const prototypeMode = userSession.get('prototypeMode');
+
+  return {
+    hasFilter,
+    columns,
+    view: view.get('query'),
+    settings: userView,
+    prototypeMode,
+  };
 })(EntityView);
 
 export default Widget.Wired(ConnectedEntityView)();

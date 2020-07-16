@@ -73,7 +73,14 @@ class FacetFilterDialogFooter extends Widget {
           />
         ) : null}
         <div className={this.styles.classNames.sajex} />
-        <Button border="none" glyph="solid/trash" onClick={this.deleteFacet} />
+        {this.props.prototypeMode ? (
+          <Button
+            border="none"
+            glyph="solid/trash"
+            tooltip={T('Supprime le filtre')}
+            onClick={this.deleteFacet}
+          />
+        ) : null}
       </div>
     );
   }
@@ -83,5 +90,9 @@ class FacetFilterDialogFooter extends Widget {
 
 export default Widget.connect((state, props) => {
   const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
-  return {flags};
+
+  const userSession = Widget.getUserSession(state);
+  const prototypeMode = userSession.get('prototypeMode');
+
+  return {flags, prototypeMode};
 })(FacetFilterDialogFooter);

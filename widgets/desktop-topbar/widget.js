@@ -73,13 +73,14 @@ const UserInfo = Widget.connect((state, props) => {
 
 /******************************************************************************/
 
-export default class DesktopTopbar extends Widget {
+class DesktopTopbarNC extends Widget {
   constructor() {
     super(...arguments);
 
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeLocale = this.onChangeLocale.bind(this);
     this.onChangeTeam = this.onChangeTeam.bind(this);
+    this.onTogglePrototypeMode = this.onTogglePrototypeMode.bind(this);
   }
 
   onChangeScreen() {
@@ -94,6 +95,10 @@ export default class DesktopTopbar extends Widget {
     this.doAs('desktop', 'change-team', {teamId});
   }
 
+  onTogglePrototypeMode() {
+    this.doFor(this.props.clientSessionId, 'toggle-prototype-mode');
+  }
+
   /******************************************************************************/
 
   renderUserPart() {
@@ -101,24 +106,33 @@ export default class DesktopTopbar extends Widget {
       <React.Fragment>
         <UserInfo user={this.props.username} desktopId={this.props.id} />
         <TeamSelector
+          kind="main-tab-right"
           desktopId={this.props.id}
           glyph="solid/users"
-          kind="main-tab-right"
           tooltip="Team"
           onChange={this.onChangeTeam}
         />
         <LocaleMenuConnected
-          glyph="solid/flag"
           kind="main-tab-right"
+          desktopId={this.props.id}
+          glyph="solid/flag"
           tooltip={T('Choix de la locale')}
           onChange={this.onChangeLocale}
-          desktopId={this.props.id}
         />
         <DesktopThemesMenu id={this.props.id} />
         <Button
-          glyph="solid/tv"
           kind="main-tab-right"
+          glyph="solid/tv"
+          tooltip={T("Change d'écran")}
           onClick={this.onChangeScreen}
+        />
+        <Button
+          kind="main-tab-right"
+          glyph={this.props.prototypeMode ? 'solid/vial' : 'solid/shield-check'}
+          tooltip={T(
+            'Bouclier: mode normal\nEprouvette: travaux en cours (prototype)'
+          )}
+          onClick={this.onTogglePrototypeMode}
         />
         <DesktopScale id={this.props.id} />
       </React.Fragment>
@@ -173,3 +187,15 @@ export default class DesktopTopbar extends Widget {
     );
   }
 }
+
+/******************************************************************************/
+
+const DesktopTopbar = Widget.connect((state) => {
+  const userSession = Widget.getUserSession(state);
+  const clientSessionId = userSession.get('id');
+  const prototypeMode = userSession.get('prototypeMode');
+
+  return {clientSessionId, prototypeMode};
+})(DesktopTopbarNC);
+
+export default DesktopTopbar;
