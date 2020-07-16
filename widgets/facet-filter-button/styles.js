@@ -16,6 +16,7 @@ export default function styles(theme, props) {
     'backgroundColor': active
       ? theme.palette.facetBackgroundActive
       : theme.palette.facetBackground,
+    'overflow': 'hidden',
     ':hover': {
       backgroundColor: theme.palette.facetBackgroundHover,
     },
