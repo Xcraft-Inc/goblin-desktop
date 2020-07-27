@@ -14,13 +14,14 @@ class StatusFilter extends Widget {
     return {
       id: 'id',
       facets: 'facets',
+      facetsDisplayName: 'facetsDisplayName',
     };
   }
 
   /******************************************************************************/
 
   render() {
-    const {id, facets} = this.props;
+    const {id, facets, facetsDisplayName} = this.props;
     if (!id || !facets) {
       return null;
     }
@@ -28,7 +29,15 @@ class StatusFilter extends Widget {
     return (
       <React.Fragment>
         {Array.from(facets.entries()).map(([k, v], i) => {
-          return <FacetFilter id={this.props.id} key={i} name={k} facets={v} />;
+          return (
+            <FacetFilter
+              id={this.props.id}
+              key={i}
+              name={k}
+              displayName={facetsDisplayName.get(k)}
+              facets={v}
+            />
+          );
         })}
         <FacetFilterAdd id={this.props.id} type={this.props.type} />
       </React.Fragment>

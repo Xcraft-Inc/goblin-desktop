@@ -52,7 +52,7 @@ export default class FacetFilter extends Widget {
   }
 
   render() {
-    const {name, facets} = this.props;
+    const {name, displayName, facets} = this.props;
     if (!facets) {
       return null;
     }
@@ -61,6 +61,7 @@ export default class FacetFilter extends Widget {
       <div ref={(node) => (this.buttonNode = node)}>
         <FacetFilterButton
           text={name}
+          displayName={displayName}
           {...this.props}
           active={this.showDialog}
           onClick={this.onToggleShowDialog}
