@@ -21,7 +21,10 @@ class FacetFilterButton extends Widget {
 
   renderText() {
     return (
-      <TT msgid={this.props.text} className={this.styles.classNames.text} />
+      <TT
+        msgid={this.props.displayName}
+        className={this.styles.classNames.text}
+      />
     );
   }
 
