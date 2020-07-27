@@ -3,7 +3,7 @@ import Widget from 'laboratory/widget';
 import Gauge from 'gadgets/gauge/widget';
 import Label from 'gadgets/label/widget';
 import T from 't';
-import TT from 'nabu/t/widget';
+import TT from 'goblin-nabu/widgets/t/widget';
 import * as FacetHelpers from '../helpers/facet-helpers';
 
 /******************************************************************************/
