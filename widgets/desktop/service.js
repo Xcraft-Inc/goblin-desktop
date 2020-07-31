@@ -220,6 +220,11 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
     workitem.kind = 'tab';
   }
 
+  if (workitem.kind === 'dialog') {
+    //ensure dialog's cannot be popped twice
+    workitem.maxInstances = 1;
+  }
+
   if (!workitem.contextId) {
     if (currentLocation) {
       workitem.contextId = extractContextIdFromCurrentLocation(currentLocation);
