@@ -45,6 +45,11 @@ class Tabs extends Widget {
   //#endregion
 
   navToWorkItem(contextId, view, workitemId) {
+    const current = this.getRouting().get('location');
+    const search = current.get('search');
+    if (search.includes(workitemId)) {
+      return;
+    }
     this.cmd('desktop.nav-to-workitem', {
       id: this.props.desktopId,
       contextId,
