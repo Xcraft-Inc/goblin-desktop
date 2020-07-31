@@ -144,8 +144,8 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function* (
       `Cannot remove workitem without a name: ${JSON.stringify(workitem)}`
     );
   }
-  quest.log.dbg(`Removing ${workitem.name}@${workitem.id}...`);
   yield mutex.lock(questLock(quest));
+  quest.log.dbg(`Removing ${workitem.name}@${workitem.id}...`);
   const state = quest.goblin.getState();
 
   if (!workitem.contextId) {
@@ -236,8 +236,8 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
       delete workitem.payload.desktopId;
     }
   }
-  quest.log.dbg(`Adding ${workitem.name}@${workitem.id}...`);
   yield mutex.lock(questLock(quest));
+  quest.log.dbg(`Adding ${workitem.name}@${workitem.id}...`);
   /* Manage `maxInstances` property which is useful to limit the quantity
    * of instances. If the `navigate` property is passed to true, then
    * a navigate is performed with the first entry.
