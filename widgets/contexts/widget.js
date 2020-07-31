@@ -20,6 +20,15 @@ export default class Contexts extends Widget {
   }
 
   navToContext(contextId) {
+    const current = this.getRouting().get('location');
+    const path = current.get('pathname');
+    const parts = path.split('/');
+    if (parts[1]) {
+      if (parts[1] === contextId) {
+        return;
+      }
+    }
+
     this.cmd('desktop.nav-to-context', {
       id: this.props.desktopId,
       contextId,
