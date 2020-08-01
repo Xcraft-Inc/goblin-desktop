@@ -106,6 +106,7 @@ class Search extends Widget {
 
     this.state = {
       showParams: true,
+      focusOnSearch: false,
     };
 
     this.onToggleParams = this.onToggleParams.bind(this);
@@ -113,6 +114,8 @@ class Search extends Widget {
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
     this.drillDown = this.drillDown.bind(this);
+    this.handleFocus = this.handleFocus.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
     this.filter = this.filter.bind(this);
     this.resetFilter = this.resetFilter.bind(this);
   }
@@ -133,10 +136,18 @@ class Search extends Widget {
   get showParams() {
     return this.state.showParams;
   }
-
   set showParams(value) {
     this.setState({
       showParams: value,
+    });
+  }
+
+  get focusOnSearch() {
+    return this.state.focusOnSearch;
+  }
+  set focusOnSearch(value) {
+    this.setState({
+      focusOnSearch: value,
     });
   }
   //#endregion
@@ -157,6 +168,14 @@ class Search extends Widget {
   drillDown(entityId) {
     this._entityIds.push(entityId);
     this._drillDown();
+  }
+
+  handleFocus() {
+    this.focusOnSearch = true;
+  }
+
+  handleBlur() {
+    this.focusOnSearch = false;
   }
 
   filter(value) {
@@ -189,6 +208,8 @@ class Search extends Widget {
                 hintText={this.props.hintText || T('Chercher')}
                 value={C('.value')}
                 changeMode="throttled"
+                onFocus={this.handleFocus}
+                onBlur={this.handleBlur}
                 onChange={this.filter}
                 autoFocus={true}
                 selectAllOnFocus={true}
@@ -228,6 +249,7 @@ class Search extends Widget {
         id={this.props.id}
         hinter={this.props.hinter}
         type={this.props.type}
+        focusOnSearch={this.focusOnSearch}
       />
     );
   }

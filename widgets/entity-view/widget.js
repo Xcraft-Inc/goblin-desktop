@@ -110,9 +110,7 @@ class EntityView extends Widget {
 
   get filterPaths() {
     // TODO...
-    return this.props.hasFilter
-      ? ['meta.summaries.description', 'meta.summaries.info']
-      : null;
+    return ['meta.summaries.description', 'meta.summaries.info'];
   }
 
   getEntityId(rowId) {
@@ -291,11 +289,19 @@ class EntityView extends Widget {
       text = new Shredder({text, glyph});
     }
 
+    const path = ListHelpers.getColumnPath(cell);
+    const filterPaths = this.filterPaths;
+    const aspect =
+      this.props.focusOnSearch && filterPaths && filterPaths.includes(path)
+        ? 'searchable'
+        : null;
+
     return (
       <TableCell
         key={index}
         isLast={false}
         isHeader={true}
+        aspect={aspect}
         verticalAlign="center"
         {...ListHelpers.getColumnProps(cell, this.props.settings)}
         text={text}
@@ -353,6 +359,7 @@ class EntityView extends Widget {
           data={{
             firstColumnWidth: this.firstColumnWidth,
             filterPaths: this.filterPaths,
+            hasFilter: this.props.hasFilter,
             onDrillDown: this.drillDown,
             onRenewTTL: this.renewTTL,
             columns: columns,

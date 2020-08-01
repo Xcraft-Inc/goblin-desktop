@@ -190,7 +190,7 @@ class EntityRow extends Widget {
   }
 
   isFilterPath(path) {
-    if (this.props.filterPaths) {
+    if (this.props.hasFilter && this.props.filterPaths) {
       return this.props.filterPaths.includes(path);
     }
     return false;
