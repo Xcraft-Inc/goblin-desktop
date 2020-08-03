@@ -25,6 +25,7 @@ class EntityView extends Widget {
     };
 
     this._entityIds = [];
+    this.initialSorting = false;
 
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
@@ -103,7 +104,7 @@ class EntityView extends Widget {
     }
 
     return {
-      columnId: this.props.columns.get(0),
+      columnId: this.props.columnIds.get(0),
       direction: 'asc',
     };
   }
@@ -206,10 +207,19 @@ class EntityView extends Widget {
     };
   }
 
-  sortList(key, dir) {
+  sortColumn(sorting) {
+    const columnId = sorting.columnId;
+    const direction = sorting.direction;
+
+    const columns = this.props.columns.filter((c) => c.get('id') === columnId);
+    if (columns.size === 0) {
+      return;
+    }
+    const path = columns.first().get('path');
+
     this.doFor(this.props.id, 'sort-list', {
-      key,
-      dir,
+      key: path,
+      dir: direction,
     });
   }
 
@@ -218,7 +228,7 @@ class EntityView extends Widget {
       return;
     }
 
-    const columnId = this.props.columns.get(index - 1);
+    const columnId = this.props.columnIds.get(index - 1);
     const sorting = this.sorting;
     if (sorting.columnId === columnId) {
       sorting.direction = sorting.direction === 'asc' ? 'desc' : 'asc';
@@ -232,9 +242,13 @@ class EntityView extends Widget {
       direction: sorting.direction,
     });
 
-    const cell = columns[index - 1];
-    const path = ListHelpers.getColumnPath(cell);
-    this.sortList(path, sorting.direction);
+    //? const cell = columns[index - 1];
+    //? const path = ListHelpers.getColumnPath(cell);
+    //? this.doFor(this.props.id, 'sort-list', {
+    //?   key: path,
+    //?   dir: sorting.direction,
+    //? });
+    this.sortColumn(sorting);
   }
 
   onWidthChanged(index, width) {
@@ -248,7 +262,7 @@ class EntityView extends Widget {
       });
     } else {
       index--;
-      const columnId = this.props.columns.get(index);
+      const columnId = this.props.columnIds.get(index);
       this.setUserSettings('set-view-column-width', {
         viewId: `view@${this.props.type}`,
         columnId,
@@ -266,7 +280,7 @@ class EntityView extends Widget {
       indexDst--; // if moved from left to right, skip the initial column (indexSrc).
     }
 
-    const c = this.props.columns.toArray();
+    const c = this.props.columnIds.toArray();
     const srcId = c[indexSrc];
     c.splice(indexSrc, 1); // Firstly, remove the column at initial position.
     c.splice(indexDst, 0, srcId); // Secondly, insert the column at new position.
@@ -281,7 +295,7 @@ class EntityView extends Widget {
 
   renderHeaderCell(cell, index) {
     let text = ListHelpers.getColumnHeaderText(cell);
-    const columnId = this.props.columns.get(index);
+    const columnId = this.props.columnIds.get(index);
     const sorting = this.sorting;
     if (sorting.columnId === columnId && !this.props.hasFilter) {
       const glyph =
@@ -435,13 +449,18 @@ class EntityView extends Widget {
   }
 
   render() {
-    const {id, columns, type} = this.props;
-    if (!id || !columns) {
+    const {id, columnIds, type} = this.props;
+    if (!id || !columnIds) {
       return null;
     }
 
+    if (!this.initialSorting) {
+      this.initialSorting = true;
+      this.sortColumn(this.sorting);
+    }
+
     return this.buildCollectionLoader(
-      columns.toArray(),
+      columnIds.toArray(),
       ({collection}) => {
         const columns = collection;
         const width = this.getEstimatedWidth(columns);
@@ -480,7 +499,7 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
   const hasFilter = !!state.get(`widgets.${prop.id}.value`, null);
 
   const view = state.get(`backend.view@${prop.type}`);
-  let columns = view.get('columns');
+  let columnIds = view.get('columns');
 
   const clientSessionId = state.get(`backend.${window.labId}.clientSessionId`);
   const userView = state.get(
@@ -490,15 +509,18 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
     const order = userView.get('order');
     if (order.size > 0) {
       //todo clean non available
-      columns = order;
+      columnIds = order;
     }
   }
+
+  const columns = columnIds.map((columnId) => state.get(`backend.${columnId}`));
 
   const userSession = Widget.getUserSession(state);
   const prototypeMode = userSession.get('prototypeMode');
 
   return {
     hasFilter,
+    columnIds,
     columns,
     view: view.get('query'),
     settings: userView,
