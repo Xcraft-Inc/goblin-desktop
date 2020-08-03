@@ -201,7 +201,7 @@ class Search extends Widget {
         <div className={this.styles.classNames.pane}>
           <Label text={this.props.title} grow="1" kind="title" />
           <div className={this.styles.classNames.separator} />
-          <FrontendForm widgetId={this.props.id} initialState={{value: ''}}>
+          <FrontendForm widgetId={this.props.id}>
             <Container kind="row">
               <TextField
                 grow="1"
