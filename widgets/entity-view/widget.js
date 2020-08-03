@@ -121,7 +121,7 @@ class EntityView extends Widget {
 
   getEntityCount() {
     const state = new Shredder(this.getState().backend);
-    return state.get(`list@${this.props.id}.list`).size;
+    return state.get(`list@${this.props.id}.count`);
   }
 
   getSelectedRowId() {
