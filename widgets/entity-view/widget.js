@@ -287,19 +287,11 @@ class EntityView extends Widget {
       text = new Shredder({text, glyph});
     }
 
-    const path = ListHelpers.getColumnPath(cell);
-    const filterPaths = this.filterPaths;
-    const aspect =
-      this.props.focusOnSearch && filterPaths && filterPaths.includes(path)
-        ? 'searchable'
-        : null;
-
     return (
       <TableCell
         key={index}
         isLast={false}
         isHeader={true}
-        aspect={aspect}
         verticalAlign="center"
         {...ListHelpers.getColumnProps(cell, this.props.settings)}
         text={text}
