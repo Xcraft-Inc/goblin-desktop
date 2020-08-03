@@ -208,8 +208,6 @@ class Search extends Widget {
                 hintText={this.props.hintText || T('Chercher')}
                 value={C('.value')}
                 changeMode="throttled"
-                onFocus={this.handleFocus}
-                onBlur={this.handleBlur}
                 onChange={this.filter}
                 autoFocus={true}
                 selectAllOnFocus={true}

@@ -25,7 +25,6 @@ class EntityView extends Widget {
     };
 
     this._entityIds = [];
-    this.initialSorting = false;
 
     this._drillDownInternal = this._drillDownInternal.bind(this);
     this._drillDown = throttle(this._drillDownInternal, 100).bind(this);
@@ -207,23 +206,7 @@ class EntityView extends Widget {
     };
   }
 
-  sortColumn(sorting) {
-    const columnId = sorting.columnId;
-    const direction = sorting.direction;
-
-    const columns = this.props.columns.filter((c) => c.get('id') === columnId);
-    if (columns.size === 0) {
-      return;
-    }
-    const path = columns.first().get('path');
-
-    this.doFor(this.props.id, 'sort-list', {
-      key: path,
-      dir: direction,
-    });
-  }
-
-  onSortColumn(index) {
+  onSortColumn(index, columns) {
     if (this.props.hasFilter) {
       return;
     }
@@ -243,7 +226,13 @@ class EntityView extends Widget {
       direction: sorting.direction,
     });
 
-    this.sortColumn(sorting);
+    const cell = columns[index - 1];
+    const path = ListHelpers.getColumnPath(cell);
+
+    this.doFor(this.props.id, 'sort-list', {
+      key: path,
+      dir: sorting.direction,
+    });
   }
 
   onWidthChanged(index, width) {
@@ -350,7 +339,7 @@ class EntityView extends Widget {
           fixedColumns={[0]}
           widthChanged={(index, width) => this.onWidthChanged(index, width)}
           columnMoved={(src, dst) => this.onColumnMoved(src, dst)}
-          columnClicked={(index) => this.onSortColumn(index)}
+          columnClicked={(index) => this.onSortColumn(index, columns)}
         />
       </div>
     );
@@ -449,11 +438,6 @@ class EntityView extends Widget {
       return null;
     }
 
-    if (!this.initialSorting) {
-      this.initialSorting = true;
-      this.sortColumn(this.sorting);
-    }
-
     return this.buildCollectionLoader(
       columnIds.toArray(),
       ({collection}) => {
@@ -508,15 +492,12 @@ const ConnectedEntityView = Widget.connect((state, prop) => {
     }
   }
 
-  const columns = columnIds.map((columnId) => state.get(`backend.${columnId}`));
-
   const userSession = Widget.getUserSession(state);
   const prototypeMode = userSession.get('prototypeMode');
 
   return {
     hasFilter,
     columnIds,
-    columns,
     view: view.get('query'),
     settings: userView,
     prototypeMode,

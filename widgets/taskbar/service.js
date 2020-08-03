@@ -73,14 +73,20 @@ Goblin.registerQuest(goblinName, 'run-workitem', function* (
   quest,
   workitem,
   contextId,
-  currentLocation
+  currentLocation,
+  clientSessionId
 ) {
   const desk = quest.getAPI(quest.goblin.getX('desktopId'));
 
   workitem.id = uuidV4();
   workitem.isDone = false;
   workitem.contextId = contextId;
-  return yield desk.addWorkitem({workitem, currentLocation, navigate: true});
+  return yield desk.addWorkitem({
+    workitem,
+    currentLocation,
+    clientSessionId,
+    navigate: true,
+  });
 });
 
 Goblin.registerQuest(goblinName, 'run-client-quest', function* (

@@ -189,6 +189,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
   quest,
   workitem,
   currentLocation,
+  clientSessionId,
   navigate
 ) {
   if (!workitem.name) {
@@ -287,6 +288,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
       {
         id: widgetId,
         desktopId,
+        clientSessionId,
         contextId: workitem.contextId,
         workflowId: workitem.workflowId,
         isDialog: workitem.kind === 'dialog',
