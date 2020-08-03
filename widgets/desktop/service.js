@@ -593,7 +593,9 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
       const search = location.get('search');
       const path = location.get('path');
       const hash = location.get('hash');
-      route = `${path}${search}${hash}`;
+      if (search) {
+        route = `${path}${search}${hash}`;
+      }
     }
     quest.evt(`nav.requested`, {
       route,
