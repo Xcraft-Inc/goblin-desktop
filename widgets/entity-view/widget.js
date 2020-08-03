@@ -223,7 +223,7 @@ class EntityView extends Widget {
     });
   }
 
-  onSortColumn(index, columns) {
+  onSortColumn(index) {
     if (this.props.hasFilter) {
       return;
     }
@@ -236,18 +236,13 @@ class EntityView extends Widget {
       sorting.columnId = columnId;
       sorting.direction = 'asc';
     }
+
     this.setUserSettings('set-view-column-sorting', {
       viewId: `view@${this.props.type}`,
       columnId: sorting.columnId,
       direction: sorting.direction,
     });
 
-    //? const cell = columns[index - 1];
-    //? const path = ListHelpers.getColumnPath(cell);
-    //? this.doFor(this.props.id, 'sort-list', {
-    //?   key: path,
-    //?   dir: sorting.direction,
-    //? });
     this.sortColumn(sorting);
   }
 
@@ -355,7 +350,7 @@ class EntityView extends Widget {
           fixedColumns={[0]}
           widthChanged={(index, width) => this.onWidthChanged(index, width)}
           columnMoved={(src, dst) => this.onColumnMoved(src, dst)}
-          columnClicked={(index) => this.onSortColumn(index, columns)}
+          columnClicked={(index) => this.onSortColumn(index)}
         />
       </div>
     );
