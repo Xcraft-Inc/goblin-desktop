@@ -11,6 +11,9 @@ function getType(keys) {
     if (key !== '') {
       // Check only the first not empty key.
       if (DateTimeConverters.check(key)) {
+        if (key.endsWith('T00:00:00.000Z')) {
+          return 'date';
+        }
         return 'datetime';
       } else {
         break;
@@ -21,10 +24,14 @@ function getType(keys) {
 }
 
 function format(text, type) {
-  if (type === 'datetime') {
-    return DateTimeConverters.getDisplayed(text);
+  switch (type) {
+    case 'datetime':
+      return DateTimeConverters.getDisplayed(text);
+    case 'date':
+      return DateTimeConverters.getDisplayed(text, 'date');
+    default:
+      return text;
   }
-  return text;
 }
 
 function extractTab(text, type) {
@@ -33,19 +40,23 @@ function extractTab(text, type) {
       return {internal: '(vide)', displayed: '(vide)'};
     }
 
-    if (type === 'datetime') {
-      const y = DateTimeConverters.getYear(text);
-      const m = DateTimeConverters.getMonth(text);
-      const mm = MonthConverters.getDisplayed(m, 'short');
-      const internal = `${m}.${y}`;
-      const displayed = StringBuilder.combine(mm, ' ', y);
-      return {internal, displayed};
-    } else {
-      const letter = text[0];
-      if (letter === ' ' || letter === '\t') {
-        return {internal: '?', displayed: '?'};
+    switch (type) {
+      case 'datetime':
+      case 'date': {
+        const y = DateTimeConverters.getYear(text);
+        const m = DateTimeConverters.getMonth(text);
+        const mm = MonthConverters.getDisplayed(m, 'short');
+        const internal = `${m}.${y}`;
+        const displayed = StringBuilder.combine(mm, ' ', y);
+        return {internal, displayed};
       }
-      return {internal: letter, displayed: letter};
+      default: {
+        const letter = text[0];
+        if (letter === ' ' || letter === '\t') {
+          return {internal: '?', displayed: '?'};
+        }
+        return {internal: letter, displayed: letter};
+      }
     }
   }
 

@@ -29,6 +29,9 @@ class FacetCheckbox extends Widget {
     );
   }
 }
+
+/******************************************************************************/
+
 export default Widget.connect((state, props) => {
   const checkbox = state
     .get(`backend.${props.id}.checkboxes.${props.name}`)
@@ -38,5 +41,3 @@ export default Widget.connect((state, props) => {
   }
   return {checked: checkbox.get('checked'), count: checkbox.get('count')};
 })(FacetCheckbox);
-
-/******************************************************************************/
