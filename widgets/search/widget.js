@@ -251,7 +251,7 @@ class Search extends Widget {
   }
 
   render() {
-    if (!this.props.id) {
+    if (!this.props.id || !this.props.type) {
       return null;
     }
 
