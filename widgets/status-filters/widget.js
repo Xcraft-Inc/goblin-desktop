@@ -18,27 +18,65 @@ class StatusFilter extends Widget {
     };
   }
 
+  get sortedFacets() {
+    const facets = [];
+
+    const s = new Set();
+
+    // First, put all the facets corresponding to columns, in the same order.
+    for (const column of this.props.columns) {
+      const path = column.get('path').replace(/\./g, '/');
+      const items = this.props.facets.get(path);
+      if (items) {
+        s.add(path);
+        facets.push({name: path, items: items});
+      }
+    }
+
+    // Finally, put the remaining facets.
+    Array.from(this.props.facets.entries()).map(([k, v]) => {
+      if (!s.has(k)) {
+        facets.push({name: k, items: v});
+      }
+    });
+
+    return facets;
+  }
+
   /******************************************************************************/
 
+  renderFacet(name, items, index) {
+    return (
+      <FacetFilter
+        id={this.props.id}
+        key={index}
+        name={name}
+        displayName={this.props.facetsDisplayName.get(name)}
+        facets={items}
+      />
+    );
+  }
+
+  renderFacets() {
+    const result = [];
+
+    const facets = this.sortedFacets;
+    let index = 0;
+    for (const facet of facets) {
+      result.push(this.renderFacet(facet.name, facet.items, index++));
+    }
+
+    return result;
+  }
+
   render() {
-    const {id, facets, facetsDisplayName} = this.props;
-    if (!id || !facets) {
+    if (!this.props.id || !this.props.facets) {
       return null;
     }
 
     return (
       <React.Fragment>
-        {Array.from(facets.entries()).map(([k, v], i) => {
-          return (
-            <FacetFilter
-              id={this.props.id}
-              key={i}
-              name={k}
-              displayName={facetsDisplayName.get(k)}
-              facets={v}
-            />
-          );
-        })}
+        {this.renderFacets()}
         <FacetFilterAdd id={this.props.id} type={this.props.type} />
       </React.Fragment>
     );
@@ -47,4 +85,25 @@ class StatusFilter extends Widget {
 
 /******************************************************************************/
 
-export default Widget.Wired(StatusFilter)();
+const StatusFilterConnected = Widget.connect((state, props) => {
+  const view = state.get(`backend.view@${props.type}`);
+  let columnIds = view.get('columns');
+
+  const clientSessionId = state.get(`backend.${window.labId}.clientSessionId`);
+  const userView = state.get(
+    `backend.${clientSessionId}.views.view@${props.type}`
+  );
+  if (userView) {
+    const order = userView.get('order');
+    if (order.size > 0) {
+      //todo clean non available
+      columnIds = order;
+    }
+  }
+
+  const columns = columnIds.map((columnId) => state.get(`backend.${columnId}`));
+
+  return {columns};
+})(StatusFilter);
+
+export default Widget.Wired(StatusFilterConnected)();
