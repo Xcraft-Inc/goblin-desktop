@@ -15,6 +15,7 @@ class StatusFilter extends Widget {
       id: 'id',
       facets: 'facets',
       facetsDisplayName: 'facetsDisplayName',
+      facetsMappingType: 'facetsMappingType',
     };
   }
 
@@ -51,6 +52,7 @@ class StatusFilter extends Widget {
         key={index}
         name={name}
         displayName={this.props.facetsDisplayName.get(name)}
+        type={this.props.facetsMappingType.get(name)}
         facets={items}
       />
     );
