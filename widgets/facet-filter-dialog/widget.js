@@ -1,7 +1,11 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
+import T from 't';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
+import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
+import Separator from 'gadgets/separator/widget';
+import TextFieldTypedNC from 'gadgets/text-field-typed-nc/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterDialogFooter from '../facet-filter-dialog-footer/widget.js';
 import * as FacetHelpers from '../helpers/facet-helpers';
@@ -10,11 +14,19 @@ const px = Unit.toPx;
 
 /******************************************************************************/
 
+function isRange(type) {
+  return type === 'date' || type === 'number';
+}
+
+/******************************************************************************/
+
 class FacetFilterDialog extends Widget {
   constructor() {
     super(...arguments);
 
     this.changeFacet = this.changeFacet.bind(this);
+    this.handleFrom = this.handleFrom.bind(this);
+    this.handleTo = this.handleTo.bind(this);
     this.onClose = this.onClose.bind(this);
   }
 
@@ -25,10 +37,26 @@ class FacetFilterDialog extends Widget {
   changeFacet(facet) {
     return () => {
       this.doAs('list', 'toggle-facet-filter', {
-        facet: facet,
         filterName: this.props.name,
+        facet: facet,
       });
     };
+  }
+
+  handleFrom(value) {
+    this.doAs('list', 'set-range', {
+      filterName: this.props.name,
+      from: value,
+      to: this.props.to,
+    });
+  }
+
+  handleTo(value) {
+    this.doAs('list', 'set-range', {
+      filterName: this.props.name,
+      from: this.props.from,
+      to: value,
+    });
   }
 
   /******************************************************************************/
@@ -49,6 +77,48 @@ class FacetFilterDialog extends Widget {
     //- );
   }
 
+  renderFooter(hasCheckbox) {
+    return (
+      <FacetFilterDialogFooter
+        id={this.props.id}
+        name={this.props.name}
+        hasCheckbox={hasCheckbox}
+      />
+    );
+  }
+
+  // Build UI for range of dates or number.
+  renderRange() {
+    const fromText = this.props.type === 'date' ? T('Du') : T('De');
+    const toText = this.props.type === 'date' ? T('Au') : T('À');
+
+    return (
+      <div className={this.styles.classNames.facetFilterDialog}>
+        <div className={this.styles.classNames.buttons}>
+          <Container kind="row">
+            <Label width="50px" text={fromText} />
+            <TextFieldTypedNC
+              type={this.props.type}
+              value={this.props.from}
+              onChange={this.handleFrom}
+            />
+          </Container>
+          <Separator kind="exact" height="5px" />
+          <Container kind="row">
+            <Label width="50px" text={toText} />
+            <TextFieldTypedNC
+              type={this.props.type}
+              value={this.props.to}
+              onChange={this.handleTo}
+            />
+          </Container>
+        </div>
+        {this.renderFooter(false)}
+        {this.renderClose()}
+      </div>
+    );
+  }
+
   renderButtons() {
     const result = [];
     const keys = this.getState()
@@ -57,6 +127,7 @@ class FacetFilterDialog extends Widget {
       .get(this.props.name)
       .keySeq();
     const type = FacetHelpers.getType(keys);
+
     if (this.props.numberOfCheckboxes < 20) {
       for (const key of keys) {
         result.push(
@@ -104,10 +175,26 @@ class FacetFilterDialog extends Widget {
     return result;
   }
 
-  renderFooter() {
+  renderList() {
     return (
-      <FacetFilterDialogFooter id={this.props.id} name={this.props.name} />
+      <div className={this.styles.classNames.facetFilterDialog}>
+        <div className={this.styles.classNames.buttons}>
+          <div className={this.styles.classNames.scrollable}>
+            {this.renderButtons()}
+          </div>
+        </div>
+        {this.renderFooter(true)}
+        {this.renderClose()}
+      </div>
     );
+  }
+
+  renderContent() {
+    if (isRange(this.props.type)) {
+      return this.renderRange();
+    } else {
+      return this.renderList();
+    }
   }
 
   render() {
@@ -117,25 +204,36 @@ class FacetFilterDialog extends Widget {
 
     const windowHeight = window.innerHeight;
     const r = this.props.parentButtonRect;
-    const count = this.props.numberOfCheckboxes;
-    const height = Math.min(Math.max(count * 20 + 100, 200), windowHeight - 20);
     let centerY = r.top + r.height / 2;
 
-    let shiftY = 0;
-    if (centerY - height / 2 < 10) {
-      const offset = height / 2 - centerY + 10;
-      centerY += offset;
-      shiftY = -offset;
-    }
-    if (centerY + height / 2 > windowHeight - 10) {
-      const offset = centerY + height / 2 - (windowHeight - 10);
-      centerY -= offset;
-      shiftY = offset;
+    let width,
+      height,
+      shiftY = 0;
+
+    if (isRange(this.props.type)) {
+      width = 265;
+      height = 190;
+    } else {
+      width = 520;
+
+      const count = this.props.numberOfCheckboxes;
+      height = Math.min(Math.max(count * 20 + 100, 200), windowHeight - 20);
+
+      if (centerY - height / 2 < 10) {
+        const offset = height / 2 - centerY + 10;
+        centerY += offset;
+        shiftY = -offset;
+      }
+      if (centerY + height / 2 > windowHeight - 10) {
+        const offset = centerY + height / 2 - (windowHeight - 10);
+        centerY -= offset;
+        shiftY = offset;
+      }
     }
 
     return (
       <DialogModal
-        width="520px"
+        width={px(width)}
         height={px(height)}
         left={px(r.right + 40)}
         center={px(centerY)}
@@ -143,15 +241,7 @@ class FacetFilterDialog extends Widget {
         backgroundClose={true}
         close={this.onClose}
       >
-        <div className={this.styles.classNames.facetFilterDialog}>
-          <div className={this.styles.classNames.buttons}>
-            <div className={this.styles.classNames.scrollable}>
-              {this.renderButtons()}
-            </div>
-          </div>
-          {this.renderFooter()}
-          {this.renderClose()}
-        </div>
+        {this.renderContent()}
       </DialogModal>
     );
   }
@@ -160,10 +250,20 @@ class FacetFilterDialog extends Widget {
 /******************************************************************************/
 
 export default Widget.connect((state, props) => {
-  const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
-  if (flags) {
-    return {numberOfCheckboxes: flags.size};
+  if (isRange(props.type)) {
+    const range = state.get(`backend.${props.id}.ranges.${props.name}`);
+    if (range) {
+      return {from: range.get('from'), to: range.get('to')};
+    } else {
+      return {from: '2020-01-01', to: '2020-12-31'};
+      //? return {loading: true};
+    }
   } else {
-    return {loading: true};
+    const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
+    if (flags) {
+      return {numberOfCheckboxes: flags.size};
+    } else {
+      return {loading: true};
+    }
   }
 })(FacetFilterDialog);

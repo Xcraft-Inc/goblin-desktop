@@ -45,6 +45,7 @@ export default class FacetFilter extends Widget {
       <FacetFilterDialog
         id={this.props.id}
         name={this.props.name}
+        type={this.props.type}
         parentButtonRect={r}
         onClose={this.onToggleShowDialog}
       />
