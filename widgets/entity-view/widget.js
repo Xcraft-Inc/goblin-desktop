@@ -462,19 +462,19 @@ class EntityView extends Widget {
 
 /******************************************************************************/
 
-const ConnectedEntityView = Widget.connect((state, prop) => {
-  if (!prop.type) {
+const ConnectedEntityView = Widget.connect((state, props) => {
+  if (!props.type) {
     return {};
   }
 
-  const hasFilter = !!state.get(`widgets.${prop.id}.value`, null);
+  const hasFilter = !!state.get(`widgets.${props.id}.value`, null);
 
-  const view = state.get(`backend.view@${prop.type}`);
+  const view = state.get(`backend.view@${props.type}`);
   let columnIds = view.get('columns');
 
   const clientSessionId = state.get(`backend.${window.labId}.clientSessionId`);
   const userView = state.get(
-    `backend.${clientSessionId}.views.view@${prop.type}`
+    `backend.${clientSessionId}.views.view@${props.type}`
   );
   if (userView) {
     const order = userView.get('order');
