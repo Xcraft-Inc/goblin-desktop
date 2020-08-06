@@ -5,7 +5,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 
 /******************************************************************************/
 
-class FacetFilterDialogFooter extends Widget {
+class FacetFilterListDialogFooter extends Widget {
   constructor() {
     super(...arguments);
     this.clearAllFacets = this.clearAllFacets.bind(this);
@@ -39,12 +39,12 @@ class FacetFilterDialogFooter extends Widget {
   /******************************************************************************/
 
   render() {
-    let enableClearAll =
-      this.props.hasCheckbox &&
-      this.props.flags.toArray().some((flag) => flag.get('checked'));
-    let enableSetAll =
-      this.props.hasCheckbox &&
-      this.props.flags.toArray().some((flag) => !flag.get('checked'));
+    const enableClearAll = this.props.flags
+      .toArray()
+      .some((flag) => flag.get('checked'));
+    const enableSetAll = this.props.flags
+      .toArray()
+      .some((flag) => !flag.get('checked'));
 
     return (
       <div className={this.styles.classNames.footer}>
@@ -95,4 +95,4 @@ export default Widget.connect((state, props) => {
   const prototypeMode = userSession.get('prototypeMode');
 
   return {flags, prototypeMode};
-})(FacetFilterDialogFooter);
+})(FacetFilterListDialogFooter);

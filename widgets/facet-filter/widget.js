@@ -1,7 +1,9 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import FacetFilterDialog from 'goblin-desktop/widgets/facet-filter-dialog/widget';
+import FacetFilterListDialog from 'goblin-desktop/widgets/facet-filter-list-dialog/widget';
+import FacetFilterRangeDialog from 'goblin-desktop/widgets/facet-filter-range-dialog/widget';
 import FacetFilterButton from 'goblin-desktop/widgets/facet-filter-button/widget';
+import * as FacetHelpers from '../helpers/facet-helpers';
 
 /******************************************************************************/
 
@@ -41,15 +43,27 @@ export default class FacetFilter extends Widget {
 
     const r = this.buttonNode.getBoundingClientRect();
 
-    return (
-      <FacetFilterDialog
-        id={this.props.id}
-        name={this.props.name}
-        type={this.props.type}
-        parentButtonRect={r}
-        onClose={this.onToggleShowDialog}
-      />
-    );
+    if (FacetHelpers.isRange(this.props.type)) {
+      return (
+        <FacetFilterRangeDialog
+          id={this.props.id}
+          name={this.props.name}
+          type={this.props.type}
+          parentButtonRect={r}
+          onClose={this.onToggleShowDialog}
+        />
+      );
+    } else {
+      return (
+        <FacetFilterListDialog
+          id={this.props.id}
+          name={this.props.name}
+          type={this.props.type}
+          parentButtonRect={r}
+          onClose={this.onToggleShowDialog}
+        />
+      );
+    }
   }
 
   render() {
