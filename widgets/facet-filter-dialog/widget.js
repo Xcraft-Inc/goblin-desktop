@@ -298,8 +298,7 @@ export default Widget.connect((state, props) => {
         to: range.get('to', range.get('max')),
       };
     } else {
-      return {from: '2020-01-01', to: '2020-12-31'};
-      //? return {loading: true};
+      return {loading: true};
     }
   } else {
     const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
