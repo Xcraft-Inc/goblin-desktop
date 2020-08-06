@@ -8,8 +8,11 @@ import Separator from 'gadgets/separator/widget';
 import TextFieldTypedNC from 'gadgets/text-field-typed-nc/widget';
 import Slider from 'gadgets/slider/widget';
 import FacetFilterRangeDialogFooter from '../facet-filter-range-dialog-footer/widget.js';
+import {date as DateConverters} from 'xcraft-core-converters';
 import {Unit} from 'goblin-theme';
 const px = Unit.toPx;
+
+/******************************************************************************/
 
 class FacetFilterRangeDialog extends Widget {
   constructor() {
@@ -43,11 +46,52 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   handleSliderFrom(value) {
-    //
+    const from = this.sliderToExternal(value);
+    const to = this.sliderToExternal(
+      Math.max(this.externalToSlider(this.props.to), value)
+    );
+
+    this.doAs('list', 'set-range', {
+      filterName: this.props.name,
+      from,
+      to,
+    });
   }
 
   handleSliderTo(value) {
-    //
+    const to = this.sliderToExternal(value);
+    const from = this.sliderToExternal(
+      Math.min(this.externalToSlider(this.props.from), value)
+    );
+
+    this.doAs('list', 'set-range', {
+      filterName: this.props.name,
+      from,
+      to,
+    });
+  }
+
+  /******************************************************************************/
+
+  externalToSlider(value) {
+    if (this.props.type === 'date') {
+      value = DateConverters.canonicalToJs(value);
+      const min = DateConverters.canonicalToJs(this.props.min);
+      const days = (value - min) / (1000 * 60 * 60 * 24);
+      return Math.round(days);
+    } else {
+      return value - this.props.min;
+    }
+  }
+
+  sliderToExternal(n) {
+    if (this.props.type === 'date') {
+      const date = DateConverters.canonicalToJs(this.props.min);
+      date.setDate(date.getDate() + n);
+      return DateConverters.jsToCanonical(date);
+    } else {
+      return n + this.props.min;
+    }
   }
 
   /******************************************************************************/
@@ -104,11 +148,11 @@ class FacetFilterRangeDialog extends Widget {
               direction="horizontal"
               colorBar="#f00"
               min={0}
-              max={100}
+              max={this.externalToSlider(this.props.max)}
               step={1}
-              value={20}
+              value={this.externalToSlider(this.props.from)}
               changeMode="throttled"
-              throttleDelay={50}
+              throttleDelay={200}
               onChange={this.handleSliderFrom}
             />
           </Container>
@@ -129,11 +173,11 @@ class FacetFilterRangeDialog extends Widget {
               direction="horizontal"
               colorBar="#0f0"
               min={0}
-              max={100}
+              max={this.externalToSlider(this.props.max)}
               step={1}
-              value={80}
+              value={this.externalToSlider(this.props.to)}
               changeMode="throttled"
-              throttleDelay={50}
+              throttleDelay={200}
               onChange={this.handleSliderTo}
             />
           </Container>
