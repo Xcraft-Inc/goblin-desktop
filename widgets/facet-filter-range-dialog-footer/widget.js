@@ -50,10 +50,20 @@ class FacetFilterRangeDialogFooter extends Widget {
     return (
       <div className={this.styles.classNames.footer}>
         {enableAll ? (
-          <Button border="none" text={T('Tout')} onClick={this.setAll} />
+          <Button
+            border="none"
+            glyph="solid/arrows-h"
+            text={T('Tout')}
+            onClick={this.setAll}
+          />
         ) : null}
         {enableNow ? (
-          <Button border="none" text={T("Aujourd'hui")} onClick={this.setNow} />
+          <Button
+            border="none"
+            glyph="solid/arrow-down"
+            text={T("Aujourd'hui")}
+            onClick={this.setNow}
+          />
         ) : null}
         <div className={this.styles.classNames.sajex} />
         {this.props.prototypeMode ? (
