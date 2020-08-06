@@ -6,6 +6,7 @@ import Container from 'gadgets/container/widget';
 import Label from 'gadgets/label/widget';
 import Separator from 'gadgets/separator/widget';
 import TextFieldTypedNC from 'gadgets/text-field-typed-nc/widget';
+import Slider from 'gadgets/slider/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterDialogFooter from '../facet-filter-dialog-footer/widget.js';
 import * as FacetHelpers from '../helpers/facet-helpers';
@@ -25,8 +26,10 @@ class FacetFilterDialog extends Widget {
     super(...arguments);
 
     this.changeFacet = this.changeFacet.bind(this);
-    this.handleFrom = this.handleFrom.bind(this);
-    this.handleTo = this.handleTo.bind(this);
+    this.handleFieldFrom = this.handleFieldFrom.bind(this);
+    this.handleFieldTo = this.handleFieldTo.bind(this);
+    this.handleSliderFrom = this.handleSliderFrom.bind(this);
+    this.handleSliderTo = this.handleSliderTo.bind(this);
     this.onClose = this.onClose.bind(this);
   }
 
@@ -43,7 +46,7 @@ class FacetFilterDialog extends Widget {
     };
   }
 
-  handleFrom(value) {
+  handleFieldFrom(value) {
     this.doAs('list', 'set-range', {
       filterName: this.props.name,
       from: value,
@@ -51,12 +54,20 @@ class FacetFilterDialog extends Widget {
     });
   }
 
-  handleTo(value) {
+  handleFieldTo(value) {
     this.doAs('list', 'set-range', {
       filterName: this.props.name,
       from: this.props.from,
       to: value,
     });
+  }
+
+  handleSliderFrom(value) {
+    //
+  }
+
+  handleSliderTo(value) {
+    //
   }
 
   /******************************************************************************/
@@ -95,23 +106,51 @@ class FacetFilterDialog extends Widget {
     return (
       <div className={this.styles.classNames.facetFilterDialog}>
         <div className={this.styles.classNames.buttons}>
-          <Container kind="row">
+          <Container kind="row" subkind="center">
             <Label width="50px" text={fromText} />
             <TextFieldTypedNC
               parentRect={parentRect}
+              horizontalSpacing="large"
               type={this.props.type}
               value={this.props.from}
-              onChange={this.handleFrom}
+              onChange={this.handleFieldFrom}
+            />
+            <Slider
+              width="200px"
+              direction="horizontal"
+              colorBar="#f00"
+              min={0}
+              max={100}
+              step={1}
+              value={20}
+              changeMode="throttled"
+              throttleDelay={50}
+              onChange={this.handleSliderFrom}
             />
           </Container>
+
           <Separator kind="exact" height="5px" />
-          <Container kind="row">
+
+          <Container kind="row" subkind="center">
             <Label width="50px" text={toText} />
             <TextFieldTypedNC
               parentRect={parentRect}
+              horizontalSpacing="large"
               type={this.props.type}
               value={this.props.to}
-              onChange={this.handleTo}
+              onChange={this.handleFieldTo}
+            />
+            <Slider
+              width="200px"
+              direction="horizontal"
+              colorBar="#0f0"
+              min={0}
+              max={100}
+              step={1}
+              value={80}
+              changeMode="throttled"
+              throttleDelay={50}
+              onChange={this.handleSliderTo}
             />
           </Container>
         </div>
@@ -213,7 +252,7 @@ class FacetFilterDialog extends Widget {
       shiftY = 0;
 
     if (isRange(this.props.type)) {
-      width = 265;
+      width = 480;
       height = 190;
     } else {
       width = 520;
