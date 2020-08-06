@@ -26,10 +26,12 @@ class StatusFilter extends Widget {
 
     // First, put all the facets corresponding to columns, in the same order.
     for (const path of this.props.columnPaths) {
-      const items = this.props.facets.get(path);
-      if (items) {
-        s.add(path);
-        facets.push({name: path, items: items});
+      if (path) {
+        const items = this.props.facets.get(path);
+        if (items) {
+          s.add(path);
+          facets.push({name: path, items: items});
+        }
       }
     }
 
@@ -108,7 +110,7 @@ const StatusFilterConnected = Widget.connect((state, props) => {
 
   const columnPaths = columnIds.map((columnId) => {
     const column = state.get(`backend.${columnId}`);
-    return column.get('path').replace(/\./g, '/');
+    return column ? column.get('path').replace(/\./g, '/') : null;
   });
 
   return {columnPaths};
