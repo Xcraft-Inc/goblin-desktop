@@ -171,7 +171,8 @@ class FacetFilterRangeDialog extends Widget {
             <Slider
               width="200px"
               direction="horizontal"
-              colorBar="#0f0"
+              colorBar="#f00"
+              barPosition="end"
               min={0}
               max={this.externalToSlider(this.props.max)}
               step={1}
