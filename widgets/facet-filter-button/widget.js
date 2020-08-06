@@ -138,7 +138,10 @@ export default Widget.connect((state, props) => {
   if (FacetHelpers.isRange(props.type)) {
     const range = state.get(`backend.${props.id}.ranges.${props.name}`);
     if (range) {
-      return {from: range.get('from'), to: range.get('to')};
+      return {
+        from: range.get('from', range.get('min')),
+        to: range.get('to', range.get('max')),
+      };
     } else {
       return {loading: true};
     }
