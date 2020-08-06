@@ -64,10 +64,15 @@ function extractTab(text, type) {
   return {internal: '?', displayed: '?'};
 }
 
+function isRange(type) {
+  return type === 'date' || type === 'number';
+}
+
 //-----------------------------------------------------------------------------
 
 module.exports = {
   getType,
   format,
   extractTab,
+  isRange,
 };

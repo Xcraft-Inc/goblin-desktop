@@ -13,14 +13,6 @@ import * as FacetHelpers from '../helpers/facet-helpers';
 import {Unit} from 'goblin-theme';
 const px = Unit.toPx;
 
-/******************************************************************************/
-
-function isRange(type) {
-  return type === 'date' || type === 'number';
-}
-
-/******************************************************************************/
-
 class FacetFilterDialog extends Widget {
   constructor() {
     super(...arguments);
@@ -231,7 +223,7 @@ class FacetFilterDialog extends Widget {
   }
 
   renderContent(parentRect) {
-    if (isRange(this.props.type)) {
+    if (FacetHelpers.isRange(this.props.type)) {
       return this.renderRange(parentRect);
     } else {
       return this.renderList();
@@ -251,7 +243,7 @@ class FacetFilterDialog extends Widget {
       height,
       shiftY = 0;
 
-    if (isRange(this.props.type)) {
+    if (FacetHelpers.isRange(this.props.type)) {
       width = 480;
       height = 190;
     } else {
@@ -298,10 +290,13 @@ class FacetFilterDialog extends Widget {
 /******************************************************************************/
 
 export default Widget.connect((state, props) => {
-  if (isRange(props.type)) {
+  if (FacetHelpers.isRange(props.type)) {
     const range = state.get(`backend.${props.id}.ranges.${props.name}`);
     if (range) {
-      return {from: range.get('from'), to: range.get('to')};
+      return {
+        from: range.get('from', range.get('min')),
+        to: range.get('to', range.get('max')),
+      };
     } else {
       return {from: '2020-01-01', to: '2020-12-31'};
       //? return {loading: true};

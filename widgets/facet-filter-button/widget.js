@@ -106,19 +106,22 @@ class FacetFilterButton extends Widget {
 
     let total = 0;
     let count = 0;
-    for (const value of this.props.facets.values()) {
-      const filter = value.get('key');
-      const isChecked = this.props.flags._state.get(filter).get('checked');
-      total = total + value.get('doc_count');
-      if (isChecked) {
-        count = count + value.get('doc_count');
+    let style = this.styles.classNames.facetFilterButton;
+    //TODO/FIXME: Handle range
+    if (this.props.flags) {
+      for (const value of this.props.facets.values()) {
+        const filter = value.get('key');
+        const isChecked = this.props.flags._state.get(filter).get('checked');
+        total = total + value.get('doc_count');
+        if (isChecked) {
+          count = count + value.get('doc_count');
+        }
       }
+      const disabled = this.props.numberOfCheckboxes <= 1;
+      style = disabled
+        ? this.styles.classNames.facetFilterButtonDisabled
+        : this.styles.classNames.facetFilterButton;
     }
-
-    const disabled = this.props.numberOfCheckboxes <= 1;
-    const style = disabled
-      ? this.styles.classNames.facetFilterButtonDisabled
-      : this.styles.classNames.facetFilterButton;
 
     return (
       <div className={style} onClick={this.props.onClick}>
@@ -132,10 +135,19 @@ class FacetFilterButton extends Widget {
 /******************************************************************************/
 
 export default Widget.connect((state, props) => {
-  const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
-  if (flags) {
-    return {flags, numberOfCheckboxes: flags.size};
+  if (FacetHelpers.isRange(props.type)) {
+    const range = state.get(`backend.${props.id}.ranges.${props.name}`);
+    if (range) {
+      return {from: range.get('from'), to: range.get('to')};
+    } else {
+      return {loading: true};
+    }
   } else {
-    return {loading: true};
+    const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
+    if (flags) {
+      return {flags, numberOfCheckboxes: flags.size};
+    } else {
+      return {loading: true};
+    }
   }
 })(FacetFilterButton);
