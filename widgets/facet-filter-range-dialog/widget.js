@@ -85,7 +85,7 @@ class FacetFilterRangeDialog extends Widget {
 
     return (
       <div className={this.styles.classNames.facetFilterDialog}>
-        <div className={this.styles.classNames.buttons}>
+        <div className={this.styles.classNames.content}>
           <Container kind="row" subkind="center">
             <Label width="50px" text={fromText} />
             <TextFieldTypedNC

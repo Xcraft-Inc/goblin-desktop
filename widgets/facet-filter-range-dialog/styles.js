@@ -11,22 +11,12 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
-  const buttons = {
+  const content = {
     padding: '20px 30px 0px 30px',
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
     overflow: 'hidden',
-  };
-
-  const scrollable = {
-    flexGrow: 1,
-    overflowY: 'auto',
-  };
-
-  const letter = {
-    margin: '20px 0px 5px 0px',
-    borderBottom: `1px solid ${theme.palette.textColor}`,
   };
 
   const closeButton = {
@@ -37,9 +27,7 @@ export default function styles(theme) {
 
   return {
     facetFilterDialog,
-    buttons,
-    scrollable,
-    letter,
+    content,
     closeButton,
   };
 }
