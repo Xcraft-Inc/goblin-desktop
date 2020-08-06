@@ -88,7 +88,7 @@ class FacetFilterDialog extends Widget {
   }
 
   // Build UI for range of dates or number.
-  renderRange() {
+  renderRange(parentRect) {
     const fromText = this.props.type === 'date' ? T('Du') : T('De');
     const toText = this.props.type === 'date' ? T('Au') : T('À');
 
@@ -98,6 +98,7 @@ class FacetFilterDialog extends Widget {
           <Container kind="row">
             <Label width="50px" text={fromText} />
             <TextFieldTypedNC
+              parentRect={parentRect}
               type={this.props.type}
               value={this.props.from}
               onChange={this.handleFrom}
@@ -107,6 +108,7 @@ class FacetFilterDialog extends Widget {
           <Container kind="row">
             <Label width="50px" text={toText} />
             <TextFieldTypedNC
+              parentRect={parentRect}
               type={this.props.type}
               value={this.props.to}
               onChange={this.handleTo}
@@ -189,9 +191,9 @@ class FacetFilterDialog extends Widget {
     );
   }
 
-  renderContent() {
+  renderContent(parentRect) {
     if (isRange(this.props.type)) {
-      return this.renderRange();
+      return this.renderRange(parentRect);
     } else {
       return this.renderList();
     }
@@ -231,6 +233,13 @@ class FacetFilterDialog extends Widget {
       }
     }
 
+    const parentRect = {
+      left: r.right + 40,
+      right: r.right + 40 + width,
+      top: centerY - height / 2,
+      bottom: centerY + height / 2,
+    };
+
     return (
       <DialogModal
         width={px(width)}
@@ -241,7 +250,7 @@ class FacetFilterDialog extends Widget {
         backgroundClose={true}
         close={this.onClose}
       >
-        {this.renderContent()}
+        {this.renderContent(parentRect)}
       </DialogModal>
     );
   }
