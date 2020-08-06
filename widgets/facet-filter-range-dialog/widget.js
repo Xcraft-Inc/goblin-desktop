@@ -74,6 +74,10 @@ class FacetFilterRangeDialog extends Widget {
         id={this.props.id}
         name={this.props.name}
         type={this.props.type}
+        min={this.props.min}
+        max={this.props.max}
+        from={this.props.from}
+        to={this.props.to}
       />
     );
   }
@@ -179,10 +183,12 @@ class FacetFilterRangeDialog extends Widget {
 export default Widget.connect((state, props) => {
   const range = state.get(`backend.${props.id}.ranges.${props.name}`);
   if (range) {
-    return {
-      from: range.get('from', range.get('min')),
-      to: range.get('to', range.get('max')),
-    };
+    const min = range.get('min');
+    const max = range.get('max');
+    const from = range.get('from', min);
+    const to = range.get('to', max);
+
+    return {min, max, from, to};
   } else {
     return {loading: true};
   }
