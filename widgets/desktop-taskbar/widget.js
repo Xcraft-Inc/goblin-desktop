@@ -30,24 +30,24 @@ export default class DesktopTaskbar extends Widget {
 
     return (
       <Container kind="left-bar">
+        <Button
+          textTransform="none"
+          text={this.props.id.split('@')[1]}
+          glyph="light/cube"
+          tooltip={T('Changer de mandat')}
+          kind="task-logo"
+          onClick={this.onChangeMandate}
+        />
         <Container kind="task-bar">
-          <Button
-            textTransform="none"
-            text={this.props.id.split('@')[1]}
-            glyph="light/cube"
-            tooltip={T('Changer de mandat')}
-            kind="task-logo"
-            onClick={this.onChangeMandate}
-          />
           <Tasks desktopId={this.props.id} />
           <Separator kind="sajex" />
-          <Button
-            kind="task-show-footer"
-            glyph="solid/chevron-right"
-            tooltip={T('Montre ou cache la barre de pied de page')}
-            onClick={this.props.onToggleFooter}
-          />
         </Container>
+        <Button
+          kind="task-show-footer"
+          glyph="solid/chevron-right"
+          tooltip={T('Montre ou cache la barre de pied de page')}
+          onClick={this.props.onToggleFooter}
+        />
       </Container>
     );
   }
