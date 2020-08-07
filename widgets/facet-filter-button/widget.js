@@ -1,7 +1,7 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import Gauge from 'gadgets/gauge/widget';
-import Label from 'gadgets/label/widget';
+import Gauge from 'goblin-gadgets/widgets/gauge/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import T from 't';
 import TT from 'goblin-nabu/widgets/t/widget';
 import * as FacetHelpers from '../helpers/facet-helpers';

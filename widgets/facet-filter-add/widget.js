@@ -1,6 +1,6 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
-import Label from 'gadgets/label/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import StateBrowserDialog from 'goblin-gadgets/widgets/state-browser-dialog/widget';
 import T from 't';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';

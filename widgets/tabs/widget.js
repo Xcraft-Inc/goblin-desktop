@@ -4,7 +4,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import NotificationsButton from 'goblin-desktop/widgets/notifications-button/widget';
-import Combo from 'gadgets/combo/widget';
+import Combo from 'goblin-gadgets/widgets/combo/widget';
 
 const wireNotifsButton = Widget.Wired(NotificationsButton);
 

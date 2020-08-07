@@ -1,7 +1,7 @@
 import React from 'react';
 import Widget from 'laboratory/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
-import Label from 'gadgets/label/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterListDialogFooter from '../facet-filter-list-dialog-footer/widget.js';
 import * as FacetHelpers from '../helpers/facet-helpers';
