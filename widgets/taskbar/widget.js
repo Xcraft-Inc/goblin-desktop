@@ -100,10 +100,35 @@ class Taskbar extends Widget {
     return (
       <Container kind="task-bar">
         {contextTasks.map((task, i) => {
-          if (task.separator) {
-            return this.renderSeparator(i);
-          } else {
-            return this.renderButton(context, task, i);
+          let isValidScope = true;
+          if (task.scope) {
+            switch (task.scope) {
+              case 'prototype':
+                if (!this.props.prototypeMode) {
+                  isValidScope = false;
+                }
+                break;
+              case 'dev':
+                isValidScope = false;
+                if (
+                  this.props.prototypeMode &&
+                  process &&
+                  process.env &&
+                  process.env.NODE_ENV === 'development'
+                ) {
+                  isValidScope = true;
+                }
+                break;
+              default:
+                break;
+            }
+          }
+          if (isValidScope) {
+            if (task.separator) {
+              return this.renderSeparator(i);
+            } else {
+              return this.renderButton(context, task, i);
+            }
           }
         })}
       </Container>
@@ -111,4 +136,9 @@ class Taskbar extends Widget {
   }
 }
 
-export default Taskbar;
+export default Widget.connect((state) => {
+  const userSession = Widget.getUserSession(state);
+  const prototypeMode = userSession.get('prototypeMode');
+
+  return {prototypeMode};
+})(Taskbar);
