@@ -1,5 +1,5 @@
 import {ColorManipulator} from 'goblin-theme';
-import TableHelpers from 'gadgets/helpers/table-helpers';
+import TableHelpers from 'goblin-gadgets/widgets/helpers/table-helpers.js';
 
 /******************************************************************************/
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-import {TranslatableDiv} from 'nabu/helpers/element-helpers';
+import {TranslatableDiv} from 'goblin-nabu/widgets/helpers/element-helpers';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 /******************************************************************************/
