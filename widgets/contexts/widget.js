@@ -48,6 +48,7 @@ export default class Contexts extends Widget {
         context={context}
         goToContext={this.goToContext}
         active={this.props.current === contextId}
+        tooltip={context.get('name')}
       />
     );
   }
@@ -90,6 +91,7 @@ class ContextButton extends Widget {
         kind="main-tab"
         onClick={this.handleClick}
         active={this.props.active}
+        tooltip={this.props.tooltip}
       />
     );
   }
