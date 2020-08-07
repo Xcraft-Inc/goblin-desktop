@@ -8,7 +8,7 @@ import ColoredContainer from 'goblin-gadgets/widgets/colored-container/widget';
 import EntityRowButton from 'goblin-desktop/widgets/entity-row-button/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import T from 't';
-import {ListHelpers} from 'goblin-toolbox';
+import ListHelpers from 'goblin-workshop/lib/list-helpers.js';
 import RetroGear from 'goblin-gadgets/widgets/retro-gear/widget';
 import {ColorManipulator} from 'goblin-theme';
 import Shredder from 'xcraft-core-shredder';

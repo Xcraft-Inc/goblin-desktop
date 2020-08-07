@@ -12,7 +12,7 @@ import Shredder from 'xcraft-core-shredder';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import T from 't';
-import {ListHelpers} from 'goblin-toolbox';
+import ListHelpers from 'goblin-workshop/lib/list-helpers.js';
 
 /******************************************************************************/
 

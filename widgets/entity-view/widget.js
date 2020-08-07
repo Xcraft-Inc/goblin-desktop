@@ -12,7 +12,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import T from 't';
 import MouseTrap from 'mousetrap';
 import {Unit} from 'goblin-theme';
-import {ListHelpers} from 'goblin-toolbox';
+import ListHelpers from 'goblin-workshop/lib/list-helpers.js';
 
 /******************************************************************************/
 
