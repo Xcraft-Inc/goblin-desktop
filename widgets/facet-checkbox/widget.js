@@ -1,5 +1,5 @@
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 
 /******************************************************************************/

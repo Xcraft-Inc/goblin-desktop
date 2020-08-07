@@ -1,5 +1,5 @@
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';

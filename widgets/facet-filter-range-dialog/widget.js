@@ -1,5 +1,5 @@
 import React from 'react';
-import Widget from 'laboratory/widget';
+import Widget from 'goblin-laboratory/widgets/widget';
 import T from 't';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
