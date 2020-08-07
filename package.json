@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "goblin-toolbox": "^0.0.1",
-    "xcraft-core-goblin": "^3.0.0",
-    "xcraft-core-utils": "^2.0.0"
+    "xcraft-core-goblin": "^4.0.1",
+    "xcraft-core-utils": "^3.0.0"
   },
   "devDependencies": {
     "prettier": "2.0.4",
