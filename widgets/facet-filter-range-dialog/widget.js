@@ -120,11 +120,26 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderFields(parentRect) {
+    let minDate, maxDate, min, max;
+
+    if (this.props.type === 'date') {
+      minDate = this.props.min;
+      maxDate = this.props.max;
+    } else {
+      min = this.props.min;
+      max = this.props.max;
+    }
+
     return (
       <div className={this.styles.classNames.fields}>
         <TextFieldTypedNC
           parentRect={parentRect}
           type={this.props.type}
+          minDate={minDate}
+          maxDate={maxDate}
+          min={min}
+          max={max}
+          mode="hard"
           value={this.props.from}
           onChange={this.handleFieldFrom}
         />
@@ -132,6 +147,11 @@ class FacetFilterRangeDialog extends Widget {
         <TextFieldTypedNC
           parentRect={parentRect}
           type={this.props.type}
+          minDate={minDate}
+          maxDate={maxDate}
+          min={min}
+          max={max}
+          mode="hard"
           value={this.props.to}
           onChange={this.handleFieldTo}
         />
