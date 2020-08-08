@@ -19,6 +19,23 @@ export default function styles(theme) {
     overflow: 'hidden',
   };
 
+  const fields = {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: '30px',
+  };
+
+  const sliders = {
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
+  const minmax = {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: '4px',
+  };
+
   const closeButton = {
     position: 'absolute',
     top: '0px',
@@ -28,6 +45,9 @@ export default function styles(theme) {
   return {
     facetFilterDialog,
     content,
+    fields,
+    sliders,
+    minmax,
     closeButton,
   };
 }

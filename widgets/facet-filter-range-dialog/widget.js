@@ -1,10 +1,7 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-import T from 't';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
-import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
-import Separator from 'goblin-gadgets/widgets/separator/widget';
 import TextFieldTypedNC from 'goblin-gadgets/widgets/text-field-typed-nc/widget';
 import Slider from 'goblin-gadgets/widgets/slider/widget';
 import FacetFilterRangeDialogFooter from '../facet-filter-range-dialog-footer/widget.js';
@@ -20,8 +17,7 @@ class FacetFilterRangeDialog extends Widget {
 
     this.handleFieldFrom = this.handleFieldFrom.bind(this);
     this.handleFieldTo = this.handleFieldTo.bind(this);
-    this.handleSliderFrom = this.handleSliderFrom.bind(this);
-    this.handleSliderTo = this.handleSliderTo.bind(this);
+    this.handleSlider = this.handleSlider.bind(this);
     this.onClose = this.onClose.bind(this);
   }
 
@@ -45,24 +41,10 @@ class FacetFilterRangeDialog extends Widget {
     });
   }
 
-  handleSliderFrom(value) {
-    const from = this.sliderToExternal(value);
-    const to = this.sliderToExternal(
-      Math.max(this.externalToSlider(this.props.to), value)
-    );
-
-    this.doAs('list', 'set-range', {
-      filterName: this.props.name,
-      from,
-      to,
-    });
-  }
-
-  handleSliderTo(value) {
-    const to = this.sliderToExternal(value);
-    const from = this.sliderToExternal(
-      Math.min(this.externalToSlider(this.props.from), value)
-    );
+  handleSlider(value) {
+    const a = value.split(';');
+    const from = this.sliderToExternal(a[0]);
+    const to = this.sliderToExternal(a[1]);
 
     this.doAs('list', 'set-range', {
       filterName: this.props.name,
@@ -72,6 +54,14 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   /******************************************************************************/
+
+  externalToDisplayed(value) {
+    if (this.props.type === 'date') {
+      return DateConverters.getDisplayed(value);
+    } else {
+      return value;
+    }
+  }
 
   externalToSlider(value) {
     if (this.props.type === 'date') {
@@ -86,6 +76,9 @@ class FacetFilterRangeDialog extends Widget {
 
   sliderToExternal(n) {
     if (this.props.type === 'date') {
+      if (typeof n === 'string') {
+        n = parseInt(n);
+      }
       const date = DateConverters.canonicalToJs(this.props.min);
       date.setDate(date.getDate() + n);
       return DateConverters.jsToCanonical(date);
@@ -126,62 +119,71 @@ class FacetFilterRangeDialog extends Widget {
     );
   }
 
+  renderFields(parentRect) {
+    return (
+      <div className={this.styles.classNames.fields}>
+        <TextFieldTypedNC
+          parentRect={parentRect}
+          type={this.props.type}
+          value={this.props.from}
+          onChange={this.handleFieldFrom}
+        />
+        <Label grow="1" />
+        <TextFieldTypedNC
+          parentRect={parentRect}
+          type={this.props.type}
+          value={this.props.to}
+          onChange={this.handleFieldTo}
+        />
+      </div>
+    );
+  }
+
+  renderSliders() {
+    const value1 = this.externalToSlider(this.props.from);
+    const value2 = this.externalToSlider(this.props.to);
+    const value = `${value1};${value2}`;
+
+    return (
+      <div className={this.styles.classNames.sliders}>
+        <Slider
+          grow="1"
+          direction="horizontal"
+          barColor="#0f0"
+          barPosition="middle"
+          min={0}
+          max={this.externalToSlider(this.props.max)}
+          step={1}
+          value={value}
+          changeMode="throttled"
+          throttleDelay={200}
+          onChange={this.handleSlider}
+        />
+      </div>
+    );
+  }
+
+  renderMinMax() {
+    const min = this.externalToDisplayed(this.props.min);
+    const max = this.externalToDisplayed(this.props.max);
+
+    return (
+      <div className={this.styles.classNames.minmax}>
+        <Label fontSize="70%" disabled={true} text={min} />
+        <Label grow="1" />
+        <Label fontSize="70%" disabled={true} text={max} justify="end" />
+      </div>
+    );
+  }
+
   // Build UI for range of dates or number.
   renderRange(parentRect) {
-    const fromText = this.props.type === 'date' ? T('Du') : T('De');
-    const toText = this.props.type === 'date' ? T('Au') : T('À');
-
     return (
       <div className={this.styles.classNames.facetFilterDialog}>
         <div className={this.styles.classNames.content}>
-          <Container kind="row" subkind="center">
-            <Label width="50px" text={fromText} />
-            <TextFieldTypedNC
-              parentRect={parentRect}
-              horizontalSpacing="large"
-              type={this.props.type}
-              value={this.props.from}
-              onChange={this.handleFieldFrom}
-            />
-            <Slider
-              width="200px"
-              direction="horizontal"
-              barColor="#f00"
-              min={0}
-              max={this.externalToSlider(this.props.max)}
-              step={1}
-              value={this.externalToSlider(this.props.from)}
-              changeMode="throttled"
-              throttleDelay={200}
-              onChange={this.handleSliderFrom}
-            />
-          </Container>
-
-          <Separator kind="exact" height="5px" />
-
-          <Container kind="row" subkind="center">
-            <Label width="50px" text={toText} />
-            <TextFieldTypedNC
-              parentRect={parentRect}
-              horizontalSpacing="large"
-              type={this.props.type}
-              value={this.props.to}
-              onChange={this.handleFieldTo}
-            />
-            <Slider
-              width="200px"
-              direction="horizontal"
-              barColor="#f00"
-              barPosition="end"
-              min={0}
-              max={this.externalToSlider(this.props.max)}
-              step={1}
-              value={this.externalToSlider(this.props.to)}
-              changeMode="throttled"
-              throttleDelay={200}
-              onChange={this.handleSliderTo}
-            />
-          </Container>
+          {this.renderFields(parentRect)}
+          {this.renderSliders()}
+          {this.renderMinMax()}
         </div>
         {this.renderFooter()}
         {this.renderClose()}
@@ -197,7 +199,7 @@ class FacetFilterRangeDialog extends Widget {
     const r = this.props.parentButtonRect;
     const centerY = r.top + r.height / 2;
     const width = 480;
-    const height = 190;
+    const height = 210;
     const shiftY = 0;
 
     const parentRect = {
