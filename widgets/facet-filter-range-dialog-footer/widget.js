@@ -11,25 +11,70 @@ class FacetFilterRangeDialogFooter extends Widget {
     super(...arguments);
     this.setAll = this.setAll.bind(this);
     this.setNow = this.setNow.bind(this);
+    this.setMonth = this.setMonth.bind(this);
+    this.setPrev = this.setPrev.bind(this);
+    this.setNext = this.setNext.bind(this);
     this.deleteFacet = this.deleteFacet.bind(this);
   }
 
-  setAll() {
+  setFilter(from, to) {
     this.doAs('list', 'set-range', {
       filterName: this.props.name,
-      from: this.props.min,
-      to: this.props.max,
+      from,
+      to,
     });
+  }
+
+  setAll() {
+    this.setFilter(this.props.min, this.props.max);
   }
 
   setNow() {
     const now = DateConverters.getNowCanonical();
+    this.setFilter(now, now);
+  }
 
-    this.doAs('list', 'set-range', {
-      filterName: this.props.name,
-      from: now,
-      to: now,
-    });
+  setMonth() {
+    const now = DateConverters.getNowCanonical();
+    const from = DateConverters.moveAtBeginningOfMonth(now);
+    const to = DateConverters.moveAtEndingOfMonth(now);
+    this.setFilter(from, to);
+  }
+
+  setPrev() {
+    let from, to;
+    if (this.props.type === 'date') {
+      const result = DateConverters.changePeriod(
+        this.props.from,
+        this.props.to,
+        -1
+      );
+      from = result.fromDate;
+      to = result.toDate;
+    } else {
+      const n = this.props.to - this.props.from;
+      to = this.props.from - 1;
+      from = to - n;
+    }
+    this.setFilter(from, to);
+  }
+
+  setNext() {
+    let from, to;
+    if (this.props.type === 'date') {
+      const result = DateConverters.changePeriod(
+        this.props.from,
+        this.props.to,
+        1
+      );
+      from = result.fromDate;
+      to = result.toDate;
+    } else {
+      const n = this.props.to - this.props.from;
+      from = this.props.to + 1;
+      from = from + n;
+    }
+    this.setFilter(from, to);
   }
 
   deleteFacet() {
@@ -47,24 +92,56 @@ class FacetFilterRangeDialogFooter extends Widget {
       this.props.type === 'date' &&
       (this.props.from !== now || this.props.to !== now);
 
+    const monthFrom = DateConverters.moveAtBeginningOfMonth(now);
+    const monthTo = DateConverters.moveAtEndingOfMonth(now);
+    const enableMonth =
+      this.props.type === 'date' &&
+      (this.props.from !== monthFrom || this.props.to !== monthTo);
+
+    const enablePrev = this.props.from > this.props.min;
+    const enableNext = this.props.to < this.props.max;
+
     return (
       <div className={this.styles.classNames.footer}>
-        {enableAll ? (
+        <Button
+          active={!enableAll}
+          border="none"
+          text={T('Tout')}
+          tooltip={T('Montre toutes les données')}
+          onClick={this.setAll}
+        />
+        {this.props.type === 'date' ? (
           <Button
+            active={!enableNow}
             border="none"
-            glyph="solid/arrows-h"
-            text={T('Tout')}
-            onClick={this.setAll}
-          />
-        ) : null}
-        {enableNow ? (
-          <Button
-            border="none"
-            glyph="solid/arrow-down"
             text={T("Aujourd'hui")}
+            tooltip={T("Montre aujourd'hui")}
             onClick={this.setNow}
           />
         ) : null}
+        {this.props.type === 'date' ? (
+          <Button
+            active={!enableMonth}
+            border="none"
+            text={T('Ce mois')}
+            tooltip={T('Montre le mois en cours')}
+            onClick={this.setMonth}
+          />
+        ) : null}
+        <Button
+          disabled={!enablePrev}
+          border="none"
+          glyph="solid/chevron-left"
+          tooltip={T('Données précédentes')}
+          onClick={this.setPrev}
+        />
+        <Button
+          disabled={!enableNext}
+          border="none"
+          glyph="solid/chevron-right"
+          tooltip={T('Données suivantes')}
+          onClick={this.setNext}
+        />
         <div className={this.styles.classNames.sajex} />
         {this.props.prototypeMode ? (
           <Button
