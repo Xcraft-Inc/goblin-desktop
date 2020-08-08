@@ -22,6 +22,7 @@ export default function styles(theme) {
   const fields = {
     display: 'flex',
     flexDirection: 'row',
+    marginTop: '10px',
     marginBottom: '30px',
   };
 
