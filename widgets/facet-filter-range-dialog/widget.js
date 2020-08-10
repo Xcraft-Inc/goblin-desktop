@@ -5,6 +5,7 @@ import Label from 'goblin-gadgets/widgets/label/widget';
 import TextFieldTypedNC from 'goblin-gadgets/widgets/text-field-typed-nc/widget';
 import Slider from 'goblin-gadgets/widgets/slider/widget';
 import FacetFilterRangeDialogFooter from '../facet-filter-range-dialog-footer/widget.js';
+import Junction from '../junction/widget.js';
 import {date as DateConverters} from 'xcraft-core-converters';
 import {Unit} from 'goblin-theme';
 const px = Unit.toPx;
@@ -19,6 +20,9 @@ class FacetFilterRangeDialog extends Widget {
     this.handleFieldTo = this.handleFieldTo.bind(this);
     this.handleSlider = this.handleSlider.bind(this);
     this.onClose = this.onClose.bind(this);
+
+    this.width = 480;
+    this.sliderThickness = 24; // according to lib\goblin-gadgets\widgets\slider\styles.js
   }
 
   onClose() {
@@ -105,20 +109,6 @@ class FacetFilterRangeDialog extends Widget {
     //- );
   }
 
-  renderFooter() {
-    return (
-      <FacetFilterRangeDialogFooter
-        id={this.props.id}
-        name={this.props.name}
-        type={this.props.type}
-        min={this.props.min}
-        max={this.props.max}
-        from={this.props.from}
-        to={this.props.to}
-      />
-    );
-  }
-
   renderFields(parentRect) {
     let minDate, maxDate, min, max;
 
@@ -155,6 +145,48 @@ class FacetFilterRangeDialog extends Widget {
           value={this.props.to}
           onChange={this.handleFieldTo}
         />
+      </div>
+    );
+  }
+
+  renderJunction() {
+    const min = this.externalToSlider(this.props.min);
+    const max = this.externalToSlider(this.props.max);
+    const from = Math.max(this.externalToSlider(this.props.from), min);
+    const to = Math.min(this.externalToSlider(this.props.to), max);
+
+    const w = this.width - 30 * 2;
+
+    const fieldWidth = 150;
+    const x1From = fieldWidth / 2;
+    const x1To = w - fieldWidth / 2;
+
+    const sliderWidth = w - this.sliderThickness;
+    const x2From =
+      this.sliderThickness / 2 + ((from - min) / (max - min)) * sliderWidth;
+    const x2To =
+      this.sliderThickness / 2 + ((to - min) / (max - min)) * sliderWidth;
+
+    const h = 30;
+    const shift = 3;
+    let yFrom, yTo;
+    if (x2To < x1From + shift) {
+      yFrom = h / 2 - shift;
+      yTo = h / 2 + shift;
+    } else if (x2From > x1To - shift) {
+      yFrom = h / 2 + shift;
+      yTo = h / 2 - shift;
+    } else {
+      yFrom = h / 2;
+      yTo = h / 2;
+    }
+
+    const color = this.context.theme.palette.buttonBorder;
+
+    return (
+      <div className={this.styles.classNames.junctions}>
+        <Junction color={color} w={w} h={h} y={yFrom} x1={x1From} x2={x2From} />
+        <Junction color={color} w={w} h={h} y={yTo} x1={x1To} x2={x2To} />
       </div>
     );
   }
@@ -196,12 +228,27 @@ class FacetFilterRangeDialog extends Widget {
     );
   }
 
+  renderFooter() {
+    return (
+      <FacetFilterRangeDialogFooter
+        id={this.props.id}
+        name={this.props.name}
+        type={this.props.type}
+        min={this.props.min}
+        max={this.props.max}
+        from={this.props.from}
+        to={this.props.to}
+      />
+    );
+  }
+
   // Build UI for range of dates or number.
   renderRange(parentRect) {
     return (
       <div className={this.styles.classNames.facetFilterDialog}>
         <div className={this.styles.classNames.content}>
           {this.renderFields(parentRect)}
+          {this.renderJunction()}
           {this.renderSliders()}
           {this.renderMinMax()}
         </div>
@@ -218,7 +265,7 @@ class FacetFilterRangeDialog extends Widget {
 
     const r = this.props.parentButtonRect;
     const centerY = r.top + r.height / 2;
-    const width = 480;
+    const width = this.width;
     const height = 210;
     const shiftY = 0;
 

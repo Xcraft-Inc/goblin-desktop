@@ -23,7 +23,13 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'row',
     marginTop: '10px',
-    marginBottom: '30px',
+    // marginBottom: '30px',
+  };
+
+  const junctions = {
+    position: 'relative',
+    width: '480px',
+    height: '30px',
   };
 
   const sliders = {
@@ -47,6 +53,7 @@ export default function styles(theme) {
     facetFilterDialog,
     content,
     fields,
+    junctions,
     sliders,
     minmax,
     closeButton,
