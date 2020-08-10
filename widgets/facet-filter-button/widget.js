@@ -102,8 +102,8 @@ class FacetFilterButton extends Widget {
 
   renderBottomRange() {
     if (
-      this.props.from === this.props.min &&
-      this.props.to === this.props.max
+      !this.props.useRange ||
+      (this.props.from === this.props.min && this.props.to === this.props.max)
     ) {
       return null;
     }
@@ -138,11 +138,15 @@ class FacetFilterButton extends Widget {
 
     if (FacetHelpers.isRange(this.props.type)) {
       for (const value of this.props.facets.values()) {
-        let filter = value.get('key');
-        if (this.props.type === 'date' && typeof filter === 'string') {
-          filter = filter.substring(0, 10); // trunc "2020-02-10T00:00:00.000Z" to "2020-02-10"
-        }
-        if (filter >= this.props.from && filter <= this.props.to) {
+        if (this.props.useRange) {
+          let filter = value.get('key');
+          if (this.props.type === 'date' && typeof filter === 'string') {
+            filter = filter.substring(0, 10); // trunc "2020-02-10T00:00:00.000Z" to "2020-02-10"
+          }
+          if (filter >= this.props.from && filter <= this.props.to) {
+            count = count + value.get('doc_count');
+          }
+        } else {
           count = count + value.get('doc_count');
         }
         total = total + value.get('doc_count');
@@ -177,12 +181,13 @@ export default Widget.connect((state, props) => {
   if (FacetHelpers.isRange(props.type)) {
     const range = state.get(`backend.${props.id}.ranges.${props.name}`);
     if (range) {
+      const useRange = range.get('useRange', false);
       const min = range.get('min');
       const max = range.get('max');
       const from = range.get('from', min);
       const to = range.get('to', max);
 
-      return {min, max, from, to};
+      return {useRange, min, max, from, to};
     } else {
       return {loading: true};
     }

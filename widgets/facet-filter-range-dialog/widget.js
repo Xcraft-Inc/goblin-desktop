@@ -24,31 +24,22 @@ class FacetFilterRangeDialog extends Widget {
     this.handleSlider = this.handleSlider.bind(this);
     this.onClose = this.onClose.bind(this);
 
-    this.state = {
-      useRange: true, // mock
-    };
-
     this.width = 480;
     this.sliderThickness = 24; // according to lib\goblin-gadgets\widgets\slider\styles.js
   }
-
-  //#region get/set
-  get useRange() {
-    return this.state.useRange;
-  }
-  set useRange(value) {
-    this.setState({
-      useRange: value,
-    });
-  }
-  //#endregion
 
   onClose() {
     this.props.onClose();
   }
 
   handleChangeUseRange(value) {
-    this.useRange = value === 'range'; // mock
+    if (value === 'all') {
+      this.doAs('list', 'clear-range', {
+        filterName: this.props.name,
+      });
+    } else {
+      this.setFilter(this.props.min, this.props.max);
+    }
   }
 
   setFilter(from, to) {
@@ -144,7 +135,7 @@ class FacetFilterRangeDialog extends Widget {
             direction="row"
             selectionMode="single"
             list={list}
-            value={this.useRange ? 'range' : 'all'}
+            value={this.props.useRange ? 'range' : 'all'}
             selectionChanged={this.handleChangeUseRange}
           />
         </div>
@@ -153,7 +144,7 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderFields(parentRect) {
-    if (!this.useRange) {
+    if (!this.props.useRange) {
       return null;
     }
 
@@ -197,7 +188,7 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderJunction() {
-    if (!this.useRange) {
+    if (!this.props.useRange) {
       return null;
     }
 
@@ -250,7 +241,7 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderSliders() {
-    if (!this.useRange) {
+    if (!this.props.useRange) {
       return null;
     }
 
@@ -278,7 +269,7 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderMinMax() {
-    if (!this.useRange) {
+    if (!this.props.useRange) {
       return null;
     }
 
@@ -304,7 +295,7 @@ class FacetFilterRangeDialog extends Widget {
         max={this.props.max}
         from={this.props.from}
         to={this.props.to}
-        useRange={this.useRange}
+        useRange={this.props.useRange}
       />
     );
   }
@@ -365,12 +356,13 @@ class FacetFilterRangeDialog extends Widget {
 export default Widget.connect((state, props) => {
   const range = state.get(`backend.${props.id}.ranges.${props.name}`);
   if (range) {
+    const useRange = range.get('useRange', false);
     const min = range.get('min');
     const max = range.get('max');
     const from = range.get('from', min);
     const to = range.get('to', max);
 
-    return {min, max, from, to};
+    return {useRange, min, max, from, to};
   } else {
     return {loading: true};
   }
