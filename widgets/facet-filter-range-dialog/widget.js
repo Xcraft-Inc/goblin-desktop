@@ -210,8 +210,8 @@ class FacetFilterRangeDialog extends Widget {
     const w = this.width - 30 * 2;
 
     const fieldWidth = 150;
-    const x1From = fieldWidth / 2;
-    const x1To = w - fieldWidth / 2;
+    let x1From = fieldWidth / 2;
+    let x1To = w - fieldWidth / 2;
 
     const sliderWidth = w - this.sliderThickness;
     const x2From =
@@ -219,13 +219,20 @@ class FacetFilterRangeDialog extends Widget {
     const x2To =
       this.sliderThickness / 2 + ((to - min) / (max - min)) * sliderWidth;
 
+    if (x2From > x1From - 20 && x2From < x1From + 20) {
+      x1From = x2From;
+    }
+    if (x2To > x1To - 20 && x2To < x1To + 20) {
+      x1To = x2To;
+    }
+
     const h = 30;
     const shift = 3;
     let yFrom, yTo;
-    if (x2To < x1From + shift) {
+    if (x2To < x1From + shift && x2From !== x2To) {
       yFrom = h / 2 - shift;
       yTo = h / 2 + shift;
-    } else if (x2From > x1To - shift) {
+    } else if (x2From > x1To - shift && x2From !== x2To) {
       yFrom = h / 2 + shift;
       yTo = h / 2 - shift;
     } else {
