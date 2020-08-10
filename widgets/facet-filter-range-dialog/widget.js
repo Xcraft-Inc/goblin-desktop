@@ -60,11 +60,15 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   handleFieldFrom(value) {
-    this.setFilter(value, this.props.to);
+    const from = this.externalToSlider(value);
+    const to = this.externalToSlider(this.props.to);
+    this.setFilter(value, this.sliderToExternal(Math.max(from, to)));
   }
 
   handleFieldTo(value) {
-    this.setFilter(this.props.from, value);
+    const from = this.externalToSlider(this.props.from);
+    const to = this.externalToSlider(value);
+    this.setFilter(this.sliderToExternal(Math.min(from, to)), value);
   }
 
   handleSlider(value) {
