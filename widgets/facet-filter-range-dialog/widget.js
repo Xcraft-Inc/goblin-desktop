@@ -51,32 +51,27 @@ class FacetFilterRangeDialog extends Widget {
     this.useRange = value === 'range'; // mock
   }
 
-  handleFieldFrom(value) {
+  setFilter(from, to) {
     this.doAs('list', 'set-range', {
       filterName: this.props.name,
-      from: value,
-      to: this.props.to,
+      from,
+      to,
     });
   }
 
+  handleFieldFrom(value) {
+    this.setFilter(value, this.props.to);
+  }
+
   handleFieldTo(value) {
-    this.doAs('list', 'set-range', {
-      filterName: this.props.name,
-      from: this.props.from,
-      to: value,
-    });
+    this.setFilter(this.props.from, value);
   }
 
   handleSlider(value) {
     const a = value.split(';');
     const from = this.sliderToExternal(a[0]);
     const to = this.sliderToExternal(a[1]);
-
-    this.doAs('list', 'set-range', {
-      filterName: this.props.name,
-      from,
-      to,
-    });
+    this.setFilter(from, to);
   }
 
   /******************************************************************************/
