@@ -4,9 +4,11 @@ import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import TextFieldTypedNC from 'goblin-gadgets/widgets/text-field-typed-nc/widget';
 import Slider from 'goblin-gadgets/widgets/slider/widget';
+import CheckList from 'goblin-gadgets/widgets/check-list/widget';
 import FacetFilterRangeDialogFooter from '../facet-filter-range-dialog-footer/widget.js';
 import Junction from '../junction/widget.js';
 import {date as DateConverters} from 'xcraft-core-converters';
+import T from 't';
 import {Unit} from 'goblin-theme';
 const px = Unit.toPx;
 
@@ -16,17 +18,37 @@ class FacetFilterRangeDialog extends Widget {
   constructor() {
     super(...arguments);
 
+    this.handleChangeUseRange = this.handleChangeUseRange.bind(this);
     this.handleFieldFrom = this.handleFieldFrom.bind(this);
     this.handleFieldTo = this.handleFieldTo.bind(this);
     this.handleSlider = this.handleSlider.bind(this);
     this.onClose = this.onClose.bind(this);
 
+    this.state = {
+      useRange: true, // mock
+    };
+
     this.width = 480;
     this.sliderThickness = 24; // according to lib\goblin-gadgets\widgets\slider\styles.js
   }
 
+  //#region get/set
+  get useRange() {
+    return this.state.useRange;
+  }
+  set useRange(value) {
+    this.setState({
+      useRange: value,
+    });
+  }
+  //#endregion
+
   onClose() {
     this.props.onClose();
+  }
+
+  handleChangeUseRange(value) {
+    this.useRange = value === 'range'; // mock
   }
 
   handleFieldFrom(value) {
@@ -109,7 +131,33 @@ class FacetFilterRangeDialog extends Widget {
     //- );
   }
 
+  renderRadios() {
+    const list = [
+      {name: 'all', description: T('Tout')},
+      {name: 'range', description: T('Intervalle')},
+    ];
+
+    return (
+      <div className={this.styles.classNames.radios}>
+        <div className={this.styles.classNames.checkList}>
+          <CheckList
+            kind="radio"
+            direction="row"
+            selectionMode="single"
+            list={list}
+            value={this.useRange ? 'range' : 'all'}
+            selectionChanged={this.handleChangeUseRange}
+          />
+        </div>
+      </div>
+    );
+  }
+
   renderFields(parentRect) {
+    if (!this.useRange) {
+      return null;
+    }
+
     let minDate, maxDate, min, max;
 
     if (this.props.type === 'date') {
@@ -150,6 +198,10 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderJunction() {
+    if (!this.useRange) {
+      return null;
+    }
+
     const min = this.externalToSlider(this.props.min);
     const max = this.externalToSlider(this.props.max);
     const from = Math.max(this.externalToSlider(this.props.from), min);
@@ -192,6 +244,10 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderSliders() {
+    if (!this.useRange) {
+      return null;
+    }
+
     const value1 = this.externalToSlider(this.props.from);
     const value2 = this.externalToSlider(this.props.to);
     const value = `${value1};${value2}`;
@@ -216,6 +272,10 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderMinMax() {
+    if (!this.useRange) {
+      return null;
+    }
+
     const min = this.externalToDisplayed(this.props.min);
     const max = this.externalToDisplayed(this.props.max);
 
@@ -238,6 +298,7 @@ class FacetFilterRangeDialog extends Widget {
         max={this.props.max}
         from={this.props.from}
         to={this.props.to}
+        useRange={this.useRange}
       />
     );
   }
@@ -246,6 +307,7 @@ class FacetFilterRangeDialog extends Widget {
   renderRange(parentRect) {
     return (
       <div className={this.styles.classNames.facetFilterDialog}>
+        {this.renderRadios()}
         <div className={this.styles.classNames.content}>
           {this.renderFields(parentRect)}
           {this.renderJunction()}
@@ -266,7 +328,7 @@ class FacetFilterRangeDialog extends Widget {
     const r = this.props.parentButtonRect;
     const centerY = r.top + r.height / 2;
     const width = this.width;
-    const height = 210;
+    const height = 280;
     const shiftY = 0;
 
     const parentRect = {

@@ -11,19 +11,33 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
+  const radios = {
+    height: '50px',
+    minHeight: '50px',
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: '3px 3px 0px 0px',
+    backgroundColor: theme.palette.paneNavigatorBackground,
+  };
+
+  const checkList = {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '10px 30px',
+  };
+
   const content = {
-    padding: '20px 30px 0px 30px',
+    padding: '0px 30px',
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     overflow: 'hidden',
   };
 
   const fields = {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: '10px',
-    // marginBottom: '30px',
   };
 
   const junctions = {
@@ -51,11 +65,16 @@ export default function styles(theme) {
 
   return {
     facetFilterDialog,
+
+    radios,
+    checkList,
+
     content,
     fields,
     junctions,
     sliders,
     minmax,
+
     closeButton,
   };
 }

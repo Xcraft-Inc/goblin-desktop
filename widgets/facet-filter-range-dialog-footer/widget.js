@@ -103,14 +103,16 @@ class FacetFilterRangeDialogFooter extends Widget {
 
     return (
       <div className={this.styles.classNames.footer}>
-        <Button
-          active={!enableAll}
-          border="none"
-          text={T('Tout')}
-          tooltip={T('Montre toutes les données')}
-          onClick={this.setAll}
-        />
-        {this.props.type === 'date' ? (
+        {this.props.useRange ? (
+          <Button
+            active={!enableAll}
+            border="none"
+            text={T('Max')}
+            tooltip={T('Montre un maximum de données')}
+            onClick={this.setAll}
+          />
+        ) : null}
+        {this.props.useRange && this.props.type === 'date' ? (
           <Button
             active={!enableNow}
             border="none"
@@ -119,7 +121,7 @@ class FacetFilterRangeDialogFooter extends Widget {
             onClick={this.setNow}
           />
         ) : null}
-        {this.props.type === 'date' ? (
+        {this.props.useRange && this.props.type === 'date' ? (
           <Button
             active={!enableMonth}
             border="none"
@@ -128,20 +130,24 @@ class FacetFilterRangeDialogFooter extends Widget {
             onClick={this.setMonth}
           />
         ) : null}
-        <Button
-          disabled={!enablePrev}
-          border="none"
-          glyph="solid/chevron-left"
-          tooltip={T('Données précédentes')}
-          onClick={this.setPrev}
-        />
-        <Button
-          disabled={!enableNext}
-          border="none"
-          glyph="solid/chevron-right"
-          tooltip={T('Données suivantes')}
-          onClick={this.setNext}
-        />
+        {this.props.useRange ? (
+          <Button
+            disabled={!enablePrev}
+            border="none"
+            glyph="solid/chevron-left"
+            tooltip={T('Données précédentes')}
+            onClick={this.setPrev}
+          />
+        ) : null}
+        {this.props.useRange ? (
+          <Button
+            disabled={!enableNext}
+            border="none"
+            glyph="solid/chevron-right"
+            tooltip={T('Données suivantes')}
+            onClick={this.setNext}
+          />
+        ) : null}
         <div className={this.styles.classNames.sajex} />
         {this.props.prototypeMode ? (
           <Button
