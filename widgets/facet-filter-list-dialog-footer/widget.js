@@ -48,22 +48,20 @@ class FacetFilterListDialogFooter extends Widget {
 
     return (
       <div className={this.styles.classNames.footer}>
-        {enableSetAll ? (
-          <Button
-            border="none"
-            glyph={'solid/check-square'}
-            text={T('Tout cocher')}
-            onClick={this.setAllFacets}
-          />
-        ) : null}
-        {enableClearAll ? (
-          <Button
-            border="none"
-            glyph={'regular/square'}
-            text={T('Tout décocher')}
-            onClick={this.clearAllFacets}
-          />
-        ) : null}
+        <Button
+          active={!enableSetAll}
+          border="none"
+          glyph={'solid/check-square'}
+          text={T('Tout cocher')}
+          onClick={this.setAllFacets}
+        />
+        <Button
+          active={!enableClearAll}
+          border="none"
+          glyph={'regular/square'}
+          text={T('Tout décocher')}
+          onClick={this.clearAllFacets}
+        />
         {enableClearAll && enableSetAll ? (
           <Button
             border="none"
