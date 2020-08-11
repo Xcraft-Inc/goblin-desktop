@@ -101,10 +101,7 @@ class FacetFilterButton extends Widget {
   }
 
   renderBottomRange() {
-    if (
-      !this.props.useRange ||
-      (this.props.from === this.props.min && this.props.to === this.props.max)
-    ) {
+    if (!this.props.useRange) {
       return null;
     }
 
