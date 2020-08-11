@@ -76,53 +76,64 @@ class FacetFilterRangeDialogFooter extends Widget {
   /******************************************************************************/
 
   render() {
-    const enableAll =
-      this.props.from !== this.props.min || this.props.to !== this.props.max;
+    const showAll = this.props.useRange;
+    const activeAll =
+      this.props.from === this.props.min && this.props.to === this.props.max;
 
     const now = DateConverters.getNowCanonical();
-    const enableNow =
+    const showNow =
+      this.props.useRange &&
       this.props.type === 'date' &&
-      (this.props.from !== now || this.props.to !== now);
+      now >= this.props.min &&
+      now <= this.props.max;
+    const activeNow = this.props.from === now && this.props.to === now;
 
     const monthFrom = DateConverters.moveAtBeginningOfMonth(now);
     const monthTo = DateConverters.moveAtEndingOfMonth(now);
-    const enableMonth =
-      this.props.type === 'date' &&
-      (this.props.from !== monthFrom || this.props.to !== monthTo);
+    const showMonth = this.props.useRange && this.props.type === 'date';
+    const activeMonth =
+      monthFrom <= this.props.max &&
+      monthTo >= this.props.min &&
+      this.props.from === monthFrom &&
+      this.props.to === monthTo;
 
+    const showPrevNext = this.props.useRange;
     const enablePrev = this.props.from > this.props.min;
     const enableNext = this.props.to < this.props.max;
 
     return (
       <div className={this.styles.classNames.footer}>
-        {this.props.useRange ? (
+        {showAll ? (
           <Button
-            active={!enableAll}
+            active={activeAll}
             border="none"
             text={T('Max')}
             tooltip={T('Montre un maximum de données')}
             onClick={this.setAll}
           />
         ) : null}
-        {this.props.useRange && this.props.type === 'date' ? (
+
+        {showNow ? (
           <Button
-            active={!enableNow}
+            active={activeNow}
             border="none"
             text={T("Aujourd'hui")}
             tooltip={T("Montre aujourd'hui")}
             onClick={this.setNow}
           />
         ) : null}
-        {this.props.useRange && this.props.type === 'date' ? (
+
+        {showMonth ? (
           <Button
-            active={!enableMonth}
+            active={activeMonth}
             border="none"
             text={T('Ce mois')}
             tooltip={T('Montre le mois en cours')}
             onClick={this.setMonth}
           />
         ) : null}
-        {this.props.useRange ? (
+
+        {showPrevNext ? (
           <Button
             disabled={!enablePrev}
             border="none"
@@ -131,7 +142,8 @@ class FacetFilterRangeDialogFooter extends Widget {
             onClick={this.setPrev}
           />
         ) : null}
-        {this.props.useRange ? (
+
+        {showPrevNext ? (
           <Button
             disabled={!enableNext}
             border="none"
@@ -140,6 +152,7 @@ class FacetFilterRangeDialogFooter extends Widget {
             onClick={this.setNext}
           />
         ) : null}
+
         <div className={this.styles.classNames.sajex} />
         {this.props.prototypeMode ? (
           <Button
