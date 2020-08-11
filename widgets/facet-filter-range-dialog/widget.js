@@ -18,6 +18,7 @@ class FacetFilterRangeDialog extends Widget {
   constructor() {
     super(...arguments);
 
+    this.setFilter = this.setFilter.bind(this);
     this.handleChangeUseRange = this.handleChangeUseRange.bind(this);
     this.handleFieldFrom = this.handleFieldFrom.bind(this);
     this.handleFieldTo = this.handleFieldTo.bind(this);
@@ -43,6 +44,18 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   setFilter(from, to) {
+    from = this.externalToSlider(from);
+    to = this.externalToSlider(to);
+
+    const min = this.externalToSlider(this.props.min);
+    const max = this.externalToSlider(this.props.max);
+
+    from = Math.max(Math.min(from, max), min);
+    to = Math.max(Math.min(to, max), min);
+
+    from = this.sliderToExternal(from);
+    to = this.sliderToExternal(to);
+
     this.doAs('list', 'set-range', {
       filterName: this.props.name,
       from,
@@ -296,6 +309,7 @@ class FacetFilterRangeDialog extends Widget {
         from={this.props.from}
         to={this.props.to}
         useRange={this.props.useRange}
+        setFilter={this.setFilter}
       />
     );
   }

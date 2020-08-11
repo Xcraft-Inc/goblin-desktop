@@ -17,28 +17,20 @@ class FacetFilterRangeDialogFooter extends Widget {
     this.deleteFacet = this.deleteFacet.bind(this);
   }
 
-  setFilter(from, to) {
-    this.doAs('list', 'set-range', {
-      filterName: this.props.name,
-      from,
-      to,
-    });
-  }
-
   setAll() {
-    this.setFilter(this.props.min, this.props.max);
+    this.props.setFilter(this.props.min, this.props.max);
   }
 
   setNow() {
     const now = DateConverters.getNowCanonical();
-    this.setFilter(now, now);
+    this.props.setFilter(now, now);
   }
 
   setMonth() {
     const now = DateConverters.getNowCanonical();
     const from = DateConverters.moveAtBeginningOfMonth(now);
     const to = DateConverters.moveAtEndingOfMonth(now);
-    this.setFilter(from, to);
+    this.props.setFilter(from, to);
   }
 
   setPrev() {
@@ -56,7 +48,7 @@ class FacetFilterRangeDialogFooter extends Widget {
       to = this.props.from - 1;
       from = to - n;
     }
-    this.setFilter(from, to);
+    this.props.setFilter(from, to);
   }
 
   setNext() {
@@ -74,7 +66,7 @@ class FacetFilterRangeDialogFooter extends Widget {
       from = this.props.to + 1;
       from = from + n;
     }
-    this.setFilter(from, to);
+    this.props.setFilter(from, to);
   }
 
   deleteFacet() {
