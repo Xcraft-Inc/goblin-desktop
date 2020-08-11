@@ -185,17 +185,19 @@ class FacetFilterRangeDialog extends Widget {
           onChange={this.handleFieldFrom}
         />
         <Label grow="1" />
-        <TextFieldTypedNC
-          parentRect={parentRect}
-          type={this.props.type}
-          minDate={minDate}
-          maxDate={maxDate}
-          min={min}
-          max={max}
-          mode="hard"
-          value={this.props.to}
-          onChange={this.handleFieldTo}
-        />
+        {this.props.max > this.props.min ? (
+          <TextFieldTypedNC
+            parentRect={parentRect}
+            type={this.props.type}
+            minDate={minDate}
+            maxDate={maxDate}
+            min={min}
+            max={max}
+            mode="hard"
+            value={this.props.to}
+            onChange={this.handleFieldTo}
+          />
+        ) : null}
       </div>
     );
   }
@@ -250,7 +252,9 @@ class FacetFilterRangeDialog extends Widget {
     return (
       <div className={this.styles.classNames.junctions}>
         <Junction color={color} w={w} h={h} y={yFrom} x1={x1From} x2={x2From} />
-        <Junction color={color} w={w} h={h} y={yTo} x1={x1To} x2={x2To} />
+        {this.props.max > this.props.min ? (
+          <Junction color={color} w={w} h={h} y={yTo} x1={x1To} x2={x2To} />
+        ) : null}
       </div>
     );
   }
@@ -271,6 +275,7 @@ class FacetFilterRangeDialog extends Widget {
           direction="horizontal"
           barColor="#0f0"
           barPosition="middle"
+          disabled={this.props.max === this.props.min}
           min={0}
           max={this.externalToSlider(this.props.max)}
           step={1}
@@ -295,7 +300,9 @@ class FacetFilterRangeDialog extends Widget {
       <div className={this.styles.classNames.minmax}>
         <Label fontSize="70%" disabled={true} text={min} />
         <Label grow="1" />
-        <Label fontSize="70%" disabled={true} text={max} justify="end" />
+        {this.props.max > this.props.min ? (
+          <Label fontSize="70%" disabled={true} text={max} justify="end" />
+        ) : null}
       </div>
     );
   }
