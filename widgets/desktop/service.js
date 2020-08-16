@@ -256,19 +256,16 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
       );
 
       if (items.count() >= workitem.maxInstances) {
-        let navigateTo = workitem.navigate;
-        if (navigateTo) {
-          const workitemId = items.keySeq().first();
-          const currentSearch = currentLocation.get('search');
-          if (currentSearch) {
-            if (!currentSearch.includes(workitemId)) {
-              yield desk.navToWorkitem({
-                contextId: workitem.contextId,
-                view: workitem.view,
-                workitemId,
-                currentLocation,
-              });
-            }
+        const workitemId = items.keySeq().first();
+        const currentSearch = currentLocation.get('search');
+        if (currentSearch) {
+          if (!currentSearch.includes(workitemId)) {
+            yield desk.navToWorkitem({
+              contextId: workitem.contextId,
+              view: workitem.view,
+              workitemId,
+              currentLocation,
+            });
           }
         }
 
