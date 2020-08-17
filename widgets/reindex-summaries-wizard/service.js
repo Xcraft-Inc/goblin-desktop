@@ -3,6 +3,10 @@
 
 const T = require('goblin-nabu');
 const {buildWizard} = require('goblin-desktop');
+const os = require('os');
+const fs = require('fs');
+const path = require('path');
+const Papa = require('papaparse');
 const workshopConfig = require('xcraft-core-etc')().load('goblin-workshop');
 const entityStorage = workshopConfig.entityStorageProvider.replace(
   'goblin-',
@@ -85,15 +89,31 @@ const config = {
         const desktopId = quest.getDesktop();
         //const desktop = quest.getAPI(desktopId).noThrow();
         const workshopAPI = quest.getAPI('workshop');
+        let reportData = [];
         for (const table of form.selectedTables) {
-          yield workshopAPI.reindexEntitiesFromStorage({
+          const data = yield workshopAPI.reindexEntitiesFromStorage({
             desktopId,
             type: table,
             status: ['draft', 'trashed', 'archived', 'published'],
             batchSize: 1000,
           });
+          if (data && data.length > 0) {
+            reportData = reportData.concat(data);
+          }
         }
 
+        const session = quest.getSession();
+        const filePath = path.join(
+          os.tmpdir(),
+          `${session}-reindex-report.csv`
+        );
+        const rows = Papa.unparse(reportData, {delimiter: ';'});
+
+        if (reportData.length !== 0) {
+          fs.writeFileSync(filePath, rows);
+          const deskAPI = quest.getAPI(desktopId);
+          yield deskAPI.downloadFile({filePath, openFile: true});
+        }
         yield quest.me.next();
       },
     },
