@@ -69,6 +69,9 @@ class DesktopMonitors extends Widget {
 
   onMonitor() {
     this.showMonitor = !this.showMonitor;
+    this.doFor(this.props.desktopId, 'toggle-monitor-feed', {
+      isOn: this.showMonitor,
+    });
   }
 
   onChangeAging(aging) {
@@ -173,6 +176,10 @@ class DesktopMonitors extends Widget {
 /******************************************************************************/
 
 export default Widget.connect((state) => {
+  const enabled = !!state.get('backend.activity-monitor');
+  if (!enabled) {
+    return {isActive: false, channels: []};
+  }
   const s = state.get('backend.activity-monitor.channels');
   const channels = s
     ? Array.from(s.entries()).map(([channel, data]) => {

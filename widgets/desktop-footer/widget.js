@@ -100,7 +100,10 @@ export default class DesktopFooter extends Widget {
         <CommandsPrompt />
         <div className={this.styles.classNames.sajex} />
         <DesktopStateMonitor id={this.props.id} />
-        <DesktopMonitors id={`activity-monitor@${this.props.id}`} />
+        <DesktopMonitors
+          id={`activity-monitor@${this.props.id}`}
+          desktopId={this.props.id}
+        />
         <DesktopClock />
       </div>
     );

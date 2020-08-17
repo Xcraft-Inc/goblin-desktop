@@ -989,5 +989,23 @@ Goblin.registerQuest(goblinName, 'delete', function (quest) {
 
 /******************************************************************************/
 
+Goblin.registerQuest(goblinName, 'toggle-monitor-feed', function* (
+  quest,
+  isOn
+) {
+  if (!isOn) {
+    yield quest.warehouse.feedSubscriptionAdd({
+      feeds: [quest.goblin.id],
+      branch: 'activity-monitor',
+    });
+  } else {
+    yield quest.warehouse.feedSubscriptionDel({
+      feed: quest.goblin.id,
+      branch: 'activity-monitor',
+    });
+  }
+  console.log('feed!');
+});
+
 // Create a Goblin with initial state and handlers
 module.exports = Goblin.configure(goblinName, logicState, logicHandlers);
