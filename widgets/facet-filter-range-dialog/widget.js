@@ -84,6 +84,10 @@ class FacetFilterRangeDialog extends Widget {
 
   /******************************************************************************/
 
+  get hasRange() {
+    return this.props.min !== null && this.props.max !== null;
+  }
+
   externalToDisplayed(value) {
     if (this.props.type === 'date') {
       return DateConverters.getDisplayed(value);
@@ -135,10 +139,11 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderRadios() {
-    const list = [
-      {name: 'all', description: T('Tout')},
-      {name: 'range', description: T('Intervalle')},
-    ];
+    const list = [{name: 'all', description: T('Tout')}];
+
+    if (this.hasRange) {
+      list.push({name: 'range', description: T('Intervalle')});
+    }
 
     return (
       <div className={this.styles.classNames.radios}>
@@ -148,7 +153,7 @@ class FacetFilterRangeDialog extends Widget {
             direction="row"
             selectionMode="single"
             list={list}
-            value={this.props.useRange ? 'range' : 'all'}
+            value={this.hasRange && this.props.useRange ? 'range' : 'all'}
             selectionChanged={this.handleChangeUseRange}
           />
         </div>
@@ -157,7 +162,7 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderFields(parentRect) {
-    if (!this.props.useRange) {
+    if (!this.hasRange || !this.props.useRange) {
       return null;
     }
 
@@ -203,7 +208,7 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderJunction() {
-    if (!this.props.useRange) {
+    if (!this.hasRange || !this.props.useRange) {
       return null;
     }
 
@@ -260,7 +265,7 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderSliders() {
-    if (!this.props.useRange) {
+    if (!this.hasRange || !this.props.useRange) {
       return null;
     }
 
@@ -289,7 +294,7 @@ class FacetFilterRangeDialog extends Widget {
   }
 
   renderMinMax() {
-    if (!this.props.useRange) {
+    if (!this.hasRange || !this.props.useRange) {
       return null;
     }
 
@@ -317,7 +322,7 @@ class FacetFilterRangeDialog extends Widget {
         max={this.props.max}
         from={this.props.from}
         to={this.props.to}
-        useRange={this.props.useRange}
+        useRange={this.hasRange && this.props.useRange}
         setFilter={this.setFilter}
       />
     );
