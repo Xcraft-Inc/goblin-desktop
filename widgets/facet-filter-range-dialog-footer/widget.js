@@ -93,7 +93,9 @@ class FacetFilterRangeDialogFooter extends Widget {
     const showMonth =
       this.props.useRange &&
       this.props.type === 'date' &&
-      this.props.max > this.props.min;
+      this.props.max > this.props.min &&
+      monthFrom <= this.props.max &&
+      monthTo >= this.props.min;
     const activeMonth =
       monthFrom <= this.props.max &&
       monthTo >= this.props.min &&
