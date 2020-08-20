@@ -101,6 +101,7 @@ class Detail extends Widget {
             }}
             readonly={true}
             dragServiceId={this.props.dragServiceId}
+            leftPanelWorkitemId={this.props.leftPanelWorkitemId}
           >
             <DetailUI
               id={workitemId}

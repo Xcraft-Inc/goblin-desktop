@@ -23,7 +23,12 @@ class DetailView extends View {
 
     const hash = this.getHash();
     const workitemId = hash.split('.')[1];
-    return <Detail id={`${hinterName}-detail@${workitemId}`} />;
+    return (
+      <Detail
+        id={`${hinterName}-detail@${workitemId}`}
+        leftPanelWorkitemId={this.props.leftPanelWorkitemId}
+      />
+    );
   }
 }
 

@@ -79,7 +79,11 @@ class DefaultView extends View {
         {WiredDialog ? <WiredDialog id={dialogId} kind="dialog" /> : null}
         {LeftPanel ? <LeftPanel id={workitemId} /> : null}
         {this.renderHinter(useHinter)}
-        <DetailView desktopId={desktopId} context={context} />
+        <DetailView
+          desktopId={desktopId}
+          context={context}
+          leftPanelWorkitemId={workitemId}
+        />
       </Container>
     );
   }
