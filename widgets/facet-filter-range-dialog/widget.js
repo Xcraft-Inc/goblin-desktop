@@ -43,7 +43,7 @@ class FacetFilterRangeDialog extends Widget {
     }
   }
 
-  setFilter(from, to) {
+  setFilter(from, to, mode) {
     from = this.externalToSlider(from);
     to = this.externalToSlider(to);
 
@@ -60,6 +60,7 @@ class FacetFilterRangeDialog extends Widget {
       filterName: this.props.name,
       from,
       to,
+      mode,
     });
   }
 

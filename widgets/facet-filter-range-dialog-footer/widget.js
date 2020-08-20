@@ -18,19 +18,19 @@ class FacetFilterRangeDialogFooter extends Widget {
   }
 
   setAll() {
-    this.props.setFilter(this.props.min, this.props.max);
+    this.props.setFilter(this.props.min, this.props.max, 'all');
   }
 
   setNow() {
     const now = DateConverters.getNowCanonical();
-    this.props.setFilter(now, now);
+    this.props.setFilter(now, now, 'now');
   }
 
   setMonth() {
     const now = DateConverters.getNowCanonical();
     const from = DateConverters.moveAtBeginningOfMonth(now);
     const to = DateConverters.moveAtEndingOfMonth(now);
-    this.props.setFilter(from, to);
+    this.props.setFilter(from, to, 'month');
   }
 
   setPrev() {
