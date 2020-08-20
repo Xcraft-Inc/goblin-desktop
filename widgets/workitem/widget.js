@@ -28,6 +28,7 @@ class Workitem extends Form {
     this.onPublish = this.onPublish.bind(this);
     this.onCopyInfoToClipboard = this.onCopyInfoToClipboard.bind(this);
     this.editSettings = this.editSettings.bind(this);
+    this.hide = this.hide.bind(this);
   }
 
   componentDidMount() {
@@ -93,7 +94,7 @@ class Workitem extends Form {
         });
         break;
       default:
-        this.doAs(this.service, 'hide');
+        this.hide();
     }
   }
 
@@ -104,6 +105,23 @@ class Workitem extends Form {
         entity,
         desktopId: this.desktopId,
       });
+    }
+  }
+
+  hide() {
+    this.doAs(this.service, 'hide');
+
+    //in case of use in a search list,
+    //dispatch to search list a null rowId
+    if (
+      this.props.leftPanelWorkitemId &&
+      this.props.leftPanelWorkitemId.match(/^.*-search@.*/)
+    ) {
+      this.dispatchTo(
+        this.props.leftPanelWorkitemId,
+        {type: 'select-row', rowId: null},
+        'entity-view'
+      );
     }
   }
 
