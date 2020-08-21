@@ -37,8 +37,12 @@ export default Widget.connect((state, props) => {
   const id = state.get(`backend.${props.listId}.list.${props.itemId}`, null);
 
   let selectedRowId = null;
+  let selectedEntityId = null;
   if (props.data.serviceId) {
     selectedRowId = state.get(`widgets.${props.data.serviceId}.selectedRowId`);
+    selectedEntityId = state.get(
+      `widgets.${props.data.serviceId}.selectedEntityId`
+    );
   }
 
   return {
@@ -55,6 +59,7 @@ export default Widget.connect((state, props) => {
     rowIndex: props.index,
     useView: props.data.useView,
     variant: props.data.variant,
-    selected: `${selectedRowId}-item` === props.itemId,
+    selected:
+      `${selectedRowId}-item` === props.itemId && selectedEntityId === id,
   };
 })(EntityListItem);

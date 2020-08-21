@@ -119,7 +119,7 @@ class Workitem extends Form {
     ) {
       this.dispatchTo(
         this.props.leftPanelWorkitemId,
-        {type: 'select-row', rowId: null},
+        {type: 'select-row', rowId: null, entityId: null},
         'entity-view'
       );
     }

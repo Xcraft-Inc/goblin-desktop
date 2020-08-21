@@ -1,11 +1,14 @@
 import {fromJS} from 'immutable';
 const initialState = fromJS({
   selectedRowId: null,
+  selectedEntityId: null,
 });
 
 const actions = {
   'select-row': (state, action) => {
-    return state.set('selectedRowId', action.rowId);
+    return state
+      .set('selectedRowId', action.rowId)
+      .set('selectedEntityId', action.entityId);
   },
 };
 
