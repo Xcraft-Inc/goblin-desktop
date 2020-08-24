@@ -36,7 +36,7 @@ class DesktopStateMonitor extends Widget {
         labId={this.context.labId}
         store={this.context.store}
         currentTheme="matrix"
-        themeContext="polypheme"
+        themeContext={this.props.themeContext}
       >
         <DialogResizable
           id="goblin-desktop/state-monitor"
@@ -113,8 +113,11 @@ class DesktopStateMonitor extends Widget {
 
 export default Widget.connect((state, props) => {
   const desktopState = state.get(`backend.${props.id}`);
+  const themeContext = state.get(`backend.${window.labId}.themeContext`);
+
   return {
     showed: desktopState.get('showStateMonitor'),
     history: desktopState.get('stateMonitorHistory'),
+    themeContext,
   };
 })(DesktopStateMonitor);
