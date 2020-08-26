@@ -1,5 +1,3 @@
-//T:2019-02-27
-
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Form from 'goblin-laboratory/widgets/form';
@@ -10,6 +8,8 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import ScrollableContainer from 'goblin-gadgets/widgets/scrollable-container/widget';
+import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
+import CheckList from 'goblin-gadgets/widgets/check-list/widget';
 import MouseTrap from 'mousetrap';
 import T from 't';
 
@@ -18,18 +18,46 @@ import T from 't';
 class Workitem extends Form {
   constructor() {
     super(...arguments);
+
+    this.state = {
+      showDeleteDialog: false,
+      deleteAction: 'archive',
+    };
+
     this.doAction = this.doAction.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCancel = this.onCancel.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onEdit = this.onEdit.bind(this);
     this.onTrash = this.onTrash.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.onDoDelete = this.onDoDelete.bind(this);
     this.onArchive = this.onArchive.bind(this);
     this.onPublish = this.onPublish.bind(this);
     this.onCopyInfoToClipboard = this.onCopyInfoToClipboard.bind(this);
     this.editSettings = this.editSettings.bind(this);
     this.hide = this.hide.bind(this);
   }
+
+  //#region get/set
+  get showDeleteDialog() {
+    return this.state.showDeleteDialog;
+  }
+  set showDeleteDialog(value) {
+    this.setState({
+      showDeleteDialog: value,
+    });
+  }
+
+  get deleteAction() {
+    return this.state.deleteAction;
+  }
+  set deleteAction(value) {
+    this.setState({
+      deleteAction: value,
+    });
+  }
+  //#endregion
 
   componentDidMount() {
     MouseTrap.bind('esc', this.onClose);
@@ -144,6 +172,20 @@ class Workitem extends Form {
     this.doAction('publish');
   }
 
+  onDelete() {
+    this.deleteAction = 'archive';
+    this.showDeleteDialog = true;
+  }
+
+  onDoDelete() {
+    this.showDeleteDialog = false;
+    if (this.deleteAction === 'trash') {
+      this.onTrash();
+    } else {
+      this.onArchive();
+    }
+  }
+
   onTrash() {
     this.doAction('trash');
   }
@@ -181,6 +223,9 @@ class Workitem extends Form {
         break;
       case 'reset':
         this.onCancel();
+        break;
+      case 'delete':
+        this.onDelete();
         break;
       case 'archive':
         this.onArchive();
@@ -526,14 +571,7 @@ class Workitem extends Form {
     );
   }
 
-  render() {
-    if (!this.props.id) {
-      return <div>missing id props on Workitem component</div>;
-    }
-    if (!this.props.entityId) {
-      return <div>missing entityId props on Workitem component</div>;
-    }
-
+  renderWorkitem() {
     const kind = this.props.kind || 'editor';
     switch (kind) {
       case 'editor':
@@ -555,6 +593,124 @@ class Workitem extends Form {
         console.error(`Workitem does not support kind='${kind}'`);
         return null;
     }
+  }
+
+  renderDeleteDialog() {
+    if (!this.showDeleteDialog) {
+      return null;
+    }
+
+    const archived = this.props.status === 'archived';
+
+    let deleteAction = this.deleteAction;
+    if (archived && deleteAction === 'archive') {
+      deleteAction = 'unknown';
+    }
+
+    const list = [];
+    if (!archived) {
+      list.push({name: 'archive', description: T('Archiver')});
+    }
+    list.push({name: 'trash', description: T('Détruire')});
+
+    const title = archived
+      ? T('Voulez-vous détruire la fiche ARCHIVÉE ?')
+      : T('Comment voulez-vous supprimer la fiche ?');
+
+    let glyph, text, description, disabled, style;
+
+    switch (deleteAction) {
+      case 'archive':
+        glyph = 'solid/archive';
+        text = T('Archiver');
+        description = T(
+          'Le STATUT FICHE deviendra ARCHIVÉ. Son apparition dans les recherches sera déterminé par les filtres. Il pourra en tout temps reprendre le statut PUBLIÉ.'
+        );
+        disabled = false;
+        style = this.styles.classNames.deleteDescriptionArchive;
+        break;
+
+      case 'trash':
+        glyph = 'solid/tombstone';
+        text = T('Détruire');
+        description = T(
+          "La fiche ne sera plus indexée. En conséquence, elle n'apparaîtra plus dans les recherches. Elle reste à disposition du gestionnaire de données jusqu'à la prochaine opération de nettoyage."
+        );
+        disabled = false;
+        style = this.styles.classNames.deleteDescriptionTrash;
+        break;
+
+      default:
+        glyph = null;
+        text = '';
+        description = '';
+        disabled = true;
+        style = this.styles.classNames.deleteDescriptionUnknown;
+        break;
+    }
+
+    return (
+      <DialogModal width="800px" height="500px">
+        <Label text={title} />
+        <div className={this.styles.classNames.deleteRadio}>
+          <CheckList
+            kind="radio"
+            direction="column"
+            selectionMode="single"
+            list={list}
+            value={deleteAction}
+            selectionChanged={(a) => (this.deleteAction = a)}
+          />
+          <Label
+            width="100px"
+            height="100px"
+            glyphSize="400%"
+            glyph={glyph}
+            glyphPosition="center"
+            justify="center"
+          />
+        </div>
+        <div className={style}>
+          <Label text={description} width="500px" />
+        </div>
+        <Container kind="row">
+          {disabled ? null : (
+            <Button
+              kind="action"
+              place="1/2"
+              grow="1"
+              glyph={glyph}
+              text={text}
+              onClick={this.onDoDelete}
+            />
+          )}
+          <Button
+            kind="action"
+            place={disabled ? '1/1' : '2/2'}
+            grow="1"
+            glyph="solid/times"
+            text={T('Annuler')}
+            onClick={() => (this.showDeleteDialog = false)}
+          />
+        </Container>
+      </DialogModal>
+    );
+  }
+
+  render() {
+    if (!this.props.id) {
+      return <div>Missing id props on Workitem component</div>;
+    }
+    if (!this.props.entityId) {
+      return <div>Missing entityId props on Workitem component</div>;
+    }
+
+    return (
+      <React.Fragment>
+        {this.renderWorkitem()}
+        {this.renderDeleteDialog()}
+      </React.Fragment>
+    );
   }
 }
 

@@ -1,4 +1,4 @@
-import {Unit} from 'goblin-theme';
+import {Unit, ColorManipulator} from 'goblin-theme';
 
 /******************************************************************************/
 
@@ -104,6 +104,35 @@ export default function styles(theme) {
 
   /******************************************************************************/
 
+  const deleteRadio = {
+    marginTop: '20px',
+    marginBottom: '20px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  };
+
+  const deleteDescriptionArchive = {
+    border: `solid 1px ${theme.palette.buttonBorder}`,
+    borderRadius: theme.shapes.smoothRadius,
+    backgroundColor: ColorManipulator.lighten(theme.palette.base, 0.8),
+    padding: '20px',
+    height: '60px',
+    marginBottom: '30px',
+  };
+
+  const deleteDescriptionTrash = {
+    ...deleteDescriptionArchive,
+    backgroundColor: '#ff000088',
+  };
+
+  const deleteDescriptionUnknown = {
+    ...deleteDescriptionArchive,
+    backgroundColor: null,
+  };
+
+  /******************************************************************************/
+
   return {
     form,
     detail,
@@ -120,6 +149,11 @@ export default function styles(theme) {
     statusDefault,
     statusEmpty,
     statusButtons,
+
+    deleteRadio,
+    deleteDescriptionArchive,
+    deleteDescriptionTrash,
+    deleteDescriptionUnknown,
   };
 }
 
