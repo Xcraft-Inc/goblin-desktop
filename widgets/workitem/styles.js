@@ -104,31 +104,43 @@ export default function styles(theme) {
 
   /******************************************************************************/
 
+  const deleteSup = {
+    margin: '40px 40px 20px 40px',
+    display: 'flex',
+    flexDirection: 'column',
+  };
+
   const deleteRadio = {
-    marginTop: '20px',
-    marginBottom: '20px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
   };
 
-  const deleteDescriptionArchive = {
-    border: `solid 1px ${theme.palette.buttonBorder}`,
-    borderRadius: theme.shapes.smoothRadius,
+  const deleteInfArchive = {
     backgroundColor: ColorManipulator.lighten(theme.palette.base, 0.8),
-    padding: '20px',
-    height: '60px',
-    marginBottom: '30px',
+    display: 'flex',
+    flexDirection: 'column',
   };
 
-  const deleteDescriptionTrash = {
-    ...deleteDescriptionArchive,
+  const deleteInfTrash = {
+    ...deleteInfArchive,
     backgroundColor: '#ff000088',
   };
 
-  const deleteDescriptionUnknown = {
-    ...deleteDescriptionArchive,
+  const deleteInfUnknown = {
+    ...deleteInfArchive,
     backgroundColor: null,
+  };
+
+  const deleteDescription = {
+    margin: '20px 40px 30px 40px',
+    height: '60px',
+  };
+
+  const deleteButtons = {
+    margin: '0px 40px 40px 40px',
+    display: 'flex',
+    flexDirection: 'row',
   };
 
   /******************************************************************************/
@@ -150,10 +162,13 @@ export default function styles(theme) {
     statusEmpty,
     statusButtons,
 
+    deleteSup,
+    deleteInfArchive,
+    deleteInfTrash,
+    deleteInfUnknown,
     deleteRadio,
-    deleteDescriptionArchive,
-    deleteDescriptionTrash,
-    deleteDescriptionUnknown,
+    deleteDescription,
+    deleteButtons,
   };
 }
 

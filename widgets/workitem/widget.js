@@ -614,7 +614,7 @@ class Workitem extends Form {
     list.push({name: 'trash', description: T('Détruire')});
 
     const title = archived
-      ? T('Voulez-vous détruire la fiche ARCHIVÉE ?')
+      ? T('Voulez-vous détruire la fiche archivée ?')
       : T('Comment voulez-vous supprimer la fiche ?');
 
     let glyph, text, description, disabled, style;
@@ -623,21 +623,19 @@ class Workitem extends Form {
       case 'archive':
         glyph = 'solid/archive';
         text = T('Archiver');
-        description = T(
-          'Le STATUT FICHE deviendra ARCHIVÉ. Son apparition dans les recherches sera déterminé par les filtres. Il pourra en tout temps reprendre le statut PUBLIÉ.'
-        );
+        description =
+          '```Le __statut fiche__ deviendra __archivé__. Son apparition dans les recherches sera déterminé par les filtres. Il pourra en tout temps reprendre le statut __publié__.```';
         disabled = false;
-        style = this.styles.classNames.deleteDescriptionArchive;
+        style = this.styles.classNames.deleteInfArchive;
         break;
 
       case 'trash':
         glyph = 'solid/tombstone';
         text = T('Détruire');
-        description = T(
-          "La fiche ne sera plus indexée. En conséquence, elle n'apparaîtra plus dans les recherches. Elle reste à disposition du gestionnaire de données jusqu'à la prochaine opération de nettoyage."
-        );
+        description =
+          "```La fiche ne sera plus indexée. En conséquence, elle n'apparaîtra plus dans les recherches. Elle reste à disposition du gestionnaire de données jusqu'à la prochaine opération de nettoyage.```";
         disabled = false;
-        style = this.styles.classNames.deleteDescriptionTrash;
+        style = this.styles.classNames.deleteInfTrash;
         break;
 
       default:
@@ -645,54 +643,58 @@ class Workitem extends Form {
         text = '';
         description = '';
         disabled = true;
-        style = this.styles.classNames.deleteDescriptionUnknown;
+        style = this.styles.classNames.deleteInfUnknown;
         break;
     }
 
     return (
-      <DialogModal width="800px" height="500px">
-        <Label text={title} />
-        <div className={this.styles.classNames.deleteRadio}>
-          <CheckList
-            kind="radio"
-            direction="column"
-            selectionMode="single"
-            list={list}
-            value={deleteAction}
-            selectionChanged={(a) => (this.deleteAction = a)}
-          />
-          <Label
-            width="100px"
-            height="100px"
-            glyphSize="400%"
-            glyph={glyph}
-            glyphPosition="center"
-            justify="center"
-          />
+      <DialogModal subkind="full">
+        <div className={this.styles.classNames.deleteSup}>
+          <Label text={title} />
+          <div className={this.styles.classNames.deleteRadio}>
+            <CheckList
+              kind="radio"
+              direction="column"
+              selectionMode="single"
+              list={list}
+              value={deleteAction}
+              selectionChanged={(a) => (this.deleteAction = a)}
+            />
+            <Label
+              width="100px"
+              height="100px"
+              glyphSize="400%"
+              glyph={glyph}
+              glyphPosition="center"
+              justify="center"
+            />
+          </div>
         </div>
         <div className={style}>
-          <Label text={description} width="500px" />
-        </div>
-        <Container kind="row">
-          {disabled ? null : (
+          <div className={this.styles.classNames.deleteDescription}>
+            <Label text={description} width="500px" />
+          </div>
+          <div className={this.styles.classNames.deleteButtons}>
+            {disabled ? null : (
+              <Button
+                kind="action"
+                place="1/2"
+                grow="1"
+                glyph={glyph}
+                text={text}
+                onClick={this.onDoDelete}
+              />
+            )}
             <Button
               kind="action"
-              place="1/2"
+              place={disabled ? '1/1' : '2/2'}
               grow="1"
-              glyph={glyph}
-              text={text}
-              onClick={this.onDoDelete}
+              glyph="solid/times"
+              text={T('Annuler')}
+              onClick={() => (this.showDeleteDialog = false)}
             />
-          )}
-          <Button
-            kind="action"
-            place={disabled ? '1/1' : '2/2'}
-            grow="1"
-            glyph="solid/times"
-            text={T('Annuler')}
-            onClick={() => (this.showDeleteDialog = false)}
-          />
-        </Container>
+          </div>
+        </div>
       </DialogModal>
     );
   }
