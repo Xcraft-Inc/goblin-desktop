@@ -380,6 +380,9 @@ class EntityRow extends Widget {
   }
 
   renderCell(cell, index) {
+    if(!cell){
+      return null;
+    }
     const targetPath = ListHelpers.getColumnTargetPath(cell);
     const columnSubPath = ListHelpers.getColumnSubPath(cell);
     const text = ListHelpers.getColumnDisplayText(cell, this.props.entity);
