@@ -23,10 +23,19 @@ module.exports = {
       },
       workitemsByContext: {},
       last: {},
+      navigating: false,
     });
   },
   'add-context': (state, action) => {
     return state.set('current.workcontext', action.get('contextId'));
+  },
+
+  'start-nav': (state) => {
+    return state.set('navigating', true);
+  },
+
+  'end-nav': (state) => {
+    return state.set('navigating', false);
   },
 
   //---------------//

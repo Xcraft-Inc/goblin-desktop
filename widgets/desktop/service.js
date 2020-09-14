@@ -734,6 +734,19 @@ Goblin.registerQuest(goblinName, 'dispatch', function (quest, action) {
   });
 });
 
+Goblin.registerQuest(goblinName, 'start-nav', function* (quest) {
+  const navigating = quest.goblin.getState().get('navigating');
+  if (navigating) {
+    return false;
+  }
+  yield quest.doSync();
+  return true;
+});
+
+Goblin.registerQuest(goblinName, 'end-nav', function* (quest) {
+  yield quest.doSync();
+});
+
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'gamepad-changed', function (quest, gamepad) {

@@ -11,6 +11,7 @@ import DesktopFooter from 'goblin-desktop/widgets/desktop-footer/widget';
 const viewImporter = importer('view');
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import {ColorManipulator} from 'goblin-theme';
+import NavigatingLayer from '../navigating-layer/widget.js';
 
 /******************************************************************************/
 
@@ -74,6 +75,7 @@ class Desktop extends Widget {
     return (
       <DesktopTaskbar
         id={this.props.id}
+        loading={this.props.navigating}
         routes={routes}
         onToggleFooter={this.toggleFooter}
       />
@@ -172,21 +174,23 @@ class Desktop extends Widget {
       : this.styles.classNames.contentWithoutfooter;
 
     return (
-      <Container kind="root">
-        {this.renderTaskBar(routes)}
-        <Container kind="right">
-          <Container kind="content">
-            {this.renderTopBar(routes)}
-            <BeforeContent desktopId={id} />
-            <div className={contentClass}>
-              {this.renderRetroPanel()}
-              <Content desktopId={id} />
-              {this.renderNofications()}
-            </div>
-            {this.renderFooter()}
+      <NavigatingLayer desktopId={id}>
+        <Container kind="root">
+          {this.renderTaskBar(routes)}
+          <Container kind="right">
+            <Container kind="content">
+              {this.renderTopBar(routes)}
+              <BeforeContent desktopId={id} />
+              <div className={contentClass}>
+                {this.renderRetroPanel()}
+                <Content desktopId={id} />
+                {this.renderNofications()}
+              </div>
+              {this.renderFooter()}
+            </Container>
           </Container>
         </Container>
-      </Container>
+      </NavigatingLayer>
     );
   }
 }

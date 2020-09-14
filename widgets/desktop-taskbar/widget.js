@@ -33,7 +33,7 @@ export default class DesktopTaskbar extends Widget {
         <Button
           textTransform="none"
           text={this.props.id.split('@')[1]}
-          glyph="light/cube"
+          glyph={this.props.loading ? 'solid/spinner' : 'light/cube'}
           tooltip={T('Changer de mandat')}
           kind="task-logo"
           onClick={this.onChangeMandate}
