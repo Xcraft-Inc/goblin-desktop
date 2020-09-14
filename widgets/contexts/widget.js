@@ -3,8 +3,31 @@ import React from 'react';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
+class ContextButton extends Widget {
+  constructor() {
+    super(...arguments);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
-export default class Contexts extends Widget {
+  handleClick() {
+    this.props.goToContext(this.props.context.get('contextId'));
+  }
+
+  render() {
+    return (
+      <Button
+        key={this.props.context.get('contextId')}
+        text={this.props.context.get('name')}
+        kind="main-tab"
+        onClick={this.handleClick}
+        active={this.props.active}
+        tooltip={this.props.tooltip}
+      />
+    );
+  }
+}
+
+class Contexts extends Widget {
   constructor() {
     super(...arguments);
     this.goToContext = this.goToContext.bind(this);
@@ -15,7 +38,6 @@ export default class Contexts extends Widget {
       id: 'id',
       desktopId: 'desktopId',
       contexts: 'contexts',
-      current: 'current',
     };
   }
 
@@ -36,7 +58,6 @@ export default class Contexts extends Widget {
   }
 
   goToContext(contextId) {
-    this.do('set-current', {contextId});
     this.navToContext(contextId);
   }
 
@@ -70,29 +91,11 @@ export default class Contexts extends Widget {
     return <Container kind="main-tab">{this.renderContexts()}</Container>;
   }
 }
-
 /******************************************************************************/
 
-class ContextButton extends Widget {
-  constructor() {
-    super(...arguments);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.props.goToContext(this.props.context.get('contextId'));
-  }
-
-  render() {
-    return (
-      <Button
-        key={this.props.context.get('contextId')}
-        text={this.props.context.get('name')}
-        kind="main-tab"
-        onClick={this.handleClick}
-        active={this.props.active}
-        tooltip={this.props.tooltip}
-      />
-    );
-  }
-}
+export default Widget.Wired(
+  Widget.connect((state, props) => {
+    const current = state.get(`backend.${props.desktopId}.current.workcontext`);
+    return {current};
+  })(Contexts)
+)();

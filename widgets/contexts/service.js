@@ -23,10 +23,6 @@ Goblin.registerQuest(goblinName, 'delete', function (quest) {
   quest.log.info('deleting contexts...');
 });
 
-Goblin.registerQuest(goblinName, 'set-current', function (quest, contextId) {
-  quest.do({contextId});
-});
-
 Goblin.registerQuest(goblinName, 'add', function (quest, contextId, name) {
   const deskId = quest.goblin.getX('desktopId');
   const useId = uuidV4();
