@@ -523,7 +523,6 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   currentLocation
 ) {
   yield mutex.lock(questLock(quest));
-  const contextsAPI = quest.getAPI(`contexts@${quest.goblin.id}`);
   const state = quest.goblin.getState();
   const location = state.get(`current.location.${contextId}`, null);
   let route;
@@ -544,9 +543,6 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
     route = `/${contextId}`;
   }
 
-  yield contextsAPI.setCurrent({
-    contextId,
-  });
   yield quest.doSync();
 
   quest.evt(`nav.requested`, {
