@@ -17,7 +17,7 @@ class TaskbarView extends Widget {
     const WiredTaskbar = Widget.Wired(Taskbar)(
       `${context}-taskbar@${desktopId}`
     );
-    return <WiredTaskbar />;
+    return <WiredTaskbar desktopId={desktopId} />;
   }
 }
 

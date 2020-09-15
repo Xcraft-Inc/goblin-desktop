@@ -97,48 +97,57 @@ class Taskbar extends Widget {
     if (!contextTasks) {
       return null;
     }
+
+    let navigatingStyle = {};
+    if (this.props.working) {
+      navigatingStyle = {
+        pointerEvents: 'none',
+      };
+    }
     return (
-      <Container kind="task-bar">
-        {contextTasks.map((task, i) => {
-          let isValidScope = true;
-          if (task.scope) {
-            switch (task.scope) {
-              case 'prototype':
-                if (!this.props.prototypeMode) {
+      <div style={navigatingStyle}>
+        <Container kind="task-bar">
+          {contextTasks.map((task, i) => {
+            let isValidScope = true;
+            if (task.scope) {
+              switch (task.scope) {
+                case 'prototype':
+                  if (!this.props.prototypeMode) {
+                    isValidScope = false;
+                  }
+                  break;
+                case 'dev':
                   isValidScope = false;
-                }
-                break;
-              case 'dev':
-                isValidScope = false;
-                if (
-                  this.props.prototypeMode &&
-                  process &&
-                  process.env &&
-                  process.env.NODE_ENV === 'development'
-                ) {
-                  isValidScope = true;
-                }
-                break;
-              default:
-                break;
+                  if (
+                    this.props.prototypeMode &&
+                    process &&
+                    process.env &&
+                    process.env.NODE_ENV === 'development'
+                  ) {
+                    isValidScope = true;
+                  }
+                  break;
+                default:
+                  break;
+              }
             }
-          }
-          if (isValidScope) {
-            if (task.separator) {
-              return this.renderSeparator(i);
-            } else {
-              return this.renderButton(context, task, i);
+            if (isValidScope) {
+              if (task.separator) {
+                return this.renderSeparator(i);
+              } else {
+                return this.renderButton(context, task, i);
+              }
             }
-          }
-        })}
-      </Container>
+          })}
+        </Container>
+      </div>
     );
   }
 }
 
-export default Widget.connect((state) => {
+export default Widget.connect((state, props) => {
   const userSession = Widget.getUserSession(state);
   const prototypeMode = userSession.get('prototypeMode');
-
-  return {prototypeMode};
+  const working = state.get(`backend.${props.desktopId}.working`);
+  return {prototypeMode, working};
 })(Taskbar);

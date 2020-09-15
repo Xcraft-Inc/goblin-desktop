@@ -9,7 +9,7 @@ const viewImporter = importer('view');
 
 /******************************************************************************/
 
-export default class DesktopTaskbar extends Widget {
+class DesktopTaskbar extends Widget {
   constructor() {
     super(...arguments);
 
@@ -37,6 +37,7 @@ export default class DesktopTaskbar extends Widget {
           tooltip={T('Changer de mandat')}
           kind="task-logo"
           onClick={this.onChangeMandate}
+          busy={this.props.working}
         />
         <Container kind="task-bar">
           <Tasks desktopId={this.props.id} />
@@ -52,5 +53,8 @@ export default class DesktopTaskbar extends Widget {
     );
   }
 }
-
+export default Widget.connect((state, props) => {
+  const working = state.get(`backend.${props.id}.working`);
+  return {working};
+})(DesktopTaskbar);
 /******************************************************************************/

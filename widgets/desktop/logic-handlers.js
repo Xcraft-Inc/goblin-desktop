@@ -24,6 +24,7 @@ module.exports = {
       workitemsByContext: {},
       last: {},
       navigating: false,
+      working: false,
     });
   },
   'add-context': (state, action) => {
@@ -146,6 +147,9 @@ module.exports = {
     return state.set('current.workcontext', action.get('contextId'));
   },
   'add-workitem': (state, action) => {
+    return state.set('working', action.get('working'));
+  },
+  'set-workitem': (state, action) => {
     const wid = action.get('widgetId');
     const workcontext = state.get('current.workcontext');
     return state

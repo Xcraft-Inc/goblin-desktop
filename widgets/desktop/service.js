@@ -10,6 +10,7 @@ const xUtils = require('xcraft-core-utils');
 const locks = require('xcraft-core-utils/lib/locks');
 const {getFileFilter} = xUtils.files;
 const T = require('goblin-nabu/widgets/helpers/t.js');
+const {JobQueue} = require('xcraft-core-utils');
 
 const mutex = locks.getMutex;
 const questLock = (quest) => `${quest.questName}/${quest.goblin.id}`;
@@ -85,6 +86,20 @@ Goblin.registerQuest(
 
     quest.log.info(`Desktop ${quest.goblin.id} created!`);
     const id = quest.goblin.id;
+
+    const addQueue = new JobQueue(
+      `Add workitem queue for: ${id}`,
+      function* ({work, resp}) {
+        yield resp.cmd(`${goblinName}.do-add`, {id, ...work});
+      },
+      1
+    );
+    quest.goblin.defer(
+      quest.sub(`*::${id}.add-workitem-enqueued`, function (err, {msg, resp}) {
+        addQueue.push({id: msg.id, work: {...msg.data}, resp});
+      })
+    );
+
     quest.goblin.defer(
       quest.sub(
         `*::*.${
@@ -184,72 +199,23 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function* (
 });
 
 /******************************************************************************/
-
-Goblin.registerQuest(goblinName, 'add-workitem', function* (
+Goblin.registerQuest(goblinName, 'do-add', function* (
   quest,
+  widgetId,
+  clientSessionId,
   workitem,
   currentLocation,
-  clientSessionId,
   navigate
 ) {
-  if (!workitem.name) {
-    throw new Error(
-      `Cannot add workitem without a name: ${JSON.stringify(workitem)}`
-    );
-  }
-
   const desk = quest.me;
-  if (!workitem.payload) {
-    workitem.payload = {};
-  }
+  const desktopId = desk.id;
 
-  if (workitem.newEntityType) {
-    workitem.payload.entityId = `${workitem.newEntityType}@${quest.uuidV4()}`;
-  }
-
-  if (!workitem.id) {
-    workitem.id = workitem.payload.entityId
-      ? workitem.payload.entityId
-      : quest.uuidV4();
-  }
-
-  if (!workitem.view) {
-    workitem.view = 'default';
-  }
-
-  if (!workitem.kind) {
-    workitem.kind = 'tab';
-  }
-
-  if (workitem.kind === 'dialog') {
-    //ensure dialog's cannot be popped twice
-    workitem.maxInstances = 1;
-  }
-
-  if (!workitem.contextId) {
-    if (currentLocation) {
-      workitem.contextId = extractContextIdFromCurrentLocation(currentLocation);
-    } else {
-      const state = quest.goblin.getState();
-      workitem.contextId = state.get(`current.workcontext`, null);
-    }
-  }
-
-  //Manage collision with desktopId
-  if (workitem.payload) {
-    if (workitem.payload.desktopId) {
-      workitem.payload.deskId = workitem.payload.desktopId;
-      delete workitem.payload.desktopId;
-    }
-  }
-  yield mutex.lock(questLock(quest));
-  quest.log.dbg(`Adding ${workitem.name}@${workitem.id}...`);
   /* Manage `maxInstances` property which is useful to limit the quantity
    * of instances. If the `navigate` property is passed to true, then
    * a navigate is performed with the first entry.
    */
   if (Number.isInteger(workitem.maxInstances)) {
-    const workitems = quest.goblin.getState().get(`workitems`);
+    const workitems = quest.goblin.getState().get('workitems');
     if (workitems) {
       const items = workitems.filter((v, k) =>
         k.startsWith(`${workitem.name}@`)
@@ -257,28 +223,30 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
 
       if (items.count() >= workitem.maxInstances) {
         const workitemId = items.keySeq().first();
-        const currentSearch = currentLocation.get('search');
-        if (currentSearch) {
-          if (!currentSearch.includes(workitemId)) {
-            yield desk.navToWorkitem({
-              contextId: workitem.contextId,
-              view: workitem.view,
-              workitemId,
-              currentLocation,
-            });
+        if (navigate) {
+          const currentSearch = currentLocation.get('search');
+          if (currentSearch) {
+            if (!currentSearch.includes(workitemId)) {
+              yield desk.navToWorkitem({
+                contextId: workitem.contextId,
+                view: workitem.view,
+                workitemId,
+                currentLocation,
+              });
+            }
           }
         }
 
-        mutex.unlock(questLock(quest));
-        quest.log.dbg(`Skipping ${workitem.name}@${workitem.id} add`);
+        quest.log.dbg(`Skipping ${widgetId} add`);
+        quest.evt(`${widgetId}.skipped`, {
+          desktopId,
+          workitemId: widgetId,
+        });
         return;
       }
     }
   }
-  const desktopId = quest.goblin.id;
-  const widgetId = `${workitem.name}${
-    workitem.mode ? `@${workitem.mode}` : ''
-  }@${desktopId}@${workitem.id}`;
+
   const workitemAPI = yield quest.create(
     widgetId,
     Object.assign(
@@ -316,7 +284,11 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
         navigate: !!navigate,
         currentLocation,
       });
-      quest.do({widgetId, tabId: widgetId, view: workitem.view});
+      quest.dispatch('set-workitem', {
+        widgetId,
+        tabId: widgetId,
+        view: workitem.view,
+      });
       break;
     }
     case 'dialog': {
@@ -324,17 +296,96 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
         dialogId: widgetId,
         currentLocation,
       });
-      quest.do({widgetId, tabId: null, view: workitem.view});
+      quest.dispatch('set-workitem', {
+        widgetId,
+        tabId: null,
+        view: workitem.view,
+      });
       break;
     }
   }
 
-  quest.evt(`workitem.added`, {
+  quest.evt(`${widgetId}.added`, {
     desktopId,
     workitemId: widgetId,
   });
-  mutex.unlock(questLock(quest));
-  quest.log.dbg(`Adding ${workitem.name}@${workitem.id}...[DONE]`);
+});
+
+Goblin.registerQuest(goblinName, 'add-workitem', function* (
+  quest,
+  workitem,
+  currentLocation,
+  clientSessionId,
+  navigate
+) {
+  if (!workitem.name) {
+    throw new Error(
+      `Cannot add workitem without a name: ${JSON.stringify(workitem)}`
+    );
+  }
+
+  if (!workitem.payload) {
+    workitem.payload = {};
+  }
+
+  if (workitem.newEntityType) {
+    workitem.payload.entityId = `${workitem.newEntityType}@${quest.uuidV4()}`;
+  }
+
+  if (!workitem.id) {
+    workitem.id = workitem.payload.entityId
+      ? workitem.payload.entityId
+      : quest.uuidV4();
+  }
+
+  if (!workitem.view) {
+    workitem.view = 'default';
+  }
+
+  if (!workitem.kind) {
+    workitem.kind = 'tab';
+  }
+
+  if (workitem.kind === 'dialog') {
+    workitem.maxInstances = 1;
+  }
+
+  if (!workitem.contextId) {
+    if (currentLocation) {
+      workitem.contextId = extractContextIdFromCurrentLocation(currentLocation);
+    } else {
+      const state = quest.goblin.getState();
+      workitem.contextId = state.get(`current.workcontext`, null);
+    }
+  }
+
+  //Manage collision with desktopId
+  if (workitem.payload) {
+    if (workitem.payload.desktopId) {
+      workitem.payload.deskId = workitem.payload.desktopId;
+      delete workitem.payload.desktopId;
+    }
+  }
+
+  const desktopId = quest.goblin.id;
+  const widgetId = `${workitem.name}${
+    workitem.mode ? `@${workitem.mode}` : ''
+  }@${desktopId}@${workitem.id}`;
+  quest.log.dbg(`Adding ${widgetId}...`);
+  yield quest.doSync({working: true});
+  yield quest.sub.callAndWait(function () {
+    quest.evt('add-workitem-enqueued', {
+      desktopId,
+      toDesktopId: desktopId,
+      currentLocation,
+      widgetId,
+      workitem,
+      clientSessionId,
+      navigate,
+    });
+  }, `*::${desktopId}.${widgetId}.(added|skipped)`);
+  yield quest.doSync({working: false});
+  quest.log.dbg(`Adding ${widgetId}...[DONE]`);
   return widgetId;
 });
 
@@ -471,7 +522,7 @@ const buildDialogNavRequest = (state, newArg, currentLocation) => {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'add-dialog', function (
+Goblin.registerQuest(goblinName, 'add-dialog', function* (
   quest,
   contextId,
   dialogId,
@@ -490,9 +541,20 @@ Goblin.registerQuest(goblinName, 'add-dialog', function (
   quest.do();
 
   const state = quest.goblin.getState();
-  quest.evt(`nav.requested`, {
+
+  yield quest.me.navAndWait({
     route: buildDialogNavRequest(state, `did=${dialogId}`, currentLocation),
   });
+});
+
+Goblin.registerQuest(goblinName, 'nav-and-wait', function* (quest, route) {
+  const navRequestId = quest.uuidV4();
+  yield quest.sub.callAndWait(function () {
+    quest.evt(`nav.requested`, {
+      route,
+      navRequestId,
+    });
+  }, `*::*.${navRequestId}.done`);
 });
 
 /******************************************************************************/
@@ -545,9 +607,7 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
 
   yield quest.doSync();
 
-  quest.evt(`nav.requested`, {
-    route,
-  });
+  yield quest.me.navAndWait({route});
   mutex.unlock(questLock(quest));
 });
 
@@ -592,9 +652,7 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
         route = `${path}${search}${hash}`;
       }
     }
-    quest.evt(`nav.requested`, {
-      route,
-    });
+    yield quest.me.navAndWait({route});
   }
 
   mutex.unlock(questLock(quest));
@@ -638,24 +696,23 @@ Goblin.registerQuest(goblinName, 'nav-to-last-workitem', function* (quest) {
     }
   }
 
-  quest.evt(`nav.requested`, {
-    route,
-  });
+  yield quest.me.navAndWait({route});
 
   mutex.unlock(questLock(quest));
 });
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'clear-workitem', function (quest, contextId) {
+Goblin.registerQuest(goblinName, 'clear-workitem', function* (
+  quest,
+  contextId
+) {
   quest.dispatch('setCurrentWorkitemByContext', {
     contextId,
     view: null,
     workitemId: null,
   });
-  quest.evt(`nav.requested`, {
-    route: `/${contextId}/?wid=null`,
-  });
+  yield quest.me.navAndWait({route: `/${contextId}/?wid=null`});
 });
 
 Goblin.registerQuest(goblinName, 'run-client-quest', function (
@@ -704,7 +761,7 @@ Goblin.registerQuest(goblinName, 'open-window', function* (
   });
 });
 
-Goblin.registerQuest(goblinName, 'update-current-location', function (
+Goblin.registerQuest(goblinName, 'update-current-location', function* (
   quest,
   currentLocation
 ) {
@@ -717,9 +774,7 @@ Goblin.registerQuest(goblinName, 'update-current-location', function (
     hash,
     search,
   });
-  quest.evt(`nav.requested`, {
-    route,
-  });
+  yield quest.me.navAndWait({route});
 });
 
 /******************************************************************************/
@@ -739,8 +794,17 @@ Goblin.registerQuest(goblinName, 'start-nav', function* (quest) {
   return true;
 });
 
-Goblin.registerQuest(goblinName, 'end-nav', function* (quest) {
-  yield quest.doSync();
+Goblin.registerQuest(goblinName, 'end-nav', function* (
+  quest,
+  navRequestId,
+  skip
+) {
+  if (!skip) {
+    yield quest.doSync();
+  }
+  if (navRequestId) {
+    quest.evt(`${navRequestId}.done`);
+  }
 });
 
 /******************************************************************************/

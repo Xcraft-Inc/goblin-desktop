@@ -9,7 +9,7 @@ class NavigatingLayer extends Widget {
 
   render() {
     let navigatingStyle = {};
-    if (this.props.navigating) {
+    if (this.props.navigating || this.props.working) {
       navigatingStyle = {
         pointerEvents: 'none',
       };
@@ -20,5 +20,6 @@ class NavigatingLayer extends Widget {
 
 export default Widget.connect((state, props) => {
   const navigating = state.get(`backend.${props.desktopId}.navigating`);
-  return {navigating};
+  const working = state.get(`backend.${props.desktopId}.working`);
+  return {navigating, working};
 })(NavigatingLayer);
