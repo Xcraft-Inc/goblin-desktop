@@ -35,8 +35,20 @@ module.exports = {
     return state.set('navigating', true);
   },
 
-  'end-nav': (state) => {
-    return state.set('navigating', false);
+  'end-nav': (state, action) => {
+    const route = action.get('route');
+    const contextId = route.split('/')[1];
+    const path = route.split('?')[0];
+    const search = route.split('?')[1];
+    const hash = route.split('#')[1];
+    const location = {
+      path: path,
+      search: search ? `?${search}` : '',
+      hash: hash ? `#${hash}` : '',
+    };
+    return state
+      .set('navigating', false)
+      .set(`current.location.${contextId}`, location);
   },
 
   //---------------//

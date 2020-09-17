@@ -241,6 +241,7 @@ Goblin.registerQuest(goblinName, 'do-add', function* (
         quest.evt(`${widgetId}.skipped`, {
           desktopId,
           workitemId: widgetId,
+          skipped: true,
         });
         return;
       }
@@ -308,6 +309,7 @@ Goblin.registerQuest(goblinName, 'do-add', function* (
   quest.evt(`${widgetId}.added`, {
     desktopId,
     workitemId: widgetId,
+    skipped: false,
   });
 });
 
@@ -371,9 +373,18 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
   const widgetId = `${workitem.name}${
     workitem.mode ? `@${workitem.mode}` : ''
   }@${desktopId}@${workitem.id}`;
+
   quest.log.dbg(`Adding ${widgetId}...`);
   yield quest.doSync({working: true});
-  yield quest.sub.callAndWait(function () {
+  const autoRelease = () => {
+    quest.evt(`${widgetId}.skipped`, {
+      desktopId,
+      workitemId: widgetId,
+      skipped: true,
+    });
+  };
+  const timeoutCancel = setTimeout(autoRelease, 1000);
+  const res = yield quest.sub.callAndWait(function () {
     quest.evt('add-workitem-enqueued', {
       desktopId,
       toDesktopId: desktopId,
@@ -384,9 +395,16 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
       navigate,
     });
   }, `*::${desktopId}.${widgetId}.(added|skipped)`);
+  clearTimeout(timeoutCancel);
   yield quest.doSync({working: false});
-  quest.log.dbg(`Adding ${widgetId}...[DONE]`);
-  return widgetId;
+
+  if (res.skipped) {
+    quest.log.dbg(`Adding ${widgetId}...[FAILED]`);
+    return null;
+  } else {
+    quest.log.dbg(`Adding ${widgetId}...[DONE]`);
+    return widgetId;
+  }
 });
 
 /******************************************************************************/
@@ -578,6 +596,28 @@ Goblin.registerQuest(goblinName, 'get-current-context', function (quest) {
 });
 
 /******************************************************************************/
+
+Goblin.registerQuest(goblinName, 'set-nav-to-default', function* (
+  quest,
+  defaultContextId
+) {
+  const state = quest.goblin.getState();
+  const currentWK = state.get('current.workcontext');
+  if (currentWK) {
+    const location = state.get(`current.location.${currentWK}`, null);
+    let route;
+    if (location) {
+      route = `${location.get('path')}${location.get('search')}${location.get(
+        'hash'
+      )}`;
+    } else {
+      route = `/${currentWK}`;
+    }
+    yield quest.me.navAndWait({route});
+  } else {
+    yield quest.me.navToContext({contextId: defaultContextId});
+  }
+});
 
 Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   quest,
@@ -797,6 +837,7 @@ Goblin.registerQuest(goblinName, 'start-nav', function* (quest) {
 Goblin.registerQuest(goblinName, 'end-nav', function* (
   quest,
   navRequestId,
+  route,
   skip
 ) {
   if (!skip) {
@@ -1039,6 +1080,7 @@ Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
   setTimeout(() => {
     clearInterval(countdown);
     quest.evt(`session.closed`);
+    quest.release(quest.goblin.id);
   }, 1000 * count);
 });
 
