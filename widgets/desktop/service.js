@@ -419,7 +419,6 @@ Goblin.registerQuest(goblinName, 'add-context', function* (
     contextId,
     name,
   });
-  quest.do();
 });
 
 /******************************************************************************/
