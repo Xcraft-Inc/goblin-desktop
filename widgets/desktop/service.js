@@ -159,15 +159,21 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function* (
       `Cannot remove workitem without a name: ${JSON.stringify(workitem)}`
     );
   }
-  yield mutex.lock(questLock(quest));
-  quest.log.dbg(`Removing ${workitem.name}@${workitem.id}...`);
+  const widgetId = `${workitem.name}@${workitem.id}`;
+  quest.log.dbg(`Removing ${widgetId}...`);
+  yield mutex.lock(widgetId);
   const state = quest.goblin.getState();
+
+  const exist = state.get(`workitems.${widgetId}`);
+  if (!exist) {
+    quest.log.dbg(`Skipping ${widgetId} remove...`);
+    mutex.unlock(widgetId);
+    return;
+  }
 
   if (!workitem.contextId) {
     workitem.contextId = state.get(`current.workcontext`);
   }
-
-  const widgetId = `${workitem.name}@${workitem.id}`;
 
   // Remove the tab
   const tabId = state.get(`workitems.${widgetId}.tabId`);
@@ -189,13 +195,12 @@ Goblin.registerQuest(goblinName, 'remove-workitem', function* (
   }
 
   yield quest.kill([widgetId]);
-  quest.evt(`${widgetId}.workitem.closed`);
 
   if (navToLastWorkitem) {
     yield quest.me.navToLastWorkitem();
   }
-  mutex.unlock(questLock(quest));
-  quest.log.dbg(`Removing ${workitem.name}@${workitem.id}...[DONE]`);
+  mutex.unlock(widgetId);
+  quest.log.dbg(`Removing ${widgetId}...[DONE]`);
 });
 
 /******************************************************************************/
