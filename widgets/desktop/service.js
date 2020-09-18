@@ -1092,8 +1092,9 @@ Goblin.registerQuest(goblinName, 'on-close-window', function (
   quest,
   currentUrl
 ) {
-  const state = quest.goblin.getState().toJS();
-  console.dir(state.current.location);
+  //const state = quest.goblin.getState().toJS();
+  //console.dir(state.current.location);
+  quest.log.dbg(`${quest.goblin.id} window closing...`);
 });
 
 /******************************************************************************/
