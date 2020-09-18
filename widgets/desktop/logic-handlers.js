@@ -37,9 +37,9 @@ module.exports = {
     if (!route) {
       return state;
     }
-    const contextId = route.split('/')[1];
+    const contextId = route.split('?')[0].split('/')[1];
     const path = route.split('?')[0];
-    const search = route.split('?')[1];
+    const search = route.split('#')[0].split('?')[1];
     const hash = route.split('#')[1];
     const location = {
       path: path,
