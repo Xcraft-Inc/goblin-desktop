@@ -34,9 +34,7 @@ class DesktopTaskbar extends Widget {
           textTransform="none"
           text={this.props.id.split('@')[1]}
           glyph={this.props.loading ? 'solid/spinner' : 'light/cube'}
-          tooltip={T('Changer de mandat')}
           kind="task-logo"
-          onClick={this.onChangeMandate}
           busy={this.props.working}
         />
         <Container kind="task-bar">
