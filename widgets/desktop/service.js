@@ -1088,6 +1088,14 @@ Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
   }, 1000 * count);
 });
 
+Goblin.registerQuest(goblinName, 'on-close-window', function (
+  quest,
+  currentUrl
+) {
+  const state = quest.goblin.getState().toJS();
+  console.dir(state.current.location);
+});
+
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'open-entity-wizard', function* (
