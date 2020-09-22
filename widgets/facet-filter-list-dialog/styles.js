@@ -11,6 +11,17 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
+  const header = {
+    height: '50px',
+    minHeight: '50px',
+    padding: '0px 10px 0px 30px',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: '0px 0px 3px 3px',
+    backgroundColor: theme.palette.paneNavigatorBackground,
+  };
+
   const buttons = {
     padding: '20px 30px 0px 30px',
     flexGrow: 1,
@@ -37,6 +48,7 @@ export default function styles(theme) {
 
   return {
     facetFilterDialog,
+    header,
     buttons,
     scrollable,
     letter,

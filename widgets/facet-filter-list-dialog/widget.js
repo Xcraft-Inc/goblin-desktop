@@ -2,19 +2,38 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
+import TextFieldNC from 'goblin-gadgets/widgets/text-field-nc/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterListDialogFooter from '../facet-filter-list-dialog-footer/widget.js';
 import * as FacetHelpers from '../helpers/facet-helpers';
 import {Unit} from 'goblin-theme';
+import T from 't';
 const px = Unit.toPx;
 
 class FacetFilterListDialog extends Widget {
   constructor() {
     super(...arguments);
 
+    this.state = {
+      filter: null,
+    };
+
     this.changeFacet = this.changeFacet.bind(this);
+    this.filterChange = this.filterChange.bind(this);
     this.onClose = this.onClose.bind(this);
   }
+
+  //#region get/set
+  get filter() {
+    return this.state.filter;
+  }
+  set filter(value) {
+    this.setState({
+      filter: value,
+    });
+  }
+  //#endregion
 
   onClose() {
     this.props.onClose();
@@ -27,6 +46,10 @@ class FacetFilterListDialog extends Widget {
         facet: facet,
       });
     };
+  }
+
+  filterChange(text) {
+    this.filter = text;
   }
 
   /******************************************************************************/
@@ -47,6 +70,31 @@ class FacetFilterListDialog extends Widget {
     //- );
   }
 
+  renderHeader() {
+    return (
+      <div className={this.styles.classNames.header}>
+        <Label text={T('Filtre')} />
+        <TextFieldNC
+          width="300px"
+          shape={this.filter ? 'left-rounded' : 'rounded'}
+          value={this.filter}
+          changeMode="throttled"
+          throttleDelay={100}
+          onChange={this.filterChange}
+        />
+        <Button
+          kind="combo"
+          shape="right-rounded"
+          leftSpacing="overlap"
+          glyph="solid/eraser"
+          tooltip={T('Tout montrer')}
+          show={!!this.filter}
+          onClick={() => (this.filter = null)}
+        />
+      </div>
+    );
+  }
+
   renderFooter() {
     return (
       <FacetFilterListDialogFooter id={this.props.id} name={this.props.name} />
@@ -62,48 +110,56 @@ class FacetFilterListDialog extends Widget {
       .keySeq();
     const type = FacetHelpers.getType(keys);
 
+    const filter = FacetHelpers.preprocessFilter(this.filter);
+
     if (this.props.numberOfCheckboxes < 20) {
       for (const key of keys) {
-        result.push(
-          <FacetCheckbox
-            id={this.props.id}
-            key={`${key}-val`}
-            name={this.props.name}
-            text={FacetHelpers.format(key, type)}
-            value={key}
-            onChange={this.changeFacet(key)}
-          />
-        );
+        const text = FacetHelpers.format(key, type);
+        if (FacetHelpers.match(text, filter)) {
+          result.push(
+            <FacetCheckbox
+              id={this.props.id}
+              key={`${key}-val`}
+              name={this.props.name}
+              text={text}
+              value={key}
+              onChange={this.changeFacet(key)}
+            />
+          );
+        }
       }
     } else {
       let lastTab = null;
       for (const key of keys) {
-        const tab = FacetHelpers.extractTab(key, type);
-        if (lastTab !== tab.internal) {
-          lastTab = tab.internal;
+        const text = FacetHelpers.format(key, type);
+        if (FacetHelpers.match(text, filter)) {
+          const tab = FacetHelpers.extractTab(key, type);
+          if (lastTab !== tab.internal) {
+            lastTab = tab.internal;
+            result.push(
+              <div
+                key={`${key}-${tab.internal}`}
+                className={this.styles.classNames.letter}
+              >
+                <Label
+                  fontSize="300%"
+                  textColor={this.context.theme.palette.mainTabBackground}
+                  text={tab.displayed}
+                />
+              </div>
+            );
+          }
           result.push(
-            <div
-              key={`${key}-${tab.internal}`}
-              className={this.styles.classNames.letter}
-            >
-              <Label
-                fontSize="300%"
-                textColor={this.context.theme.palette.mainTabBackground}
-                text={tab.displayed}
-              />
-            </div>
+            <FacetCheckbox
+              id={this.props.id}
+              key={`${key}-val`}
+              name={this.props.name}
+              text={text}
+              value={key}
+              onChange={this.changeFacet(key)}
+            />
           );
         }
-        result.push(
-          <FacetCheckbox
-            id={this.props.id}
-            key={`${key}-val`}
-            name={this.props.name}
-            text={FacetHelpers.format(key, type)}
-            value={key}
-            onChange={this.changeFacet(key)}
-          />
-        );
       }
     }
     return result;
@@ -112,6 +168,7 @@ class FacetFilterListDialog extends Widget {
   renderList() {
     return (
       <div className={this.styles.classNames.facetFilterDialog}>
+        {this.renderHeader()}
         <div className={this.styles.classNames.buttons}>
           <div className={this.styles.classNames.scrollable}>
             {this.renderButtons()}

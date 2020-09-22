@@ -34,6 +34,27 @@ function format(text, type) {
   }
 }
 
+// Remove accents/diacritics.
+// See https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+function preprocessFilter(filter) {
+  if (!filter) {
+    return null;
+  }
+  return filter
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function match(text, filter) {
+  if (!text || !filter) {
+    return true;
+  }
+
+  text = preprocessFilter(text);
+  return text.includes(filter);
+}
+
 function extractTab(text, type) {
   if (typeof text === 'string') {
     if (text.length === 0) {
@@ -73,6 +94,8 @@ function isRange(type) {
 module.exports = {
   getType,
   format,
+  preprocessFilter,
+  match,
   extractTab,
   isRange,
 };
