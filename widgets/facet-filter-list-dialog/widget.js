@@ -71,6 +71,10 @@ class FacetFilterListDialog extends Widget {
   }
 
   renderHeader() {
+    if (this.props.numberOfCheckboxes <= 5) {
+      return null;
+    }
+
     return (
       <div className={this.styles.classNames.header}>
         <Label text={T('Filtre')} />
