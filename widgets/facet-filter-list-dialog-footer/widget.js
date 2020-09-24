@@ -17,18 +17,21 @@ class FacetFilterListDialogFooter extends Widget {
   clearAllFacets() {
     this.doAs('list', 'clear-all-facets', {
       filterName: this.props.name,
+      keys: this.props.keys,
     });
   }
 
   setAllFacets() {
     this.doAs('list', 'set-all-facets', {
       filterName: this.props.name,
+      keys: this.props.keys,
     });
   }
 
   toggleAllFacets() {
     this.doAs('list', 'toggle-all-facets', {
       filterName: this.props.name,
+      keys: this.props.keys,
     });
   }
 
@@ -39,10 +42,15 @@ class FacetFilterListDialogFooter extends Widget {
   /******************************************************************************/
 
   render() {
-    const enableClearAll = this.props.flags
+    const filteredKeys = this.props.flags.filter((flag, key) =>
+      this.props.keys.includes(key)
+    );
+
+    const enableClearAll = filteredKeys
       .toArray()
       .some((flag) => flag.get('checked'));
-    const enableSetAll = this.props.flags
+
+    const enableSetAll = filteredKeys
       .toArray()
       .some((flag) => !flag.get('checked'));
 

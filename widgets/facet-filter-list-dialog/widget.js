@@ -35,6 +35,21 @@ class FacetFilterListDialog extends Widget {
   }
   //#endregion
 
+  getFilteredKeys(filter) {
+    const keys = this.getState()
+      .backend.get(this.props.id)
+      .get('checkboxes')
+      .get(this.props.name)
+      .keySeq();
+    const type = FacetHelpers.getType(keys);
+    filter = FacetHelpers.preprocessFilter(filter);
+
+    return keys.filter((key) => {
+      const text = FacetHelpers.format(key, type);
+      return FacetHelpers.match(text, filter);
+    });
+  }
+
   onClose() {
     this.props.onClose();
   }
@@ -48,8 +63,18 @@ class FacetFilterListDialog extends Widget {
     };
   }
 
+  initAllFacets(keys) {
+    this.doAs('list', 'init-all-facets', {
+      filterName: this.props.name,
+      keys,
+    });
+  }
+
   filterChange(text) {
     this.filter = text;
+
+    const keys = this.getFilteredKeys(text);
+    this.initAllFacets(keys);
   }
 
   /******************************************************************************/
@@ -70,7 +95,7 @@ class FacetFilterListDialog extends Widget {
     //- );
   }
 
-  renderHeader() {
+  renderHeader(keys) {
     if (this.props.numberOfCheckboxes <= 5) {
       return null;
     }
@@ -83,7 +108,7 @@ class FacetFilterListDialog extends Widget {
           shape={this.filter ? 'left-rounded' : 'rounded'}
           value={this.filter}
           changeMode="throttled"
-          throttleDelay={100}
+          throttleDelay={200}
           onChange={this.filterChange}
         />
         <Button
@@ -93,92 +118,85 @@ class FacetFilterListDialog extends Widget {
           glyph="solid/eraser"
           tooltip={T('Tout montrer')}
           show={!!this.filter}
-          onClick={() => (this.filter = null)}
+          onClick={() => this.filterChange(null)}
         />
       </div>
     );
   }
 
-  renderFooter() {
+  renderFooter(keys) {
     return (
-      <FacetFilterListDialogFooter id={this.props.id} name={this.props.name} />
+      <FacetFilterListDialogFooter
+        id={this.props.id}
+        name={this.props.name}
+        keys={keys}
+      />
     );
   }
 
-  renderButtons() {
+  renderButtons(keys) {
     const result = [];
-    const keys = this.getState()
-      .backend.get(this.props.id)
-      .get('checkboxes')
-      .get(this.props.name)
-      .keySeq();
     const type = FacetHelpers.getType(keys);
-
-    const filter = FacetHelpers.preprocessFilter(this.filter);
 
     if (this.props.numberOfCheckboxes < 20) {
       for (const key of keys) {
-        const text = FacetHelpers.format(key, type);
-        if (FacetHelpers.match(text, filter)) {
-          result.push(
-            <FacetCheckbox
-              id={this.props.id}
-              key={`${key}-val`}
-              name={this.props.name}
-              text={text}
-              value={key}
-              onChange={this.changeFacet(key)}
-            />
-          );
-        }
+        result.push(
+          <FacetCheckbox
+            id={this.props.id}
+            key={`${key}-val`}
+            name={this.props.name}
+            text={FacetHelpers.format(key, type)}
+            value={key}
+            onChange={this.changeFacet(key)}
+          />
+        );
       }
     } else {
       let lastTab = null;
       for (const key of keys) {
-        const text = FacetHelpers.format(key, type);
-        if (FacetHelpers.match(text, filter)) {
-          const tab = FacetHelpers.extractTab(key, type);
-          if (lastTab !== tab.internal) {
-            lastTab = tab.internal;
-            result.push(
-              <div
-                key={`${key}-${tab.internal}`}
-                className={this.styles.classNames.letter}
-              >
-                <Label
-                  fontSize="300%"
-                  textColor={this.context.theme.palette.mainTabBackground}
-                  text={tab.displayed}
-                />
-              </div>
-            );
-          }
+        const tab = FacetHelpers.extractTab(key, type);
+        if (lastTab !== tab.internal) {
+          lastTab = tab.internal;
           result.push(
-            <FacetCheckbox
-              id={this.props.id}
-              key={`${key}-val`}
-              name={this.props.name}
-              text={text}
-              value={key}
-              onChange={this.changeFacet(key)}
-            />
+            <div
+              key={`${key}-${tab.internal}`}
+              className={this.styles.classNames.letter}
+            >
+              <Label
+                fontSize="300%"
+                textColor={this.context.theme.palette.mainTabBackground}
+                text={tab.displayed}
+              />
+            </div>
           );
         }
+        result.push(
+          <FacetCheckbox
+            id={this.props.id}
+            key={`${key}-val`}
+            name={this.props.name}
+            text={FacetHelpers.format(key, type)}
+            value={key}
+            onChange={this.changeFacet(key)}
+          />
+        );
       }
     }
     return result;
   }
 
   renderList() {
+    const keys = this.getFilteredKeys(this.filter);
+
     return (
       <div className={this.styles.classNames.facetFilterDialog}>
-        {this.renderHeader()}
+        {this.renderHeader(keys)}
         <div className={this.styles.classNames.buttons}>
           <div className={this.styles.classNames.scrollable}>
-            {this.renderButtons()}
+            {this.renderButtons(keys)}
           </div>
         </div>
-        {this.renderFooter()}
+        {this.renderFooter(keys)}
         {this.renderClose()}
       </div>
     );
