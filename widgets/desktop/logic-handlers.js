@@ -5,6 +5,7 @@ module.exports = {
     return state.set('', {
       id: id,
       username: action.get('username', 'guest'),
+      profileKey: action.get('profileKey'),
       routes: action.get('routes'),
       showNotifications: false,
       dnd: false,

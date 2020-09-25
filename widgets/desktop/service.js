@@ -82,7 +82,13 @@ Goblin.registerQuest(
       routes = defaultRoutes;
     }
 
-    quest.do({id: quest.goblin.id, routes, username, session});
+    quest.do({
+      id: quest.goblin.id,
+      routes,
+      username,
+      session,
+      profileKey: configuration.id,
+    });
 
     quest.log.info(`Desktop ${quest.goblin.id} created!`);
     const id = quest.goblin.id;
