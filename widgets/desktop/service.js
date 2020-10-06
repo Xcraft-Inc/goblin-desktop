@@ -234,17 +234,21 @@ Goblin.registerQuest(goblinName, 'do-add', function* (
 
       if (items.count() >= workitem.maxInstances) {
         const workitemId = items.keySeq().first();
+
+        //navigate to existing tab when possible
         if (navigate) {
           const currentSearch = currentLocation.get('search');
-          if (currentSearch) {
-            if (!currentSearch.includes(workitemId)) {
-              yield desk.navToWorkitem({
-                contextId: workitem.contextId,
-                view: workitem.view,
-                workitemId,
-                currentLocation,
-              });
-            }
+          if (
+            currentSearch &&
+            !currentSearch.includes(workitemId) &&
+            workitem.kind === 'tab'
+          ) {
+            yield desk.navToWorkitem({
+              contextId: workitem.contextId,
+              view: workitem.view,
+              workitemId,
+              currentLocation,
+            });
           }
         }
 
