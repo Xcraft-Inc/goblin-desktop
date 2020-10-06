@@ -639,6 +639,7 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   currentLocation
 ) {
   yield mutex.lock(questLock(quest));
+  quest.defer(() => mutex.unlock(questLock(quest)));
   const state = quest.goblin.getState();
   const location = state.get(`current.location.${contextId}`, null);
   let route;
@@ -662,7 +663,6 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
   yield quest.doSync();
 
   yield quest.me.navAndWait({route});
-  mutex.unlock(questLock(quest));
 });
 
 /******************************************************************************/
@@ -676,6 +676,8 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
   currentLocation
 ) {
   yield mutex.lock(questLock(quest));
+  quest.defer(() => mutex.unlock(questLock(quest)));
+
   const state = quest.goblin.getState();
 
   if (!contextId) {
@@ -708,8 +710,6 @@ Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
     }
     yield quest.me.navAndWait({route});
   }
-
-  mutex.unlock(questLock(quest));
 });
 
 /******************************************************************************/
