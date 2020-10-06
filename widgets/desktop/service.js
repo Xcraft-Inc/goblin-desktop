@@ -100,6 +100,7 @@ Goblin.registerQuest(
       },
       1
     );
+    quest.goblin.defer(() => addQueue.dispose());
     quest.goblin.defer(
       quest.sub(`*::${id}.add-workitem-enqueued`, function (err, {msg, resp}) {
         addQueue.push({id: msg.id, work: {...msg.data}, resp});
