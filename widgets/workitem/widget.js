@@ -247,12 +247,14 @@ class Workitem extends Form {
   }
 
   renderActionButton(button, layout, index, count) {
+    const secondary = layout === 'secondary';
+
     return (
       <Button
         key={index}
-        kind={layout === 'secondary' ? 'secondary-action' : 'action'}
-        width={layout === 'secondary' ? null : '0px'}
-        grow={layout === 'secondary' ? null : '1'}
+        kind={secondary ? 'secondary-action' : 'action'}
+        width={secondary ? null : '0px'}
+        grow={secondary ? null : '1'}
         place={`${index + 1}/${count}`}
         onClick={() => this.handleOnClick(button)}
         {...button}
@@ -279,8 +281,45 @@ class Workitem extends Form {
     const secondaryButtons = this.props.buttons.filter(
       (b) => b.get('layout') === 'secondary'
     );
+    const thirdButtons = this.props.buttons.filter(
+      (b) => b.get('layout') === 'third'
+    );
+    const fourthButtons = this.props.buttons.filter(
+      (b) => b.get('layout') === 'fourth'
+    );
 
-    if (secondaryButtons.size > 0) {
+    if (fourthButtons.size > 0) {
+      return (
+        <Container kind="actions-lines">
+          <Container kind="actions-line-secondary">
+            {this.renderActionButtonsList(fourthButtons, 'secondary')}
+          </Container>
+          <Container kind="actions-line-secondary">
+            {this.renderActionButtonsList(thirdButtons, 'secondary')}
+          </Container>
+          <Container kind="actions-line-secondary">
+            {this.renderActionButtonsList(secondaryButtons, 'secondary')}
+          </Container>
+          <Container kind="actions-line-primary">
+            {this.renderActionButtonsList(primaryButtons, 'primary')}
+          </Container>
+        </Container>
+      );
+    } else if (thirdButtons.size > 0) {
+      return (
+        <Container kind="actions-lines">
+          <Container kind="actions-line-secondary">
+            {this.renderActionButtonsList(thirdButtons, 'secondary')}
+          </Container>
+          <Container kind="actions-line-secondary">
+            {this.renderActionButtonsList(secondaryButtons, 'secondary')}
+          </Container>
+          <Container kind="actions-line-primary">
+            {this.renderActionButtonsList(primaryButtons, 'primary')}
+          </Container>
+        </Container>
+      );
+    } else if (secondaryButtons.size > 0) {
       return (
         <Container kind="actions-lines">
           <Container kind="actions-line-secondary">
