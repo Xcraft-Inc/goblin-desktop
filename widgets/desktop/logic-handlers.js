@@ -194,7 +194,10 @@ module.exports = {
       const newLast = state.get(`workitemsByContext.${workcontext}`).last();
       if (newLast.state) {
         state = state.set(`last.${workcontext}.workitem`, newLast.state);
-        //TODO: handle last view
+        state = state.set(
+          `last.${workcontext}.view`,
+          state.get(`workitems.${newLast.state}.view`)
+        );
       } else {
         state = state.set(`last.${workcontext}.workitem`, null);
         state = state.set(`last.${workcontext}.view`, null);
@@ -206,8 +209,10 @@ module.exports = {
       const newLast = state.get(`workitemsByContext.${workcontext}`).last();
       if (newLast.state) {
         state = state.set(`current.workitems.${workcontext}`, newLast.state);
-        //TODO: handle current view
-        state = state.set(`current.views.${workcontext}`, null);
+        state = state.set(
+          `current.views.${workcontext}`,
+          state.get(`workitems.${wid}.view`)
+        );
       } else {
         state = state.set(`current.workitems.${workcontext}`, null);
         state = state.set(`current.views.${workcontext}`, null);
