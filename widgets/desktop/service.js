@@ -1068,17 +1068,22 @@ Goblin.registerQuest(goblinName, 'get-workitems', function (quest) {
 Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
   let count = closeIn ? closeIn : 0;
   quest.log.info(`Closing desktop in ${count}sec...`);
+
   const message = T(
     'Un administrateur à demandé la fermeture de votre session dans {count}sec',
     '',
     {count}
   );
-  yield quest.me.addNotification({
-    notificationId: quest.goblin.id,
-    color: 'red',
-    glyph: 'solid/exclamation-triangle',
-    message,
-  });
+
+  if (count) {
+    yield quest.me.addNotification({
+      notificationId: quest.goblin.id,
+      color: 'red',
+      glyph: 'solid/exclamation-triangle',
+      message,
+    });
+  }
+
   const countdown = setInterval(
     watt(function* () {
       count--;
@@ -1098,6 +1103,7 @@ Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
     }),
     1000
   );
+
   setTimeout(() => {
     clearInterval(countdown);
     quest.evt(`session.closed`);
