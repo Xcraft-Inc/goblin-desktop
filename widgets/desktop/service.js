@@ -1045,6 +1045,12 @@ Goblin.registerQuest(goblinName, 'get-lab-id', function (quest) {
 
 /******************************************************************************/
 
+Goblin.registerQuest(goblinName, 'set-lab-id', function (quest, labId) {
+  return quest.goblin.setX('labId', labId);
+});
+
+/******************************************************************************/
+
 Goblin.registerQuest(goblinName, 'get-client-session-id', function (quest) {
   return quest.goblin.getX('clientSessionId');
 });
