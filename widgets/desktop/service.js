@@ -803,35 +803,6 @@ Goblin.registerQuest(goblinName, 'run-client-quest', function (
   });
 });
 
-Goblin.registerQuest(goblinName, 'open-window', function* (
-  quest,
-  contextId,
-  workitemId
-) {
-  //TODO: tab close
-  const state = quest.goblin.getState();
-  const clientSessionId = quest.goblin.getX('clientSessionId');
-  const rootWidgetId = `desktop-window@${workitemId}`;
-  const view = state.get(`workitems.${workitemId}.view`);
-  yield quest.create('desktop-window', {
-    id: rootWidgetId,
-    desktopId: quest.goblin.id,
-    view,
-    contextId: contextId,
-    workitemId,
-  });
-  /*const parts = workitemId.split('@');
-  yield quest.me.removeWorkitem({
-    workitem: {name: parts.shift(), id: parts.join('@'), contextId},
-    navToLastWorkitem: true,
-  });*/
-  quest.evt(`${clientSessionId}.open-window-requested`, {
-    desktopId: quest.goblin.id,
-    rootWidget: 'desktop-window',
-    rootWidgetId,
-  });
-});
-
 Goblin.registerQuest(goblinName, 'update-current-location', function* (
   quest,
   currentLocation
