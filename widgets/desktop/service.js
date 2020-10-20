@@ -46,8 +46,8 @@ Goblin.registerQuest(
     username,
     session,
     configuration,
-    useNabu,
-    routes
+    routes,
+    mainGoblin
   ) {
     if (clientSessionId) {
       quest.goblin.setX('clientSessionId', clientSessionId);
@@ -62,16 +62,32 @@ Goblin.registerQuest(
       desktopId: quest.goblin.id,
     });
 
-    // CREATE NABU TOOLBAR IF NEEDED
-    if (useNabu) {
-      const toolbarId = `nabu-toolbar@${quest.goblin.id}`;
-      yield quest.create('nabu-toolbar', {
-        id: toolbarId,
-        desktopId: quest.goblin.id,
-        enabled: false,
-        show: true,
-      });
+    if (!mainGoblin && configuration) {
+      mainGoblin = configuration.mainGoblin;
     }
+
+    if (mainGoblin) {
+      let useNabu = mainGoblin === 'nabu';
+
+      if (!useNabu) {
+        const mainConfig = require('xcraft-core-etc')().load(
+          `goblin-${mainGoblin}`
+        );
+        useNabu = mainConfig.profile && mainConfig.profile.useNabu;
+      }
+
+      // CREATE NABU TOOLBAR IF NEEDED
+      if (useNabu) {
+        const toolbarId = `nabu-toolbar@${quest.goblin.id}`;
+        yield quest.create('nabu-toolbar', {
+          id: toolbarId,
+          desktopId: quest.goblin.id,
+          enabled: false,
+          show: true,
+        });
+      }
+    }
+
     // CREATE DEFAULT TABS MANAGER
     yield quest.create('tabs', {
       id: `tabs@${quest.goblin.id}`,
@@ -87,7 +103,7 @@ Goblin.registerQuest(
       routes,
       username,
       session,
-      profileKey: configuration.id,
+      profileKey: configuration && configuration.id,
     });
 
     quest.log.info(`Desktop ${quest.goblin.id} created!`);
