@@ -1065,7 +1065,7 @@ Goblin.registerQuest(goblinName, 'get-workitems', function (quest) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
+Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn, $msg) {
   let count = closeIn ? closeIn : 0;
   quest.log.info(`Closing desktop in ${count}sec...`);
 
@@ -1107,7 +1107,9 @@ Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn) {
     if (countdown) {
       clearInterval(countdown);
     }
-    quest.evt(`session.closed`);
+    quest.evt(`${$msg.orcName}::desktop-manager.session.closed`, {
+      desktopId: quest.goblin.id,
+    });
     quest.release(quest.goblin.id);
   }, 1000 * count);
 });
