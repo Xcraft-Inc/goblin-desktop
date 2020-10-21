@@ -5,7 +5,6 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import React from 'react';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
-import Field from 'goblin-gadgets/widgets/field/widget';
 import T from 't';
 
 class Monitor extends Widget {
@@ -23,16 +22,6 @@ class Monitor extends Widget {
     return this.mapWidget(
       (props) => {
         const size = props.state.size;
-        if (size > 1000 && this.collectRequested === false) {
-          this.collectRequested = true;
-          setTimeout(() => {
-            this.doAs('warehouse', 'collect');
-            setTimeout(() => {
-              this.collectRequested = false;
-              console.log('collect ready');
-            }, 10000);
-          }, 1000);
-        }
         return <div style={{fontWeight: 900}}>LocalState: {size}</div>;
       },
       'state',
