@@ -177,28 +177,22 @@ class DesktopMonitors extends Widget {
 
 export default Widget.connect((state) => {
   const enabled = !!state.get('backend.activity-monitor');
+  const isActive = !!state.get('backend.activity-monitor-led.isActive');
+
   if (!enabled) {
-    return {isActive: false, channels: []};
+    return {isActive, channels: []};
   }
+
   const s = state.get('backend.activity-monitor.channels');
   const channels = s
     ? Array.from(s.entries()).map(([channel, data]) => {
         return {
           name: channel,
           samples: data.get('samples'),
-          isActive: data.get('isActive'),
           max: data.get('delayedMax'),
         };
       })
     : [];
-
-  let isActive = false;
-  for (const channel of channels) {
-    if (channel.isActive) {
-      isActive = true;
-      continue;
-    }
-  }
 
   return {
     isActive,

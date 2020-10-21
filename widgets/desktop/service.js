@@ -1134,10 +1134,6 @@ Goblin.registerQuest(goblinName, 'toggle-monitor-feed', function* (
   quest,
   isOn
 ) {
-  /* FIXME: Note that it works but it's not 100% correct because when removing
-   * the branch, then the activity green LED doen't work anymore. the LED should
-   * be handled by an other way.
-   */
   if (!isOn) {
     yield quest.warehouse.feedSubscriptionAdd({
       feed: quest.goblin.id,
