@@ -70,7 +70,8 @@ class Taskbar extends Widget {
       );
     }
     if (task.clientQuest) {
-      const runClientQuest = () => this.runClientQuest(task.clientQuest);
+      const runClientQuest = () =>
+        this.runClientQuest({labId: window.labId, ...task.clientQuest});
       return (
         <Button
           key={index}
