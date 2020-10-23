@@ -183,7 +183,7 @@ const config = {
           if (entities.length > 0) {
             for (const entity of entities) {
               const requestId = quest.uuidV4();
-              quest.evt('hydrate-entity-requested', {
+              quest.evt('<hydrate-entity-requested>', {
                 desktopId: quest.getDesktop(),
                 requestId,
                 entityId: entity.id,
