@@ -79,64 +79,64 @@ module.exports = (config) => {
     },
   };
 
-  Goblin.registerQuest(
-    goblinName,
-    'create',
-    function* (quest, desktopId, form, isDialog) {
-      const id = quest.goblin.id;
-      quest.goblin.setX('desktopId', desktopId);
-      quest.goblin.setX('isDialog', isDialog);
-      const wizardGadgets = {};
+  Goblin.registerQuest(goblinName, 'create', function* (
+    quest,
+    desktopId,
+    form,
+    isDialog
+  ) {
+    const id = quest.goblin.id;
+    quest.goblin.setX('desktopId', desktopId);
+    quest.goblin.setX('isDialog', isDialog);
+    const wizardGadgets = {};
 
-      if (gadgets) {
-        for (const key of Object.keys(gadgets)) {
-          const gadget = gadgets[key];
-          // const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
-          const newGadgetId = `${key}@${quest.goblin.id}`; // Uses 'key' instead of 'gadget.type' to allow the same gadget to be used in a wizard more than once.
-          wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
+    if (gadgets) {
+      for (const key of Object.keys(gadgets)) {
+        const gadget = gadgets[key];
+        // const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
+        const newGadgetId = `${key}@${quest.goblin.id}`; // Uses 'key' instead of 'gadget.type' to allow the same gadget to be used in a wizard more than once.
+        wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
 
-          if (gadgets[key].onActions) {
-            for (const handler of Object.keys(gadgets[key].onActions)) {
-              quest.goblin.defer(
-                quest.sub(`${newGadgetId}.${handler}`, function* (
-                  err,
-                  {msg, resp}
-                ) {
-                  const cmdName = `${key}-${handler}`;
-                  yield resp.cmd(
-                    `${goblinName}.${cmdName}`,
-                    Object.assign({id}, msg.data)
-                  );
-                })
-              );
-            }
+        if (gadgets[key].onActions) {
+          for (const handler of Object.keys(gadgets[key].onActions)) {
+            quest.goblin.defer(
+              quest.sub(`${newGadgetId}.${handler}`, function* (
+                err,
+                {msg, resp}
+              ) {
+                const cmdName = `${key}-${handler}`;
+                yield resp.cmd(
+                  `${goblinName}.${cmdName}`,
+                  Object.assign({id}, msg.data)
+                );
+              })
+            );
           }
-
-          yield quest.create(`${gadget.type}-gadget`, {
-            id: newGadgetId,
-            desktopId,
-            options: gadget.options || null,
-          });
         }
-      }
-      if (hinters) {
-        yield quest.me.createHinters();
-      }
 
-      quest.goblin.defer(
-        quest.sub(`*::${quest.goblin.id}.step`, function* (err, {msg, resp}) {
-          const {action, ...other} = msg.data;
-          yield resp.cmd(`${goblinName}.${action}`, Object.assign({id}, other));
-        })
-      );
+        yield quest.create(`${gadget.type}-gadget`, {
+          id: newGadgetId,
+          desktopId,
+          options: gadget.options || null,
+        });
+      }
+    }
+    if (hinters) {
+      yield quest.me.createHinters();
+    }
 
-      quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
-      yield quest.me.initWizard();
-      yield quest.me.idle();
-      return quest.goblin.id;
-    },
-    ['*::*.step']
-  );
+    quest.goblin.defer(
+      quest.sub(`*::${quest.goblin.id}.step`, function* (err, {msg, resp}) {
+        const {action, ...other} = msg.data;
+        yield resp.cmd(`${goblinName}.${action}`, Object.assign({id}, other));
+      })
+    );
+
+    quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
+    yield quest.me.initWizard();
+    yield quest.me.idle();
+    return quest.goblin.id;
+  });
 
   Goblin.registerQuest(goblinName, 'create-hinters', function* (quest, next) {
     const desktopId = quest.goblin.getX('desktopId');

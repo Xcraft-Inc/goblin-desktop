@@ -36,126 +36,119 @@ const extractContextIdFromCurrentLocation = (loc) => {
 /******************************************************************************/
 
 // Register quest's according rc.json
-Goblin.registerQuest(
-  goblinName,
-  'create',
-  function* (
-    quest,
-    clientSessionId,
-    labId,
+Goblin.registerQuest(goblinName, 'create', function* (
+  quest,
+  clientSessionId,
+  labId,
+  username,
+  session,
+  configuration,
+  routes,
+  mainGoblin
+) {
+  if (clientSessionId) {
+    quest.goblin.setX('clientSessionId', clientSessionId);
+  } else {
+    quest.log.warn('no clientSessionId provided to the new desktop');
+  }
+  quest.goblin.setX('labId', labId);
+  quest.goblin.setX('configuration', configuration);
+  // CREATE DEFAULT CONTEXT MANAGER
+  yield quest.create('contexts', {
+    id: `contexts@${quest.goblin.id}`,
+    desktopId: quest.goblin.id,
+  });
+
+  if (!mainGoblin && configuration) {
+    mainGoblin = configuration.mainGoblin;
+  }
+
+  if (mainGoblin) {
+    let useNabu = mainGoblin === 'nabu';
+
+    if (!useNabu) {
+      const mainConfig = require('xcraft-core-etc')().load(
+        `goblin-${mainGoblin}`
+      );
+      useNabu = mainConfig.profile && mainConfig.profile.useNabu;
+    }
+
+    // CREATE NABU TOOLBAR IF NEEDED
+    if (useNabu) {
+      const toolbarId = `nabu-toolbar@${quest.goblin.id}`;
+      yield quest.create('nabu-toolbar', {
+        id: toolbarId,
+        desktopId: quest.goblin.id,
+        enabled: false,
+        show: true,
+      });
+    }
+  }
+
+  // CREATE DEFAULT TABS MANAGER
+  yield quest.create('tabs', {
+    id: `tabs@${quest.goblin.id}`,
+    desktopId: quest.goblin.id,
+  });
+
+  if (!routes) {
+    routes = defaultRoutes;
+  }
+
+  quest.do({
+    id: quest.goblin.id,
+    routes,
     username,
     session,
-    configuration,
-    routes,
-    mainGoblin
-  ) {
-    if (clientSessionId) {
-      quest.goblin.setX('clientSessionId', clientSessionId);
-    } else {
-      quest.log.warn('no clientSessionId provided to the new desktop');
-    }
-    quest.goblin.setX('labId', labId);
-    quest.goblin.setX('configuration', configuration);
-    // CREATE DEFAULT CONTEXT MANAGER
-    yield quest.create('contexts', {
-      id: `contexts@${quest.goblin.id}`,
-      desktopId: quest.goblin.id,
-    });
+    profileKey: configuration && configuration.id,
+  });
 
-    if (!mainGoblin && configuration) {
-      mainGoblin = configuration.mainGoblin;
-    }
+  quest.log.info(`Desktop ${quest.goblin.id} created!`);
+  const id = quest.goblin.id;
 
-    if (mainGoblin) {
-      let useNabu = mainGoblin === 'nabu';
+  const addQueue = new JobQueue(
+    `Add workitem queue for: ${id}`,
+    function* ({work, resp}) {
+      yield resp.cmd(`${goblinName}.do-add`, {id, ...work});
+    },
+    1
+  );
+  quest.goblin.defer(() => addQueue.dispose());
+  quest.goblin.defer(
+    quest.sub(`*::${id}.add-workitem-enqueued`, function (err, {msg, resp}) {
+      addQueue.push({id: msg.id, work: {...msg.data}, resp});
+    })
+  );
 
-      if (!useNabu) {
-        const mainConfig = require('xcraft-core-etc')().load(
-          `goblin-${mainGoblin}`
-        );
-        useNabu = mainConfig.profile && mainConfig.profile.useNabu;
+  quest.goblin.defer(
+    quest.sub(
+      `*::*.${quest.goblin.id.split('@')[1]}.desktop-notification-broadcasted`,
+      function* (err, {msg, resp}) {
+        yield resp.cmd(`${goblinName}.add-notification`, {id, ...msg.data});
       }
+    )
+  );
 
-      // CREATE NABU TOOLBAR IF NEEDED
-      if (useNabu) {
-        const toolbarId = `nabu-toolbar@${quest.goblin.id}`;
-        yield quest.create('nabu-toolbar', {
-          id: toolbarId,
-          desktopId: quest.goblin.id,
-          enabled: false,
-          show: true,
-        });
-      }
-    }
+  quest.goblin.defer(
+    quest.sub(`*::*.${quest.goblin.id}.add-workitem-requested`, function* (
+      err,
+      {msg, resp}
+    ) {
+      yield resp.cmd(`${goblinName}.add-workitem`, {id, ...msg.data});
+    })
+  );
 
-    // CREATE DEFAULT TABS MANAGER
-    yield quest.create('tabs', {
-      id: `tabs@${quest.goblin.id}`,
-      desktopId: quest.goblin.id,
-    });
+  quest.goblin.defer(
+    quest.sub(`*::*.${quest.goblin.id}.remove-workitem-requested`, function* (
+      err,
+      {msg, resp}
+    ) {
+      yield resp.cmd(`${goblinName}.remove-workitem`, {id, ...msg.data});
+    })
+  );
 
-    if (!routes) {
-      routes = defaultRoutes;
-    }
-
-    quest.do({
-      id: quest.goblin.id,
-      routes,
-      username,
-      session,
-      profileKey: configuration && configuration.id,
-    });
-
-    quest.log.info(`Desktop ${quest.goblin.id} created!`);
-    const id = quest.goblin.id;
-
-    const addQueue = new JobQueue(
-      `Add workitem queue for: ${id}`,
-      function* ({work, resp}) {
-        yield resp.cmd(`${goblinName}.do-add`, {id, ...work});
-      },
-      1
-    );
-    quest.goblin.defer(() => addQueue.dispose());
-    quest.goblin.defer(
-      quest.sub(`*::${id}.add-workitem-enqueued`, function (err, {msg, resp}) {
-        addQueue.push({id: msg.id, work: {...msg.data}, resp});
-      })
-    );
-
-    quest.goblin.defer(
-      quest.sub(
-        `*::*.${
-          quest.goblin.id.split('@')[1]
-        }.desktop-notification-broadcasted`,
-        function* (err, {msg, resp}) {
-          yield resp.cmd(`${goblinName}.add-notification`, {id, ...msg.data});
-        }
-      )
-    );
-
-    quest.goblin.defer(
-      quest.sub(`*::*.${quest.goblin.id}.add-workitem-requested`, function* (
-        err,
-        {msg, resp}
-      ) {
-        yield resp.cmd(`${goblinName}.add-workitem`, {id, ...msg.data});
-      })
-    );
-
-    quest.goblin.defer(
-      quest.sub(`*::*.${quest.goblin.id}.remove-workitem-requested`, function* (
-        err,
-        {msg, resp}
-      ) {
-        yield resp.cmd(`${goblinName}.remove-workitem`, {id, ...msg.data});
-      })
-    );
-
-    return quest.goblin.id;
-  },
-  ['*::*.desktop-notification-broadcasted']
-);
+  return quest.goblin.id;
+});
 
 /******************************************************************************/
 
