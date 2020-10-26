@@ -29,32 +29,11 @@ class Monitor extends Widget {
     );
   }
 
-  connectWarehouseInfosMonitor() {
-    return this.mapWidget(
-      (props) => {
-        if (!props.infos) {
-          return <div style={{fontWeight: 900}}>WarehouseInfos: N/A</div>;
-        }
-        const size = props.infos.size;
-        return (
-          <div style={{fontWeight: 900}}>
-            WarehouseState: {size} Feeds:
-            {props.infos.feeds}
-          </div>
-        );
-      },
-      'infos',
-      'infos.warehouse'
-    );
-  }
-
   renderMonitors() {
     const LocalStateMonitor = this.connectLocalStateMonitor();
-    const WarehouseMonitor = this.connectWarehouseInfosMonitor();
     return (
       <div style={{margin: '10px'}}>
         <LocalStateMonitor />
-        <WarehouseMonitor />
       </div>
     );
   }
