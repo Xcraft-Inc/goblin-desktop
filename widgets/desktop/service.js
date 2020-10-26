@@ -1,6 +1,5 @@
 'use strict';
-//T:2019-02-27
-const watt = require('gigawatts');
+
 const path = require('path');
 const Goblin = require('xcraft-core-goblin');
 const uuidV4 = require('uuid/v4');
@@ -9,7 +8,6 @@ const StringBuilder = require('goblin-nabu/lib/string-builder.js');
 const xUtils = require('xcraft-core-utils');
 const locks = require('xcraft-core-utils/lib/locks');
 const {getFileFilter} = xUtils.files;
-const T = require('goblin-nabu/widgets/helpers/t.js');
 const {JobQueue} = require('xcraft-core-utils');
 
 const mutex = locks.getMutex;
@@ -1045,53 +1043,9 @@ Goblin.registerQuest(goblinName, 'get-workitems', function (quest) {
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'close', function* (quest, closeIn, $msg) {
-  let count = closeIn ? closeIn : 0;
-  quest.log.info(`Closing desktop in ${count}sec...`);
-
-  let countdown;
-  if (count) {
-    const message = T(
-      'Un administrateur à demandé la fermeture de votre session dans {count}sec',
-      '',
-      {count}
-    );
-
-    yield quest.me.addNotification({
-      notificationId: quest.goblin.id,
-      color: 'red',
-      glyph: 'solid/exclamation-triangle',
-      message,
-    });
-
-    countdown = setInterval(
-      watt(function* () {
-        count--;
-        const message = T(
-          'Un administrateur à demandé la fermeture de votre session dans {count}sec',
-          '',
-          {count}
-        );
-        yield quest.me.addNotification({
-          notificationId: quest.goblin.id,
-          color: 'red',
-          glyph: 'solid/exclamation-triangle',
-          message,
-        });
-      }),
-      1000
-    );
-  }
-
-  setTimeout(() => {
-    if (countdown) {
-      clearInterval(countdown);
-    }
-    quest.evt(`${$msg.orcName}::desktop-manager.session.closed`, {
-      desktopId: quest.goblin.id,
-    });
-    quest.release(quest.goblin.id);
-  }, 1000 * count);
+Goblin.registerQuest(goblinName, 'close', function* (quest) {
+  const deskManager = quest.getAPI('desktop-manager');
+  yield deskManager.close({sessionDesktopId: quest.goblin.id});
 });
 
 Goblin.registerQuest(goblinName, 'on-close-window', function (
