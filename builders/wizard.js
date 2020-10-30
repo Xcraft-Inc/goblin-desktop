@@ -375,7 +375,6 @@ module.exports = (config) => {
       close: false,
       navToLastWorkitem: true,
     });
-    quest.release(quest.goblin.id);
   });
 
   Goblin.registerQuest(goblinName, 'delete', function (quest) {
