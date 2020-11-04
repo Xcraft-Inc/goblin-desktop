@@ -17,6 +17,7 @@ class Editor extends Widget {
       id: 'id',
       entityId: 'entityId',
       firstFieldToFocus: 'firstFieldToFocus',
+      width: 'width',
     };
   }
 
@@ -61,6 +62,7 @@ class Editor extends Widget {
           id={this.props.id}
           entityId={this.props.entityId}
           dragServiceId={this.props.dragServiceId}
+          width={this.props.width}
         >
           <EditorUI
             {...this.props}
