@@ -129,7 +129,7 @@ const config = {
 
           const query = getInfo.toString();
           const args = [table, form.onlyPublished];
-          r.querySync({query, args}, next.parallel());
+          r.query({query, args}, next.parallel());
         }
 
         const forRehydrate = yield next.sync();
