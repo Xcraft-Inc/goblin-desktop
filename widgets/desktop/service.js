@@ -261,7 +261,7 @@ Goblin.registerQuest(goblinName, 'do-add', function* (
         }
 
         quest.log.dbg(`Skipping ${widgetId} add`);
-        quest.evt(`${widgetId}.skipped`, {
+        quest.evt(`${widgetId}.<desktop-workitem-queue>.skipped`, {
           desktopId,
           workitemId: widgetId,
           skipped: true,
@@ -329,7 +329,7 @@ Goblin.registerQuest(goblinName, 'do-add', function* (
     }
   }
 
-  quest.evt(`${widgetId}.added`, {
+  quest.evt(`${widgetId}.<desktop-workitem-queue>.added`, {
     desktopId,
     workitemId: widgetId,
     skipped: false,
@@ -400,7 +400,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
   quest.log.dbg(`Adding ${widgetId}...`);
   yield quest.doSync({working: true});
   const autoRelease = () => {
-    quest.evt(`${widgetId}.skipped`, {
+    quest.evt(`${widgetId}.<desktop-workitem-queue>.skipped`, {
       desktopId,
       workitemId: widgetId,
       skipped: true,
@@ -417,7 +417,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
       clientSessionId,
       navigate,
     });
-  }, `*::${desktopId}.${widgetId}.(added|skipped)`);
+  }, `*::${desktopId}.${widgetId}.<desktop-workitem-queue>.(added|skipped)`);
   clearTimeout(timeoutCancel);
   yield quest.doSync({working: false});
 
