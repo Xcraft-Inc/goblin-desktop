@@ -11,6 +11,20 @@ function prepare(props) {
     <Container kind="column" grow="1">
       <Label text={T('Sélectionnez les entités à réindexer')} />
       <Separator kind="space" height="10px" />
+
+      <Container kind="row" grow="1">
+        <Field
+          kind="bool"
+          model=".form.resetIndex"
+          labelWidth="0px"
+          labelText={T(
+            "Réinitialise l'index du mandat (y compris les indexes des locales)"
+          )}
+          verticalSpacing="compact"
+        />
+      </Container>
+
+      <Separator kind="space" height="10px" />
       <Container kind="row" width="500px">
         <Field
           kind="gadget"

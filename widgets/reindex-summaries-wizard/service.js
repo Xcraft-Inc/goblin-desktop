@@ -80,15 +80,25 @@ const config = {
           disabled: disabled,
         });
       },
-      form: {},
+      form: {
+        resetIndex: false,
+      },
       quest: function* (quest, form) {},
     },
     finish: {
       form: {},
       quest: function* (quest, form, next) {
+        const workshopAPI = quest.getAPI('workshop');
+
+        if (form.resetIndex) {
+          yield workshopAPI.resetIndex();
+        }
+
+        const nabu = yield quest.warehouse.get({path: 'nabu'});
+        const locales = nabu.get('locales');
+
         const desktopId = quest.getDesktop();
         //const desktop = quest.getAPI(desktopId).noThrow();
-        const workshopAPI = quest.getAPI('workshop');
         let reportData = [];
         for (const table of form.selectedTables) {
           const data = yield workshopAPI.reindexEntitiesFromStorage({
@@ -96,6 +106,7 @@ const config = {
             type: table,
             status: ['draft', 'trashed', 'archived', 'published'],
             batchSize: 1000,
+            locales,
           });
           if (data && data.length > 0) {
             reportData = reportData.concat(data);
