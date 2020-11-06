@@ -17,7 +17,9 @@ function prepare(props) {
           kind="bool"
           model=".form.resetIndex"
           labelWidth="0px"
-          labelText={T("Réinitialise l'index du mandat")}
+          labelText={T(
+            "Réinitialise l'index du mandat (y compris les indexes des locales)"
+          )}
           verticalSpacing="compact"
         />
       </Container>
