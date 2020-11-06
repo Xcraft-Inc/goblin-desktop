@@ -38,6 +38,11 @@ export default function styles(theme) {
     backgroundColor: theme.palette.paneBackground,
   };
 
+  const scrollablePane = {
+    ...pane,
+    overflowY: 'auto',
+  };
+
   const separator = {
     height: m,
   };
@@ -63,6 +68,7 @@ export default function styles(theme) {
     searchWithoutParams,
     params,
     pane,
+    scrollablePane,
     separator,
     sajex,
     button,

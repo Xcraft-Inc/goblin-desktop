@@ -206,7 +206,7 @@ class Search extends Widget {
           </FrontendForm>
         </div>
 
-        <div className={this.styles.classNames.pane}>
+        <div className={this.styles.classNames.scrollablePane}>
           <StatusFilters id={listId} type={this.props.type} />
           <div className={this.styles.classNames.separator} />
           <Count id={listId} />
