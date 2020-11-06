@@ -80,12 +80,19 @@ const config = {
           disabled: disabled,
         });
       },
-      form: {},
+      form: {
+        resetIndex: false,
+      },
       quest: function* (quest, form) {},
     },
     finish: {
       form: {},
       quest: function* (quest, form, next) {
+        if (form.resetIndex) {
+          const e = quest.getStorage('elastic');
+          yield e.resetIndex();
+        }
+
         const desktopId = quest.getDesktop();
         //const desktop = quest.getAPI(desktopId).noThrow();
         const workshopAPI = quest.getAPI('workshop');
