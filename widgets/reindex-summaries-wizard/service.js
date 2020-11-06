@@ -94,6 +94,9 @@ const config = {
           yield workshopAPI.resetIndex();
         }
 
+        const nabu = yield quest.warehouse.get({path: 'nabu'});
+        const locales = nabu.get('locales');
+
         const desktopId = quest.getDesktop();
         //const desktop = quest.getAPI(desktopId).noThrow();
         let reportData = [];
@@ -103,6 +106,7 @@ const config = {
             type: table,
             status: ['draft', 'trashed', 'archived', 'published'],
             batchSize: 1000,
+            locales,
           });
           if (data && data.length > 0) {
             reportData = reportData.concat(data);
