@@ -21,7 +21,9 @@ function prepare(props) {
           verticalSpacing="compact"
         />
       </Container>
-      <Container kind="row" width="800px">
+
+      <Separator kind="space" height="10px" />
+      <Container kind="row" width="500px">
         <Field
           kind="gadget"
           name="tablesTable"
