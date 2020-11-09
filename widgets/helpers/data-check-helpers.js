@@ -31,6 +31,8 @@ const types = [
   {type: 'delay', description: T('delay')},
   {type: 'array', description: T('array')},
   {type: 'object', description: T('object')},
+  {type: 'nabu', description: T('nabu')},
+  {type: 'translatable', description: T('translatable')},
   {type: 'pointer-reference', description: T('reference (pointeur)')},
   {type: 'pointer-value', description: T('value (pointeur)')},
 ];
