@@ -816,7 +816,7 @@ Goblin.registerQuest(goblinName, 'update-current-location', function* (
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'dispatch', function (quest, action) {
-  quest.evt(`dispatch.requested`, {
+  quest.fullEvt(`<${quest.goblin.id}.dispatch.requested>`, {
     action,
   });
 });
