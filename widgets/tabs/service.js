@@ -51,8 +51,6 @@ Goblin.registerQuest(goblinName, 'remove', function* (
   }
 
   yield quest.me.clean({contextId, tabId});
-
-  quest.evt('removed', {workitemId});
 });
 
 Goblin.registerQuest(goblinName, 'clean', function* (quest, tabId, contextId) {
