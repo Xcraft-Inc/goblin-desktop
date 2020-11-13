@@ -590,7 +590,7 @@ Goblin.registerQuest(goblinName, 'add-dialog', function* (
 Goblin.registerQuest(goblinName, 'nav-and-wait', function* (quest, route) {
   const navRequestId = quest.uuidV4();
   yield quest.sub.callAndWait(function () {
-    quest.evt(`nav.requested`, {
+    quest.fullEvt(`<${quest.goblin.id}.nav.requested>`, {
       route,
       navRequestId,
     });
