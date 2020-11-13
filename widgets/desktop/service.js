@@ -131,7 +131,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
   );
 
   quest.goblin.defer(
-    quest.sub(`*::*.${quest.goblin.id}.add-workitem-requested`, function* (
+    quest.sub(`*::*.${quest.goblin.id}.<add-workitem-requested>`, function* (
       err,
       {msg, resp}
     ) {
