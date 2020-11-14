@@ -57,6 +57,7 @@ module.exports = (config) => {
         busy: true,
         buttons: defaultButtons,
         form: mergedInitialForm,
+        blocked: false,
       });
     },
     buttons: (state, action) => {
@@ -76,6 +77,9 @@ module.exports = (config) => {
     },
     idle: (state) => {
       return state.set('busy', false);
+    },
+    goto: (state, action) => {
+      return state.set('blocked', action.get('blocked'));
     },
   };
 
@@ -227,8 +231,12 @@ module.exports = (config) => {
       return result;
     }
     const nIndex = cIndex + 1;
+    let lastStep = false;
+    if (nIndex === wizardFlow.length - 1) {
+      lastStep = true;
+    }
     const nextStep = wizardFlow[nIndex];
-    quest.evt('step', {action: 'goto', step: nextStep});
+    quest.evt('step', {action: 'goto', step: nextStep, last: lastStep});
     return result;
   });
 
@@ -243,7 +251,16 @@ module.exports = (config) => {
     quest.evt('step', {action: 'goto', step: nextStep});
   });
 
-  Goblin.registerQuest(goblinName, 'goto', function* (quest, step) {
+  Goblin.registerQuest(goblinName, 'goto', function* (quest, step, last) {
+    const blocked = quest.goblin.getState().get('blocked');
+    if (blocked) {
+      return;
+    }
+
+    if (last) {
+      quest.do({blocked: true});
+    }
+
     yield quest.me.busy(); // Set busy
 
     quest.dispatch('next', {step});
@@ -272,6 +289,11 @@ module.exports = (config) => {
   });
 
   Goblin.registerQuest(goblinName, 'cancel', function* (quest) {
+    const blocked = quest.goblin.getState().get('blocked');
+    if (blocked) {
+      return;
+    }
+
     quest.evt('done', quest.cancel());
     yield quest.me.dispose();
   });
