@@ -130,7 +130,10 @@ module.exports = (config) => {
     }
 
     quest.goblin.defer(
-      quest.sub(`*::${quest.goblin.id}.step`, function* (err, {msg, resp}) {
+      quest.sub.local(`*::${quest.goblin.id}.<wizard-step>`, function* (
+        err,
+        {msg, resp}
+      ) {
         const {action, ...other} = msg.data;
         yield resp.cmd(`${goblinName}.${action}`, Object.assign({id}, other));
       })
@@ -220,14 +223,14 @@ module.exports = (config) => {
 
   Goblin.registerQuest(goblinName, 'init-wizard', function (quest) {
     const nextStep = wizardFlow[1];
-    quest.evt('step', {action: 'goto', step: nextStep});
+    quest.evt('<wizard-step>', {action: 'goto', step: nextStep});
   });
 
   Goblin.registerQuest(goblinName, 'next', function (quest, result) {
     const c = quest.goblin.getState().get('step');
     const cIndex = wizardFlow.indexOf(c);
     if (cIndex === wizardFlow.length - 1) {
-      quest.evt('step', {action: 'done', result});
+      quest.evt('<wizard-step>', {action: 'done', result});
       return result;
     }
     const nIndex = cIndex + 1;
@@ -236,7 +239,11 @@ module.exports = (config) => {
       lastStep = true;
     }
     const nextStep = wizardFlow[nIndex];
-    quest.evt('step', {action: 'goto', step: nextStep, last: lastStep});
+    quest.evt('<wizard-step>', {
+      action: 'goto',
+      step: nextStep,
+      last: lastStep,
+    });
     return result;
   });
 
@@ -248,7 +255,7 @@ module.exports = (config) => {
     }
     const nIndex = cIndex - 1;
     const nextStep = wizardFlow[nIndex];
-    quest.evt('step', {action: 'goto', step: nextStep});
+    quest.evt('<wizard-step>', {action: 'goto', step: nextStep});
   });
 
   Goblin.registerQuest(goblinName, 'goto', function* (quest, step, last) {
