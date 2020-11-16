@@ -15,7 +15,9 @@ const viewImporter = importer('view');
 /******************************************************************************/
 
 const LocaleMenuConnected = Widget.connect((state) => {
-  const locales = state.get(`backend.nabu.locales`);
+  const locales = state
+    .get(`backend.nabu.locales`)
+    .filter((locale) => !locale.get('hide'));
   const localeId = Widget.getUserSession(state).get('locale');
 
   return {
