@@ -261,7 +261,10 @@ module.exports = (config) => {
       quest.do({blocked: true});
     }
 
-    yield quest.me.busy(); // Set busy
+    yield quest.me.busy();
+    quest.defer(function* () {
+      yield quest.me.idle();
+    });
 
     quest.dispatch('next', {step});
 
@@ -279,8 +282,6 @@ module.exports = (config) => {
     // The step is used in updateButtons.
     // The quest of the step can use updateButtons without specifying the step.
     //quest.dispatch('next', {step});
-
-    yield quest.me.idle(); // Clear busy
   });
 
   Goblin.registerQuest(goblinName, 'done', function* (quest, result) {
@@ -317,6 +318,9 @@ module.exports = (config) => {
     const step = steps[stepName];
 
     yield quest.me.busy();
+    quest.defer(function* () {
+      yield quest.me.idle();
+    });
 
     if (step) {
       if (step.updateButtonsMode === 'onChange') {
@@ -327,8 +331,6 @@ module.exports = (config) => {
         yield quest.me[`${stepName}OnChange`]({form});
       }
     }
-
-    yield quest.me.idle();
   });
 
   Goblin.registerQuest(goblinName, 'update-buttons', function* (quest) {
