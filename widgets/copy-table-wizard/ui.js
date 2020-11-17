@@ -11,6 +11,12 @@ function prepare(props) {
     <Container kind="column" grow="1">
       <Field
         kind="combo"
+        labelText={T('Hôte rethink')}
+        listModel=".form.hosts"
+        model=".form.host"
+      />
+      <Field
+        kind="combo"
         labelText={T('Mandat source')}
         listModel=".form.databases"
         model=".form.fromDb"
