@@ -113,7 +113,10 @@ Goblin.registerQuest(goblinName, 'create', function* (
   );
   quest.goblin.defer(() => addQueue.dispose());
   quest.goblin.defer(
-    quest.sub(`*::${id}.add-workitem-enqueued`, function (err, {msg, resp}) {
+    quest.sub.local(`*::${id}.<add-workitem-enqueued>`, function (
+      err,
+      {msg, resp}
+    ) {
       addQueue.push({id: msg.id, work: {...msg.data}, resp});
     })
   );
@@ -128,7 +131,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
   );
 
   quest.goblin.defer(
-    quest.sub(`*::*.${quest.goblin.id}.add-workitem-requested`, function* (
+    quest.sub(`*::*.${quest.goblin.id}.<add-workitem-requested>`, function* (
       err,
       {msg, resp}
     ) {
@@ -408,7 +411,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
   };
   const timeoutCancel = setTimeout(autoRelease, 1000);
   const res = yield quest.sub.callAndWait(function () {
-    quest.evt('add-workitem-enqueued', {
+    quest.evt('<add-workitem-enqueued>', {
       desktopId,
       toDesktopId: desktopId,
       currentLocation,
@@ -590,7 +593,7 @@ Goblin.registerQuest(goblinName, 'add-dialog', function* (
 Goblin.registerQuest(goblinName, 'nav-and-wait', function* (quest, route) {
   const navRequestId = quest.uuidV4();
   yield quest.sub.callAndWait(function () {
-    quest.evt(`nav.requested`, {
+    quest.fullEvt(`<${quest.goblin.id}.nav.requested>`, {
       route,
       navRequestId,
     });
@@ -813,7 +816,7 @@ Goblin.registerQuest(goblinName, 'update-current-location', function* (
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'dispatch', function (quest, action) {
-  quest.evt(`dispatch.requested`, {
+  quest.fullEvt(`<${quest.goblin.id}.dispatch.requested>`, {
     action,
   });
 });
