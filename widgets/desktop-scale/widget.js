@@ -27,7 +27,7 @@ class DesktopScale extends Widget {
       zoom: this.props.zoom,
     };
 
-    this.min = 0.7;
+    this.min = 0.2;
     this.max = 2;
   }
 
