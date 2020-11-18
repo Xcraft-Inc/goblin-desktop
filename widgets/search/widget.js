@@ -34,23 +34,15 @@ class HinterNewButton extends Widget {
       onNew: 'onNew',
       withDetails: 'withDetails',
       newButtonTitle: 'newButtonTitle',
-      onNewButtonClickedSpecified: 'onNewButtonClickedSpecified',
     };
   }
 
   onNew() {
-    const {onNewButtonClickedSpecified} = this.props;
-
     const model = this.getRouting().get('location.hash').substring(1);
     const value = this.getModelValue(model, true);
-
-    this.doAs(
-      'hinter',
-      onNewButtonClickedSpecified ? 'custom-create-new' : 'create-new',
-      {
-        value,
-      }
-    );
+    this.doAs('hinter', 'create-new', {
+      value,
+    });
   }
 
   render() {
