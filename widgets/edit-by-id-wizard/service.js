@@ -75,6 +75,7 @@ const config = {
               entityId,
             },
           },
+          navigate: true,
         });
         yield quest.me.next();
       },
