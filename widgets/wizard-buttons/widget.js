@@ -68,12 +68,7 @@ class WizardButtons extends Widget {
   renderButton(button, id, index, size) {
     button = button.toJS();
     const {questService, quest, questParams, ...props} = button;
-    let mainProps = {};
-    if (id === 'main') {
-      mainProps = {
-        busy: this.props.busy,
-      };
-    }
+
     return (
       <Button
         key={id}
@@ -82,7 +77,6 @@ class WizardButtons extends Widget {
         onClick={() =>
           this.handleButtonClick(id, questService, quest, questParams)
         }
-        {...mainProps}
         {...props}
       />
     );
@@ -95,7 +89,7 @@ class WizardButtons extends Widget {
     let index = 0;
     const size = this.props.buttons.size;
     return (
-      <Container kind={this.props.containerKind}>
+      <Container kind={this.props.containerKind} busy={this.props.busy}>
         {this.props.buttons
           .map((button, id) => this.renderButton(button, id, index++, size))
           .toArray()}
