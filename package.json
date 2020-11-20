@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "xcraft-core-goblin": "^4.0.1",
+    "xcraft-core-shredder": "^4.0.0",
     "xcraft-core-utils": "^3.0.0"
   },
   "devDependencies": {
