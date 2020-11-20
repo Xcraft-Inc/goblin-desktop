@@ -60,12 +60,13 @@ class Workitem extends Form {
   //#endregion
 
   componentDidMount() {
-    MouseTrap.bind('esc', this.onClose);
+    // FIXME: stacked workitems not handled properly
+    // MouseTrap.bind('esc', this.onClose);
   }
 
   componentWillUnmount() {
     super.componentWillUnmount();
-    MouseTrap.unbind('esc');
+    // MouseTrap.unbind('esc');
   }
 
   getChildContext() {
