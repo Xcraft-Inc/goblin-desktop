@@ -13,7 +13,7 @@ const config = {
   steps: {
     prepare: {
       updateButtonsMode: 'onChange',
-      buttons: function*(quest, buttons, form) {
+      buttons: function* (quest, buttons, form) {
         const entityId = form.get('entityId');
 
         let text = T('Ouvrir');
@@ -62,7 +62,7 @@ const config = {
     },
     finish: {
       form: {},
-      quest: function*(quest, form) {
+      quest: function* (quest, form) {
         const deskAPI = quest.getAPI(quest.getDesktop());
         const entityId = form.entityId;
         const type = entityId.split('@')[0];
