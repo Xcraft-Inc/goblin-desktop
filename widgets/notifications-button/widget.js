@@ -34,4 +34,4 @@ class NotificationsButton extends Widget {
   }
 }
 
-export default NotificationsButton;
+export default Widget.Wired(NotificationsButton)();

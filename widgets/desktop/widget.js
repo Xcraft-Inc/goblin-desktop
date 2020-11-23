@@ -3,13 +3,13 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import MouseTrap from 'mousetrap';
 import Container from 'goblin-gadgets/widgets/container/widget';
-import DesktopTaskbar from 'goblin-desktop/widgets/desktop-taskbar/widget';
-import DesktopTopbar from 'goblin-desktop/widgets/desktop-topbar/widget';
-
+import DesktopTaskbar from 'goblin-desktop/widgets/desktop-taskbar/widget.js';
+import DesktopTopbar from 'goblin-desktop/widgets/desktop-topbar/widget.js';
+import DesktopContent from 'goblin-desktop/widgets/desktop-content/widget.js';
 import Tabs from 'goblin-desktop/widgets/tabs/widget.js';
-import DesktopNotifications from 'goblin-desktop/widgets/desktop-notifications/widget';
-import DesktopFooter from 'goblin-desktop/widgets/desktop-footer/widget';
-import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
+import DesktopNotifications from 'goblin-desktop/widgets/desktop-notifications/widget.js';
+import DesktopFooter from 'goblin-desktop/widgets/desktop-footer/widget.js';
+import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget.js';
 import {ColorManipulator} from 'goblin-theme';
 import NavigatingLayer from '../navigating-layer/widget.js';
 
@@ -93,7 +93,7 @@ class Desktop extends Widget {
   }
 
   renderContent() {
-    return null;
+    return <DesktopContent id={this.props.id} />;
   }
 
   renderRetroPanel() {
@@ -141,7 +141,7 @@ class Desktop extends Widget {
           <Container kind="right">
             <Container kind="content">
               {this.renderTopBar()}
-              <Tabs id={`tabs@${id}`} desktopId={id} />
+              <Tabs id={id} desktopId={id} />
               <div className={contentClass}>
                 {this.renderRetroPanel()}
                 {this.renderContent()}

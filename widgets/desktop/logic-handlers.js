@@ -163,12 +163,18 @@ module.exports = {
     return state.set('working', action.get('working'));
   },
   'set-workitem': (state, action) => {
-    const wid = action.get('widgetId');
+    const wid = action.get('id');
     const workcontext = state.get('current.workcontext');
     return state
       .set(`workitems.${wid}`, {
-        tabId: action.get('tabId'),
+        id: wid,
+        kind: action.get('kind'),
+        entityId: action.get('entityId'),
+        context: action.get('context'),
         view: action.get('view'),
+        name: action.get('name'),
+        glyph: action.get('glyph'),
+        closable: action.get('closable'),
       })
       .push(`workitemsByContext.${workcontext}`, wid);
   },

@@ -79,12 +79,6 @@ Goblin.registerQuest(goblinName, 'create', function* (
     }
   }
 
-  // CREATE DEFAULT TABS MANAGER
-  yield quest.create('tabs', {
-    id: `tabs@${quest.goblin.id}`,
-    desktopId: quest.goblin.id,
-  });
-
   quest.do({
     id: quest.goblin.id,
     username,
@@ -287,41 +281,16 @@ Goblin.registerQuest(goblinName, 'do-add', function* (
     yield workitemAPI.waitLoaded();
   }
 
-  switch (workitem.kind) {
-    default:
-      break;
-    case 'tab': {
-      yield desk.addTab({
-        workitemId: widgetId,
-        entityId: workitem.payload.entityId,
-        view: workitem.view,
-        contextId: workitem.contextId,
-        name: workitem.description,
-        glyph: workitem.icon,
-        closable: true,
-        navigate: !!navigate,
-        currentLocation,
-      });
-      quest.dispatch('set-workitem', {
-        widgetId,
-        tabId: widgetId,
-        view: workitem.view,
-      });
-      break;
-    }
-    case 'dialog': {
-      yield desk.addDialog({
-        dialogId: widgetId,
-        currentLocation,
-      });
-      quest.dispatch('set-workitem', {
-        widgetId,
-        tabId: null,
-        view: workitem.view,
-      });
-      break;
-    }
-  }
+  quest.dispatch('set-workitem', {
+    id: widgetId,
+    kind: workitem.kind,
+    entityId: workitem.payload.entityId,
+    context: workitem.contextId,
+    view: workitem.view,
+    name: workitem.description,
+    glyph: workitem.icon,
+    closable: true,
+  });
 
   quest.evt(`${widgetId}.<desktop-workitem-queue>.added`, {
     desktopId,
@@ -473,16 +442,6 @@ Goblin.registerQuest(goblinName, 'add-tab', function* (
       workitemId,
     });
   }
-  const tabs = quest.getAPI(`tabs@${quest.goblin.id}`);
-  const tabId = yield tabs.add({
-    name,
-    contextId,
-    view,
-    workitemId,
-    entityId,
-    glyph,
-    closable: closable || false,
-  });
 
   if (navigate && currentContext === contextId) {
     yield quest.cmd('desktop.nav-to-workitem', {
@@ -493,7 +452,6 @@ Goblin.registerQuest(goblinName, 'add-tab', function* (
       currentLocation,
     });
   }
-  return tabId;
 });
 
 /******************************************************************************/
@@ -669,49 +627,18 @@ Goblin.registerQuest(goblinName, 'nav-to-context', function* (
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'nav-to-workitem', function* (
+Goblin.registerQuest(goblinName, 'nav-to-workitem', function (
   quest,
-  contextId,
-  view,
-  workitemId,
-  skipNav,
-  currentLocation
+  workitemId
 ) {
-  yield mutex.lock(questLock(quest));
-  quest.defer(() => mutex.unlock(questLock(quest)));
-
   const state = quest.goblin.getState();
 
-  if (!contextId) {
-    contextId = state.get(`current.workcontext`, null);
-  }
-
-  //save current loc if provided
-  if (currentLocation) {
-    quest.dispatch('setCurrentLocationByWorkitem', {
-      path: currentLocation.get('pathname'),
-      hash: currentLocation.get('hash'),
-      search: currentLocation.get('search'),
-    });
-  }
+  const workitem = state.get(`workitems.${workitemId}`);
+  const contextId = workitem.get('context');
+  const view = workitem.get('view');
 
   //set new current workitem
   quest.dispatch('setCurrentWorkitemByContext', {contextId, view, workitemId});
-
-  if (!skipNav) {
-    let route = `/${contextId}/${view}?wid=${workitemId}`;
-
-    const location = state.get(`current.location.${workitemId}`, null);
-    if (location) {
-      const search = location.get('search');
-      const path = location.get('path');
-      const hash = location.get('hash');
-      if (search) {
-        route = `${path}${search}${hash}`;
-      }
-    }
-    yield quest.me.navAndWait({route});
-  }
 });
 
 /******************************************************************************/
