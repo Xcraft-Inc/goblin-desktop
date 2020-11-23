@@ -45,7 +45,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
 
 Goblin.registerQuest(goblinName, 'init-window', function (quest) {
   const {contextId, view, workitemId} = quest.goblin.getState().toJS();
-  quest.fullEvt(`<${quest.goblin.id}>.nav.requested`, {
+  quest.evt.full(`<${quest.goblin.id}>.nav.requested`, {
     route: `/${contextId}/${view}?wid=${workitemId}`,
   });
 });

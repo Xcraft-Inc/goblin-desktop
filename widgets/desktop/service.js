@@ -593,7 +593,7 @@ Goblin.registerQuest(goblinName, 'add-dialog', function* (
 Goblin.registerQuest(goblinName, 'nav-and-wait', function* (quest, route) {
   const navRequestId = quest.uuidV4();
   yield quest.sub.callAndWait(function () {
-    quest.fullEvt(`<${quest.goblin.id}>.nav.requested`, {
+    quest.evt.full(`<${quest.goblin.id}>.nav.requested`, {
       route,
       navRequestId,
     });
@@ -603,7 +603,7 @@ Goblin.registerQuest(goblinName, 'nav-and-wait', function* (quest, route) {
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'change-theme', function (quest, name) {
-  quest.fullEvt(`<${quest.goblin.id}>.change-theme.requested`, {
+  quest.evt.full(`<${quest.goblin.id}>.change-theme.requested`, {
     name,
   });
 });
@@ -816,7 +816,7 @@ Goblin.registerQuest(goblinName, 'update-current-location', function* (
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'dispatch', function (quest, action) {
-  quest.fullEvt(`<${quest.goblin.id}>.dispatch.requested`, {
+  quest.evt.full(`<${quest.goblin.id}>.dispatch.requested`, {
     action,
   });
 });
