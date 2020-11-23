@@ -7,11 +7,20 @@ class Tab extends Widget {
   constructor() {
     super(...arguments);
     this.nav = this.nav.bind(this);
+    this.close = this.close.bind(this);
   }
 
   nav() {
     const workitemId = this.props.workitem.get('id');
-    this.cmd('desktop.nav-to-workitem', {
+    this.cmd('desktop.navToWorkitem', {
+      id: this.props.desktopId,
+      workitemId,
+    });
+  }
+
+  close() {
+    const workitemId = this.props.workitem.get('id');
+    this.cmd('desktop.removeWorkitem', {
       id: this.props.desktopId,
       workitemId,
     });
@@ -37,15 +46,13 @@ class Tab extends Widget {
           glyph={workitem.get('glyph')}
           active={isActive}
           onClick={this.nav}
-          onRightClick={() => null}
         />
         <Button
           kind="view-tab-last"
           glyph="solid/times"
           show={workitem.get('closable', false)}
           active={isActive}
-          onClick={() => null}
-          onRightClick={() => null}
+          onClick={this.close}
         />
       </div>
     );

@@ -188,8 +188,8 @@ module.exports = {
       view: lastView,
     });
   },
-  'remove-workitem': (state, action) => {
-    const wid = action.get('widgetId');
+  'removeWorkitem': (state, action) => {
+    const wid = action.get('workitemId');
     const workcontext = state.get('current.workcontext');
 
     state = state.del(`workitems.${wid}`).del(`current.location.${wid}`);

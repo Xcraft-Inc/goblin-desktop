@@ -416,13 +416,9 @@ module.exports = (config) => {
     quest.goblin.setX('isDisposing', true);
 
     const desktopId = quest.goblin.getX('desktopId');
-    const nameId = quest.goblin.id.split('@');
 
     quest.evt(`${desktopId}.<remove-workitem-requested>`, {
-      workitem: {
-        id: quest.goblin.id.replace(nameId[0] + '@', ''),
-        name: nameId[0],
-      },
+      workitemId: quest.goblin.id,
       close: false,
       navToLastWorkitem: true,
       currentLocation,
