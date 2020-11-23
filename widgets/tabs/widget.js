@@ -9,58 +9,6 @@ import NotificationsButton from 'goblin-desktop/widgets/notifications-button/wid
 class Tabs extends Widget {
   constructor() {
     super(...arguments);
-    this.goToWorkItem = this.goToWorkItem.bind(this);
-    this.newWorkItem = this.newWorkItem.bind(this);
-    this.closeWorkItem = this.closeWorkItem.bind(this);
-  }
-
-  clearWorkitem(contextId) {
-    this.cmd('desktop.clear-workitem', {
-      id: this.props.desktopId,
-      contextId,
-    });
-  }
-
-  goToWorkItem(k, v, isRightClick, workitemId, tabIsActive) {
-    if (isRightClick) {
-      // Right click.
-      this.k = k;
-      this.v = v;
-      this.workitemId = workitemId;
-      this.tabIsActive = tabIsActive;
-      this.showMenu = true;
-    } else {
-      // Left click (standard click).
-      this.navToWorkItem(this.props.context, v.get('view'), workitemId);
-    }
-  }
-
-  newWorkItem(k, v, isRightClick, workitemId) {
-    this.cmd('desktop.open-tab-to-window', {
-      id: this.props.desktopId,
-      contextId: this.props.context,
-      workitemId,
-    });
-  }
-
-  closeWorkItem(k, v, isRightClick, workitemId, tabIsActive) {
-    if (isRightClick) {
-      // Right click.
-      this.k = k;
-      this.v = v;
-      this.workitemId = workitemId;
-      this.tabIsActive = tabIsActive;
-      this.showMenu = true;
-    } else {
-      // Left click (standard click).
-      this.do('remove', {
-        tabId: workitemId,
-        contextId: this.props.context,
-        workitemId: workitemId,
-        close: true,
-        navToLastWorkitem: tabIsActive,
-      });
-    }
   }
 
   /******************************************************************************/
