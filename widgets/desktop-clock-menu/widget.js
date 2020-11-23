@@ -30,6 +30,7 @@ export default class DesktopClockMenu extends Widget {
             size={this.props.clockSize}
             look={look}
             transition="none"
+            serverTick={this.props.serverTick}
           />
         </div>
       </div>

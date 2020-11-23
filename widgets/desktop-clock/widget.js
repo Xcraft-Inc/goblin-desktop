@@ -175,6 +175,7 @@ class DesktopClock extends Widget {
         onClick={this.toggleClock}
         mouseOver={this.clockMouseOver}
         mouseOut={this.clockMouseOut}
+        serverTick={this.props.serverTick}
       />
     );
   }
@@ -352,6 +353,7 @@ class DesktopClock extends Widget {
           this.clockLook = look;
         }}
         onClose={() => (this.showMenuLook = false)}
+        serverTick={this.props.serverTick}
       />
     );
   }
@@ -379,6 +381,7 @@ export default Widget.connect((state) => {
   const clientSessionId = userSession.get('id');
   const theme = userSession.get('theme') || 'default';
   const desktopClockState = userSession.get(`desktopClock.${theme}`);
+  const serverTick = state.get(`backend.desktop-manager.serverTick`);
 
-  return {clientSessionId, desktopClockState};
+  return {clientSessionId, desktopClockState, serverTick};
 })(DesktopClock);

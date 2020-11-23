@@ -86,6 +86,7 @@ export default class DesktopClockClock extends Widget {
           transition="1.0s ease-out"
           mouseOver={this.props.mouseOver}
           mouseOut={this.props.mouseOut}
+          serverTick={this.props.serverTick}
         />
       </div>
     );
