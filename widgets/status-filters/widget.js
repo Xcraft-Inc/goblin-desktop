@@ -102,11 +102,9 @@ const StatusFilterConnected = Widget.connect((state, props) => {
   );
   if (userView) {
     const order = userView.get('order');
-    if (order && order.size > 0) {
-      const _columnIds = order.filter((_, id) => columnIds.has(id));
-      if (_columnIds.size === columnIds.size) {
-        columnIds = _columnIds;
-      }
+    if (order.size > 0) {
+      //todo clean non available
+      columnIds = order;
     }
   }
 
