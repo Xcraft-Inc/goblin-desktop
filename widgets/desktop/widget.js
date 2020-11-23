@@ -69,31 +69,34 @@ class Desktop extends Widget {
 
   /******************************************************************************/
 
-  renderTaskBar(routes) {
+  renderTopBar() {
     return (
-      <DesktopTaskbar
+      <DesktopTopbar
         id={this.props.id}
-        loading={this.props.navigating}
-        routes={routes}
-        onToggleFooter={this.toggleFooter}
+        desktopId={this.props.id}
+        username={this.props.username}
       />
     );
   }
 
-  renderTopBar() {
-    return <DesktopTopbar id={this.props.id} username={this.props.username} />;
-  }
-
   renderNofications() {
-    return <DesktopNotifications id={this.props.id} />;
+    return (
+      <DesktopNotifications id={this.props.id} desktopId={this.props.id} />
+    );
   }
 
   renderFooter() {
-    return <DesktopFooter id={this.props.id} showFooter={this.showFooter} />;
+    return (
+      <DesktopFooter
+        id={this.props.id}
+        desktopId={this.props.id}
+        showFooter={this.showFooter}
+      />
+    );
   }
 
   renderContent() {
-    return <DesktopContent id={this.props.id} />;
+    return <DesktopContent id={this.props.id} desktopId={this.props.id} />;
   }
 
   renderRetroPanel() {

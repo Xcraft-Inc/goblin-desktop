@@ -42,16 +42,10 @@ class Contexts extends Widget {
   }
 
   navToContext(contextId) {
-    const current = this.getRouting().get('location');
-    const path = current.get('pathname');
-    const parts = path.split('/');
-    if (parts[1]) {
-      if (parts[1] === contextId) {
-        return;
-      }
+    if (this.props.current === contextId) {
+      return;
     }
-
-    this.cmd('desktop.nav-to-context', {
+    this.cmd('desktop.navToContext', {
       id: this.props.desktopId,
       contextId,
     });
