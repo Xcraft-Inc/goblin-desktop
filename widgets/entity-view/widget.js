@@ -425,8 +425,15 @@ class EntityView extends Widget {
   }
 
   render() {
-    const {id, columnIds, type} = this.props;
+    const {id, columnIds, isBad, type} = this.props;
     if (!id || !columnIds) {
+      return null;
+    }
+
+    if (isBad) {
+      this.setUserSettings('reset-view-column', {
+        viewId: `view@${type}`,
+      });
       return null;
     }
 
@@ -476,11 +483,14 @@ const ConnectedEntityView = Widget.connect((state, props) => {
   const userView = state.get(
     `backend.${clientSessionId}.views.view@${props.type}`
   );
+  let isBad = false;
   if (userView) {
     const order = userView.get('order');
     if (order.size > 0) {
-      //todo clean non available
-      columnIds = order;
+      isBad = order.some((id) => !columnIds.includes(id));
+      if (!isBad) {
+        columnIds = order;
+      }
     }
   }
 
@@ -488,6 +498,7 @@ const ConnectedEntityView = Widget.connect((state, props) => {
   const prototypeMode = userSession.get('prototypeMode');
 
   return {
+    isBad,
     hasFilter,
     columnIds,
     view: view.get('query'),
