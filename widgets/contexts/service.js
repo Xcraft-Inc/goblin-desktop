@@ -24,15 +24,6 @@ Goblin.registerQuest(goblinName, 'delete', function (quest) {
 });
 
 Goblin.registerQuest(goblinName, 'add', function (quest, contextId, name) {
-  const deskId = quest.goblin.getX('desktopId');
-  const useId = uuidV4();
-
-  quest.create(`taskbar@${useId}`, {
-    id: `${contextId}-taskbar@${deskId}`,
-    desktopId: quest.goblin.getX('desktopId'),
-    contextId: contextId,
-  });
-
   quest.do({contextId, name});
 });
 

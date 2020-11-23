@@ -14,7 +14,6 @@ const logicHandlers = {
     const id = action.get('id');
     return state.set('', {
       id: id,
-      context: action.get('contextId'),
     });
   },
 };

@@ -137,7 +137,7 @@ class Desktop extends Widget {
     return (
       <NavigatingLayer desktopId={id}>
         <Container kind="root">
-          <DesktopTaskbar id={`taskbar@${id}`} desktopId={id} />
+          <DesktopTaskbar id={id} desktopId={id} />
           <Container kind="right">
             <Container kind="content">
               {this.renderTopBar()}

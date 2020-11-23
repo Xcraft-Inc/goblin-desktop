@@ -47,6 +47,12 @@ Goblin.registerQuest(goblinName, 'create', function* (
     desktopId: quest.goblin.id,
   });
 
+  //CREATE TASKBAR (TASK LAUNCHER)
+  quest.create('taskbar', {
+    id: `taskbar@${quest.goblin.id}`,
+    desktopId: quest.goblin.id,
+  });
+
   if (!mainGoblin && configuration) {
     mainGoblin = configuration.mainGoblin;
   }

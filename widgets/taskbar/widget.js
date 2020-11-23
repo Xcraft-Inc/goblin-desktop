@@ -18,7 +18,6 @@ class Taskbar extends Widget {
   static get wiring() {
     return {
       id: 'id',
-      context: 'context',
     };
   }
 
@@ -150,5 +149,6 @@ export default Widget.connect((state, props) => {
   const userSession = Widget.getUserSession(state);
   const prototypeMode = userSession.get('prototypeMode');
   const working = state.get(`backend.${props.desktopId}.working`);
-  return {prototypeMode, working};
+  const context = state.get(`backend.${props.desktopId}.current.workcontext`);
+  return {prototypeMode, working, context};
 })(Taskbar);

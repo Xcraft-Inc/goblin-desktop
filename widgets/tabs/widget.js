@@ -270,11 +270,11 @@ class Tabs extends Widget {
   }
 
   render() {
-    const {tabs, desktopId} = this.props;
+    const {context, tabs, desktopId} = this.props;
 
     const WiredNotificationsButton = wireNotifsButton(desktopId);
 
-    let contextTabs = tabs.get(this.props.context, null);
+    let contextTabs = tabs.get(context, null);
     if (contextTabs) {
       contextTabs = contextTabs.toArray();
     } else {
@@ -298,10 +298,11 @@ class Tabs extends Widget {
 /******************************************************************************/
 
 const TabsWithCurrent = Widget.connect((state, props) => {
+  const context = state.get(`backend.${props.desktopId}.current.workcontext`);
   const currentTab = state.get(
-    `backend.${props.desktopId}.current.workitems.${props.context}`
+    `backend.${props.desktopId}.current.workitems.${context}`
   );
-  return {currentTab};
+  return {currentTab, context};
 })(Tabs);
 
 export default Widget.Wired(TabsWithCurrent)();

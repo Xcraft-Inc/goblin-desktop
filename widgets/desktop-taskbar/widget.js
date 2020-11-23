@@ -4,7 +4,7 @@ import T from 't';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
-
+import Taskbar from 'goblin-desktop/widgets/taskbar/widget.js';
 /******************************************************************************/
 
 class DesktopTaskbar extends Widget {
@@ -29,7 +29,7 @@ class DesktopTaskbar extends Widget {
           busy={this.props.working}
         />
         <Container kind="task-bar">
-          {/*TODO: INJECT TASKS*/}
+          <Taskbar id={`taskbar@${this.props.id}`} desktopId={this.props.id} />
           <Separator kind="sajex" />
         </Container>
         <Button
