@@ -1,20 +1,19 @@
 //T:2019-02-27
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
-import importer from 'goblin_importer';
 import MouseTrap from 'mousetrap';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import DesktopTaskbar from 'goblin-desktop/widgets/desktop-taskbar/widget';
 import DesktopTopbar from 'goblin-desktop/widgets/desktop-topbar/widget';
+
+import Tabs from 'goblin-desktop/widgets/tabs/widget.js';
 import DesktopNotifications from 'goblin-desktop/widgets/desktop-notifications/widget';
 import DesktopFooter from 'goblin-desktop/widgets/desktop-footer/widget';
-const viewImporter = importer('view');
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import {ColorManipulator} from 'goblin-theme';
 import NavigatingLayer from '../navigating-layer/widget.js';
 
 /******************************************************************************/
-
 class Desktop extends Widget {
   constructor() {
     super(...arguments);
@@ -60,7 +59,6 @@ class Desktop extends Widget {
   static get wiring() {
     return {
       id: 'id',
-      routesMap: 'routes',
       username: 'username',
     };
   }
@@ -82,14 +80,8 @@ class Desktop extends Widget {
     );
   }
 
-  renderTopBar(routes) {
-    return (
-      <DesktopTopbar
-        id={this.props.id}
-        routes={routes}
-        username={this.props.username}
-      />
-    );
+  renderTopBar() {
+    return <DesktopTopbar id={this.props.id} username={this.props.username} />;
   }
 
   renderNofications() {
@@ -98,6 +90,10 @@ class Desktop extends Widget {
 
   renderFooter() {
     return <DesktopFooter id={this.props.id} showFooter={this.showFooter} />;
+  }
+
+  renderContent() {
+    return null;
   }
 
   renderRetroPanel() {
@@ -128,46 +124,11 @@ class Desktop extends Widget {
   }
 
   render() {
-    const {id, routesMap} = this.props;
+    const {id} = this.props;
 
-    if (!id || !routesMap) {
+    if (!id) {
       return null;
     }
-
-    const routes = {
-      '/hinter/': {},
-      '/task-bar/': {},
-      '/top-bar/': {},
-      '/before-content/': {},
-      '/content/': {},
-    };
-
-    Widget.shred(routesMap).select((k, v) => {
-      const ex = /^(\/.[:\-a-z]+\/).*/;
-      const res = ex.exec(v);
-      let mount = '/';
-      if (res) {
-        mount = res[1];
-      }
-      if (routes[mount]) {
-        routes[mount] = {path: v.replace(mount, '/'), component: k};
-      } else {
-        console.warn(`Invalid mount point ${mount} for ${k}`);
-      }
-    });
-
-    const contentView = viewImporter(routes['/content/'].component);
-    const Content = Widget.WithRoute(
-      contentView,
-      ['context', 'view'],
-      ['wid', 'did']
-    )(routes['/content/'].path);
-
-    const beforeView = viewImporter(routes['/before-content/'].component);
-    const BeforeContent = Widget.WithRoute(
-      beforeView,
-      'context'
-    )(routes['/before-content/'].path);
 
     const contentClass = this.showFooter
       ? this.styles.classNames.content
@@ -176,14 +137,14 @@ class Desktop extends Widget {
     return (
       <NavigatingLayer desktopId={id}>
         <Container kind="root">
-          {this.renderTaskBar(routes)}
+          <DesktopTaskbar id={`taskbar@${id}`} desktopId={id} />
           <Container kind="right">
             <Container kind="content">
-              {this.renderTopBar(routes)}
-              <BeforeContent desktopId={id} />
+              {this.renderTopBar()}
+              <Tabs id={`tabs@${id}`} desktopId={id} />
               <div className={contentClass}>
                 {this.renderRetroPanel()}
-                <Content desktopId={id} />
+                {this.renderContent()}
                 {this.renderNofications()}
               </div>
               {this.renderFooter()}

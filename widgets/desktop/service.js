@@ -13,16 +13,6 @@ const {JobQueue} = require('xcraft-core-utils');
 const mutex = locks.getMutex;
 const questLock = (quest) => `${quest.questName}/${quest.goblin.id}`;
 
-// Default route/view mapping
-// /mountpoint/:context/:view/:hinter
-const defaultRoutes = {
-  tabs: '/before-content/:context',
-  workitem: '/content/:context/:view',
-  hinter: '/hinter/:context/:view/:hinter',
-  taskbar: '/task-bar/:context',
-  contexts: '/top-bar/',
-};
-
 // Define initial logic values
 const logicState = {};
 
@@ -89,13 +79,8 @@ Goblin.registerQuest(goblinName, 'create', function* (
     desktopId: quest.goblin.id,
   });
 
-  if (!routes) {
-    routes = defaultRoutes;
-  }
-
   quest.do({
     id: quest.goblin.id,
-    routes,
     username,
     session,
     profileKey: configuration && configuration.id,

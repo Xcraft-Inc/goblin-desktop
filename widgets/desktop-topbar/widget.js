@@ -2,7 +2,6 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import T from 't';
-import importer from 'goblin_importer';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
@@ -10,7 +9,7 @@ import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import DesktopThemesMenu from 'goblin-desktop/widgets/desktop-themes-menu/widget';
 import DesktopScale from 'goblin-desktop/widgets/desktop-scale/widget';
 import {ColorManipulator} from 'goblin-theme';
-const viewImporter = importer('view');
+import Contexts from 'goblin-desktop/widgets/contexts/widget.js';
 
 /******************************************************************************/
 
@@ -174,16 +173,9 @@ class DesktopTopbarNC extends Widget {
   }
 
   render() {
-    const routes = this.props.routes;
-    const topbarView = viewImporter(routes['/top-bar/'].component);
-    const TopBar = Widget.WithRoute(
-      topbarView,
-      'context'
-    )(routes['/top-bar/'].path);
-
     return (
       <Container kind="top-bar">
-        <TopBar desktopId={this.props.id} />
+        <Contexts id={`contexts@${this.props.id}`} desktopId={this.props.id} />
         {this.renderUserUI()}
       </Container>
     );

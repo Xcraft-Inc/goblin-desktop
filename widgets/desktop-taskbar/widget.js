@@ -1,11 +1,9 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import T from 't';
-import importer from 'goblin_importer';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
-const viewImporter = importer('view');
 
 /******************************************************************************/
 
@@ -21,13 +19,6 @@ class DesktopTaskbar extends Widget {
   }
 
   render() {
-    const routes = this.props.routes;
-    const taskView = viewImporter(routes['/task-bar/'].component);
-    const Tasks = Widget.WithRoute(
-      taskView,
-      'context'
-    )(routes['/task-bar/'].path);
-
     return (
       <Container kind="left-bar">
         <Button
@@ -38,7 +29,7 @@ class DesktopTaskbar extends Widget {
           busy={this.props.working}
         />
         <Container kind="task-bar">
-          <Tasks desktopId={this.props.id} />
+          {/*TODO: INJECT TASKS*/}
           <Separator kind="sajex" />
         </Container>
         <Button
