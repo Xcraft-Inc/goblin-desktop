@@ -13,9 +13,11 @@ class Content extends Widget {
 
     let wid;
     let view;
+    let hinter;
     if (workitem) {
       wid = workitem.get('id');
       view = workitem.get('view');
+      hinter = workitem.get('hinter');
     } else if (!dialogId) {
       return null;
     }
@@ -36,6 +38,7 @@ class Content extends Widget {
         context={context}
         workitemId={wid}
         dialogId={dialogId}
+        hinter={hinter}
       />
     );
   }
@@ -54,6 +57,7 @@ const CurrentContent = Widget.connect((state, props) => {
   if (workitemId) {
     workitem = state.get(`backend.${props.id}.workitems.${workitemId}`);
   }
+
   return {workitem, dialogId, context};
 })(Content);
 

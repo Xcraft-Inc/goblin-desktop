@@ -9,23 +9,17 @@ import Search from 'goblin-desktop/widgets/search/widget';
 import Datagrid from 'goblin-desktop/widgets/datagrid/widget';
 import Wizard from 'goblin-desktop/widgets/wizard/widget';
 import WorkitemDialog from 'goblin-desktop/widgets/workitem-dialog/widget';
-
+import Hinter from 'goblin-desktop/widgets/hinter/widget.js';
 const viewImporter = importer('view');
 
 class DefaultView extends View {
   renderHinter(useHinter) {
-    if (!useHinter) {
+    if (!useHinter || !this.props.hinter) {
       return null;
     }
-
-    const HinterView = viewImporter('hinter');
-
     return (
       <Container kind="row" grow="1">
-        <HinterView
-          desktopId={this.props.desktopId}
-          context={this.props.context}
-        />
+        <Hinter id={this.props.hinter} />
       </Container>
     );
   }

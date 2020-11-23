@@ -149,6 +149,10 @@ module.exports = {
   'add-workitem': (state, action) => {
     return state.set('working', action.get('working'));
   },
+  'setHinter': (state, action) => {
+    const wid = action.get('workitemId');
+    return state.set(`workitems.${wid}.hinter`, action.get('hinterId'));
+  },
   'set-workitem': (state, action) => {
     const wid = action.get('id');
     const workcontext = state.get('current.workcontext');

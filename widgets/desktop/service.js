@@ -376,14 +376,12 @@ Goblin.registerQuest(goblinName, 'add-context', function* (
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'nav-and-wait', function* (quest, route) {
-  const navRequestId = quest.uuidV4();
-  yield quest.sub.callAndWait(function () {
-    quest.fullEvt(`<${quest.goblin.id}.nav.requested>`, {
-      route,
-      navRequestId,
-    });
-  }, `*::*.${navRequestId}.done`);
+Goblin.registerQuest(goblinName, 'setHinter', function (
+  quest,
+  workitemId,
+  hinterId
+) {
+  quest.do({workitemId, hinterId});
 });
 
 /******************************************************************************/
@@ -414,18 +412,7 @@ Goblin.registerQuest(goblinName, 'set-nav-to-default', function* (
 ) {
   const state = quest.goblin.getState();
   const currentWK = state.get('current.workcontext');
-  if (currentWK) {
-    const location = state.get(`current.location.${currentWK}`, null);
-    let route;
-    if (location) {
-      route = `${location.get('path')}${location.get('search')}${location.get(
-        'hash'
-      )}`;
-    } else {
-      route = `/${currentWK}`;
-    }
-    yield quest.me.navAndWait({route});
-  } else {
+  if (!currentWK) {
     yield quest.me.navToContext({contextId: defaultContextId});
   }
 });
