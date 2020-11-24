@@ -34,12 +34,7 @@ class Tab extends Widget {
     }
 
     return (
-      <div
-        className={this.styles.classNames.tabsButton}
-        ref={(x) => {
-          console.log(x);
-        }}
-      >
+      <div className={this.styles.classNames.tabsButton}>
         <Button
           kind="view-tab-first"
           text={tabText}

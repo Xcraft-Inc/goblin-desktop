@@ -10,7 +10,7 @@ import Datagrid from 'goblin-desktop/widgets/datagrid/widget';
 import Wizard from 'goblin-desktop/widgets/wizard/widget';
 import WorkitemDialog from 'goblin-desktop/widgets/workitem-dialog/widget';
 import Hinter from 'goblin-desktop/widgets/hinter/widget.js';
-const viewImporter = importer('view');
+import Detail from 'goblin-desktop/widgets/detail/widget.js';
 
 class DefaultView extends View {
   renderHinter(useHinter) {
@@ -21,6 +21,18 @@ class DefaultView extends View {
       <Container kind="row" grow="1">
         <Hinter id={this.props.hinter} />
       </Container>
+    );
+  }
+
+  renderDetail() {
+    if (!this.props.detail) {
+      return null;
+    }
+    return (
+      <Detail
+        id={this.props.detail}
+        leftPanelWorkitemId={this.props.leftPanelWorkitemId}
+      />
     );
   }
 
@@ -66,18 +78,12 @@ class DefaultView extends View {
       }
     }
 
-    const DetailView = viewImporter('detail');
-
     return (
       <Container kind="views">
         {WiredDialog ? <WiredDialog id={dialogId} kind="dialog" /> : null}
         {LeftPanel ? <LeftPanel id={workitemId} /> : null}
         {this.renderHinter(useHinter)}
-        <DetailView
-          desktopId={desktopId}
-          context={context}
-          leftPanelWorkitemId={workitemId}
-        />
+        {this.renderDetail()}
       </Container>
     );
   }

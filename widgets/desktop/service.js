@@ -384,6 +384,18 @@ Goblin.registerQuest(goblinName, 'setHinter', function (
   quest.do({workitemId, hinterId});
 });
 
+Goblin.registerQuest(goblinName, 'setDetail', function (
+  quest,
+  workitemId,
+  hinterId
+) {
+  const parts = hinterId.split('@');
+  const name = parts[0].replace(/-hinter/, '-detail');
+  const endParts = parts.slice(1);
+  const detailId = `${name}@${endParts.join('@')}`;
+  quest.do({workitemId, detailId});
+});
+
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'change-theme', function (quest, name) {

@@ -144,7 +144,9 @@ class EntityView extends Widget {
     const entityId = this.getEntityId(rowId);
     this.dispatch({type: 'select-row', rowId, entityId});
     if (entityId && this.props.hinter) {
-      this.navToDetail(this.props.id, entityId, this.props.hinter);
+      this.doFor(this.props.id, 'setDetail', {
+        entityId,
+      });
     }
   }
 
