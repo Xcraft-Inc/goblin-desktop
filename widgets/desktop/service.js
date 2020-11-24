@@ -389,6 +389,10 @@ Goblin.registerQuest(goblinName, 'setDetail', function (
   workitemId,
   hinterId
 ) {
+  if (!hinterId) {
+    quest.do({workitemId, detailId: null});
+    return;
+  }
   const parts = hinterId.split('@');
   const name = parts[0].replace(/-hinter/, '-detail');
   const endParts = parts.slice(1);
