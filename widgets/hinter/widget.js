@@ -169,8 +169,7 @@ class Hinter extends Widget {
     const target = e.target;
     const containers = [...document.getElementsByClassName('hinter-container')];
     if (!containers.some((container) => container.contains(target))) {
-      //TODO-VNEXT: REPAIR ME
-      //this.hideHinter();
+      this.do('hide');
       this.removeOutsideClickListener();
     }
   }
@@ -238,8 +237,7 @@ class Hinter extends Widget {
       text: value,
       model,
     });
-    //TODO-VNEXT: REPAIR ME
-    //this.hideHinter();
+    this.do('hide');
   }
 
   setLoadingForDetails() {
