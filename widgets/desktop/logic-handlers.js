@@ -21,7 +21,9 @@ module.exports = {
       teamId: null,
       current: {
         workitems: {},
+        dialogs: {},
       },
+      workitems: {},
       workitemsByContext: {},
       last: {},
       navigating: false,
@@ -33,23 +35,8 @@ module.exports = {
     return state.set('navigating', true);
   },
 
-  'end-nav': (state, action) => {
-    const route = action.get('route');
-    if (!route) {
-      return state;
-    }
-    const contextId = route.split('?')[0].split('/')[1];
-    const path = route.split('?')[0];
-    const search = route.split('#')[0].split('?')[1];
-    const hash = route.split('#')[1];
-    const location = {
-      path: path,
-      search: search ? `?${search}` : '',
-      hash: hash ? `#${hash}` : '',
-    };
-    return state
-      .set('navigating', false)
-      .set(`current.location.${contextId}`, location);
+  'end-nav': (state) => {
+    return state.set('navigating', false);
   },
 
   //---------------//
@@ -156,34 +143,38 @@ module.exports = {
 
   /******************************************************************************/
 
-  'nav-to-context': (state, action) => {
+  'navToContext': (state, action) => {
     return state.set('current.workcontext', action.get('contextId'));
   },
   'add-workitem': (state, action) => {
     return state.set('working', action.get('working'));
   },
+  'setHinter': (state, action) => {
+    const wid = action.get('workitemId');
+    return state.set(`workitems.${wid}.hinter`, action.get('hinterId'));
+  },
+  'setDetail': (state, action) => {
+    const wid = action.get('workitemId');
+    return state.set(`workitems.${wid}.detail`, action.get('detailId'));
+  },
   'set-workitem': (state, action) => {
-    const wid = action.get('widgetId');
+    const wid = action.get('id');
     const workcontext = state.get('current.workcontext');
     return state
       .set(`workitems.${wid}`, {
-        tabId: action.get('tabId'),
+        id: wid,
+        kind: action.get('kind'),
+        entityId: action.get('entityId'),
+        context: action.get('context'),
         view: action.get('view'),
+        name: action.get('name'),
+        glyph: action.get('glyph'),
+        closable: action.get('closable'),
       })
       .push(`workitemsByContext.${workcontext}`, wid);
   },
-  'add-dialog': (state) => {
-    const workcontext = state.get('current.workcontext');
-    const lastWorkitem = state.get(`current.workitems.${workcontext}`, null);
-    const lastView = state.get(`current.views.${workcontext}`, null);
-    return state.set(`last.${workcontext}`, {
-      workcontext: workcontext,
-      workitem: lastWorkitem,
-      view: lastView,
-    });
-  },
-  'remove-workitem': (state, action) => {
-    const wid = action.get('widgetId');
+  'removeWorkitem': (state, action) => {
+    const wid = action.get('workitemId');
     const workcontext = state.get('current.workcontext');
 
     state = state.del(`workitems.${wid}`).del(`current.location.${wid}`);
@@ -241,25 +232,11 @@ module.exports = {
       });
   },
 
-  'setCurrentLocationByContext': (state, action) => {
-    const lastWorkcontext = state.get('current.workcontext');
-    return state.set(`current.location.${lastWorkcontext}`, {
-      path: action.get('path'),
-      search: action.get('search'),
-      hash: action.get('hash'),
-    });
-  },
-
-  'setCurrentLocationByWorkitem': (state, action) => {
-    const currentContext = state.get('current.workcontext');
-    const currentWorkitem = state.get(`current.workitems.${currentContext}`);
-    if (!currentWorkitem) {
-      return state;
-    }
-    return state.set(`current.location.${currentWorkitem}`, {
-      path: action.get('path'),
-      search: action.get('search'),
-      hash: action.get('hash'),
-    });
+  'setCurrentDialogByContext': (state, action) => {
+    const workcontext = action.get('contextId');
+    return state.set(
+      `current.dialogs.${workcontext}`,
+      action.get('workitemId')
+    );
   },
 };

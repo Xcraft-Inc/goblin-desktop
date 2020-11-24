@@ -109,7 +109,8 @@ class Workitem extends Form {
 
   onCancel() {
     this.doAs(this.service, 'restore-entity');
-    this.hideHinter();
+    //TODO-VNEXT: REPAIR ME
+    //this.hideHinter();
   }
 
   onClose() {

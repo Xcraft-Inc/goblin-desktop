@@ -14,7 +14,6 @@ const logicHandlers = {
     const id = action.get('id');
     return state.set('', {
       id: id,
-      context: action.get('contextId'),
     });
   },
 };
@@ -73,7 +72,6 @@ Goblin.registerQuest(goblinName, 'run-workitem', function* (
   quest,
   workitem,
   contextId,
-  currentLocation,
   clientSessionId
 ) {
   const desk = quest.getAPI(quest.goblin.getX('desktopId'));
@@ -83,7 +81,6 @@ Goblin.registerQuest(goblinName, 'run-workitem', function* (
   workitem.contextId = contextId;
   return yield desk.addWorkitem({
     workitem,
-    currentLocation,
     clientSessionId,
     navigate: true,
   });

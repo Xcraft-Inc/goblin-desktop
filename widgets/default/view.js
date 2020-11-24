@@ -9,24 +9,30 @@ import Search from 'goblin-desktop/widgets/search/widget';
 import Datagrid from 'goblin-desktop/widgets/datagrid/widget';
 import Wizard from 'goblin-desktop/widgets/wizard/widget';
 import WorkitemDialog from 'goblin-desktop/widgets/workitem-dialog/widget';
-
-const viewImporter = importer('view');
+import Hinter from 'goblin-desktop/widgets/hinter/widget.js';
+import Detail from 'goblin-desktop/widgets/detail/widget.js';
 
 class DefaultView extends View {
   renderHinter(useHinter) {
-    if (!useHinter) {
+    if (!useHinter || !this.props.hinter) {
       return null;
     }
-
-    const HinterView = viewImporter('hinter');
-
     return (
       <Container kind="row" grow="1">
-        <HinterView
-          desktopId={this.props.desktopId}
-          context={this.props.context}
-        />
+        <Hinter id={this.props.hinter} />
       </Container>
+    );
+  }
+
+  renderDetail() {
+    if (!this.props.detail) {
+      return null;
+    }
+    return (
+      <Detail
+        id={this.props.detail}
+        leftPanelWorkitemId={this.props.leftPanelWorkitemId}
+      />
     );
   }
 
@@ -72,18 +78,12 @@ class DefaultView extends View {
       }
     }
 
-    const DetailView = viewImporter('detail');
-
     return (
       <Container kind="views">
         {WiredDialog ? <WiredDialog id={dialogId} kind="dialog" /> : null}
         {LeftPanel ? <LeftPanel id={workitemId} /> : null}
         {this.renderHinter(useHinter)}
-        <DetailView
-          desktopId={desktopId}
-          context={context}
-          leftPanelWorkitemId={workitemId}
-        />
+        {this.renderDetail()}
       </Container>
     );
   }
