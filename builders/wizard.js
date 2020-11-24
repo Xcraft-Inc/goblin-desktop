@@ -165,7 +165,7 @@ module.exports = (config) => {
         err,
         {msg, resp}
       ) {
-        const {calledFrom, currentLocation = null} = msg.data;
+        const {calledFrom} = msg.data;
         const isInternal = calledFrom.split('.')[0] === quest.goblin.id;
         if (running > 0 && !isInternal) {
           return; /* Drop this tick because a step is already running */
@@ -174,7 +174,7 @@ module.exports = (config) => {
         try {
           ++running;
           const step = quest.goblin.getState().get('step');
-          yield resp.cmd(`${goblinName}.${step}`, {id, currentLocation});
+          yield resp.cmd(`${goblinName}.${step}`, {id});
         } finally {
           --running;
         }
@@ -268,19 +268,15 @@ module.exports = (config) => {
     quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
-  Goblin.registerQuest(goblinName, 'next', function (
-    quest,
-    result,
-    currentLocation
-  ) {
+  Goblin.registerQuest(goblinName, 'next', function (quest, result) {
     quest.do();
-    quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom, currentLocation});
+    quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
     return result;
   });
 
-  Goblin.registerQuest(goblinName, 'back', function (quest, currentLocation) {
+  Goblin.registerQuest(goblinName, 'back', function (quest) {
     quest.do();
-    quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom, currentLocation});
+    quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
   Goblin.registerQuest(goblinName, 'goto', function* (quest) {
@@ -307,7 +303,7 @@ module.exports = (config) => {
     //quest.dispatch('next', {step});
   });
 
-  Goblin.registerQuest(goblinName, 'done', function* (quest, currentLocation) {
+  Goblin.registerQuest(goblinName, 'done', function* (quest) {
     let result = quest.goblin.getState().get('result');
     if (Shredder.isImmutable(result)) {
       result = result.toJS();
@@ -317,12 +313,12 @@ module.exports = (config) => {
       payload = quest.cancel();
     }
     quest.evt('done', payload);
-    yield quest.me.dispose({currentLocation});
+    yield quest.me.dispose({});
   });
 
-  Goblin.registerQuest(goblinName, 'cancel', function (quest, currentLocation) {
+  Goblin.registerQuest(goblinName, 'cancel', function (quest) {
     quest.do();
-    quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom, currentLocation});
+    quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
   Goblin.registerQuest(goblinName, 'change', function* (quest, path, newValue) {
@@ -408,7 +404,7 @@ module.exports = (config) => {
   Goblin.registerQuest(goblinName, 'load-entity', common.loadEntityQuest);
   Goblin.registerQuest(goblinName, 'open-wizard', common.openWizard);
 
-  function disposeQuest(quest, currentLocation) {
+  function disposeQuest(quest) {
     if (quest.goblin.getX('isDisposing')) {
       return;
     }
@@ -421,7 +417,6 @@ module.exports = (config) => {
       workitemId: quest.goblin.id,
       close: false,
       navToLastWorkitem: true,
-      currentLocation,
     });
   }
 
