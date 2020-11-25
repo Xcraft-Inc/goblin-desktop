@@ -61,7 +61,7 @@ module.exports = (config) => {
       });
     },
     'init-wizard': (state) => {
-      return state.set('step', 'goto').set('nextStep', wizardFlow[1]);
+      return state.set('step', '_goto').set('nextStep', wizardFlow[1]);
     },
     'buttons': (state, action) => {
       return state.set('buttons', action.get('buttons'));
@@ -79,7 +79,7 @@ module.exports = (config) => {
         return state;
       }
       const nIndex = cIndex - 1;
-      return state.set('step', 'goto').set('nextStep', wizardFlow[nIndex]);
+      return state.set('step', '_goto').set('nextStep', wizardFlow[nIndex]);
     },
     'next': (state, action) => {
       const c = state.get('step');
@@ -94,9 +94,13 @@ module.exports = (config) => {
 
       const nIndex = cIndex + 1;
       const nextStep = wizardFlow[nIndex];
-      return state.set('nextStep', nextStep).set('step', 'goto');
+      return state.set('nextStep', nextStep).set('step', '_goto');
     },
-    'goto': (state) => {
+    'goto': (state, action) => {
+      const step = action.get('step');
+      return state.set('nextStep', step).set('step', '_goto');
+    },
+    '_goto': (state) => {
       const nextStep = state.get('nextStep');
       return state.set('step', nextStep).del('nextStep');
     },
@@ -279,7 +283,12 @@ module.exports = (config) => {
     quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
-  Goblin.registerQuest(goblinName, 'goto', function* (quest) {
+  Goblin.registerQuest(goblinName, 'goto', function (quest, step) {
+    quest.do();
+    quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
+  });
+
+  Goblin.registerQuest(goblinName, '_goto', function* (quest, nextStep) {
     yield quest.me.busy();
     quest.defer(function* () {
       yield quest.me.idle();
@@ -287,14 +296,14 @@ module.exports = (config) => {
 
     const state = quest.goblin.getState();
     const form = state.get('form').toJS();
-    const nextStep = state.get('nextStep');
+    const _nextStep = state.get('nextStep');
 
-    quest.dispatch(`init-${nextStep}`); // ?
+    quest.dispatch(`init-${_nextStep}`);
     quest.do();
 
     yield quest.me.updateButtons();
-    if (quest.me[nextStep]) {
-      yield quest.me[nextStep]({form});
+    if (quest.me[_nextStep]) {
+      yield quest.me[_nextStep]({form});
     }
 
     // Moved to the top of goto.
