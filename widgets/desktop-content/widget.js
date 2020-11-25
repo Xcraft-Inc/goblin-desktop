@@ -3,6 +3,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import importer from 'goblin_importer';
 /******************************************************************************/
 const viewImporter = importer('view');
+
 class Content extends Widget {
   constructor() {
     super(...arguments);

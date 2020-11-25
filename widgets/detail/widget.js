@@ -6,8 +6,10 @@ import importer from 'goblin_importer';
 
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Workitem from 'goblin-desktop/widgets/workitem/widget';
-import T from 't';
 
+const Spinner = () => {
+  return <Container kind="full" width={'100%'} height={'100%'} busy={true} />;
+};
 const uiImporter = importer('ui');
 
 class Detail extends Widget {
@@ -68,52 +70,54 @@ class Detail extends Widget {
       'buttons',
       `backend.${workitemId}.buttons`
     );
-
-    return this.buildLoader(entityId, () => {
-      let DetailUI = this.WithState(
-        workitemUI.panel.readonly,
-        'entityId'
-      )('.entityId');
-
-      if (
-        workitemUI.mappers &&
-        workitemUI.mappers.panel &&
-        workitemUI.mappers.panel.readonly
-      ) {
-        DetailUI = this.mapWidget(
-          DetailUI,
-          workitemUI.mappers.panel.readonly,
-          `backend.${entityId}`
-        );
-      }
-      return (
-        <Container
-          kind="view-right"
-          width={width ? width : '700px'}
-          busy={this.props.loading}
+    return (
+      <Container
+        kind="view-right"
+        width={width ? width : '700px'}
+        busy={this.props.loading}
+      >
+        <Detail
+          kind={kind ? kind : 'detail'}
+          id={workitemId}
+          entityId={entityId}
+          readonly={true}
+          dragServiceId={this.props.dragServiceId}
+          leftPanelWorkitemId={this.props.leftPanelWorkitemId}
         >
-          <Detail
-            kind={kind ? kind : 'detail'}
-            id={workitemId}
-            entityId={entityId}
-            title={() => {
-              return <div>{T('Détails')}</div>;
-            }}
-            readonly={true}
-            dragServiceId={this.props.dragServiceId}
-            leftPanelWorkitemId={this.props.leftPanelWorkitemId}
-          >
-            <DetailUI
-              id={workitemId}
-              theme={this.context.theme}
-              do={this.doProxy}
-              entityId={entityId}
-              contextId={this.context.contextId}
-            />
-          </Detail>
-        </Container>
-      );
-    });
+          {this.buildLoader(
+            entityId,
+            () => {
+              let DetailUI = this.WithState(
+                workitemUI.panel.readonly,
+                'entityId'
+              )('.entityId');
+
+              if (
+                workitemUI.mappers &&
+                workitemUI.mappers.panel &&
+                workitemUI.mappers.panel.readonly
+              ) {
+                DetailUI = this.mapWidget(
+                  DetailUI,
+                  workitemUI.mappers.panel.readonly,
+                  `backend.${entityId}`
+                );
+              }
+              return (
+                <DetailUI
+                  id={workitemId}
+                  theme={this.context.theme}
+                  do={this.doProxy}
+                  entityId={entityId}
+                  contextId={this.context.contextId}
+                />
+              );
+            },
+            Spinner
+          )}
+        </Detail>
+      </Container>
+    );
   }
 }
 

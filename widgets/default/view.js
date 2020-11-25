@@ -1,7 +1,6 @@
 //T:2019-02-27
 
 import React from 'react';
-import importer from 'goblin_importer';
 import View from 'goblin-laboratory/widgets/view';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Editor from 'goblin-desktop/widgets/editor/widget';
