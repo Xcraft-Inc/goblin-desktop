@@ -305,11 +305,6 @@ module.exports = (config) => {
     if (quest.me[_nextStep]) {
       yield quest.me[_nextStep]({form});
     }
-
-    // Moved to the top of goto.
-    // The step is used in updateButtons.
-    // The quest of the step can use updateButtons without specifying the step.
-    //quest.dispatch('next', {step});
   });
 
   Goblin.registerQuest(goblinName, 'done', function* (quest) {
