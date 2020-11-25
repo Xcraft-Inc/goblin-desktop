@@ -320,7 +320,7 @@ module.exports = (config) => {
       payload = quest.cancel();
     }
     quest.evt('done', payload);
-    yield quest.me.dispose({});
+    yield quest.me.dispose();
   });
 
   Goblin.registerQuest(goblinName, 'cancel', function (quest) {
