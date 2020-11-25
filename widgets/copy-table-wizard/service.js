@@ -137,35 +137,6 @@ const config = {
           }
           yield next.sync();
         } else {
-          // Code working with goblin-rethink branch wip/stored-connection
-          // const destDb = yield quest.create(destDbId, {
-          //   id: destDbId,
-          //   desktopId: `system@${profile.mandate}`,
-          //   host: profile.rethinkdbHost,
-          //   database: profile.mandate,
-          // });
-          //
-          // for (let table of form.selectedTables) {
-          //   // Ensure table exist
-          //   yield sourceDb.ensureTable({table});
-          //   yield destDb.ensureTable({table});
-          //   // Get records from source
-          //   const records = yield sourceDb.getAll({
-          //     table,
-          //     status: ['published'],
-          //   });
-          //   if (records.length > 0) {
-          //     let res = yield destDb.query({
-          //       query: function (r, dbName, table, records) {
-          //         return r.db(dbName).table(table).insert(records);
-          //       },
-          //       args: [profile.mandate, table, records],
-          //     });
-          //     quest.log.dbg(
-          //       `query executed ! inserted: ${res[0].inserted} / errors: ${res[0].errors}\n`
-          //     );
-          //   }
-          // }
           let recordsByTable = {};
           for (let table of form.selectedTables) {
             // Ensure table exist
