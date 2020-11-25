@@ -376,28 +376,20 @@ Goblin.registerQuest(goblinName, 'add-context', function* (
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'setHinter', function (
-  quest,
-  workitemId,
-  hinterId
-) {
-  quest.do({workitemId, hinterId});
+Goblin.registerQuest(goblinName, 'setHinter', function (quest, hinterId) {
+  quest.do({hinterId});
 });
 
-Goblin.registerQuest(goblinName, 'setDetail', function (
-  quest,
-  workitemId,
-  hinterId
-) {
+Goblin.registerQuest(goblinName, 'setDetail', function (quest, hinterId) {
   if (!hinterId) {
-    quest.do({workitemId, detailId: null});
+    quest.do({detailId: null});
     return;
   }
   const parts = hinterId.split('@');
   const name = parts[0].replace(/-hinter/, '-detail');
   const endParts = parts.slice(1);
   const detailId = `${name}@${endParts.join('@')}`;
-  quest.do({workitemId, detailId});
+  quest.do({detailId});
 });
 
 /******************************************************************************/
