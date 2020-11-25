@@ -55,7 +55,7 @@ module.exports = (config) => {
           width: '500px',
         },
         gadgets: action.get('wizardGadgets'),
-        busy: false,
+        busy: true,
         buttons: defaultButtons,
         form: mergedInitialForm,
       });
@@ -288,22 +288,25 @@ module.exports = (config) => {
     quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
-  Goblin.registerQuest(goblinName, '_goto', function* (quest, nextStep) {
-    yield quest.me.busy();
-    quest.defer(function* () {
-      yield quest.me.idle();
-    });
-
+  Goblin.registerQuest(goblinName, '_goto', function* (quest) {
     const state = quest.goblin.getState();
     const form = state.get('form').toJS();
-    const _nextStep = state.get('nextStep');
+    const nextStep = state.get('nextStep');
 
-    quest.dispatch(`init-${_nextStep}`);
+    quest.dispatch(`init-${nextStep}`);
     quest.do();
 
     yield quest.me.updateButtons();
-    if (quest.me[_nextStep]) {
-      yield quest.me[_nextStep]({form});
+
+    if (quest.me[nextStep]) {
+      try {
+        yield quest.me.busy();
+        yield quest.me[nextStep]({form});
+      } finally {
+        if (!quest.goblin.getX('isDisposing')) {
+          yield quest.me.idle();
+        }
+      }
     }
   });
 
