@@ -161,13 +161,13 @@ module.exports = {
   },
   'set-workitem': (state, action) => {
     const wid = action.get('id');
-    const workcontext = state.get('current.workcontext');
+    const workcontext = action.get('context');
     return state
       .set(`workitems.${wid}`, {
         id: wid,
         kind: action.get('kind'),
         entityId: action.get('entityId'),
-        context: action.get('context'),
+        context: workcontext,
         view: action.get('view'),
         name: action.get('name'),
         glyph: action.get('glyph'),
@@ -177,9 +177,9 @@ module.exports = {
   },
   'removeWorkitem': (state, action) => {
     const wid = action.get('workitemId');
-    const workcontext = state.get('current.workcontext');
+    const workcontext = state.get(`workitems.${wid}.context`);
 
-    state = state.del(`workitems.${wid}`).del(`current.location.${wid}`);
+    state = state.del(`workitems.${wid}`);
     state = state.unpush(`workitemsByContext.${workcontext}`, wid);
 
     const last = state.get(`last.${workcontext}.workitem`);
@@ -187,13 +187,8 @@ module.exports = {
       const newLast = state.get(`workitemsByContext.${workcontext}`).last();
       if (newLast.state) {
         state = state.set(`last.${workcontext}.workitem`, newLast.state);
-        state = state.set(
-          `last.${workcontext}.view`,
-          state.get(`workitems.${newLast.state}.view`)
-        );
       } else {
         state = state.set(`last.${workcontext}.workitem`, null);
-        state = state.set(`last.${workcontext}.view`, null);
       }
     }
 
@@ -202,13 +197,8 @@ module.exports = {
       const newLast = state.get(`workitemsByContext.${workcontext}`).last();
       if (newLast.state) {
         state = state.set(`current.workitems.${workcontext}`, newLast.state);
-        state = state.set(
-          `current.views.${workcontext}`,
-          state.get(`workitems.${wid}.view`)
-        );
       } else {
         state = state.set(`current.workitems.${workcontext}`, null);
-        state = state.set(`current.views.${workcontext}`, null);
       }
     }
 
@@ -221,16 +211,13 @@ module.exports = {
   'setCurrentWorkitemByContext': (state, action) => {
     const lastWorkcontext = state.get('current.workcontext');
     const lastWorkitem = state.get(`current.workitems.${lastWorkcontext}`);
-    const lastView = state.get(`current.views.${lastWorkcontext}`);
     const workcontext = action.get('contextId');
     return state
       .set('current.workcontext', workcontext)
       .set(`current.workitems.${workcontext}`, action.get('workitemId'))
-      .set(`current.views.${workcontext}`, action.get('view'))
       .set(`last.${workcontext}`, {
         workcontext: lastWorkcontext,
         workitem: lastWorkitem,
-        view: lastView,
       });
   },
 
