@@ -3,7 +3,7 @@ import React from 'react';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
-class ContextButton extends Widget {
+class ContextButtonNC extends Widget {
   constructor() {
     super(...arguments);
     this.handleClick = this.handleClick.bind(this);
@@ -22,10 +22,28 @@ class ContextButton extends Widget {
         onClick={this.handleClick}
         active={this.props.active}
         tooltip={this.props.tooltip}
+        badgeColor="dark"
+        badgeSize={1.1}
+        badgePosition="over"
+        badgeValue={this.props.openTabs}
+        badgePush={false}
+        badgeShape="circle"
       />
     );
   }
 }
+
+const ContextButton = Widget.connect((state, props) => {
+  const byContext = state.get(`backend.${props.desktopId}.workitemsByContext`);
+  let openTabs = 0;
+  if (byContext) {
+    const list = byContext.get(props.contextId);
+    if (list) {
+      openTabs = list.size;
+    }
+  }
+  return {openTabs};
+})(ContextButtonNC);
 
 class Contexts extends Widget {
   constructor() {
@@ -60,7 +78,9 @@ class Contexts extends Widget {
     return (
       <ContextButton
         key={contextId}
+        desktopId={this.props.desktopId}
         context={context}
+        contextId={contextId}
         goToContext={this.goToContext}
         active={this.props.current === contextId}
         tooltip={context.get('name')}
