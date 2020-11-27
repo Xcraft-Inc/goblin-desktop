@@ -209,14 +209,11 @@ module.exports = {
   },
 
   'setCurrentWorkitemByContext': (state, action) => {
-    const lastWorkcontext = state.get('current.workcontext');
-    const lastWorkitem = state.get(`current.workitems.${lastWorkcontext}`);
-    const workcontext = action.get('contextId');
+    const destinationContext = action.get('contextId');
+    const lastWorkitem = state.get(`current.workitems.${destinationContext}`);
     return state
-      .set('current.workcontext', workcontext)
-      .set(`current.workitems.${workcontext}`, action.get('workitemId'))
-      .set(`last.${workcontext}`, {
-        workcontext: lastWorkcontext,
+      .set(`current.workitems.${destinationContext}`, action.get('workitemId'))
+      .set(`last.${destinationContext}`, {
         workitem: lastWorkitem,
       });
   },
