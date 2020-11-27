@@ -57,7 +57,7 @@ Goblin.registerQuest(goblinName, 'run-app', function* (quest, app) {
 
   const username = yield desk.getUserInfo();
   const newDesktopSessionId = `desktop@${app.mandate}@${username}`;
-  quest.evt(`${labId}.open-session-requested`, {
+  quest.evt(`<${labId}>.open-session-requested`, {
     desktopId: newDesktopSessionId,
     session: newDesktopSessionId,
     username: username,

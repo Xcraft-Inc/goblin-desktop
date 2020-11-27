@@ -117,7 +117,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
 
 Goblin.registerQuest(goblinName, 'change-locale', function (quest, locale) {
   const labId = quest.goblin.getX('labId');
-  quest.evt(`${labId}.user-locale-changed`, {locale});
+  quest.evt(`<${labId}>.user-locale-changed`, {locale});
 });
 
 /******************************************************************************/
@@ -438,7 +438,7 @@ Goblin.registerQuest(goblinName, 'run-client-quest', function (
   questName,
   questArgs
 ) {
-  quest.evt(`${labId}.run-client-quest-requested`, {
+  quest.evt(`<${labId}>.run-client-quest-requested`, {
     desktopId: quest.goblin.id,
     goblinName,
     goblinId,
