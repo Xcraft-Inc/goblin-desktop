@@ -3,12 +3,13 @@
 const path = require('path');
 const Goblin = require('xcraft-core-goblin');
 const uuidV4 = require('uuid/v4');
+const watt = require('gigawatts');
 const goblinName = path.basename(module.parent.filename, '.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
 const xUtils = require('xcraft-core-utils');
 const {getFileFilter} = xUtils.files;
-const {JobQueue} = require('xcraft-core-utils');
-
+const {locks} = require('xcraft-core-utils');
+const doAddLock = locks.getMutex;
 // Define initial logic values
 const logicState = {};
 
@@ -81,23 +82,6 @@ Goblin.registerQuest(goblinName, 'create', function* (
 
   quest.log.info(`Desktop ${quest.goblin.id} created!`);
   const id = quest.goblin.id;
-
-  const addQueue = new JobQueue(
-    `Add workitem queue for: ${id}`,
-    function* ({work, resp}) {
-      yield resp.cmd(`${goblinName}.do-add`, {id, ...work});
-    },
-    1
-  );
-  quest.goblin.defer(() => addQueue.dispose());
-  quest.goblin.defer(
-    quest.sub.local(`*::${id}.<add-workitem-enqueued>`, function (
-      err,
-      {msg, resp}
-    ) {
-      addQueue.push({id: msg.id, work: {...msg.data}, resp});
-    })
-  );
 
   quest.goblin.defer(
     quest.sub(
@@ -177,7 +161,7 @@ Goblin.registerQuest(goblinName, 'removeWorkitem', function* (
 });
 
 /******************************************************************************/
-Goblin.registerQuest(goblinName, 'do-add', function* (
+const doAdd = watt(function* (
   quest,
   widgetId,
   clientSessionId,
@@ -209,36 +193,13 @@ Goblin.registerQuest(goblinName, 'do-add', function* (
         }
 
         quest.log.dbg(`Skipping ${widgetId} add`);
-        quest.evt(`${widgetId}.<desktop-workitem-queue>.skipped`, {
+        return {
           desktopId,
           workitemId: widgetId,
           skipped: true,
-        });
-        return;
+        };
       }
     }
-  }
-
-  const workitemAPI = yield quest.create(
-    widgetId,
-    Object.assign(
-      {
-        id: widgetId,
-        desktopId,
-        clientSessionId,
-        contextId: workitem.contextId,
-        workflowId: workitem.workflowId,
-        isDialog: workitem.kind === 'dialog',
-        mode: workitem.mode ? workitem.mode : false,
-        level: 1,
-      },
-      workitem.payload,
-      {payload: workitem.payload}
-    )
-  );
-
-  if (workitemAPI.waitLoaded) {
-    yield workitemAPI.waitLoaded();
   }
 
   quest.dispatch('set-workitem', {
@@ -265,11 +226,11 @@ Goblin.registerQuest(goblinName, 'do-add', function* (
     });
   }
 
-  quest.evt(`${widgetId}.<desktop-workitem-queue>.added`, {
+  return {
     desktopId,
     workitemId: widgetId,
     skipped: false,
-  });
+  };
 });
 
 Goblin.registerQuest(goblinName, 'add-workitem', function* (
@@ -329,32 +290,36 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
   }@${desktopId}@${workitem.id}`;
 
   quest.log.dbg(`Adding ${widgetId}...`);
-  yield quest.doSync({working: true});
-  const autoRelease = () => {
-    quest.evt(`${widgetId}.<desktop-workitem-queue>.skipped`, {
-      desktopId,
-      workitemId: widgetId,
-      skipped: true,
-    });
-  };
-  const timeoutCancel = setTimeout(autoRelease, 1000);
-  const res = yield quest.sub.callAndWait(function () {
-    quest.evt('<add-workitem-enqueued>', {
-      desktopId,
-      toDesktopId: desktopId,
-      widgetId,
-      workitem,
-      clientSessionId,
-      navigate,
-    });
-  }, `*::${desktopId}.${widgetId}.<desktop-workitem-queue>.(added|skipped)`);
-  clearTimeout(timeoutCancel);
-  yield quest.doSync({working: false});
+
+  yield doAddLock.lock(desktopId);
+  const res = yield doAdd(quest, widgetId, clientSessionId, workitem, navigate);
+  doAddLock.unlock(desktopId);
 
   if (res.skipped) {
     quest.log.dbg(`Adding ${widgetId}...[FAILED]`);
     return null;
   } else {
+    const workitemAPI = yield quest.create(
+      widgetId,
+      Object.assign(
+        {
+          id: widgetId,
+          desktopId,
+          clientSessionId,
+          contextId: workitem.contextId,
+          workflowId: workitem.workflowId,
+          isDialog: workitem.kind === 'dialog',
+          mode: workitem.mode ? workitem.mode : false,
+          level: 1,
+        },
+        workitem.payload,
+        {payload: workitem.payload}
+      )
+    );
+
+    if (workitemAPI.waitLoaded) {
+      yield workitemAPI.waitLoaded();
+    }
     quest.log.dbg(`Adding ${widgetId}...[DONE]`);
     return widgetId;
   }
