@@ -209,7 +209,7 @@ class EntityView extends Widget {
   }
 
   onSortColumn(index, columns) {
-    if (this.props.hasFilter) {
+    if (this.props.hasFilter || index === 0) {
       return;
     }
 
