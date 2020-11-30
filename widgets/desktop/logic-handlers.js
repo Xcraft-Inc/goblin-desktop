@@ -107,7 +107,7 @@ module.exports = {
     const doPush = action.get('doPush');
 
     const h = state.get('stateMonitorHistory');
-    const stack = h.get('stack').toArray();
+    const stack = h.get('stack').valueSeq().toArray();
     let index = h.get('index');
 
     if (doPush) {

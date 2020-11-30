@@ -47,10 +47,12 @@ class FacetFilterListDialogFooter extends Widget {
     );
 
     const enableClearAll = filteredKeys
+      .valueSeq()
       .toArray()
       .some((flag) => flag.get('checked'));
 
     const enableSetAll = filteredKeys
+      .valueSeq()
       .toArray()
       .some((flag) => !flag.get('checked'));
 

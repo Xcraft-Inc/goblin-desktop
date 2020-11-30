@@ -171,6 +171,7 @@ class DesktopNotifications extends Widget {
           return this.renderNotification(n.toJS(), index++);
         }
       })
+      .valueSeq()
       .toArray();
   }
 

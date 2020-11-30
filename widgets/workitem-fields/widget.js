@@ -42,7 +42,7 @@ class WorkitemFields extends Widget {
 
     return (
       <Container kind="column" grow="1">
-        {this.buildCollectionLoader(fields.toArray(), () => (
+        {this.buildCollectionLoader(fields.valueSeq().toArray(), () => (
           <Container kind="pane">
             {Array.from(fields.values()).map((fieldId, i) => {
               return (

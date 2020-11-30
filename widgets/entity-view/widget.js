@@ -266,7 +266,7 @@ class EntityView extends Widget {
       indexDst--; // if moved from left to right, skip the initial column (indexSrc).
     }
 
-    const c = this.props.columnIds.toArray();
+    const c = this.props.columnIds.valueSeq().toArray();
     const srcId = c[indexSrc];
     c.splice(indexSrc, 1); // Firstly, remove the column at initial position.
     c.splice(indexDst, 0, srcId); // Secondly, insert the column at new position.
@@ -440,7 +440,7 @@ class EntityView extends Widget {
     }
 
     return this.buildCollectionLoader(
-      columnIds.toArray(),
+      columnIds.valueSeq().toArray(),
       ({collection}) => {
         const columns = collection;
         const width = this.getEstimatedWidth(columns);

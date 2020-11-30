@@ -548,7 +548,7 @@ class Plugin extends Widget {
   }
 
   renderDefault() {
-    const entityIds = this.props.entityIds.toArray();
+    const entityIds = this.props.entityIds.valueSeq().toArray();
     if (entityIds.length === 0 && this.props.readonly && this.props.embedded) {
       return null;
     }
