@@ -411,6 +411,41 @@ module.exports = (config) => {
   Goblin.registerQuest(goblinName, 'load-entity', common.loadEntityQuest);
   Goblin.registerQuest(goblinName, 'open-wizard', common.openWizard);
 
+  Goblin.registerQuest(goblinName, 'showHinter', function* (
+    quest,
+    type,
+    withDetail = true
+  ) {
+    const hinterAPI = quest
+      .getAPI(`${type}-hinter@${quest.goblin.id}`)
+      .noThrow();
+    yield hinterAPI.show();
+    if (withDetail) {
+      yield hinterAPI.showDetail();
+    }
+  });
+
+  Goblin.registerQuest(goblinName, 'hideHinter', function* (quest, type) {
+    const hinterAPI = quest
+      .getAPI(`${type}-hinter@${quest.goblin.id}`)
+      .noThrow();
+    yield hinterAPI.hide();
+  });
+
+  Goblin.registerQuest(goblinName, 'setDetail', function* (
+    quest,
+    type,
+    entityId
+  ) {
+    const deskAPI = quest.getAPI(quest.getDesktop()).noThrow();
+    const hinterId = `${type}-hinter@${quest.goblin.id}`;
+    yield deskAPI.setDetail({
+      hinterId,
+    });
+    const hinterAPI = quest.getAPI(hinterId).noThrow();
+    yield hinterAPI.setCurrentDetailEntity({entityId});
+  });
+
   function disposeQuest(quest) {
     if (quest.goblin.getX('isDisposing')) {
       return;
