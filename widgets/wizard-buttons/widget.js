@@ -91,8 +91,8 @@ class WizardButtons extends Widget {
     return (
       <Container kind={this.props.containerKind} busy={this.props.busy}>
         {this.props.buttons
-          .map((button, id) => this.renderButton(button, id, index++, size))
-          .valueSeq()
+          .entrySeq()
+          .map(([id, button]) => this.renderButton(button, id, index++, size))
           .toArray()}
       </Container>
     );
