@@ -3,6 +3,8 @@ import React from 'react';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
+import Shredder from 'xcraft-core-shredder';
+
 class ContextButtonNC extends Widget {
   constructor() {
     super(...arguments);
@@ -92,10 +94,9 @@ class Contexts extends Widget {
     if (!this.props.contexts) {
       return null;
     }
-    return this.props.contexts
-      .map((context) => this.renderContext(context))
-      .valueSeq()
-      .toArray();
+    return Shredder.mapJS(this.props.contexts, (context) =>
+      this.renderContext(context)
+    );
   }
 
   render() {
