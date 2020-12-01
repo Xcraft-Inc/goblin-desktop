@@ -93,8 +93,8 @@ class Contexts extends Widget {
       return null;
     }
     return this.props.contexts
-      .map((context) => this.renderContext(context))
       .valueSeq()
+      .map((context) => this.renderContext(context))
       .toArray();
   }
 
