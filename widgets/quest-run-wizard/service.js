@@ -12,7 +12,7 @@ const config = {
   },
   steps: {
     prepare: {
-      form: {payload: '{}', quest: 'workshop.trash-entities'},
+      form: {payload: '{}', quest: ''},
       quest: function () {},
     },
     finish: {
