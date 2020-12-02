@@ -317,9 +317,6 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
       )
     );
 
-    if (workitemAPI.waitLoaded) {
-      yield workitemAPI.waitLoaded();
-    }
     quest.log.dbg(`Adding ${widgetId}...[DONE]`);
     return widgetId;
   }
