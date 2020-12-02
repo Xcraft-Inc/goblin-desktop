@@ -178,6 +178,9 @@ module.exports = {
   'removeWorkitem': (state, action) => {
     const wid = action.get('workitemId');
     const workcontext = state.get(`workitems.${wid}.context`);
+    if (!workcontext) {
+      return state;
+    }
 
     state = state.del(`workitems.${wid}`);
     state = state.unpush(`workitemsByContext.${workcontext}`, wid);
