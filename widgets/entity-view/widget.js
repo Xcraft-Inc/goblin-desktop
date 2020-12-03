@@ -38,6 +38,8 @@ class EntityView extends Widget {
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onKeyValidate = this.onKeyValidate.bind(this);
+    this._setDetail = this._setDetail.bind(this);
+    this.setDetail = throttle(this._setDetail, 1200);
   }
 
   //#region get/set
@@ -136,17 +138,20 @@ class EntityView extends Widget {
     });
   }
 
+  _setDetail(entityId) {
+    this.doFor(this.props.id, 'setDetail', {
+      entityId,
+    });
+  }
+
   selectRow(rowId) {
-    console.log(`EntityView.selectRow rowId='${rowId}'`);
     if (rowId < 0 || rowId >= this.getEntityCount()) {
       return;
     }
     const entityId = this.getEntityId(rowId);
     this.dispatch({type: 'select-row', rowId, entityId});
     if (entityId && this.props.hinter) {
-      this.doFor(this.props.id, 'setDetail', {
-        entityId,
-      });
+      this.setDetail(entityId);
     }
   }
 
