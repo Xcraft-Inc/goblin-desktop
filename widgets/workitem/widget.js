@@ -103,7 +103,6 @@ class Workitem extends Form {
     this.doAs(this.service, 'close', {
       kind: 'validate',
       desktopId: this.desktopId,
-      contextId: this.contextId,
     });
   }
 
@@ -120,7 +119,6 @@ class Workitem extends Form {
         this.doAs(this.service, 'close', {
           kind: 'terminate',
           desktopId: this.desktopId,
-          contextId: this.contextId,
         });
         break;
       default:
@@ -162,7 +160,6 @@ class Workitem extends Form {
         this.doAs(this.service, 'close', {
           kind: action,
           desktopId: this.desktopId,
-          contextId: this.contextId,
         });
         break;
       default:
