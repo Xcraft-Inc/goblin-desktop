@@ -299,7 +299,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
     quest.log.dbg(`Adding ${widgetId}...[FAILED]`);
     return null;
   } else {
-    const workitemAPI = yield quest.create(
+    yield quest.create(
       widgetId,
       Object.assign(
         {
