@@ -414,13 +414,10 @@ Goblin.registerQuest(goblinName, 'navToLastWorkitem', function (quest) {
     return;
   }
 
-  const contextId = last.get('workcontext');
-  const view = last.get('view');
   const workitemId = last.get('workitem');
 
   quest.dispatch('setCurrentWorkitemByContext', {
-    contextId,
-    view,
+    contextId: currentWorkcontext,
     workitemId,
   });
 });
