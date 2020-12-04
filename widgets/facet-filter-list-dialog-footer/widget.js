@@ -17,21 +17,21 @@ class FacetFilterListDialogFooter extends Widget {
   clearAllFacets() {
     this.doAs('list', 'clear-all-facets', {
       filterName: this.props.name,
-      keys: this.props.keys,
+      keys: this.props.keys.toArray(),
     });
   }
 
   setAllFacets() {
     this.doAs('list', 'set-all-facets', {
       filterName: this.props.name,
-      keys: this.props.keys,
+      keys: this.props.keys.toArray(),
     });
   }
 
   toggleAllFacets() {
     this.doAs('list', 'toggle-all-facets', {
       filterName: this.props.name,
-      keys: this.props.keys,
+      keys: this.props.keys.toArray(),
     });
   }
 
