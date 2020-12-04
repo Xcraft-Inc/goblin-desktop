@@ -19,7 +19,8 @@ export default function styles(theme) {
   let monitorShowed;
   let monitorHidden;
   let monitorSajex;
-  let monitorSlider;
+  let monitorResizeButton;
+  let monitorResizeGlyph;
 
   //---------\
   //  MODERN  >
@@ -39,12 +40,34 @@ export default function styles(theme) {
       bottom: '-500px',
     };
 
-    monitorSlider = {
-      height: theme.shapes.footerHeight,
+    monitorResizeButton = {
+      'position': 'absolute',
+      'left': '0px',
+      'top': '0px',
+      'width': '30px',
+      'height': '30px',
+      'borderRadius': '15px',
+      'display': 'flex',
+      'justifyContent': 'center',
+      'alignItems': 'center',
+      'color': 'white',
+      'backgroundColor': '#222',
+      'transform': 'scale(0.5)',
+      'transition': '0.3s ease-out',
+      ':hover': {
+        transform: 'scale(1.5)',
+        backgroundColor: theme.palette.chrome,
+      },
+      ':hover .glyph-hover': {
+        opacity: 1,
+      },
+    };
+
+    monitorResizeGlyph = {
       display: 'flex',
+      justifyContent: 'center',
       alignItems: 'center',
-      padding: '0px 10px',
-      backgroundColor: theme.palette.footerTextBackground,
+      opacity: 0,
     };
   }
 
@@ -72,6 +95,49 @@ export default function styles(theme) {
     monitorSajex = {
       width: '10px',
     };
+
+    monitorResizeButton = {
+      'position': 'absolute',
+      'left': '-10px',
+      'top': '-10px',
+      'width': '30px',
+      'height': '30px',
+      'borderRadius': '30px',
+      'borderTop': '3px solid transparent',
+      'borderLeft': '3px solid transparent',
+      'borderBottom': '3px solid transparent',
+      'borderRight': '3px solid transparent',
+      'display': 'flex',
+      'justifyContent': 'center',
+      'alignItems': 'center',
+      'color': '#12a279',
+      'boxShadow': '0px 0px 0px 0px transparent',
+      'transition': theme.transitions.retroCloseTransition,
+      'transitionTimingFunction': theme.transitions.retroCloseFunction,
+      ':hover': {
+        transform: 'scale(1.5)',
+        borderTop: '3px solid #ccc',
+        borderLeft: '3px solid #ccc',
+        borderBottom: '3px solid #888',
+        borderRight: '3px solid #888',
+        backgroundColor: '#111',
+        boxShadow: '5px 5px 15px 5px black',
+        transition: theme.transitions.retroOpenTransition,
+        transitionTimingFunction: theme.transitions.retroOpenFunction,
+      },
+      ':hover .glyph-hover': {
+        opacity: 1,
+        transform: 'rotate(180deg)',
+      },
+    };
+
+    monitorResizeGlyph = {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      opacity: 0,
+      transition: '0.3s ease-out',
+    };
   }
 
   /******************************************************************************/
@@ -81,7 +147,8 @@ export default function styles(theme) {
     monitorShowed,
     monitorHidden,
     monitorSajex,
-    monitorSlider,
+    monitorResizeButton,
+    monitorResizeGlyph,
   };
 }
 

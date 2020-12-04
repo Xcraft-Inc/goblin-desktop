@@ -3,13 +3,12 @@ import Widget from 'goblin-laboratory/widgets/widget';
 const T = require('goblin-nabu');
 import * as styles from './styles';
 import Button from 'goblin-gadgets/widgets/button/widget';
-import Label from 'goblin-gadgets/widgets/label/widget';
 import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
-import Slider from 'goblin-gadgets/widgets/slider/widget';
 import SamplesMonitor from 'goblin-gadgets/widgets/samples-monitor/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import RetroIlluminatedButton from 'goblin-gadgets/widgets/retro-illuminated-button/widget';
 import {ColorManipulator} from 'goblin-theme';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Unit} from 'goblin-theme';
 const px = Unit.toPx;
 
@@ -25,12 +24,15 @@ class DesktopMonitors extends Widget {
 
     this.state = {
       showMonitor: false,
-      monitorHeight: 450,
+      monitorSize: {width: 600, height: 450},
       monitorAging: 'old',
       doRenderMonitor: false,
     };
 
     this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
+    this.onDragDown = this.onDragDown.bind(this);
+    this.onDragMove = this.onDragMove.bind(this);
+    this.onDragUp = this.onDragUp.bind(this);
   }
 
   //#region get/set
@@ -43,12 +45,12 @@ class DesktopMonitors extends Widget {
     });
   }
 
-  get monitorHeight() {
-    return this.state.monitorHeight;
+  get monitorSize() {
+    return this.state.monitorSize;
   }
-  set monitorHeight(value) {
+  set monitorSize(value) {
     this.setState({
-      monitorHeight: value,
+      monitorSize: value,
     });
   }
 
@@ -89,7 +91,53 @@ class DesktopMonitors extends Widget {
     this.monitorAging = aging;
   }
 
+  onDragDown(e) {
+    e.target.setPointerCapture(e.pointerId);
+
+    this.isDragging = true;
+    this.initialPositionX = e.clientX;
+    this.initialPositionY = e.clientY;
+    this.initialWidth = this.monitorSize.width;
+    this.initialHeight = this.monitorSize.height;
+  }
+
+  onDragMove(e) {
+    if (this.isDragging) {
+      const deltaX = this.initialPositionX - e.clientX;
+      const deltaY = this.initialPositionY - e.clientY;
+      const width = Math.max(this.initialWidth + deltaX, 400);
+      const height = Math.max(this.initialHeight + deltaY, 300);
+      this.monitorSize = {width, height};
+    }
+  }
+
+  onDragUp(e) {
+    this.isDragging = false;
+    e.target.releasePointerCapture(e.pointerId);
+  }
+
   /******************************************************************************/
+
+  renderResizeButton() {
+    if (!this.showMonitor) {
+      return null;
+    }
+
+    return (
+      <div
+        className={this.styles.classNames.monitorResizeButton}
+        onPointerDown={this.onDragDown}
+        onPointerMove={this.onDragMove}
+        onPointerUp={this.onDragUp}
+      >
+        <div
+          className={`glyph-hover ${this.styles.classNames.monitorResizeGlyph}`}
+        >
+          <FontAwesomeIcon icon={[`fas`, 'arrows-alt']} />
+        </div>
+      </div>
+    );
+  }
 
   renderMonitor() {
     const showed = this.showMonitor;
@@ -99,7 +147,7 @@ class DesktopMonitors extends Widget {
 
     const style = {};
     if (!showed) {
-      style.bottom = px(-this.monitorHeight / 0.9);
+      style.bottom = px(-this.monitorSize.height / 0.9);
     }
 
     return (
@@ -112,37 +160,15 @@ class DesktopMonitors extends Widget {
           id={this.props.id}
           showed={showed}
           channels={this.props.channels}
-          width={px(this.monitorHeight / 0.75)}
-          height={px(this.monitorHeight)}
+          width={px(this.monitorSize.width)}
+          height={px(this.monitorSize.height)}
           aging={this.monitorAging}
           onOff={this.onMonitor}
           onChangeAging={this.onChangeAging}
         />
+        {this.renderResizeButton()}
       </div>
     );
-  }
-
-  renderSlider() {
-    if (this.showMonitor) {
-      return (
-        <Slider
-          direction="horizontal"
-          cabSize="large"
-          gliderSize="large"
-          displayValue="never"
-          barColor={this.context.theme.palette.chrome}
-          width="120px"
-          changeMode="throttled"
-          throttleDelay={200}
-          min={300}
-          max={1200}
-          value={this.monitorHeight}
-          onChange={(h) => (this.monitorHeight = h)}
-        />
-      );
-    } else {
-      return <Label width="120px" />;
-    }
   }
 
   renderButton() {
@@ -178,8 +204,6 @@ class DesktopMonitors extends Widget {
             color="white"
             onClick={this.onMonitor}
           />
-          <div className={this.styles.classNames.monitorSajex} />
-          {this.renderSlider()}
         </RetroPanel>
       );
     } else {
@@ -201,9 +225,6 @@ class DesktopMonitors extends Widget {
             text={T('Activité')}
             onClick={this.onMonitor}
           />
-          <div className={this.styles.classNames.monitorSlider}>
-            {this.renderSlider()}
-          </div>
         </React.Fragment>
       );
     }
