@@ -3,11 +3,15 @@ import Widget from 'goblin-laboratory/widgets/widget';
 const T = require('goblin-nabu');
 import * as styles from './styles';
 import Button from 'goblin-gadgets/widgets/button/widget';
+import Label from 'goblin-gadgets/widgets/label/widget';
 import Checkbox from 'goblin-gadgets/widgets/checkbox/widget';
+import Slider from 'goblin-gadgets/widgets/slider/widget';
 import SamplesMonitor from 'goblin-gadgets/widgets/samples-monitor/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import RetroIlluminatedButton from 'goblin-gadgets/widgets/retro-illuminated-button/widget';
 import {ColorManipulator} from 'goblin-theme';
+import {Unit} from 'goblin-theme';
+const px = Unit.toPx;
 
 /******************************************************************************/
 
@@ -21,6 +25,7 @@ class DesktopMonitors extends Widget {
 
     this.state = {
       showMonitor: false,
+      monitorHeight: 450,
       monitorAging: 'old',
       doRenderMonitor: false,
     };
@@ -32,17 +37,24 @@ class DesktopMonitors extends Widget {
   get showMonitor() {
     return this.state.showMonitor;
   }
-
   set showMonitor(value) {
     this.setState({
       showMonitor: value,
     });
   }
 
+  get monitorHeight() {
+    return this.state.monitorHeight;
+  }
+  set monitorHeight(value) {
+    this.setState({
+      monitorHeight: value,
+    });
+  }
+
   get monitorAging() {
     return this.state.monitorAging;
   }
-
   set monitorAging(value) {
     this.setState({
       monitorAging: value,
@@ -52,7 +64,6 @@ class DesktopMonitors extends Widget {
   get doRenderMonitor() {
     return this.state.doRenderMonitor;
   }
-
   set doRenderMonitor(value) {
     this.setState({
       doRenderMonitor: value,
@@ -82,24 +93,56 @@ class DesktopMonitors extends Widget {
 
   renderMonitor() {
     const showed = this.showMonitor;
-    const style = showed
+    const styleName = showed
       ? this.styles.classNames.monitorShowed
       : this.styles.classNames.monitorHidden;
 
+    const style = {};
+    if (!showed) {
+      style.bottom = px(-this.monitorHeight / 0.9);
+    }
+
     return (
-      <div className={style} onTransitionEnd={this.handleTransitionEnd}>
+      <div
+        className={styleName}
+        style={style}
+        onTransitionEnd={this.handleTransitionEnd}
+      >
         <SamplesMonitor
           id={this.props.id}
           showed={showed}
           channels={this.props.channels}
-          width="600px"
-          height="450px"
+          width={px(this.monitorHeight / 0.75)}
+          height={px(this.monitorHeight)}
           aging={this.monitorAging}
           onOff={this.onMonitor}
           onChangeAging={this.onChangeAging}
         />
       </div>
     );
+  }
+
+  renderSlider() {
+    if (this.showMonitor) {
+      return (
+        <Slider
+          direction="horizontal"
+          cabSize="large"
+          gliderSize="large"
+          displayValue="never"
+          barColor={this.context.theme.palette.chrome}
+          width="120px"
+          changeMode="throttled"
+          throttleDelay={200}
+          min={300}
+          max={1200}
+          value={this.monitorHeight}
+          onChange={(h) => (this.monitorHeight = h)}
+        />
+      );
+    } else {
+      return <Label width="120px" />;
+    }
   }
 
   renderButton() {
@@ -135,6 +178,8 @@ class DesktopMonitors extends Widget {
             color="white"
             onClick={this.onMonitor}
           />
+          <div className={this.styles.classNames.monitorSajex} />
+          {this.renderSlider()}
         </RetroPanel>
       );
     } else {
@@ -146,15 +191,20 @@ class DesktopMonitors extends Widget {
       }
 
       return (
-        <Button
-          kind="button-footer"
-          width="140px"
-          justify="start"
-          glyph={glyph}
-          glyphColor={glyphColor}
-          text={T('Activité')}
-          onClick={this.onMonitor}
-        />
+        <React.Fragment>
+          <Button
+            kind="button-footer"
+            width="140px"
+            justify="start"
+            glyph={glyph}
+            glyphColor={glyphColor}
+            text={T('Activité')}
+            onClick={this.onMonitor}
+          />
+          <div className={this.styles.classNames.monitorSlider}>
+            {this.renderSlider()}
+          </div>
+        </React.Fragment>
       );
     }
   }

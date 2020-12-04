@@ -97,12 +97,15 @@ class Taskbar extends Widget {
       return null;
     }
 
-    let navigatingStyle = {};
+    const navigatingStyle = {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+    };
     if (this.props.working) {
-      navigatingStyle = {
-        pointerEvents: 'none',
-      };
+      navigatingStyle.pointerEvents = 'none';
     }
+
     return (
       <div style={navigatingStyle}>
         <Container kind="task-bar">

@@ -19,6 +19,7 @@ export default function styles(theme) {
   let monitorShowed;
   let monitorHidden;
   let monitorSajex;
+  let monitorSlider;
 
   //---------\
   //  MODERN  >
@@ -36,6 +37,14 @@ export default function styles(theme) {
     monitorHidden = {
       ...monitorShowed,
       bottom: '-500px',
+    };
+
+    monitorSlider = {
+      height: theme.shapes.footerHeight,
+      display: 'flex',
+      alignItems: 'center',
+      padding: '0px 10px',
+      backgroundColor: theme.palette.footerTextBackground,
     };
   }
 
@@ -72,6 +81,7 @@ export default function styles(theme) {
     monitorShowed,
     monitorHidden,
     monitorSajex,
+    monitorSlider,
   };
 }
 
