@@ -1,4 +1,4 @@
-import {Unit} from 'goblin-theme';
+import {ColorManipulator, Unit} from 'goblin-theme';
 
 /******************************************************************************/
 
@@ -51,7 +51,7 @@ export default function styles(theme) {
       'justifyContent': 'center',
       'alignItems': 'center',
       'color': 'white',
-      'backgroundColor': '#222',
+      'backgroundColor': ColorManipulator.emphasize(theme.palette.chrome, 0.3),
       'transform': 'scale(0.5)',
       'transition': '0.3s ease-out',
       ':hover': {
