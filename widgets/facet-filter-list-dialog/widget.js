@@ -6,7 +6,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import TextFieldNC from 'goblin-gadgets/widgets/text-field-nc/widget';
 import FacetCheckbox from '../facet-checkbox/widget.js';
 import FacetFilterListDialogFooter from '../facet-filter-list-dialog-footer/widget.js';
-import * as FacetHelpers from '../helpers/facet-helpers';
+import FacetHelpers from '../helpers/facet-helpers';
 import {Unit} from 'goblin-theme';
 import T from 't';
 const px = Unit.toPx;

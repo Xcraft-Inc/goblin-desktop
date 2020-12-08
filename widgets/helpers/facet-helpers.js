@@ -91,11 +91,4 @@ function isRange(type) {
 
 //-----------------------------------------------------------------------------
 
-module.exports = {
-  getType,
-  format,
-  preprocessFilter,
-  match,
-  extractTab,
-  isRange,
-};
+export default {getType, format, preprocessFilter, match, extractTab, isRange};
