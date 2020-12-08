@@ -141,7 +141,7 @@ class Hinter extends Widget {
     this.addOutsideClickListener();
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     MouseTrap.bind('up', this.onKeyUp, 'keydown');
     MouseTrap.bind('down', this.onKeyDown, 'keydown');
     MouseTrap.bind('return', this.validate);

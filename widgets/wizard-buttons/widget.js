@@ -16,7 +16,7 @@ class WizardButtons extends Widget {
     this.handleKeyEscape = this.handleKeyEscape.bind(this);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     KeyTrap.bind('Enter', this.handleKeyEnter);
     KeyTrap.bind('Escape', this.handleKeyEscape);
   }

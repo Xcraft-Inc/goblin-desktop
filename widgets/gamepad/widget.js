@@ -7,7 +7,7 @@ class GamePad extends Widget {
     super(...arguments);
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     if (this.props.gamepad) {
       this.doFor(this.props.id, 'gamepad-changed', {
         gamepad: this.props.gamepad,

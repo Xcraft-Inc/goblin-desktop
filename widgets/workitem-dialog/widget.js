@@ -26,8 +26,8 @@ class WorkitemDialog extends Widget {
   }
 
   /*
-  ToDo : why initialize is called in render? 
-  componentWillMount () {
+  ToDo : why initialize is called in render?
+  UNSAFE_componentWillMount () {
     this.initializeEntity ();
   }
   */
