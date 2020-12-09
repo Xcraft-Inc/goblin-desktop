@@ -161,6 +161,11 @@ class Search extends Widget {
   filter(value) {
     this.dispatchTo(
       this.props.id,
+      {type: 'select-row', rowId: null, entityId: null},
+      'entity-view'
+    );
+    this.dispatchTo(
+      this.props.id,
       {type: 'CHANGE', path: 'value', newValue: value},
       'frontend-form'
     );
