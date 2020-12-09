@@ -1,19 +1,9 @@
 {
   "presets": ["@babel/preset-react"],
-  "env": {
-    "development": {
-      "plugins": [
-        "@babel/proposal-class-properties",
-        "@babel/proposal-object-rest-spread",
-        "@babel/proposal-function-bind"
-      ]
-    },
-    "production": {
-      "plugins": [
-        "@babel/proposal-class-properties",
-        "@babel/proposal-object-rest-spread",
-        "@babel/proposal-function-bind"
-      ]
-    }
-  }
+  "plugins": [
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread",
+    "@babel/proposal-function-bind",
+    "@babel/transform-modules-commonjs"
+  ]
 }
