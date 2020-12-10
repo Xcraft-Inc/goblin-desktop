@@ -452,6 +452,7 @@ class Workitem extends Form {
         kind="view"
         width={this.props.width || '700px'}
         horizontalSpacing="large"
+        busy={this.props.loading}
       >
         <Container kind="pane-header">
           <Title kind="pane-header" singleLine={true} wrap="no" />
@@ -756,17 +757,20 @@ class Workitem extends Form {
 
 /******************************************************************************/
 export default Widget.connect((state, props) => {
+  const loading = state.get(`backend.${props.id}.loading`, true);
   if (props.entityId) {
     return {
       status: state.get(`backend.${props.entityId}.meta.status`),
       businessStatus: state.get(`backend.${props.entityId}.status`),
       entityType: state.get(`backend.${props.entityId}.meta.type`),
+      loading,
     };
   } else {
     return {
       status: null,
       businessStatus: null,
       entityType: null,
+      loading,
     };
   }
 })(Workitem);
