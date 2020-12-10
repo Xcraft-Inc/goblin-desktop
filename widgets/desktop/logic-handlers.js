@@ -228,4 +228,9 @@ module.exports = {
       action.get('workitemId')
     );
   },
+
+  'set-note': (state, action) => {
+    const content = action.get('content');
+    return state.set(`note`, content);
+  },
 };

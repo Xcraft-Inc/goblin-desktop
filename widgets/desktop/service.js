@@ -701,6 +701,14 @@ Goblin.registerQuest(goblinName, 'open-entity-wizard', function* (quest) {
 
 /******************************************************************************/
 
+/******************************************************************************/
+
+Goblin.registerQuest(goblinName, 'save-note', function (quest, content) {
+  quest.dispatch('set-note', {content});
+});
+
+/******************************************************************************/
+
 Goblin.registerQuest(goblinName, 'delete', function (quest) {
   quest.log.info('Deleting desktop...');
 });
