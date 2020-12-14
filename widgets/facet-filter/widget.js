@@ -3,7 +3,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import FacetFilterListDialog from 'goblin-desktop/widgets/facet-filter-list-dialog/widget';
 import FacetFilterRangeDialog from 'goblin-desktop/widgets/facet-filter-range-dialog/widget';
 import FacetFilterButton from 'goblin-desktop/widgets/facet-filter-button/widget';
-import * as FacetHelpers from '../helpers/facet-helpers';
+import FacetHelpers from '../helpers/facet-helpers';
 
 /******************************************************************************/
 

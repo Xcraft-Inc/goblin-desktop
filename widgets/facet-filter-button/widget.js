@@ -4,7 +4,7 @@ import Gauge from 'goblin-gadgets/widgets/gauge/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import T from 't';
 import TT from 'goblin-nabu/widgets/t/widget';
-import * as FacetHelpers from '../helpers/facet-helpers';
+import FacetHelpers from '../helpers/facet-helpers';
 import {date as DateConverters} from 'xcraft-core-converters';
 
 /******************************************************************************/
