@@ -145,7 +145,6 @@ class Hinter extends Widget {
     MouseTrap.bind('up', this.onKeyUp, 'keydown');
     MouseTrap.bind('down', this.onKeyDown, 'keydown');
     MouseTrap.bind('return', this.validate);
-    MouseTrap.bind('tab', this.validate);
   }
 
   componentWillUnmount() {
@@ -153,7 +152,6 @@ class Hinter extends Widget {
     MouseTrap.unbind('up');
     MouseTrap.unbind('down');
     MouseTrap.unbind('return');
-    MouseTrap.unbind('tab');
     this.removeOutsideClickListener();
   }
 
@@ -237,7 +235,6 @@ class Hinter extends Widget {
       text: value,
       model,
     });
-    this.do('hide');
   }
 
   setLoadingForDetails() {

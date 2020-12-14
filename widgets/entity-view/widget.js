@@ -58,7 +58,6 @@ class EntityView extends Widget {
     MouseTrap.bind('up', this.onKeyUp, 'keydown');
     MouseTrap.bind('down', this.onKeyDown, 'keydown');
     MouseTrap.bind('return', this.onKeyValidate);
-    MouseTrap.bind('tab', this.onKeyValidate);
   }
 
   componentWillUnmount() {
@@ -66,7 +65,6 @@ class EntityView extends Widget {
     MouseTrap.unbind('up');
     MouseTrap.unbind('down');
     MouseTrap.unbind('return');
-    MouseTrap.unbind('tab');
   }
 
   get firstColumnWidth() {
