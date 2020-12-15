@@ -101,9 +101,6 @@ class DesktopNotebook extends Widget {
 
   onMonitor() {
     this.showMonitor = !this.showMonitor;
-    this.doFor(this.props.desktopId, 'toggle-monitor-feed', {
-      isOn: this.showMonitor,
-    });
   }
 
   onDragDown(e) {
