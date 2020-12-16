@@ -3,7 +3,7 @@
 
 const Goblin = require('xcraft-core-goblin');
 const goblinName = 'taskbar';
-const uuidV4 = require('uuid/v4');
+const {v4: uuidV4} = require('uuid');
 const confConfig = require('xcraft-core-etc')().load('goblin-configurator');
 
 // Define initial logic values

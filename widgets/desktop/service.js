@@ -2,7 +2,7 @@
 
 const path = require('path');
 const Goblin = require('xcraft-core-goblin');
-const uuidV4 = require('uuid/v4');
+const {v4: uuidV4} = require('uuid');
 const watt = require('gigawatts');
 const goblinName = path.basename(module.parent.filename, '.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
