@@ -254,9 +254,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
   }
 
   if (!workitem.id) {
-    workitem.id = workitem.payload.entityId
-      ? workitem.payload.entityId
-      : quest.uuidV4();
+    workitem.id = quest.uuidV4();
   }
 
   if (!workitem.view) {
