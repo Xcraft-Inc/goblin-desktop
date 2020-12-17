@@ -58,6 +58,9 @@ export default Widget.connect((state, props) => {
   const workitem = state.get(
     `backend.${props.desktopId}.workitems.${props.id}`
   );
+  if (!workitem) {
+    return {skipped: true};
+  }
   const isTab = workitem.get('kind') === 'tab';
   if (!isTab) {
     return {skipped: true};
