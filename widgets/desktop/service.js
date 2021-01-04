@@ -209,6 +209,7 @@ const doAdd = watt(function* (
     context: workitem.contextId,
     view: workitem.view,
     name: workitem.name,
+    description: workitem.description,
     glyph: workitem.icon,
     closable: true,
   });

@@ -170,6 +170,7 @@ module.exports = {
         context: workcontext,
         view: action.get('view'),
         name: action.get('name'),
+        description: action.get('description'),
         glyph: action.get('glyph'),
         closable: action.get('closable'),
       })

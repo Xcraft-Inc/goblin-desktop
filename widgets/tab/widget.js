@@ -71,7 +71,7 @@ export default Widget.connect((state, props) => {
   );
 
   const isActive = workitem.get('id') === currentTab;
-  let tabText = workitem.get('name');
+  let tabText = workitem.get('description') || workitem.get('name');
   const entityId = workitem.get('entityId');
   if (entityId) {
     const entity = state.get(`backend.${entityId}`);
