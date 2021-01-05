@@ -4,6 +4,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Form from 'goblin-laboratory/widgets/form';
 import Container from 'goblin-gadgets/widgets/container/widget';
+import Separator from 'goblin-gadgets/widgets/separator/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import DatagridCell from '../datagrid-cell/widget';
 import T from 't';
@@ -104,6 +105,7 @@ class Header extends Widget {
     return (
       <Container kind="row" width={column.get('width')}>
         {this.renderComponent()}
+        <Separator kind="space" width="3px" />
         <CellUI
           key={`${id}_${index}`}
           id={id}
@@ -136,7 +138,7 @@ class Header extends Widget {
           id={datagridId}
           index={index}
           column={column}
-          margin="0px"
+          margin="0"
           cellUI={this.renderCustomSortCellUI}
         />
       );
@@ -146,7 +148,7 @@ class Header extends Widget {
           id={datagridId}
           index={index}
           column={column}
-          margin="0px"
+          margin="0"
           cellUI={this.renderSortableCellUI}
         />
       );
@@ -246,7 +248,7 @@ class DatagridHeaders extends Form {
     const DatagridHinter = Hinter.connectTo(datagridId);
 
     return (
-      <div>
+      <Container kind="pane">
         <Form {...self.formConfig} className={this.props.className}>
           <Container kind="row">
             {Array.apply(null, {length: columnsNo}).map((_, i) => {
@@ -254,6 +256,7 @@ class DatagridHeaders extends Form {
             })}
           </Container>
         </Form>
+        <Separator kind="space" height="5px" />
         <DatagridHinter
           component={this}
           entityUI={entityUI}
@@ -261,7 +264,7 @@ class DatagridHeaders extends Form {
           columnsNo={columnsNo}
           className={this.props.className}
         />
-      </div>
+      </Container>
     );
   }
 }

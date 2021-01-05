@@ -69,7 +69,7 @@ class DatagridEntity extends Form {
 
     return (
       <Form {...this.formConfig} className={this.props.className}>
-        <Container kind="row">
+        <Container kind="row" maxHeight={`${this.props.height}px`}>
           {Array.apply(null, {length: this.props.columnsNo}).map((_, i) => {
             return this.renderCell(i);
           })}

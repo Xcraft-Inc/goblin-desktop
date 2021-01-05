@@ -111,7 +111,6 @@ class Datagrid extends Widget {
         entityUI={this.entityUI}
         columnsNo={columnsNo}
         datagridId={this.props.id}
-        className={this.styles.classNames.entity}
       />
     );
   }

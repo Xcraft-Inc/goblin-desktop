@@ -3,7 +3,6 @@
 export default function styles(theme) {
   const entity = {
     'flexGrow': 1,
-    //marginRight: '20px',
     'width': '100%',
     ':hover': {
       backgroundColor: theme.palette.tableHoverBackground,

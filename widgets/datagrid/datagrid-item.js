@@ -47,6 +47,7 @@ class DatagridItem extends Widget {
         index={this.props.index}
         listId={this.props.listId}
         itemId={this.props.itemId}
+        height={this.props.height}
         onDrillDown={this.props.onDrillDown}
       />
     );
@@ -54,7 +55,11 @@ class DatagridItem extends Widget {
 
   render() {
     return (
-      <Container height={`${this.props.height}px`} grow="1">
+      <Container
+        minHeight={`${this.props.height}px`}
+        maxHeight={`${this.props.height}px`}
+        kind="content"
+      >
         {this.renderItem()}
       </Container>
     );
