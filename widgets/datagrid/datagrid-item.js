@@ -54,10 +54,16 @@ class DatagridItem extends Widget {
   }
 
   render() {
+    let {height} = this.props;
+
+    if (height < 40) {
+      height = 40;
+    }
+
     return (
       <Container
-        minHeight={`${this.props.height}px`}
-        maxHeight={`${this.props.height}px`}
+        minHeight={`${height}px`}
+        maxHeight={`${height}px`}
         kind="content"
       >
         {this.renderItem()}
