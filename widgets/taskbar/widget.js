@@ -40,7 +40,7 @@ class Taskbar extends Widget {
       context,
     });
     if (workitem.kind === 'tab') {
-      SFX.tududu.play();
+      SFX.tuludu.play();
     }
     if (workitem.kind === 'dialog') {
       SFX.zim.play();

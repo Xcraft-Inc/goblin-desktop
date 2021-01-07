@@ -188,11 +188,6 @@ const DesktopTopbar = Widget.connect((state) => {
   const userSession = Widget.getUserSession(state);
   const clientSessionId = userSession.get('id');
   const prototypeMode = userSession.get('prototypeMode');
-  if (prototypeMode) {
-    window.mainGain.connect(window.mainAudioCtx.destination);
-  } else {
-    window.mainGain.disconnect();
-  }
   return {clientSessionId, prototypeMode};
 })(DesktopTopbarNC);
 

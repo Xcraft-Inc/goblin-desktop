@@ -44,6 +44,14 @@ class DesktopTaskbar extends Widget {
 }
 export default Widget.connect((state, props) => {
   const working = state.get(`backend.${props.id}.working`);
+  const content = state.get(`backend.${props.id}.note`);
+  const userSession = Widget.getUserSession(state);
+  const prototypeMode = userSession.get('prototypeMode');
+  if (prototypeMode && content === 'sfx=on') {
+    window.mainGain.connect(window.mainAudioCtx.destination);
+  } else {
+    window.mainGain.disconnect();
+  }
   return {working};
 })(DesktopTaskbar);
 /******************************************************************************/
