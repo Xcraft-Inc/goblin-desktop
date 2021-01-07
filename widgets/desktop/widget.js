@@ -12,7 +12,7 @@ import DesktopFooter from 'goblin-desktop/widgets/desktop-footer/widget.js';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget.js';
 import {ColorManipulator} from 'goblin-theme';
 import NavigatingLayer from '../navigating-layer/widget.js';
-
+import SFX from '../audio/sfx.js';
 /******************************************************************************/
 class Desktop extends Widget {
   constructor() {
@@ -35,6 +35,7 @@ class Desktop extends Widget {
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
     MouseTrap.bind('ctrl+o', this.openWorkitemWizard);
+    SFX.intro.play();
   }
 
   componentWillUnmount() {

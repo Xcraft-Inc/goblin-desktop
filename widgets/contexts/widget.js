@@ -3,6 +3,7 @@ import React from 'react';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
+import SFX from '../audio/sfx.js';
 class ContextButtonNC extends Widget {
   constructor() {
     super(...arguments);
@@ -11,6 +12,7 @@ class ContextButtonNC extends Widget {
 
   handleClick() {
     this.props.goToContext(this.props.context.get('contextId'));
+    SFX.bop.play();
   }
 
   render() {

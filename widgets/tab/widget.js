@@ -2,6 +2,7 @@ import T from 't';
 import React from 'react';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Widget from 'goblin-laboratory/widgets/widget';
+import SFX from '../audio/sfx.js';
 
 class Tab extends Widget {
   constructor() {
@@ -16,6 +17,7 @@ class Tab extends Widget {
       id: this.props.desktopId,
       workitemId,
     });
+    SFX.blip.play();
   }
 
   close() {
@@ -24,6 +26,7 @@ class Tab extends Widget {
       id: this.props.desktopId,
       workitemId,
     });
+    SFX.blop.play();
   }
 
   render() {

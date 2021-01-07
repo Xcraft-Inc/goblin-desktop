@@ -6,6 +6,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
+import SFX from '../audio/sfx.js';
 
 const tasksImporter = importer('tasks');
 class Taskbar extends Widget {
@@ -38,6 +39,12 @@ class Taskbar extends Widget {
       workitem,
       context,
     });
+    if (workitem.kind === 'tab') {
+      SFX.tududu.play();
+    }
+    if (workitem.kind === 'dialog') {
+      SFX.zim.play();
+    }
   }
 
   renderButton(context, task, index) {
