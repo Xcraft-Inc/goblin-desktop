@@ -15,6 +15,11 @@ export default function styles(theme) {
 
   /******************************************************************************/
 
+  const backgroundColor = ColorManipulator.emphasize(
+    theme.palette.footerBackground,
+    0.2
+  );
+
   const simpleButton = {
     'width': theme.shapes.footerHeight,
     'height': theme.shapes.footerHeight,
@@ -26,10 +31,10 @@ export default function styles(theme) {
     'backgroundColor': theme.palette.footerBackground,
     'transition': 'all 0.3s ease',
     ':hover': {
-      backgroundColor: ColorManipulator.emphasize(
-        theme.palette.footerBackground,
-        0.2
-      ),
+      backgroundColor: backgroundColor,
+    },
+    ':active': {
+      backgroundColor: ColorManipulator.darken(backgroundColor, 0.1),
     },
   };
 
