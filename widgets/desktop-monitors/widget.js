@@ -215,7 +215,7 @@ class DesktopMonitors extends Widget {
       }
 
       return (
-        <React.Fragment>
+        <>
           <Button
             kind="button-footer"
             width="140px"
@@ -225,7 +225,7 @@ class DesktopMonitors extends Widget {
             text={T('Activité')}
             onClick={this.onMonitor}
           />
-        </React.Fragment>
+        </>
       );
     }
   }

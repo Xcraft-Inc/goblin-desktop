@@ -78,10 +78,10 @@ class StatusFilter extends Widget {
     }
 
     return (
-      <React.Fragment>
+      <>
         {this.renderFacets()}
         <FacetFilterAdd id={this.props.id} type={this.props.type} />
-      </React.Fragment>
+      </>
     );
   }
 }

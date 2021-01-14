@@ -52,7 +52,7 @@ class HinterNewButton extends Widget {
       return null;
     }
     return (
-      <React.Fragment>
+      <>
         {onNew ? (
           <Button
             kind="action"
@@ -63,7 +63,7 @@ class HinterNewButton extends Widget {
             onClick={this.onNew}
           />
         ) : null}
-      </React.Fragment>
+      </>
     );
   }
 }

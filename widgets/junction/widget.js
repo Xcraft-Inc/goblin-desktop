@@ -44,9 +44,7 @@ export default class Junction extends Widget {
 
   render() {
     return (
-      <React.Fragment>
-        {svg.renderElements(this.styles.classNames.junction, this.elements)}
-      </React.Fragment>
+      <>{svg.renderElements(this.styles.classNames.junction, this.elements)}</>
     );
   }
 }

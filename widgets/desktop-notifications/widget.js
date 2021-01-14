@@ -45,7 +45,7 @@ class DesktopNotifications extends Widget {
     }
 
     return (
-      <React.Fragment>
+      <>
         <RetroScrew
           backgroundBrigtness="dark"
           top="15px"
@@ -70,7 +70,7 @@ class DesktopNotifications extends Widget {
           right="15px"
           angle="-10deg"
         />
-      </React.Fragment>
+      </>
     );
   }
 

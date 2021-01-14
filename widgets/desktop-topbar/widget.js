@@ -104,7 +104,7 @@ class DesktopTopbarNC extends Widget {
 
   renderUserPart() {
     return (
-      <React.Fragment>
+      <>
         <UserInfo user={this.props.username} desktopId={this.props.id} />
         <TeamSelector
           kind="main-tab-right"
@@ -136,7 +136,7 @@ class DesktopTopbarNC extends Widget {
           onClick={this.onTogglePrototypeMode}
         />
         <DesktopScale id={this.props.id} />
-      </React.Fragment>
+      </>
     );
   }
 

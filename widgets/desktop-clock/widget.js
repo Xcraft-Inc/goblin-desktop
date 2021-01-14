@@ -226,7 +226,7 @@ class DesktopClock extends Widget {
   renderButtonModern() {
     if (this.showClock) {
       return (
-        <React.Fragment>
+        <>
           <div
             className={this.styles.classNames.simpleButton}
             onClick={this.toggleClock}
@@ -246,7 +246,7 @@ class DesktopClock extends Widget {
           >
             <FontAwesomeIcon icon={['far', 'clock']} />
           </div>
-        </React.Fragment>
+        </>
       );
     } else {
       return (

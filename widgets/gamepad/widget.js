@@ -44,7 +44,7 @@ class GamePads extends Widget {
   render() {
     const gamepads = [].slice.call(this.state.gamepads);
     return (
-      <React.Fragment>
+      <>
         {gamepads.map((g, i) => {
           if (!g) {
             return null;
@@ -68,7 +68,7 @@ class GamePads extends Widget {
             />
           );
         })}
-      </React.Fragment>
+      </>
     );
   }
 }

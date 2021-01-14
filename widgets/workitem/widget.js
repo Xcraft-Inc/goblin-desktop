@@ -747,10 +747,10 @@ class Workitem extends Form {
     }
 
     return (
-      <React.Fragment>
+      <>
         {this.renderWorkitem()}
         {this.renderDeleteDialog()}
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -784,6 +784,6 @@ class FormComponent extends React.PureComponent {
 
 class FormFragmentComponent extends React.PureComponent {
   render() {
-    return <React.Fragment>{this.props.children}</React.Fragment>;
+    return <>{this.props.children}</>;
   }
 }

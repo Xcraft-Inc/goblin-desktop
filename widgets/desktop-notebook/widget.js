@@ -23,14 +23,14 @@ class Editor extends Widget {
       caretColor: 'green',
     };
     return (
-      <React.Fragment>
+      <>
         <textarea
           autoFocus
           defaultValue={this.props.content}
           style={contentStyle}
           onChange={this.props.onChange}
         ></textarea>
-      </React.Fragment>
+      </>
     );
   }
 }
@@ -221,7 +221,7 @@ class DesktopNotebook extends Widget {
       let glyphColor = this.context.theme.palette.buttonDisableText;
 
       return (
-        <React.Fragment>
+        <>
           <Button
             kind="button-footer"
             width="140px"
@@ -231,7 +231,7 @@ class DesktopNotebook extends Widget {
             text={T('Notes')}
             onClick={this.onMonitor}
           />
-        </React.Fragment>
+        </>
       );
     }
   }
