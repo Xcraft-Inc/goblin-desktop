@@ -21,7 +21,7 @@ class DesktopLatencyNC extends Widget {
     if (_latency < 100) {
       color = '#00ff00'; // green
     } else if (_latency < 200) {
-      color = '#00ffff'; // yellow
+      color = '#ffff00'; // yellow
     } else if (_latency < 500) {
       color = '#ff7f00'; // orange
     } else {
