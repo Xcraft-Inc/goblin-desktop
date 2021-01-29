@@ -8,7 +8,7 @@ import MainTabMenu from 'goblin-desktop/widgets/main-tab-menu/widget';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget';
 import DesktopThemesMenu from 'goblin-desktop/widgets/desktop-themes-menu/widget';
 import DesktopScale from 'goblin-desktop/widgets/desktop-scale/widget';
-import DesktopLatency from 'goblin-desktop/widgets/desktop-latency/widget';
+import DesktopJitter from 'goblin-desktop/widgets/desktop-jitter/widget';
 import {ColorManipulator} from 'goblin-theme';
 import Contexts from 'goblin-desktop/widgets/contexts/widget.js';
 
@@ -137,7 +137,7 @@ class DesktopTopbarNC extends Widget {
           onClick={this.onTogglePrototypeMode}
         />
         <DesktopScale id={this.props.id} />
-        <DesktopLatency id={this.props.id} />
+        <DesktopJitter id={this.props.id} />
       </>
     );
   }

@@ -8,7 +8,7 @@ import {ColorManipulator} from 'goblin-theme';
 
 /******************************************************************************/
 
-class DesktopLatencyNC extends Widget {
+class DesktopJitterNC extends Widget {
   constructor() {
     super(...arguments);
     this.styles = styles;
@@ -33,7 +33,7 @@ class DesktopLatencyNC extends Widget {
     this.showDialog = !this.showDialog;
   }
 
-  renderDialog(horde, latency, color) {
+  renderDialog(horde, jitter, color) {
     if (!this.showDialog) {
       return null;
     }
@@ -47,14 +47,14 @@ class DesktopLatencyNC extends Widget {
           glyphSize="150%"
         />
         <div className={this.styles.classNames.list}>
-          <Label fontWeight="bold" text={T('Latence')} />
+          <Label fontWeight="bold" text={T('Jitter')} />
           <Label
             text={T(
-              '{horde} : {latency, select, Infinity {inconnu} other {{latency} ms}}',
+              '{horde} : {jitter, select, Infinity {inconnu} other {{jitter} ms}}',
               '',
               {
                 horde,
-                latency,
+                jitter,
               }
             )}
           />
@@ -63,14 +63,14 @@ class DesktopLatencyNC extends Widget {
     );
   }
 
-  renderLatency(horde, latency, noLatency) {
+  renderJitter(horde, jitter, noJitter) {
     let color;
-    const _latency = noLatency ? Infinity : latency.get(0);
-    if (_latency < 100) {
+    const _jitter = noJitter ? Infinity : jitter.get(0);
+    if (_jitter < 100) {
       color = '#00ff00'; // green
-    } else if (_latency < 250) {
+    } else if (_jitter < 250) {
       color = '#ffff00'; // yellow
-    } else if (_latency < 500) {
+    } else if (_jitter < 500) {
       color = '#ff7f00'; // orange
     } else {
       color = '#ff0000'; // red
@@ -85,29 +85,29 @@ class DesktopLatencyNC extends Widget {
           glyphColor={color}
           onClick={() => this.onToggleDialog()}
         />
-        {this.renderDialog(horde, _latency, color)}
+        {this.renderDialog(horde, _jitter, color)}
       </React.Fragment>
     );
   }
 
   render() {
-    const {hordes, noLatency} = this.props;
+    const {hordes, noJitter} = this.props;
     if (!hordes) {
       return null;
     }
 
     return hordes
       .entrySeq()
-      .map(([horde, latency]) => this.renderLatency(horde, latency, noLatency));
+      .map(([horde, jitter]) => this.renderJitter(horde, jitter, noJitter));
   }
 }
 
 /******************************************************************************/
 
-const DesktopLatency = Widget.connect((state) => {
-  const hordes = state.get(`network.latency`);
-  const noLatency = state.get(`network.noLatency`);
-  return {hordes, noLatency};
-})(DesktopLatencyNC);
+const DesktopJitter = Widget.connect((state) => {
+  const hordes = state.get(`network.jitter`);
+  const noJitter = state.get(`network.noJitter`);
+  return {hordes, noJitter};
+})(DesktopJitterNC);
 
-export default DesktopLatency;
+export default DesktopJitter;
