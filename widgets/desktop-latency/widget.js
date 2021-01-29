@@ -33,7 +33,7 @@ class DesktopLatencyNC extends Widget {
         key={horde}
         kind="main-tab-right"
         glyph="solid/signal"
-        glyphColor={ColorManipulator.darken(color, 0.5)}
+        glyphColor={ColorManipulator.darken(color, 0.4)}
         tooltip={T('Latence avec le serveur {horde} : {latency} ms', '', {
           horde,
           latency: _latency,
