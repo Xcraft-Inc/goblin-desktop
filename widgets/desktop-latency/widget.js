@@ -15,9 +15,9 @@ class DesktopLatencyNC extends Widget {
 
   onChart(horde, latency) {}
 
-  renderLatency(horde, latency) {
+  renderLatency(horde, latency, noLatency) {
     let color;
-    const _latency = latency.get(0);
+    const _latency = noLatency ? Infinity : latency.get(0);
     if (_latency < 100) {
       color = '#00ff00'; // green
     } else if (_latency < 200) {
@@ -44,14 +44,14 @@ class DesktopLatencyNC extends Widget {
   }
 
   render() {
-    const {hordes} = this.props;
+    const {hordes, noLatency} = this.props;
     if (!hordes) {
       return null;
     }
 
     return hordes
       .entrySeq()
-      .map(([horde, latency]) => this.renderLatency(horde, latency));
+      .map(([horde, latency]) => this.renderLatency(horde, latency, noLatency));
   }
 }
 
@@ -59,7 +59,8 @@ class DesktopLatencyNC extends Widget {
 
 const DesktopLatency = Widget.connect((state) => {
   const hordes = state.get(`network.latency`);
-  return {hordes};
+  const noLatency = state.get(`network.noLatency`);
+  return {hordes, noLatency};
 })(DesktopLatencyNC);
 
 export default DesktopLatency;
