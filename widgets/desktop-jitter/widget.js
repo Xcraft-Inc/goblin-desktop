@@ -4,6 +4,7 @@ import * as styles from './styles';
 import T from 't';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
+import SamplesMonitor from 'goblin-gadgets/widgets/samples-monitor/widget';
 import {ColorManipulator} from 'goblin-theme';
 
 /******************************************************************************/
@@ -33,7 +34,7 @@ class DesktopJitterNC extends Widget {
     this.showDialog = !this.showDialog;
   }
 
-  renderDialog(horde, jitter, color) {
+  renderDialog(horde, jitter, color, samples) {
     if (!this.showDialog) {
       return null;
     }
@@ -47,16 +48,29 @@ class DesktopJitterNC extends Widget {
           glyphSize="150%"
         />
         <div className={this.styles.classNames.list}>
-          <Label fontWeight="bold" text={T('Jitter')} />
+          <Label fontWeight="bold" text={T('Network')} />
           <Label
             text={T(
-              '{horde} : {jitter, select, Infinity {inconnu} other {{jitter} ms}}',
+              '{horde} : {jitter, select, Infinity {unknown} other {{jitter} ms}}',
               '',
               {
                 horde,
                 jitter,
               }
             )}
+          />
+          <SamplesMonitor
+            id={this.props.id}
+            showed={true}
+            mode="separate"
+            disableRightPanel={true}
+            look="simple"
+            chartMarginLeft={5}
+            chartMarginRight={5}
+            channels={[{name: 'jitter', samples, max: 1000}]}
+            strokeColors={['#333']}
+            width="280px"
+            height="150px"
           />
         </div>
       </div>
@@ -85,7 +99,7 @@ class DesktopJitterNC extends Widget {
           glyphColor={color}
           onClick={() => this.onToggleDialog()}
         />
-        {this.renderDialog(horde, _jitter, color)}
+        {this.renderDialog(horde, _jitter, color, jitter)}
       </React.Fragment>
     );
   }

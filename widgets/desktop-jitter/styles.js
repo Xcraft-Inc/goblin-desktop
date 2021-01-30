@@ -13,7 +13,7 @@ export default function styles(theme) {
     boxShadow: 'rgba(0, 0, 0, 1) 0px 0px 40px 15px',
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'start',
     transformOrigin: 'top right',
   };
 
