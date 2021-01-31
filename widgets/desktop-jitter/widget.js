@@ -51,7 +51,7 @@ class DesktopJitterNC extends Widget {
           <Label fontWeight="bold" text={T('Network')} />
           <Label
             text={T(
-              '{horde} : {jitter, select, Infinity {unknown} other {{jitter} ms}}',
+              '{horde}: {jitter, select, Infinity {unknown} other {{jitter} ms}}',
               '',
               {
                 horde,
