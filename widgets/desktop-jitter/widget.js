@@ -34,7 +34,7 @@ class DesktopJitterNC extends Widget {
     this.showDialog = !this.showDialog;
   }
 
-  renderDialog(horde, jitter, color, samples) {
+  renderDialog(horde, color, samples, currentValue) {
     if (!this.showDialog) {
       return null;
     }
@@ -55,7 +55,7 @@ class DesktopJitterNC extends Widget {
               '',
               {
                 horde,
-                jitter,
+                jitter: currentValue,
               }
             )}
           />
@@ -64,8 +64,7 @@ class DesktopJitterNC extends Widget {
             showed={true}
             mode="separate"
             disableRightPanel={true}
-            chartMarginLeft={5}
-            chartMarginRight={5}
+            chartMargin={5}
             channels={[{name: 'jitter', samples, max: 1000}]}
             backgroundColor="transparent"
             strokeColors={['#333']}
@@ -77,14 +76,14 @@ class DesktopJitterNC extends Widget {
     );
   }
 
-  renderJitter(horde, jitter, noJitter) {
+  renderJitter(horde, samples, noJitter) {
     let color;
-    const _jitter = noJitter ? Infinity : jitter.get(0);
-    if (_jitter < 100) {
+    const currentValue = noJitter ? Infinity : samples.get(0);
+    if (currentValue < 100) {
       color = '#00ff00'; // green
-    } else if (_jitter < 250) {
+    } else if (currentValue < 250) {
       color = '#ffff00'; // yellow
-    } else if (_jitter < 500) {
+    } else if (currentValue < 500) {
       color = '#ff7f00'; // orange
     } else {
       color = '#ff0000'; // red
@@ -99,7 +98,7 @@ class DesktopJitterNC extends Widget {
           glyphColor={color}
           onClick={() => this.onToggleDialog()}
         />
-        {this.renderDialog(horde, _jitter, color, jitter)}
+        {this.renderDialog(horde, color, samples, currentValue)}
       </React.Fragment>
     );
   }
