@@ -64,10 +64,10 @@ class DesktopJitterNC extends Widget {
             showed={true}
             mode="separate"
             disableRightPanel={true}
-            look="simple"
             chartMarginLeft={5}
             chartMarginRight={5}
             channels={[{name: 'jitter', samples, max: 1000}]}
+            backgroundColor="transparent"
             strokeColors={['#333']}
             width="280px"
             height="150px"
