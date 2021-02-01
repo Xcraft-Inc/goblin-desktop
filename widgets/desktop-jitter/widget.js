@@ -51,7 +51,7 @@ class DesktopJitterNC extends Widget {
           <Label fontWeight="bold" text={T('Network')} />
           <Label
             text={T(
-              '{horde}: {jitter, select, Infinity {unknown} other {{jitter} ms}}',
+              '{horde}: {jitter, select, Infinity {💔} other {{jitter} ms\n}}',
               '',
               {
                 horde,
@@ -97,6 +97,7 @@ class DesktopJitterNC extends Widget {
           glyph="solid/signal"
           glyphColor={color}
           onClick={() => this.onToggleDialog()}
+          className={noJitter && this.styles.classNames.blink}
         />
         {this.renderDialog(horde, color, samples, currentValue)}
       </React.Fragment>

@@ -22,11 +22,22 @@ export default function styles(theme) {
     flexDirection: 'column',
   };
 
+  const blink = {
+    animationName: {
+      '50%': {
+        opacity: 0,
+      },
+    },
+    animationDuration: '1.2s',
+    animationIterationCount: 'infinite',
+  };
+
   /******************************************************************************/
 
   return {
     dialog,
     list,
+    blink,
   };
 }
 
