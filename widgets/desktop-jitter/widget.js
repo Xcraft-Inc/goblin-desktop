@@ -52,7 +52,7 @@ class DesktopJitterNC extends Widget {
           <Label
             height="120%"
             text={T(
-              '{horde}: {jitter, select, Infinity {💔} other {{jitter} ms\n}}',
+              '{horde}: {jitter, select, Infinity {💔} other {{jitter} ms}}',
               '',
               {
                 horde,
