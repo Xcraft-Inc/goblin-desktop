@@ -50,7 +50,7 @@ class DesktopJitterNC extends Widget {
         <div className={this.styles.classNames.list}>
           <Label fontWeight="bold" text={T('Network')} />
           <Label
-            height="120%"
+            height="30px"
             text={T(
               '{horde}: {jitter, select, Infinity {💔} other {{jitter} ms}}',
               '',
