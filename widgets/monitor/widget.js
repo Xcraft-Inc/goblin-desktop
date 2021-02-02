@@ -39,7 +39,11 @@ class Monitor extends Widget {
   }
 
   render() {
-    const {enabled} = this.props;
+    const {prototypeMode, enabled} = this.props;
+    if (!prototypeMode) {
+      return null;
+    }
+
     return (
       <Container kind="row">
         <Button
@@ -53,8 +57,11 @@ class Monitor extends Widget {
   }
 }
 
-export default Widget.connectWidget((state) => {
+export default Widget.connect((state, props) => {
+  const stateWidgets = state.get('widgets').get(props.id);
+  const userSession = Widget.getUserSession(state);
   return {
-    enabled: state ? state.get('enabled') : false,
+    prototypeMode: userSession.get('prototypeMode'),
+    enabled: stateWidgets ? stateWidgets.get('enabled') : false,
   };
 })(Monitor);
