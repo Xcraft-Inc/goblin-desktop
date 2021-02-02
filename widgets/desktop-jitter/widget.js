@@ -118,7 +118,7 @@ class DesktopJitterNC extends Widget {
 /******************************************************************************/
 
 const DesktopJitter = Widget.connect((state, props) => {
-  const stateWidgets = state.get('widgets').get(props.widgetId);
+  const stateWidgets = state.get('widgets').get(props.id);
   const stateNetwork = state.get('network');
 
   const hordes = stateNetwork.get(`jitter`);
