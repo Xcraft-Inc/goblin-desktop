@@ -15,18 +15,15 @@ class DesktopJitterNC extends Widget {
     this.styles = styles;
 
     this.onToggleDialog = this.onToggleDialog.bind(this);
-
-    this.state = {
-      showDialog: false,
-    };
   }
 
   get showDialog() {
-    return this.state.showDialog;
+    return this.props.dialogVisibility;
   }
+
   set showDialog(value) {
-    this.setState({
-      showDialog: value,
+    this.dispatchTo(this.widgetId, {
+      type: value ? 'SHOW_DIALOG' : 'HIDE_DIALOG',
     });
   }
 
@@ -120,10 +117,16 @@ class DesktopJitterNC extends Widget {
 
 /******************************************************************************/
 
-const DesktopJitter = Widget.connect((state) => {
-  const hordes = state.get(`network.jitter`);
-  const noJitter = state.get(`network.noJitter`);
-  return {hordes, noJitter};
+const DesktopJitter = Widget.connect((state, props) => {
+  const stateWidgets = state.get('widgets').get(props.widgetId);
+  const stateNetwork = state.get('network');
+
+  const hordes = stateNetwork.get(`jitter`);
+  const noJitter = stateNetwork.get(`noJitter`);
+  const dialogVisibility = stateWidgets
+    ? stateWidgets.get('dialogVisibility')
+    : false;
+  return {hordes, noJitter, dialogVisibility};
 })(DesktopJitterNC);
 
 export default DesktopJitter;
