@@ -1,4 +1,3 @@
-'use strict';
 //T:2019-02-27
 
 import Widget from 'goblin-laboratory/widgets/widget';

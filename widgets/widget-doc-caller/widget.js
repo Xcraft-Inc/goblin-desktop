@@ -1,5 +1,3 @@
-'use strict';
-
 import Widget from 'goblin-laboratory/widgets/widget';
 import React from 'react';
 import Container from 'goblin-gadgets/widgets/container/widget';
