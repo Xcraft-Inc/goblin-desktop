@@ -78,7 +78,7 @@ class DesktopJitterNC extends Widget {
   renderJitter(horde, samples, noJitter) {
     let color;
     const currentValue = noJitter ? Infinity : samples.get(0);
-    if (currentValue < 100) {
+    if (currentValue < 125) {
       color = '#00ff00'; // green
     } else if (currentValue < 250) {
       color = '#ffff00'; // yellow
