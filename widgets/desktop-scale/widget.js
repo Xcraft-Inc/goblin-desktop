@@ -6,6 +6,8 @@ import Label from 'goblin-gadgets/widgets/label/widget';
 import Slider from 'goblin-gadgets/widgets/slider/widget';
 import {percent as PercentConverters} from 'xcraft-core-converters';
 import T from 't';
+import {Unit} from 'goblin-theme';
+const to = Unit.to;
 
 /******************************************************************************/
 
@@ -22,31 +24,18 @@ class DesktopScale extends Widget {
 
     this.onToggleDialog = this.onToggleDialog.bind(this);
 
-    this.state = {
-      showDialog: false,
-      zoom: this.props.zoom,
-    };
-
     this.min = 0.2;
     this.max = 2;
   }
 
   //#region get/set
   get showDialog() {
-    return this.state.showDialog;
-  }
-  set showDialog(value) {
-    this.setState({
-      showDialog: value,
-    });
+    return this.props.dialogVisibility;
   }
 
-  get zoom() {
-    return this.state.zoom;
-  }
-  set zoom(value) {
-    this.setState({
-      zoom: value,
+  set showDialog(value) {
+    this.dispatchTo(this.widgetId, {
+      type: value ? 'SHOW_DIALOG' : 'HIDE_DIALOG',
     });
   }
   //#endregion
@@ -58,7 +47,6 @@ class DesktopScale extends Widget {
   changeZoom(zoom) {
     zoom = Math.round(zoom * 10) / 10;
     this.doFor(this.context.labId, 'change-zoom', {zoom});
-    this.zoom = zoom;
   }
 
   /******************************************************************************/
@@ -68,59 +56,68 @@ class DesktopScale extends Widget {
       return null;
     }
 
-    const style = {
-      top: `${10 / this.zoom}px`,
-      right: `${10 / this.zoom}px`,
-      transform: `scale(${1 / this.zoom})`,
-    };
-
-    // TODO: Use this mode for Slider!
-    // changeMode="throttled"
-    // throttleDelay={50}
+    const {cssUnit} = this.props;
 
     return (
-      <div className={this.styles.classNames.dialog} style={style}>
-        <Label width="50px" glyph="solid/binoculars" glyphSize="200%" />
-        <Label width="70px" text={getDisplayed(this.zoom)} />
+      <div className={this.styles.classNames.dialog}>
+        <Label
+          cssUnit={cssUnit}
+          width={to(50, cssUnit)}
+          glyph="solid/binoculars"
+          glyphSize="200%"
+        />
+        <Label
+          cssUnit={cssUnit}
+          width={to(70, cssUnit)}
+          text={getDisplayed(this.props.zoom)}
+        />
         <Button
+          cssUnit={cssUnit}
+          width={to(32, cssUnit)}
           shape="rounded"
           glyph="solid/minus"
           tooltip={T('Diminue le zoom')}
-          disabled={this.zoom <= this.min}
-          onClick={() => this.changeZoom(this.zoom - 0.1)}
+          disabled={this.props.zoom <= this.min}
+          onClick={() => this.changeZoom(this.props.zoom - 0.1)}
         />
-        <Label width="10px" />
+        <Label cssUnit={cssUnit} width={to(10, cssUnit)} />
         <Slider
-          width="150px"
+          cssUnit={cssUnit}
+          width={to(150, cssUnit)}
           direction="horizontal"
           min={this.min}
           max={this.max}
           step={0.1}
-          value={this.zoom}
+          value={this.props.zoom}
           displayValue="dragging"
           getDisplayedValue={getDisplayed}
-          changeMode="blur"
+          changeMode="throttled"
+          throttleDelay={50}
           onChange={(value) => this.changeZoom(value)}
         />
-        <Label width="10px" />
+        <Label cssUnit={cssUnit} width={to(10, cssUnit)} />
         <Button
+          cssUnit={cssUnit}
+          width={to(32, cssUnit)}
           shape="rounded"
           glyph="solid/plus"
           tooltip={T('Augmente le zoom')}
-          disabled={this.zoom >= this.max}
-          onClick={() => this.changeZoom(this.zoom + 0.1)}
+          disabled={this.props.zoom >= this.max}
+          onClick={() => this.changeZoom(this.props.zoom + 0.1)}
         />
-        <Label width="10px" />
+        <Label cssUnit={cssUnit} width={to(10, cssUnit)} />
         <Button
+          cssUnit={cssUnit}
           shape="rounded"
           text="100%"
-          fontSize="60%"
+          fontSize={to(10, cssUnit)}
           tooltip={T('Remet le zoom 100%')}
-          visibility={this.zoom !== 1}
+          disabled={this.props.zoom === 1}
           onClick={() => this.changeZoom(1)}
         />
         <div className={this.styles.classNames.close}>
           <Button
+            cssUnit={cssUnit}
             border="none"
             glyph="solid/times"
             onClick={this.onToggleDialog}
@@ -157,10 +154,19 @@ class DesktopScale extends Widget {
 
 /******************************************************************************/
 
-export default Widget.connect((state) => {
+export default Widget.connect((state, props) => {
+  const stateWidgets = state.get('widgets').get(props.id);
   const userSession = Widget.getUserSession(state);
+
   const clientSessionId = userSession.get('id');
   const zoom = userSession.get('zoom') || 1;
-
-  return {clientSessionId, zoom};
+  const dialogVisibility = stateWidgets
+    ? stateWidgets.get('dialogVisibility')
+    : false;
+  return {
+    clientSessionId,
+    zoom,
+    dialogVisibility,
+    cssUnit: {unit: 'vmin', ratio: 0.1},
+  };
 })(DesktopScale);

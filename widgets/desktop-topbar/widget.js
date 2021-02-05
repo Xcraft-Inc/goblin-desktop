@@ -136,7 +136,7 @@ class DesktopTopbarNC extends Widget {
           )}
           onClick={this.onTogglePrototypeMode}
         />
-        <DesktopScale id={this.props.id} />
+        <DesktopScale id={this.props.id + '$desktop-scale'} />
         <DesktopJitter id={this.props.id + '$desktop-jitter'} />
       </>
     );

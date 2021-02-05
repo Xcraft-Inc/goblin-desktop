@@ -1,27 +1,39 @@
 import {Unit} from 'goblin-theme';
+const to = Unit.to;
 
 /******************************************************************************/
 
-export default function styles(theme) {
+export const propNames = ['cssUnit'];
+
+export default function styles(theme, props) {
+  let {cssUnit = 'px'} = props;
   const desktopScale = {};
 
   const dialog = {
     zIndex: 20,
     position: 'fixed',
-    padding: '20px 45px 20px 20px',
-    borderRadius: '10px',
+    top: to(10, cssUnit),
+    right: to(10, cssUnit),
+    padding:
+      `${to(20, cssUnit)} ${to(45, cssUnit)} ` +
+      `${to(20, cssUnit)} ${to(20, cssUnit)}`,
+    borderRadius: to(10, cssUnit),
     backgroundColor: theme.palette.flyingDialogBackground,
-    boxShadow: 'rgba(0, 0, 0, 1) 0px 0px 40px 15px',
+    boxShadow:
+      `rgba(0, 0, 0, 1) ` +
+      `${to(0, cssUnit)} ${to(0, cssUnit)} ` +
+      `${to(40, cssUnit)} ${to(15, cssUnit)}`,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     transformOrigin: 'top right',
+    fontSize: to(16, cssUnit),
   };
 
   const close = {
     position: 'fixed',
-    right: '5px',
-    top: '5px',
+    right: to(15, cssUnit),
+    top: to(15, cssUnit),
   };
 
   /******************************************************************************/
