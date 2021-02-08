@@ -185,9 +185,6 @@ class Hinter extends Widget {
     if (parseInt(index) < this.getRows().size - 1) {
       this.dispatch({type: 'next-row'});
       this.do('next-row');
-      if (this.props.withDetails) {
-        this.setLoadingForDetails();
-      }
     }
   }
 
@@ -196,9 +193,6 @@ class Hinter extends Widget {
     if (parseInt(index) > 0) {
       this.dispatch({type: 'prev-row'});
       this.do('prev-row');
-      if (this.props.withDetails) {
-        this.setLoadingForDetails();
-      }
     }
   }
 
@@ -206,9 +200,6 @@ class Hinter extends Widget {
     if (parseInt(index) <= this.getRows().size - 1) {
       this.dispatch({type: 'select-row', index});
       this.do('select-row', {index, value});
-      if (this.props.withDetails) {
-        this.setLoadingForDetails();
-      }
     }
   }
 
@@ -234,13 +225,6 @@ class Hinter extends Widget {
       index,
       text: value,
       model,
-    });
-  }
-
-  setLoadingForDetails() {
-    const detailServiceId = this.props.id.replace(`-hinter`, `-detail`);
-    this.cmd(`detail.set-loading`, {
-      id: detailServiceId,
     });
   }
 
