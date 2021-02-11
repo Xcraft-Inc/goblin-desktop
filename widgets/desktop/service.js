@@ -683,7 +683,6 @@ Goblin.registerQuest(goblinName, 'close', function* (quest) {
 
 Goblin.registerQuest(goblinName, 'closeCurrentTab', function* (quest) {
   const state = quest.goblin.getState();
-  console.dir(state.toJS());
   const context = state.get('current.workcontext');
   const currentWorkitem = state.get(`current.workitems.${context}`);
   const workitem = state.get(`workitems.${currentWorkitem}`);
@@ -692,6 +691,22 @@ Goblin.registerQuest(goblinName, 'closeCurrentTab', function* (quest) {
   }
 
   yield quest.me.removeWorkitem({workitemId: currentWorkitem});
+});
+
+Goblin.registerQuest(goblinName, 'closeAllCurrentTabs', function* (quest) {
+  const state = quest.goblin.getState();
+  const context = state.get('current.workcontext');
+
+  const toClose = [];
+  for (const workitem of state.get(`workitems`).values()) {
+    if (workitem.get('kind') === 'tab' && workitem.get('context') === context) {
+      toClose.push(workitem.get('id'));
+    }
+  }
+
+  for (const workitemId of toClose) {
+    yield quest.me.removeWorkitem({workitemId});
+  }
 });
 
 Goblin.registerQuest(goblinName, 'on-close-window', function (
