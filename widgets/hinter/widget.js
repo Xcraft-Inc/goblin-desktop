@@ -210,21 +210,15 @@ class Hinter extends Widget {
   }
 
   validate() {
-    const index = this.getBackendValue(
-      `backend.${this.props.id}.selectedIndex`
-    );
-    const value = this.getBackendValue(
-      `backend.${this.props.id}.rows[${index}]`
-    );
-    this.validateRow(index, value);
+    const index = this.getState()
+      .widgets.get(this.props.id)
+      .get('selectedIndex');
+    this.validateRow(index);
   }
 
-  validateRow(index, value) {
-    const model = this.getRouting().get('location.hash').substring(1);
+  validateRow(index) {
     this.do('validate-row', {
       index,
-      text: value,
-      model,
     });
   }
 
