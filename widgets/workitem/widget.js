@@ -496,7 +496,7 @@ class Workitem extends Form {
     }`;
 
     return (
-      <Container kind="column-full">
+      <Container kind="column-full" addClassName="hinter-container">
         <Container kind="pane-header">
           <Title kind="pane-header" singleLine={true} wrap="no" />
         </Container>
