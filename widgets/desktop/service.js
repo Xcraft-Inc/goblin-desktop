@@ -759,5 +759,18 @@ Goblin.registerQuest(goblinName, 'toggle-monitor-feed', function* (
   }
 });
 
+const getMetrics = function (goblin) {
+  const metrics = {};
+  const state = goblin.getState();
+  metrics.workitems = state.get('workitems').size;
+  metrics.notifications = state.get('notifications').size;
+  metrics.stateMonitorHistoryStack = state.get(
+    'stateMonitorHistory.stack'
+  ).size;
+  return metrics;
+};
+
 // Create a Goblin with initial state and handlers
-module.exports = Goblin.configure(goblinName, logicState, logicHandlers);
+module.exports = Goblin.configure(goblinName, logicState, logicHandlers, {
+  getMetrics,
+});
