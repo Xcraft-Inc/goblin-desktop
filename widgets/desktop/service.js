@@ -762,9 +762,9 @@ Goblin.registerQuest(goblinName, 'toggle-monitor-feed', function* (
 const getMetrics = function (goblin) {
   const metrics = {};
   const state = goblin.getState();
-  metrics.workitems = state.get('workitems').size;
-  metrics.notifications = state.get('notifications').size;
-  metrics.stateMonitorHistoryStack = state.get(
+  metrics['workitems.total'] = state.get('workitems').size;
+  metrics['notifications.total'] = state.get('notifications').size;
+  metrics['stateMonitorHistoryStack.total'] = state.get(
     'stateMonitorHistory.stack'
   ).size;
   return metrics;
