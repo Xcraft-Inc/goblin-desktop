@@ -476,9 +476,10 @@ Goblin.registerQuest(goblinName, 'end-nav', function* (
 
 /******************************************************************************/
 
-Goblin.registerQuest(goblinName, 'gamepad-changed', function (quest, gamepad) {
-  console.dir(gamepad.toJS());
-});
+Goblin.registerQuest(goblinName, 'gamepad-changed', function (
+  quest,
+  gamepad
+) {});
 
 /******************************************************************************/
 
@@ -713,8 +714,6 @@ Goblin.registerQuest(goblinName, 'on-close-window', function (
   quest,
   currentUrl
 ) {
-  //const state = quest.goblin.getState().toJS();
-  //console.dir(state.current.location);
   quest.log.dbg(`${quest.goblin.id} window closing...`);
 });
 

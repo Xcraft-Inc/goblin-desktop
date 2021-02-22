@@ -16,7 +16,6 @@ class GamePad extends Widget {
   }
 
   render() {
-    console.log('gamepad react');
     return null;
   }
 }
