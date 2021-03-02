@@ -399,6 +399,13 @@ Goblin.registerQuest(goblinName, 'navToWorkitem', function (quest, workitemId) {
   const state = quest.goblin.getState();
 
   const workitem = state.get(`workitems.${workitemId}`);
+  if (!workitem) {
+    quest.log.warn(
+      `cancel navigate to an undefined workitem, ${workitemId} for desktop ${quest.goblin.id}`
+    );
+    return;
+  }
+
   const contextId = workitem.get('context');
   const view = workitem.get('view');
 
