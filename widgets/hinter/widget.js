@@ -156,11 +156,11 @@ class Hinter extends Widget {
   }
 
   addOutsideClickListener() {
-    document.addEventListener('click', this.handleOutsideClick);
+    document.addEventListener('mousedown', this.handleOutsideClick);
   }
 
   removeOutsideClickListener() {
-    document.removeEventListener('click', this.handleOutsideClick);
+    document.removeEventListener('mousedown', this.handleOutsideClick);
   }
 
   handleOutsideClick(e) {
