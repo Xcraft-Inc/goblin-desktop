@@ -43,7 +43,10 @@ const TeamSelector = Widget.connect((state, props) => {
   const items = teamIds.reduce((items, id) => {
     const item = state.get(`backend.${id}`);
     if (item) {
-      items.push({text: item.get('name'), value: id});
+      const metaStatus = item.get('meta').get('status');
+      if (metaStatus !== 'archived') {
+        items.push({text: item.get('name'), value: id});
+      }
     }
     return items;
   }, []);
