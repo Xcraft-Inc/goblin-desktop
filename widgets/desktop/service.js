@@ -120,6 +120,27 @@ Goblin.registerQuest(goblinName, 'change-locale', function (quest, locale) {
   quest.evt(`<${labId}>.user-locale-changed`, {locale});
 });
 
+Goblin.registerQuest(goblinName, 'setDefaultNewWorkitem', function (
+  quest,
+  workitem
+) {
+  quest.goblin.setX('newWorkitemDef', workitem);
+});
+
+Goblin.registerQuest(goblinName, 'openNewWorkitem', function* (
+  quest,
+  clientSessionId
+) {
+  const workitem = quest.goblin.getX('newWorkitemDef');
+  if (!workitem) {
+    return;
+  }
+  yield quest.me.addWorkitem({
+    clientSessionId,
+    workitem: {...workitem}, //!newref
+    navigate: true,
+  });
+});
 /******************************************************************************/
 
 Goblin.registerQuest(goblinName, 'removeWorkitem', function* (

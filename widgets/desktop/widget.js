@@ -24,10 +24,15 @@ class Desktop extends Widget {
 
     this.toggleFooter = this.toggleFooter.bind(this);
     this.openWorkitemWizard = this.openWorkitemWizard.bind(this);
+    this.openNewWorkitem = this.openNewWorkitem.bind(this);
   }
 
   openWorkitemWizard() {
     this.do('open-entity-wizard');
+  }
+
+  openNewWorkitem() {
+    this.do('openNewWorkitem');
   }
 
   componentDidMount() {
@@ -35,6 +40,7 @@ class Desktop extends Widget {
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
     MouseTrap.bind('ctrl+o', this.openWorkitemWizard);
+    MouseTrap.bind('ctrl+n', this.openNewWorkitem);
     SFX.intro.play();
   }
 
@@ -42,7 +48,8 @@ class Desktop extends Widget {
     super.componentWillUnmount();
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
-    MouseTrap.unbind('ctrl+o', this.openWorkitemWizard);
+    MouseTrap.unbind('ctrl+o');
+    MouseTrap.unbind('ctrl+n');
   }
 
   //#region get/set
