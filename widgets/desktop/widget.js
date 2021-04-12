@@ -40,7 +40,7 @@ class Desktop extends Widget {
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
     MouseTrap.bind('ctrl+o', this.openWorkitemWizard);
-    MouseTrap.bind('ctrl+n', this.openNewWorkitem);
+    MouseTrap.bind('mod+n', this.openNewWorkitem);
     SFX.intro.play();
   }
 
@@ -49,7 +49,7 @@ class Desktop extends Widget {
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
     MouseTrap.unbind('ctrl+o');
-    MouseTrap.unbind('ctrl+n');
+    MouseTrap.unbind('mod+n');
   }
 
   //#region get/set
