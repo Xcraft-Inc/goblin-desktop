@@ -69,22 +69,23 @@ class ListToolbar extends Widget {
               onClick={this.exportToJSON}
             />
 
-            {queriesPreset.map((p, index) => {
-              return (
-                <div key={index}>
-                  <label>
-                    <input
-                      type="radio"
-                      name={p}
-                      value={p}
-                      checked={p === query}
-                      onChange={this.selectQuery}
-                    />
-                    {p}
-                  </label>
-                </div>
-              );
-            })}
+            {queriesPreset &&
+              queriesPreset.map((p, index) => {
+                return (
+                  <div key={index}>
+                    <label>
+                      <input
+                        type="radio"
+                        name={p}
+                        value={p}
+                        checked={p === query}
+                        onChange={this.selectQuery}
+                      />
+                      {p}
+                    </label>
+                  </div>
+                );
+              })}
           </Container>
         )}
       </div>
