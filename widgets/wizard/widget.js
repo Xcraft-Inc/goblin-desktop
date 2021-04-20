@@ -128,14 +128,7 @@ class Wizard extends Form {
         zIndex={this.props.dialog.get('zIndex')}
         close={this.onCancel}
       >
-        <Form
-          {...this.formConfigWithoutStyle}
-          style={{
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <Form {...this.formConfigWithoutStyle}>
           <Step
             {...this.props}
             theme={this.context.theme}
