@@ -47,7 +47,7 @@ class ListToolbar extends Widget {
       <div>
         {exporting ? (
           <div>
-            <Label text={T('Export csv en cours...')} />
+            <Label text={T('Export en cours...')} />
           </div>
         ) : (
           <Container kind="row">
