@@ -398,6 +398,11 @@ class Plugin extends Widget {
 
       const kind = this.props.readonly ? 'plugin-light' : 'plugin-dark';
 
+      let otherButtons = null;
+      if (this.props.buttons) {
+        otherButtons = this.props.buttons(entityId);
+      }
+
       return (
         <div className={buttonsClass}>
           <Button
@@ -419,6 +424,7 @@ class Plugin extends Widget {
             tooltip={T('Editer')}
             onClick={() => this.onEditEntity(entityId)}
           />
+          {otherButtons}
           {canDelete ? (
             <Button
               width="32px"
