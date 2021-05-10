@@ -321,57 +321,57 @@ class Workitem extends Form {
 
     if (fourthButtons.size > 0) {
       return (
-        <Container kind="actions-lines">
+        <div className={this.styles.classNames.actionsLines}>
           {this.renderActionListButtons(listButtons)}
-          <Container kind="actions-line-secondary">
+          <div className={this.styles.classNames.actionsLineSecondary}>
             {this.renderActionButtonsList(fourthButtons, 'secondary')}
-          </Container>
-          <Container kind="actions-line-secondary">
+          </div>
+          <div className={this.styles.classNames.actionsLineSecondary}>
             {this.renderActionButtonsList(thirdButtons, 'secondary')}
-          </Container>
-          <Container kind="actions-line-secondary">
+          </div>
+          <div className={this.styles.classNames.actionsLineSecondary}>
             {this.renderActionButtonsList(secondaryButtons, 'secondary')}
-          </Container>
-          <Container kind="actions-line-primary">
+          </div>
+          <div className={this.styles.classNames.actionsLinePrimary}>
             {this.renderActionButtonsList(primaryButtons, 'primary')}
-          </Container>
-        </Container>
+          </div>
+        </div>
       );
     } else if (thirdButtons.size > 0) {
       return (
-        <Container kind="actions-lines">
+        <div className={this.styles.classNames.actionsLines}>
           {this.renderActionListButtons(listButtons)}
-          <Container kind="actions-line-secondary">
+          <div className={this.styles.classNames.actionsLineSecondary}>
             {this.renderActionButtonsList(thirdButtons, 'secondary')}
-          </Container>
-          <Container kind="actions-line-secondary">
+          </div>
+          <div className={this.styles.classNames.actionsLineSecondary}>
             {this.renderActionButtonsList(secondaryButtons, 'secondary')}
-          </Container>
-          <Container kind="actions-line-primary">
+          </div>
+          <div className={this.styles.classNames.actionsLinePrimary}>
             {this.renderActionButtonsList(primaryButtons, 'primary')}
-          </Container>
-        </Container>
+          </div>
+        </div>
       );
     } else if (secondaryButtons.size > 0) {
       return (
-        <Container kind="actions-lines">
+        <div className={this.styles.classNames.actionsLines}>
           {this.renderActionListButtons(listButtons)}
-          <Container kind="actions-line-secondary">
+          <div className={this.styles.classNames.actionsLineSecondary}>
             {this.renderActionButtonsList(secondaryButtons, 'secondary')}
-          </Container>
-          <Container kind="actions-line-primary">
+          </div>
+          <div className={this.styles.classNames.actionsLinePrimary}>
             {this.renderActionButtonsList(primaryButtons, 'primary')}
-          </Container>
-        </Container>
+          </div>
+        </div>
       );
     } else if (listButtons.size > 0) {
       return (
-        <Container kind="actions-lines">
+        <div className={this.styles.classNames.actionsLines}>
           {this.renderActionListButtons(listButtons)}
-          <Container kind="actions-line-primary">
+          <div className={this.styles.classNames.actionsLinePrimary}>
             {this.renderActionButtonsList(primaryButtons, 'primary')}
-          </Container>
-        </Container>
+          </div>
+        </div>
       );
     } else {
       return (

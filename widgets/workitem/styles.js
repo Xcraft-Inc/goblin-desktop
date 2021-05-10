@@ -145,15 +145,51 @@ export default function styles(theme) {
 
   /******************************************************************************/
 
+  const actionsLines = {
+    minHeight: Unit.add(
+      Unit.add(
+        theme.shapes.secondaryActionHeight,
+        theme.shapes.secondaryActionSpacing
+      ),
+      theme.shapes.actionHeight
+    ),
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    padding: m,
+    borderStyle: 'none',
+    backgroundColor: theme.palette.actionBackground,
+    borderTopWidth: '1px',
+    borderTopStyle: 'solid',
+    borderTopColor: theme.palette.actionBorder,
+    boxShadow: theme.shapes.actionShadow,
+  };
+
+  const actionsLinePrimary = {
+    minHeight: theme.shapes.actionHeight,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  };
+
+  const actionsLineSecondary = {
+    minHeight: theme.shapes.secondaryActionHeight,
+    display: 'flex',
+    flexDirection: 'row',
+    alignContent: 'flex-start',
+    margin: '0px 0px ' + theme.shapes.secondaryActionSpacing + ' 0px',
+  };
+
   const actionsList = {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     marginBottom: '10px',
   };
 
   const actionList = {
-    width: '300px',
+    width: '320px',
     display: 'flex',
     flexDirection: 'row',
     margin: '0px 5px 2px 5px',
@@ -186,6 +222,9 @@ export default function styles(theme) {
     deleteDescription,
     deleteButtons,
 
+    actionsLines,
+    actionsLinePrimary,
+    actionsLineSecondary,
     actionsList,
     actionList,
   };
