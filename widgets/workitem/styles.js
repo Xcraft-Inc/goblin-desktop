@@ -145,6 +145,22 @@ export default function styles(theme) {
 
   /******************************************************************************/
 
+  const actionsList = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: '10px',
+  };
+
+  const actionList = {
+    width: '300px',
+    display: 'flex',
+    flexDirection: 'row',
+    margin: '0px 5px 2px 5px',
+  };
+
+  /******************************************************************************/
+
   return {
     form,
     detail,
@@ -169,6 +185,9 @@ export default function styles(theme) {
     deleteRadio,
     deleteDescription,
     deleteButtons,
+
+    actionsList,
+    actionList,
   };
 }
 
