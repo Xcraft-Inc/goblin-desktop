@@ -247,9 +247,8 @@ class Workitem extends Form {
 
   renderActionListButton(button, index) {
     return (
-      <div className={this.styles.classNames.actionList}>
+      <div key={index} className={this.styles.classNames.actionList}>
         <Button
-          key={index}
           kind="secondary-action"
           grow="1"
           place="1/1"
