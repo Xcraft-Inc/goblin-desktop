@@ -10,7 +10,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import ScrollableContainer from 'goblin-gadgets/widgets/scrollable-container/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import CheckList from 'goblin-gadgets/widgets/check-list/widget';
-import MouseTrap from 'mousetrap';
+import EntityAlerts from 'goblin-desktop/widgets/entity-alerts/widget.js';
 import T from 't';
 
 /******************************************************************************/
@@ -468,14 +468,21 @@ class Workitem extends Form {
     }
   }
 
+  renderAlerts() {
+    return <EntityAlerts entityId={this.props.entityId} />;
+  }
+
   renderStatus() {
     return (
-      <div className={this.styles.classNames.status}>
-        {this.renderStatusTopButtons()}
-        {this.renderStatusBase()}
-        {this.renderStatusBusiness()}
-        {this.renderStatusButtons()}
-      </div>
+      <React.Fragment>
+        <div className={this.styles.classNames.status}>
+          {this.renderStatusTopButtons()}
+          {this.renderStatusBase()}
+          {this.renderStatusBusiness()}
+          {this.renderStatusButtons()}
+        </div>
+        {this.renderAlerts()}
+      </React.Fragment>
     );
   }
 
