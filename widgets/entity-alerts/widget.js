@@ -87,12 +87,12 @@ class EntityAlerts extends Widget {
     }
 
     for (let i = 0; i < count; i++) {
-      const tooltip = list.get(i);
+      const tooltip = list.get(i).get('message');
       result.push(this.renderGlyph(type, tooltip, '40px', i));
     }
 
     if (overflow) {
-      result.push(<Label text="..." fontSize="200%" />);
+      result.push(<Label key="last" text="..." fontSize="200%" />);
     }
 
     return result;
@@ -161,8 +161,8 @@ class EntityAlerts extends Widget {
 
     return (
       <div className={this.styles.classNames.entityAlert} style={style}>
-        {this.renderGlyphs('error', error)}
-        {this.renderGlyphs('warning', warning)}
+        {this.renderGlyphs('error', errors)}
+        {this.renderGlyphs('warning', warnings)}
         <Label width="20px" />
         <Label text={message} />
       </div>
