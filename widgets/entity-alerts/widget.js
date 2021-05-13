@@ -193,7 +193,7 @@ class EntityAlerts extends Widget {
 
   render() {
     const {alerts} = this.props;
-    if (!alerts) {
+    if (!alerts || alerts.size === 0) {
       return null;
     }
 
