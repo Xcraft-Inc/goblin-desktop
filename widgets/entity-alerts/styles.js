@@ -4,35 +4,36 @@ import {Unit, ColorManipulator} from 'goblin-theme';
 
 export default function styles(theme) {
   const m = theme.shapes.containerMargin;
-  const mm = Unit.multiply(m, 0.5);
-  const mmm = Unit.multiply(m, 0.25);
+  const m12 = Unit.multiply(m, 0.5);
+  const m14 = Unit.multiply(m, 0.25);
+  const m34 = Unit.multiply(m, 0.75);
 
   const entityAlerts = {
     position: 'relative',
     minHeight: '30px',
     maxHeight: '40%',
-    margin: `${Unit.multiply(m, -1)} ${mm} ${mm} ${mm}`,
+    margin: `${Unit.multiply(m, -1)} 0px ${m} 0px`,
     display: 'flex',
     flexDirection: 'column',
-    padding: '5px 0px',
+    padding: `${m34} 0px`,
+    boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.3)',
     overflowY: 'auto',
   };
 
   const entityAlert = {
     display: 'flex',
     flexDirection: 'row',
-    margin: `${mmm} ${mm}`,
-    padding: `${mm} ${m} ${mm} ${mm}`,
+    margin: `${m14} ${m}`,
+    padding: `${m12} ${m} ${m12} ${m12}`,
     borderRadius: '4px',
-    backgroundColor: '#fff',
     color: '#333',
     // + borderLeft: `10px solid ${color}`,
   };
 
   const button = {
     position: 'absolute',
-    right: mm,
-    top: mm,
+    right: m,
+    top: m,
   };
 
   /******************************************************************************/
