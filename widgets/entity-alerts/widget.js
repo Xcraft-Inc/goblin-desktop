@@ -7,6 +7,35 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 
 /******************************************************************************/
 
+function getColor(type) {
+  return (
+    {
+      error: '#e60000', // red
+      warning: '#ffc000', // orange
+    }[type] || '#888'
+  );
+}
+
+function getColorBackground(type) {
+  return (
+    {
+      error: '#fed9d9', // light red
+      warning: '#fff4d3', // light orange
+    }[type] || '#888'
+  );
+}
+
+function getGlyph(type) {
+  return (
+    {
+      error: 'solid/exclamation-triangle',
+      warning: 'solid/info-square',
+    }[type] || 'solid/bug'
+  );
+}
+
+/******************************************************************************/
+
 class EntityAlerts extends Widget {
   constructor() {
     super(...arguments);
@@ -27,16 +56,59 @@ class EntityAlerts extends Widget {
   }
   //#endregion
 
+  /******************************************************************************/
+
+  renderGlyph(type, width, index) {
+    const color = getColor(type);
+    const glyph = getGlyph(type);
+
+    return (
+      <Label
+        key={index}
+        glyph={glyph}
+        width={width || '60px'}
+        glyphSize="180%"
+        glyphColor={color}
+      />
+    );
+  }
+
+  renderGlyphs(type, count) {
+    const result = [];
+
+    let overflow = false;
+    if (count > 3) {
+      count = 3;
+      overflow = true;
+    }
+
+    for (let i = 0; i < count; i++) {
+      result.push(this.renderGlyph(type, '40px', i));
+    }
+
+    if (overflow) {
+      result.push(<Label text="..." fontSize="200%" />);
+    }
+
+    return result;
+  }
+
   renderAlert(alert, index) {
     const {type, message, count} = alert.pick('type', 'message', 'count');
 
-    const style =
-      type === 'warning'
-        ? this.styles.classNames.entityAlertWarning
-        : this.styles.classNames.entityAlertError;
+    const color = getColor(type);
+    const style = {
+      borderLeft: `10px solid ${color}`,
+      backgroundColor: getColorBackground(type),
+    };
 
     return (
-      <div key={index} className={style}>
+      <div
+        key={index}
+        className={this.styles.classNames.entityAlert}
+        style={style}
+      >
+        {this.renderGlyph(type)}
         <Label text={message} />
       </div>
     );
@@ -52,11 +124,21 @@ class EntityAlerts extends Widget {
     const nError = alerts.filter((a) => a.get('type') === 'error').size;
     const nWarning = alerts.filter((a) => a.get('type') === 'warning').size;
 
-    const t = `${nError} erreurs, ${nWarning} avertissements`;
+    const message = `${nError} erreurs, ${nWarning} avertissements`;
+    const type = nError > 0 ? 'error' : 'warning';
+
+    const color = getColor(type);
+    const style = {
+      borderLeft: `10px solid ${color}`,
+      backgroundColor: getColorBackground(type),
+    };
 
     return (
-      <div className={this.styles.classNames.entityAlertCompacted}>
-        <Label text={t} />
+      <div className={this.styles.classNames.entityAlert} style={style}>
+        {this.renderGlyphs('error', nError)}
+        {this.renderGlyphs('warning', nWarning)}
+        <Label width="20px" />
+        <Label text={message} />
       </div>
     );
   }
