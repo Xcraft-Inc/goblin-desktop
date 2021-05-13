@@ -2,39 +2,11 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Shredder from 'xcraft-core-shredder';
 import T from 't';
+import {ColorManipulator} from 'goblin-theme';
 
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import StringBuilder from 'goblin-nabu/lib/string-builder';
-
-/******************************************************************************/
-
-function getColor(type) {
-  return (
-    {
-      error: '#e60000', // red
-      warning: '#ffc000', // orange
-    }[type] || '#888'
-  );
-}
-
-function getColorBackground(type) {
-  return (
-    {
-      error: '#fed9d9', // light red
-      warning: '#fff4d3', // light orange
-    }[type] || '#888'
-  );
-}
-
-function getGlyph(type) {
-  return (
-    {
-      error: 'solid/exclamation-triangle',
-      warning: 'solid/info-square',
-    }[type] || 'solid/bug'
-  );
-}
 
 /******************************************************************************/
 
@@ -58,11 +30,47 @@ class EntityAlerts extends Widget {
   }
   //#endregion
 
+  get isRetro() {
+    return this.context.theme.look.name === 'retro';
+  }
+
+  getColor(type) {
+    let color =
+      {
+        error: '#e60000', // red
+        warning: '#ffc000', // orange
+      }[type] || '#888';
+
+    if (this.isRetro) {
+      color = ColorManipulator.darken(color, 0.3);
+    }
+
+    return color;
+  }
+
+  getColorBackground(type) {
+    return (
+      {
+        error: '#fed9d9', // light red
+        warning: '#fff4d3', // light orange
+      }[type] || '#888'
+    );
+  }
+
+  getGlyph(type) {
+    return (
+      {
+        error: 'solid/exclamation-triangle',
+        warning: 'solid/info-square',
+      }[type] || 'solid/bug'
+    );
+  }
+
   /******************************************************************************/
 
   renderGlyph(type, tooltip, width, index) {
-    const color = getColor(type);
-    const glyph = getGlyph(type);
+    const color = this.getColor(type);
+    const glyph = this.getGlyph(type);
 
     return (
       <Label
@@ -101,10 +109,10 @@ class EntityAlerts extends Widget {
   renderAlert(alert, index) {
     const {type, message, count} = alert.pick('type', 'message', 'count');
 
-    const color = getColor(type);
+    const color = this.getColor(type);
     const style = {
-      borderLeft: `10px solid ${color}`,
-      backgroundColor: getColorBackground(type),
+      borderLeft: this.isRetro ? `30px solid ${color}` : `10px solid ${color}`,
+      backgroundColor: this.getColorBackground(type),
     };
 
     return (
@@ -157,10 +165,10 @@ class EntityAlerts extends Widget {
 
     const type = nError > 0 ? 'error' : 'warning';
 
-    const color = getColor(type);
+    const color = this.getColor(type);
     const style = {
-      borderLeft: `10px solid ${color}`,
-      backgroundColor: getColorBackground(type),
+      borderLeft: this.isRetro ? `30px solid ${color}` : `10px solid ${color}`,
+      backgroundColor: this.getColorBackground(type),
     };
 
     return (
