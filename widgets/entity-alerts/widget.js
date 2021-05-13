@@ -60,7 +60,7 @@ class EntityAlerts extends Widget {
 
   /******************************************************************************/
 
-  renderGlyph(type, width, index) {
+  renderGlyph(type, tooltip, width, index) {
     const color = getColor(type);
     const glyph = getGlyph(type);
 
@@ -71,13 +71,15 @@ class EntityAlerts extends Widget {
         width={width || '60px'}
         glyphSize="180%"
         glyphColor={color}
+        tooltip={tooltip}
       />
     );
   }
 
-  renderGlyphs(type, count) {
+  renderGlyphs(type, list) {
     const result = [];
 
+    let count = list.size;
     let overflow = false;
     if (count > 3) {
       count = 3;
@@ -85,7 +87,8 @@ class EntityAlerts extends Widget {
     }
 
     for (let i = 0; i < count; i++) {
-      result.push(this.renderGlyph(type, '40px', i));
+      const tooltip = list.get(i);
+      result.push(this.renderGlyph(type, tooltip, '40px', i));
     }
 
     if (overflow) {
@@ -123,8 +126,11 @@ class EntityAlerts extends Widget {
   }
 
   renderAlertCompacted(alerts) {
-    const nError = alerts.filter((a) => a.get('type') === 'error').size;
-    const nWarning = alerts.filter((a) => a.get('type') === 'warning').size;
+    const errors = alerts.filter((a) => a.get('type') === 'error');
+    const warnings = alerts.filter((a) => a.get('type') === 'warning');
+
+    const nError = errors.size;
+    const nWarning = warnings.size;
 
     if (nError === 0 && nWarning === 0) {
       return null;
@@ -155,8 +161,8 @@ class EntityAlerts extends Widget {
 
     return (
       <div className={this.styles.classNames.entityAlert} style={style}>
-        {this.renderGlyphs('error', nError)}
-        {this.renderGlyphs('warning', nWarning)}
+        {this.renderGlyphs('error', error)}
+        {this.renderGlyphs('warning', warning)}
         <Label width="20px" />
         <Label text={message} />
       </div>

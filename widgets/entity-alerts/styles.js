@@ -10,11 +10,12 @@ export default function styles(theme) {
   const entityAlerts = {
     position: 'relative',
     minHeight: '30px',
+    maxHeight: '40%',
     margin: `${Unit.multiply(m, -1)} ${mm} ${mm} ${mm}`,
     display: 'flex',
     flexDirection: 'column',
     padding: '5px 0px',
-    // backgroundColor: '#fff',
+    overflowY: 'auto',
   };
 
   const entityAlert = {
