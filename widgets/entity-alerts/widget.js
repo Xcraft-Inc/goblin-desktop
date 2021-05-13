@@ -1,9 +1,11 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Shredder from 'xcraft-core-shredder';
+import T from 't';
 
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
+import StringBuilder from 'goblin-nabu/lib/string-builder';
 
 /******************************************************************************/
 
@@ -124,7 +126,25 @@ class EntityAlerts extends Widget {
     const nError = alerts.filter((a) => a.get('type') === 'error').size;
     const nWarning = alerts.filter((a) => a.get('type') === 'warning').size;
 
-    const message = `${nError} erreurs, ${nWarning} avertissements`;
+    if (nError === 0 && nWarning === 0) {
+      return null;
+    }
+
+    const a = [];
+    if (nError === 1) {
+      a.push(T('1 erreur'));
+    }
+    if (nError > 1) {
+      a.push(T(`${nError} erreurs`, null, {nError}));
+    }
+    if (nWarning === 1) {
+      a.push(T('1 avertissement'));
+    }
+    if (nWarning > 1) {
+      a.push(T(`${nWarning} avertissements`, null, {nWarning}));
+    }
+    const message = StringBuilder.joinSentences(a);
+
     const type = nError > 0 ? 'error' : 'warning';
 
     const color = getColor(type);
