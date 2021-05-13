@@ -119,16 +119,20 @@ class EntityAlerts extends Widget {
     );
   }
 
-  renderAlertExtended(alerts) {
-    return alerts.map((alert, index) =>
-      this.renderAlert(new Shredder(alert), index)
+  renderAlertExtended(errors, warnings) {
+    return (
+      <>
+        {errors.map((alert, index) =>
+          this.renderAlert(new Shredder(alert), index)
+        )}
+        {warnings.map((alert, index) =>
+          this.renderAlert(new Shredder(alert), index)
+        )}
+      </>
     );
   }
 
-  renderAlertCompacted(alerts) {
-    const errors = alerts.filter((a) => a.get('type') === 'error');
-    const warnings = alerts.filter((a) => a.get('type') === 'warning');
-
+  renderAlertCompacted(errors, warnings) {
     const nError = errors.size;
     const nWarning = warnings.size;
 
@@ -169,15 +173,19 @@ class EntityAlerts extends Widget {
     );
   }
 
-  renderAlerts(alerts) {
-    if (this.extended) {
-      return this.renderAlertExtended(alerts);
+  renderAlerts(errors, warnings) {
+    if (this.extended || errors.size + warnings.size === 1) {
+      return this.renderAlertExtended(errors, warnings);
     } else {
-      return this.renderAlertCompacted(alerts);
+      return this.renderAlertCompacted(errors, warnings);
     }
   }
 
-  renderButton() {
+  renderButton(errors, warnings) {
+    if (errors.size + warnings.size === 1) {
+      return null;
+    }
+
     return (
       <div className={this.styles.classNames.button}>
         <Button
@@ -193,14 +201,22 @@ class EntityAlerts extends Widget {
 
   render() {
     const {alerts} = this.props;
-    if (!alerts || alerts.size === 0) {
+
+    if (!alerts) {
+      return null;
+    }
+
+    const errors = alerts.filter((a) => a.get('type') === 'error');
+    const warnings = alerts.filter((a) => a.get('type') === 'warning');
+
+    if (errors.size === 0 && warnings.size === 0) {
       return null;
     }
 
     return (
       <div className={this.styles.classNames.entityAlerts}>
-        {this.renderAlerts(alerts)}
-        {this.renderButton()}
+        {this.renderAlerts(errors, warnings)}
+        {this.renderButton(errors, warnings)}
       </div>
     );
   }
