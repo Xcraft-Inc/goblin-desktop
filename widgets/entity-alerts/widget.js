@@ -3,10 +3,11 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import Shredder from 'xcraft-core-shredder';
 import T from 't';
 import {ColorManipulator} from 'goblin-theme';
+import StringBuilder from 'goblin-nabu/lib/string-builder';
 
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
-import StringBuilder from 'goblin-nabu/lib/string-builder';
+import RetroIlluminatedButton from 'goblin-gadgets/widgets/retro-illuminated-button/widget';
 
 /******************************************************************************/
 
@@ -42,7 +43,7 @@ class EntityAlerts extends Widget {
       }[type] || '#888';
 
     if (this.isRetro) {
-      color = ColorManipulator.darken(color, 0.3);
+      color = ColorManipulator.darken(color, 0.4);
     }
 
     return color;
@@ -72,16 +73,35 @@ class EntityAlerts extends Widget {
     const color = this.getColor(type);
     const glyph = this.getGlyph(type);
 
-    return (
-      <Label
-        key={index}
-        glyph={glyph}
-        width={width || '60px'}
-        glyphSize="180%"
-        glyphColor={color}
-        tooltip={tooltip}
-      />
-    );
+    if (this.isRetro) {
+      return (
+        <>
+          <RetroIlluminatedButton
+            key={index}
+            glyph={glyph}
+            glyphSize="150%"
+            width="40px"
+            height="40px"
+            material="led"
+            color={color}
+            backgroundColor={this.getColorBackground(type)}
+            tooltip={tooltip}
+          />
+          <Label width={width ? null : '20px'} />
+        </>
+      );
+    } else {
+      return (
+        <Label
+          key={index}
+          glyph={glyph}
+          width={width || '60px'}
+          glyphSize="180%"
+          glyphColor={color}
+          tooltip={tooltip}
+        />
+      );
+    }
   }
 
   renderGlyphs(type, list) {
