@@ -142,7 +142,8 @@ class EntityAlerts extends Widget {
         style={style}
       >
         {this.renderGlyph(type)}
-        <Label text={message} />
+        <Label text={message} grow="1" />
+        {count > 1 ? <Label text={`(×${count})`} /> : null}
       </div>
     );
   }
