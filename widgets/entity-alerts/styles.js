@@ -22,9 +22,9 @@ export default function styles(theme) {
     overflowY: 'auto',
   };
 
-  const entityAlert = {
+  const group = {
     display: 'flex',
-    flexDirection: 'row',
+    flexDirection: 'column',
     margin: isRetro ? '-5px 20px' : `${m14} ${m}`,
     padding: isRetro ? '20px 20px 20px 10px' : `${m12} ${m} ${m12} ${m12}`,
     borderRadius: isRetro ? '25px 25px 2px 2px' : '4px',
@@ -32,6 +32,26 @@ export default function styles(theme) {
     border: isRetro ? '1px solid #777' : null,
     boxShadow: isRetro ? 'rgba(0, 0, 0, 0.5) 2px 6px 50px 0px inset' : null,
     // + borderLeft: `10px solid ${color}`,
+    // + backgroundColor: color,
+  };
+
+  const compacted = {
+    ...group,
+    flexDirection: 'row',
+  };
+
+  const alert = {
+    display: 'flex',
+    flexDirection: 'row',
+    borderRadius: isRetro ? '26px' : '4px',
+    border: isRetro ? '1px solid #aaa' : null,
+    boxShadow: isRetro ? '0px 5px 10px 0px rgba(0,0,0,0.3)' : null,
+    margin: isRetro ? '0px 0px 2px 0px' : null,
+    // + backgroundColor: color,
+  };
+
+  const title = {
+    margin: '0px 0px 10px 58px',
   };
 
   const button = {
@@ -44,7 +64,10 @@ export default function styles(theme) {
 
   return {
     entityAlerts,
-    entityAlert,
+    group,
+    compacted,
+    title,
+    alert,
     button,
   };
 }
