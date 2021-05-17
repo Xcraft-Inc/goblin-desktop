@@ -293,6 +293,10 @@ class EntityAlerts extends Widget {
       return count;
     }, 0);
 
+    if (total === 0) {
+      return null;
+    }
+
     return (
       <div className={this.styles.classNames.entityAlerts}>
         {this.extended || total === 1
