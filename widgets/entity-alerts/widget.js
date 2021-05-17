@@ -228,13 +228,8 @@ class EntityAlerts extends Widget {
     );
   }
 
-  render() {
-    const {alerts} = this.props;
-
-    if (!alerts) {
-      return null;
-    }
-
+  renderGroup(group, index) {
+    const alerts = group.get('alerts');
     const errors = alerts.filter((a) => a.get('type') === 'error');
     const warnings = alerts.filter((a) => a.get('type') === 'warning');
 
@@ -242,12 +237,23 @@ class EntityAlerts extends Widget {
       return null;
     }
 
+    const title = group.get('title', '');
+
     return (
-      <div className={this.styles.classNames.entityAlerts}>
+      <div key={index} className={this.styles.classNames.entityAlerts}>
+        {title}
         {this.renderAlerts(errors, warnings)}
         {this.renderButton(errors, warnings)}
       </div>
     );
+  }
+
+  render() {
+    const {alerts} = this.props;
+    if (!alerts) {
+      return null;
+    }
+    return alerts.map((group, index) => this.renderGroup(group, index));
   }
 }
 
