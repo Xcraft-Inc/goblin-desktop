@@ -26,8 +26,8 @@ export default function styles(theme) {
     display: 'flex',
     flexDirection: 'column',
     margin: isRetro ? '-5px 20px' : `${m14} ${m}`,
-    padding: isRetro ? '20px 20px 20px 10px' : `${m12} ${m} ${m12} ${m12}`,
-    borderRadius: isRetro ? '25px 25px 2px 2px' : '4px',
+    padding: isRetro ? '20px 20px 20px 10px' : null,
+    borderRadius: isRetro ? '25px 25px 2px 2px' : '2px',
     color: '#333',
     border: isRetro ? '1px solid #777' : null,
     boxShadow: isRetro ? 'rgba(0, 0, 0, 0.5) 2px 6px 50px 0px inset' : null,
@@ -43,15 +43,17 @@ export default function styles(theme) {
   const alert = {
     display: 'flex',
     flexDirection: 'row',
-    borderRadius: isRetro ? '26px' : '4px',
+    borderRadius: isRetro ? '26px' : '2px',
     border: isRetro ? '1px solid #aaa' : null,
     boxShadow: isRetro ? '0px 5px 10px 0px rgba(0,0,0,0.3)' : null,
-    margin: isRetro ? '0px 0px 2px 0px' : null,
+    margin: isRetro ? '0px 0px 2px 0px' : '0px -10px',
+    padding: isRetro ? null : `0px ${Unit.multiply(m12, -1)}`,
+    // + borderLeft: `10px solid ${color}`,
     // + backgroundColor: color,
   };
 
   const title = {
-    margin: '0px 0px 10px 58px',
+    margin: '5px 0px 5px 48px',
   };
 
   const button = {

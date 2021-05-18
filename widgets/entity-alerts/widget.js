@@ -97,8 +97,8 @@ class EntityAlerts extends Widget {
         <Label
           key={index}
           glyph={glyph}
-          width={width || '60px'}
-          glyphSize="180%"
+          width={width || '50px'}
+          glyphSize="120%"
           glyphColor={color}
         />
       );
@@ -128,7 +128,9 @@ class EntityAlerts extends Widget {
   renderAlert(alert, index) {
     const {type, message} = alert.pick('type', 'message');
 
+    const color = this.getColor(type);
     const style = {
+      borderLeft: this.isRetro ? null : `10px solid ${color}`,
       backgroundColor: this.getColorBackground(type),
     };
 
@@ -189,7 +191,7 @@ class EntityAlerts extends Widget {
       <div key={index} className={this.styles.classNames.group} style={style}>
         {title ? (
           <div key={index} className={this.styles.classNames.title}>
-            <Label kind="title" text={title} />
+            <Label textTransform="uppercase" fontWeight="bold" text={title} />
           </div>
         ) : null}
         {this.renderAlerts(errors, warnings, infos)}
