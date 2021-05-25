@@ -46,7 +46,7 @@ export default function styles(theme) {
     borderRadius: isRetro ? '26px' : '2px',
     border: isRetro ? '1px solid #aaa' : null,
     boxShadow: isRetro ? '0px 5px 10px 0px rgba(0,0,0,0.3)' : null,
-    margin: isRetro ? '0px 0px 2px 0px' : '0px -10px',
+    margin: isRetro ? '0px 0px 2px 0px' : '0px 0px 0px -10px',
     padding: isRetro ? null : `0px ${Unit.multiply(m12, -1)}`,
     // + borderLeft: `10px solid ${color}`,
     // + backgroundColor: color,
