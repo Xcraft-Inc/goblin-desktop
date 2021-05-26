@@ -150,6 +150,16 @@ class DesktopMonitors extends Widget {
       style.bottom = px(-this.monitorSize.height / 0.9);
     }
 
+    const channels = Array.from(this.props.channels.entries()).map(
+      ([channel, data]) => {
+        return {
+          name: channel,
+          samples: data.get('samples'),
+          max: data.get('delayedMax'),
+        };
+      }
+    );
+
     return (
       <div
         className={styleName}
@@ -159,7 +169,7 @@ class DesktopMonitors extends Widget {
         <SamplesMonitor
           id={this.props.id}
           showed={showed}
-          channels={this.props.channels}
+          channels={channels}
           width={px(this.monitorSize.width)}
           height={px(this.monitorSize.height)}
           aging={this.monitorAging}
@@ -245,26 +255,17 @@ class DesktopMonitors extends Widget {
 }
 
 /******************************************************************************/
+const emptyChannels = [];
 
 export default Widget.connect((state) => {
   const enabled = !!state.get('backend.activity-monitor');
   const isActive = !!state.get('backend.activity-monitor-led.isActive');
 
   if (!enabled) {
-    return {isActive, channels: []};
+    return {isActive, channels: emptyChannels};
   }
 
-  const s = state.get('backend.activity-monitor.channels');
-  const channels = s
-    ? Array.from(s.entries()).map(([channel, data]) => {
-        return {
-          name: channel,
-          samples: data.get('samples'),
-          max: data.get('delayedMax'),
-        };
-      })
-    : [];
-
+  const channels = state.get('backend.activity-monitor.channels');
   return {
     isActive,
     channels,
