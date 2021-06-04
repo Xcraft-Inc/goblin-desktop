@@ -350,12 +350,14 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
 Goblin.registerQuest(goblinName, 'add-context', function* (
   quest,
   contextId,
-  name
+  name,
+  scope
 ) {
   const contexts = quest.getAPI(`contexts@${quest.goblin.id}`);
   yield contexts.add({
     contextId,
     name,
+    scope,
   });
 });
 

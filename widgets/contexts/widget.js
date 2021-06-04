@@ -16,6 +16,33 @@ class ContextButtonNC extends Widget {
   }
 
   render() {
+    let isValidScope = true;
+    const scope = this.props.context.get('scope');
+    if (scope) {
+      switch (scope) {
+        case 'prototype':
+          if (!this.props.prototypeMode) {
+            isValidScope = false;
+          }
+          break;
+        case 'dev':
+          isValidScope = false;
+          if (
+            this.props.prototypeMode &&
+            process &&
+            process.env &&
+            process.env.NODE_ENV === 'development'
+          ) {
+            isValidScope = true;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    if (!isValidScope) {
+      return null;
+    }
     return (
       <Button
         key={this.props.context.get('contextId')}
@@ -36,6 +63,8 @@ class ContextButtonNC extends Widget {
 }
 
 const ContextButton = Widget.connect((state, props) => {
+  const userSession = Widget.getUserSession(state);
+  const prototypeMode = userSession.get('prototypeMode');
   const byContext = state.get(`backend.${props.desktopId}.workitemsByContext`);
   let openTabs = 0;
   if (byContext) {
@@ -44,7 +73,7 @@ const ContextButton = Widget.connect((state, props) => {
       openTabs = list.size;
     }
   }
-  return {openTabs};
+  return {openTabs, prototypeMode};
 })(ContextButtonNC);
 
 class Contexts extends Widget {
