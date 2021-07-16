@@ -39,7 +39,7 @@ class DesktopConnectionStatusNC extends Widget {
   renderRow(horde, lag, delta) {
     return (
       <Container kind="row" key={horde}>
-        <Label singleLine={true} text={T('{horde}:', '', {horde})} />
+        <Label singleLine={true} text={T('{horde} :', '', {horde})} />
         <Label
           singleLine={true}
           kind="warning"
