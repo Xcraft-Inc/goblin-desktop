@@ -45,10 +45,10 @@ class DesktopConnectionStatusNC extends Widget {
           kind="warning"
           text={
             lag
-              ? T('disconnected since {delta}s', '', {
+              ? T('déconnecté depuis {delta}s', '', {
                   delta: parseInt(delta / 1000),
                 })
-              : T('connected')
+              : T('connecté')
           }
         />
       </Container>
@@ -68,7 +68,7 @@ class DesktopConnectionStatusNC extends Widget {
           glyphColor={color}
         />
         <div className={this.styles.classNames.list}>
-          <Label fontWeight="bold" text={T('Network')} bottomSpacing="large" />
+          <Label fontWeight="bold" text={T('Réseau')} bottomSpacing="large" />
           {hordes
             .entrySeq()
             .map(([horde, {lag, delta}]) => this.renderRow(horde, lag, delta))}
