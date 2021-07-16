@@ -63,7 +63,7 @@ class DesktopConnectionStatusNC extends Widget {
       <div className={this.styles.classNames.dialog}>
         <Label
           width="50px"
-          glyph="solid/signal"
+          glyph="solid/globe"
           glyphSize="150%"
           glyphColor={color}
         />
@@ -88,8 +88,9 @@ class DesktopConnectionStatusNC extends Widget {
       <>
         <Button
           kind="main-tab-right"
-          glyph="solid/signal"
-          glyphColor={color}
+          glyph="solid/globe"
+          glyphColor={lag && color}
+          tooltip={T('Statut du réseau')}
           onClick={() => this.onToggleDialog()}
           className={lag && this.styles.classNames.blink}
         />
