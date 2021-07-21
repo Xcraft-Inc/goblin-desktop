@@ -93,7 +93,7 @@ class DesktopConnectionStatusNC extends Widget {
         <Button
           kind="main-tab-right"
           glyph="solid/globe"
-          glyphColor={lag && color}
+          glyphColor={lag ? color : null}
           tooltip={T('Statut du réseau')}
           onClick={() => this.onToggleDialog()}
           className={lag && this.styles.classNames.blink}
