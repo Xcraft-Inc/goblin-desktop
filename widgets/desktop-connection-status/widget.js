@@ -36,7 +36,7 @@ class DesktopConnectionStatusNC extends Widget {
     return ColorManipulator.darken(color, 0.4);
   }
 
-  renderRow(horde, lag, delta) {
+  renderRow(horde, lag, delta, noSocket) {
     return (
       <Container kind="row" key={horde}>
         <Label singleLine={true} text={T('{horde} :', '', {horde})} />
@@ -44,7 +44,9 @@ class DesktopConnectionStatusNC extends Widget {
           singleLine={true}
           kind="warning"
           text={
-            lag
+            noSocket
+              ? T('inatteignable')
+              : lag
               ? T('déconnecté depuis {delta}s', '', {
                   delta: parseInt(delta / 1000),
                 })
@@ -71,7 +73,9 @@ class DesktopConnectionStatusNC extends Widget {
           <Label fontWeight="bold" text={T('Réseau')} bottomSpacing="large" />
           {hordes
             .entrySeq()
-            .map(([horde, {lag, delta}]) => this.renderRow(horde, lag, delta))}
+            .map(([horde, {lag, delta, noSocket}]) =>
+              this.renderRow(horde, lag, delta, noSocket)
+            )}
         </div>
       </div>
     );
