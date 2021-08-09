@@ -109,6 +109,7 @@ class Detail extends Widget {
                   theme={this.context.theme}
                   do={this.doProxy}
                   entityId={entityId}
+                  entitySchema={this.getSchema(this.props.type)}
                   contextId={this.context.contextId}
                 />
               );
