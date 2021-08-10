@@ -22,6 +22,7 @@ class Workitem extends Form {
     this.state = {
       showDeleteDialog: false,
       deleteAction: 'archive',
+      showStatureSmall: false,
     };
 
     this.doAction = this.doAction.bind(this);
@@ -55,6 +56,15 @@ class Workitem extends Form {
   set deleteAction(value) {
     this.setState({
       deleteAction: value,
+    });
+  }
+
+  get showStatureSmall() {
+    return this.state.showStatureSmall;
+  }
+  set showStatureSmall(value) {
+    this.setState({
+      showStatureSmall: value,
     });
   }
   //#endregion
@@ -245,9 +255,24 @@ class Workitem extends Form {
     }
   }
 
-  renderActionListButton(button, index) {
+  renderActionListButton(button, hasStatureSmall, index) {
+    if (
+      hasStatureSmall !== undefined &&
+      !this.showStatureSmall &&
+      button.stature === 'small'
+    ) {
+      return null;
+    }
+
     return (
-      <div key={index} className={this.styles.classNames.actionList}>
+      <div
+        key={index}
+        className={
+          hasStatureSmall
+            ? this.styles.classNames.actionListWithStature
+            : this.styles.classNames.actionList
+        }
+      >
         <Button
           kind="secondary-action"
           grow="1"
@@ -264,13 +289,42 @@ class Workitem extends Form {
       return null;
     }
 
-    return (
-      <div className={this.styles.classNames.actionsList}>
-        {listButtons.map((button, index) =>
-          this.renderActionListButton(button.toJS(), index)
-        )}
-      </div>
+    const hasStatureSmall = !!listButtons.find(
+      (b) => b.get('stature') === 'small'
     );
+
+    const hasStatureMajor = !!listButtons.find(
+      (b) => b.get('stature') === 'major'
+    );
+
+    if (hasStatureSmall && hasStatureMajor) {
+      return (
+        <div className={this.styles.classNames.actionsListWithStature}>
+          <div className={this.styles.classNames.actionsListStature}>
+            <Button
+              shape="rounded"
+              glyph={
+                this.showStatureSmall
+                  ? 'solid/chevron-down'
+                  : 'solid/chevron-up'
+              }
+              onClick={() => (this.showStatureSmall = !this.showStatureSmall)}
+            />
+          </div>
+          {listButtons.map((button, index) =>
+            this.renderActionListButton(button.toJS(), hasStatureSmall, index)
+          )}
+        </div>
+      );
+    } else {
+      return (
+        <div className={this.styles.classNames.actionsList}>
+          {listButtons.map((button, index) =>
+            this.renderActionListButton(button.toJS(), undefined, index)
+          )}
+        </div>
+      );
+    }
   }
 
   renderActionButton(button, layout, index, count) {

@@ -188,11 +188,28 @@ export default function styles(theme) {
     marginBottom: '10px',
   };
 
+  const actionsListWithStature = {
+    ...actionsList,
+    position: 'relative',
+    marginRight: '32px',
+  };
+
   const actionList = {
     width: '320px',
     display: 'flex',
     flexDirection: 'row',
     margin: '0px 5px 2px 5px',
+  };
+
+  const actionListWithStature = {
+    ...actionList,
+    width: '300px',
+  };
+
+  const actionsListStature = {
+    position: 'absolute',
+    right: '-32px',
+    top: '0px',
   };
 
   /******************************************************************************/
@@ -226,7 +243,10 @@ export default function styles(theme) {
     actionsLinePrimary,
     actionsLineSecondary,
     actionsList,
+    actionsListWithStature,
     actionList,
+    actionListWithStature,
+    actionsListStature,
   };
 }
 
