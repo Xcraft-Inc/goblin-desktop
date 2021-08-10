@@ -22,8 +22,13 @@ Goblin.registerQuest(goblinName, 'delete', function (quest) {
   quest.log.info('deleting contexts...');
 });
 
-Goblin.registerQuest(goblinName, 'add', function (quest, contextId, name) {
-  quest.do({contextId, name});
+Goblin.registerQuest(goblinName, 'add', function (
+  quest,
+  contextId,
+  name,
+  scope
+) {
+  quest.do({contextId, name, scope});
 });
 
 Goblin.registerQuest(goblinName, 'remove', function (quest, widgetId) {

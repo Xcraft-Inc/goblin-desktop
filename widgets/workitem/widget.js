@@ -467,9 +467,15 @@ class Workitem extends Form {
 
   renderStatusBusiness() {
     if (this.props.businessStatus) {
+      let nabuId = this.getSchema(
+        `${this.props.entityType}.status.valuesInfo.${this.props.businessStatus}.text.nabuId`
+      );
+      if (!nabuId) {
+        nabuId = this.props.businessStatus;
+      }
       return (
         <div className={this.styles.classNames.statusBusiness}>
-          <Label kind="pane-warning" text={this.props.businessStatus} />
+          <Label kind="pane-warning" text={T(nabuId)} />
         </div>
       );
     } else {

@@ -316,10 +316,11 @@ class Plugin extends Widget {
     const key1 = this.props.readonly ? 'readonly' : 'edit';
     const key2 = extended ? 'extend' : 'compact';
 
-    let UI = this.WithState(
-      workitemUI.plugin[key1][key2],
-      'entityId'
-    )('.entityId');
+    let UI = workitemUI.plugin[key1][key2];
+    //let UI = this.WithState(
+    //  workitemUI.plugin[key1][key2],
+    //  'entityId'
+    //)('.entityId');
 
     if (
       workitemUI.mappers &&

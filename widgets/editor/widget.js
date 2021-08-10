@@ -68,6 +68,7 @@ class Editor extends Widget {
             {...this.props}
             theme={this.context.theme}
             do={this.doProxy}
+            entitySchema={this.getSchema(this.props.type)}
             contextId={this.context.contextId}
           />
         </Editor>

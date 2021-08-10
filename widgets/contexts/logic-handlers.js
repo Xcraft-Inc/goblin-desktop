@@ -13,13 +13,14 @@ module.exports = {
   'add': (state, action) => {
     const name = action.get('name');
     const contextId = action.get('contextId');
+    const scope = action.get('scope');
     const current = state.get('current');
     if (!current) {
       return state
         .set('current', contextId)
-        .set(`contexts.${contextId}`, {contextId, name});
+        .set(`contexts.${contextId}`, {contextId, name, scope});
     }
-    return state.set(`contexts.${contextId}`, {contextId, name});
+    return state.set(`contexts.${contextId}`, {contextId, name, scope});
   },
   'remove': (state, action) => {
     const widgetId = action.get('widgetId');

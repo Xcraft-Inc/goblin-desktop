@@ -5,7 +5,7 @@ export default function styles(theme) {
     zIndex: 10,
     top: '80px',
     right: '20px',
-    width: '300px',
+    width: '400px',
     position: 'fixed',
     padding: '20px 20px 20px 20px',
     borderRadius: '10px',

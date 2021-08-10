@@ -8,7 +8,7 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Workitem from 'goblin-desktop/widgets/workitem/widget';
 
 const Spinner = () => {
-  return <Container kind="full" width={'100%'} height={'100%'} busy={true} />;
+  return <Container width={'100%'} height={'100%'} busy={true} />;
 };
 const uiImporter = importer('ui');
 
@@ -109,6 +109,7 @@ class Detail extends Widget {
                   theme={this.context.theme}
                   do={this.doProxy}
                   entityId={entityId}
+                  entitySchema={this.getSchema(this.props.type)}
                   contextId={this.context.contextId}
                 />
               );
