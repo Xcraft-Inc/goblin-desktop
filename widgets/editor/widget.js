@@ -34,7 +34,7 @@ class Editor extends Widget {
     if (!entityId) {
       return null;
     }
-
+    const type = entityId.split('@', 1)[0];
     const Editor = this.mapWidget(Workitem, 'buttons', `backend.${id}.buttons`);
 
     return this.buildLoader(entityId, () => {
@@ -68,7 +68,7 @@ class Editor extends Widget {
             {...this.props}
             theme={this.context.theme}
             do={this.doProxy}
-            entitySchema={this.getSchema(this.props.type)}
+            entitySchema={this.getSchema(type)}
             contextId={this.context.contextId}
           />
         </Editor>
