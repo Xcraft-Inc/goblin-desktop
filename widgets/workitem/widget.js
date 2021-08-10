@@ -276,14 +276,58 @@ class Workitem extends Form {
     );
   }
 
+  renderActionListButtonsGroup(list, index) {
+    const name = list.get(0).get('statureGroupName');
+
+    return (
+      <div key={index} className={this.styles.classNames.actionsListSmall}>
+        <div className={this.styles.classNames.actionsListSmallTitle}>
+          <Label
+            textTransform="uppercase"
+            fontSize="75%"
+            fontWeight="bold"
+            text={name}
+          />
+        </div>
+        <div
+          key={index}
+          className={this.styles.classNames.actionsListSmallContent}
+        >
+          {list.map((button, index) =>
+            this.renderActionListButton(button.toJS(), true, index)
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  renderActionListButtonsGroups(listButtons, groups) {
+    if (!this.showStatureSmall) {
+      return null;
+    }
+
+    const result = [];
+    groups.forEach((group, index) => {
+      const list = listButtons.filter(
+        (b) =>
+          b.get('stature') === 'small' &&
+          b.get('statureGroup', 'default') === group
+      );
+      result.push(this.renderActionListButtonsGroup(list, index));
+    });
+    return result;
+  }
+
   renderActionListButtons(listButtons) {
     if (listButtons.size === 0) {
       return null;
     }
 
-    const hasStatureSmall = !!listButtons.find(
-      (b) => b.get('stature') === 'small'
-    );
+    const smalls = listButtons.filter((b) => b.get('stature') === 'small');
+    const hasStatureSmall = smalls.size > 0;
+
+    const groups = new Set();
+    smalls.forEach((small) => groups.add(small.get('statureGroup', 'default')));
 
     const hasStatureMajor = !!listButtons.find(
       (b) => b.get('stature') === 'major'
@@ -310,15 +354,7 @@ class Workitem extends Form {
                 this.renderActionListButton(button.toJS(), true, index)
               )}
           </div>
-          {this.showStatureSmall ? (
-            <div className={this.styles.classNames.actionsListSmall}>
-              {listButtons
-                .filter((b) => b.get('stature') === 'small')
-                .map((button, index) =>
-                  this.renderActionListButton(button.toJS(), true, index)
-                )}
-            </div>
-          ) : null}
+          {this.renderActionListButtonsGroups(listButtons, groups)}
         </div>
       );
     } else {

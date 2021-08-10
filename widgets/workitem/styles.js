@@ -202,10 +202,20 @@ export default function styles(theme) {
 
   const actionsListSmall = {
     display: 'flex',
-    flexWrap: 'wrap',
-    marginTop: '10px',
+    flexDirection: 'column',
+  };
+
+  const actionsListSmallTitle = {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: '0px 0px 10px 5px',
     paddingTop: '10px',
-    borderTop: '1px solid #aaa',
+    borderBottom: '1px solid #aaa',
+  };
+
+  const actionsListSmallContent = {
+    display: 'flex',
+    flexWrap: 'wrap',
   };
 
   const actionList = {
@@ -260,6 +270,8 @@ export default function styles(theme) {
     actionsListWithStature,
     actionsListMajor,
     actionsListSmall,
+    actionsListSmallTitle,
+    actionsListSmallContent,
     actionList,
     actionListWithStature,
     actionsListStature,
