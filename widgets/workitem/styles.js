@@ -184,14 +184,28 @@ export default function styles(theme) {
   const actionsList = {
     display: 'flex',
     flexWrap: 'wrap',
-    // justifyContent: 'center',
     marginBottom: '10px',
   };
 
   const actionsListWithStature = {
-    ...actionsList,
     position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: '10px',
     marginRight: '32px',
+  };
+
+  const actionsListMajor = {
+    display: 'flex',
+    flexWrap: 'wrap',
+  };
+
+  const actionsListSmall = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    marginTop: '10px',
+    paddingTop: '10px',
+    borderTop: '1px solid #aaa',
   };
 
   const actionList = {
@@ -244,6 +258,8 @@ export default function styles(theme) {
     actionsLineSecondary,
     actionsList,
     actionsListWithStature,
+    actionsListMajor,
+    actionsListSmall,
     actionList,
     actionListWithStature,
     actionsListStature,

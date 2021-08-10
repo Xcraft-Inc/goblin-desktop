@@ -255,20 +255,12 @@ class Workitem extends Form {
     }
   }
 
-  renderActionListButton(button, hasStatureSmall, index) {
-    if (
-      hasStatureSmall !== undefined &&
-      !this.showStatureSmall &&
-      button.stature === 'small'
-    ) {
-      return null;
-    }
-
+  renderActionListButton(button, hasStature, index) {
     return (
       <div
         key={index}
         className={
-          hasStatureSmall
+          hasStature
             ? this.styles.classNames.actionListWithStature
             : this.styles.classNames.actionList
         }
@@ -311,16 +303,29 @@ class Workitem extends Form {
               onClick={() => (this.showStatureSmall = !this.showStatureSmall)}
             />
           </div>
-          {listButtons.map((button, index) =>
-            this.renderActionListButton(button.toJS(), hasStatureSmall, index)
-          )}
+          <div className={this.styles.classNames.actionsListMajor}>
+            {listButtons
+              .filter((b) => b.get('stature') === 'major')
+              .map((button, index) =>
+                this.renderActionListButton(button.toJS(), true, index)
+              )}
+          </div>
+          {this.showStatureSmall ? (
+            <div className={this.styles.classNames.actionsListSmall}>
+              {listButtons
+                .filter((b) => b.get('stature') === 'small')
+                .map((button, index) =>
+                  this.renderActionListButton(button.toJS(), true, index)
+                )}
+            </div>
+          ) : null}
         </div>
       );
     } else {
       return (
         <div className={this.styles.classNames.actionsList}>
           {listButtons.map((button, index) =>
-            this.renderActionListButton(button.toJS(), undefined, index)
+            this.renderActionListButton(button.toJS(), false, index)
           )}
         </div>
       );
