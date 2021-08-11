@@ -335,6 +335,7 @@ class Plugin extends Widget {
       );
     }
 
+    const type = entityId.split('@', 1)[0];
     const Loader = (props) => {
       if (props.loaded) {
         return (
@@ -354,6 +355,7 @@ class Plugin extends Widget {
                 origin={this.props.origin}
                 contextId={this.context.contextId}
                 do={this.doProxy(index)}
+                entitySchema={this.getSchema(type)}
               />
             ))}
           </Workitem>
