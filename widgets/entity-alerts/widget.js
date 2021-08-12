@@ -119,7 +119,7 @@ class EntityAlerts extends Widget {
     }
 
     if (overflow) {
-      result.push(<Label key="last" text="..." fontSize="200%" />);
+      result.push(<Label key="last" text="..." fontSize="135%" />);
     }
 
     return result;
@@ -137,7 +137,7 @@ class EntityAlerts extends Widget {
     return (
       <div key={index} className={this.styles.classNames.alert} style={style}>
         {this.renderGlyph(type)}
-        <Label text={message} />
+        <Label kind="alert" text={message} />
       </div>
     );
   }
