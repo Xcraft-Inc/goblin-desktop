@@ -38,6 +38,11 @@ module.exports = (config) => {
     hinters,
   } = config;
   const goblinName = `${name}-wizard`;
+  if (gadgets) {
+    for (const [alias, def] of Object.entries(gadgets)) {
+      Goblin.registerAliasNamespace(alias, `${def.type}-gadget`);
+    }
+  }
   const wizardSteps = Object.keys(steps);
   const wizardFlow = ['init'].concat(wizardSteps);
 
