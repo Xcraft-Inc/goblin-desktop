@@ -380,12 +380,26 @@ class EntityRow extends Widget {
   }
 
   renderCell(cell, index) {
-    if(!cell){
+    if (!cell) {
       return null;
     }
     const targetPath = ListHelpers.getColumnTargetPath(cell);
     const columnSubPath = ListHelpers.getColumnSubPath(cell);
-    const text = ListHelpers.getColumnDisplayText(cell, this.props.entity);
+    let text = ListHelpers.getColumnDisplayText(cell, this.props.entity);
+
+    const {schema} = this.props;
+    if (schema) {
+      const propSchema = schema.get(targetPath, null);
+      if (propSchema) {
+        const {type} = propSchema.pick('type');
+        if (type === 'enum') {
+          const valuesInfo = propSchema.get('valuesInfo');
+          if (valuesInfo) {
+            text = valuesInfo.get(`${text}.text`, text);
+          }
+        }
+      }
+    }
 
     if (
       ListHelpers.isTargetingValueOrRef(this.props.entity, targetPath) &&
@@ -394,6 +408,7 @@ class EntityRow extends Widget {
       return (
         <Driller
           entityId={text}
+          schema={this.props.schema}
           rowId={this.props.rowIndex}
           key={index}
           column={cell}

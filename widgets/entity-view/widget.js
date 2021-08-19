@@ -364,6 +364,7 @@ class EntityView extends Widget {
             useView: this.props.view ? true : false,
             serviceId: this.props.id,
             variant: this.variant,
+            schema: this.getSchema(this.props.type)
           }}
         />
       </div>
