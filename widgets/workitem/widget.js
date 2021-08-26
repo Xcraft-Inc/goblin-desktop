@@ -516,7 +516,7 @@ class Workitem extends Form {
       }
       return (
         <div className={this.styles.classNames.statusBusiness}>
-          <Label kind="pane-warning" text={T(nabuId)} />
+          <Label kind="pane-warning" text={{nabuId}} />
         </div>
       );
     } else {
