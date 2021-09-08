@@ -140,7 +140,13 @@ class Taskbar extends Widget {
                   break;
               }
             }
-            if (isValidScope) {
+
+            let canDo = true;
+            if (task.workitem) {
+              canDo = this.canDo(`${task.workitem.name}.create`);
+            }
+
+            if (isValidScope && canDo) {
               if (task.separator) {
                 return this.renderSeparator(i);
               } else {
