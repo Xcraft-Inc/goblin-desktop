@@ -14,13 +14,21 @@
     }
   },
   "dependencies": {
-    "goblin-theme": "^1.0.6",
+    "immutable": "4.0.0-rc.14",
+    "uuid": "^8.3.2",
     "xcraft-core-goblin": "^4.0.1",
     "xcraft-core-shredder": "^4.0.0",
     "xcraft-core-utils": "^3.0.0"
   },
   "devDependencies": {
+    "goblin-theme": "^1.0.6",
     "prettier": "2.0.4",
+    "prop-types": "^15.5.10",
+    "mousetrap": "^1.6.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "@fortawesome/react-fontawesome": "^0.1.9",
+    "scroll-into-view-if-needed": "^1.4.0",
     "xcraft-dev-prettier": "^2.0.0",
     "xcraft-dev-rules": "^2.0.0"
   },
