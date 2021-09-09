@@ -1,12 +1,20 @@
-import {ColorManipulator} from 'goblin-theme';
+import {Unit, ColorManipulator} from 'goblin-theme';
 import TableHelpers from 'goblin-gadgets/widgets/helpers/table-helpers.js';
+
+const px = Unit.toPx;
 
 /******************************************************************************/
 
-export const propNames = ['height', 'minHeight', 'selected', 'rowIndex'];
+export const propNames = [
+  'busyHeight',
+  'height',
+  'minHeight',
+  'selected',
+  'rowIndex',
+];
 
 export default function styles(theme, props) {
-  const {height, minHeight, selected, rowIndex} = props;
+  const {busyHeight, height, minHeight, selected, rowIndex} = props;
 
   let backgroundColor = theme.palette.tableCellBackground;
   if (theme.look.name === 'retro' && rowIndex % 2 === 0) {
@@ -60,6 +68,10 @@ export default function styles(theme, props) {
     display: 'flex',
   };
 
+  const spinner = {
+    height: px(busyHeight),
+  };
+
   const filteredCellBarre = {
     display: 'flex',
     flexDirection: 'row',
@@ -77,6 +89,7 @@ export default function styles(theme, props) {
     entityRow,
     buttons,
     busyBox,
+    spinner,
     filteredCellBarre,
     filteredCellGauge,
   };
