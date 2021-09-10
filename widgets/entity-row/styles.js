@@ -47,6 +47,8 @@ export default function styles(theme, props) {
     },
   };
 
+  const busyEntityRow = {...entityRow, padding: '0 20px'};
+
   const buttons = {
     position: 'absolute',
     height: '100%',
@@ -69,7 +71,10 @@ export default function styles(theme, props) {
   };
 
   const spinner = {
+    position: 'relative',
     height: px(busyHeight),
+    minHeight: '40px',
+    top: '10px',
   };
 
   const filteredCellBarre = {
@@ -87,6 +92,7 @@ export default function styles(theme, props) {
 
   return {
     entityRow,
+    busyEntityRow,
     buttons,
     busyBox,
     spinner,

@@ -467,7 +467,7 @@ class EntityRow extends Widget {
 
     if (!loaded) {
       return (
-        <div className={this.styles.classNames.entityRow}>
+        <div className={this.styles.classNames.busyEntityRow}>
           <TableCell isLast={false} isHeader={false}>
             {this.renderSpinner()}
           </TableCell>
