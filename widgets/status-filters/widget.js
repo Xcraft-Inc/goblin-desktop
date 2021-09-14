@@ -13,6 +13,7 @@ class StatusFilter extends Widget {
   static get wiring() {
     return {
       id: 'id',
+      entityType: 'table',
       facets: 'facets',
       facetsDisplayName: 'facetsDisplayName',
       facetsMappingType: 'facetsMappingType',
@@ -54,6 +55,7 @@ class StatusFilter extends Widget {
         key={index}
         name={name}
         displayName={this.props.facetsDisplayName.get(name)}
+        entityType={this.props.entityType}
         type={this.props.facetsMappingType.get(name)}
         facets={items}
       />
