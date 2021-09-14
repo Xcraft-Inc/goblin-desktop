@@ -12,6 +12,7 @@ class EntityListItem extends Widget {
     return (
       <EntityRow
         id={this.props.id}
+        busyHeight={this.props.busyHeight}
         minHeight="28px"
         maxHeight="200px"
         firstColumnWidth={this.props.firstColumnWidth}
