@@ -54,11 +54,15 @@ export default class FacetFilter extends Widget {
         />
       );
     } else {
+      const schema = this.getSchema(this.props.entityType);
+      const prop = this.props.name.replace('/', '.');
+      const propInfos = schema.get(prop);
       return (
         <FacetFilterListDialog
           id={this.props.id}
           name={this.props.name}
           type={this.props.type}
+          propInfos={propInfos}
           parentButtonRect={r}
           onClose={this.onToggleShowDialog}
         />
