@@ -40,6 +40,7 @@ export default function styles(theme) {
 
   const scrollablePane = {
     ...pane,
+    backgroundColor: null,
     overflowY: 'auto',
   };
 

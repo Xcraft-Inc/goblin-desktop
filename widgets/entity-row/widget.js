@@ -427,25 +427,31 @@ class EntityRow extends Widget {
   renderSpinner() {
     if (this.context.theme.look.name === 'retro') {
       return (
-        <div className={this.styles.classNames.busyBox}>
-          <RetroGear
-            color={ColorManipulator.darken(
-              this.context.theme.palette.light,
-              0.2
-            )}
-            left="0px"
-            top="0px"
-            radius="20px"
-            toothCount={12}
-            toothThickness={6}
-            rotationDuration="3s"
-            rotationDirection="cw"
-            shadow="no"
-          />
+        <div className={this.styles.classNames.spinner}>
+          <div className={this.styles.classNames.busyBox}>
+            <RetroGear
+              color={ColorManipulator.darken(
+                this.context.theme.palette.light,
+                0.2
+              )}
+              left="0px"
+              top="0px"
+              radius="20px"
+              toothCount={12}
+              toothThickness={6}
+              rotationDuration="3s"
+              rotationDirection="cw"
+              shadow="no"
+            />
+          </div>
         </div>
       );
     } else {
-      return <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />;
+      return (
+        <div className={this.styles.classNames.spinner}>
+          <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
+        </div>
+      );
     }
   }
 
@@ -461,7 +467,7 @@ class EntityRow extends Widget {
 
     if (!loaded) {
       return (
-        <div className={this.styles.classNames.entityRow}>
+        <div className={this.styles.classNames.busyEntityRow}>
           <TableCell isLast={false} isHeader={false}>
             {this.renderSpinner()}
           </TableCell>

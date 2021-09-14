@@ -145,7 +145,7 @@ class FacetFilterListDialog extends Widget {
             id={this.props.id}
             key={`${key}-val`}
             name={this.props.name}
-            text={FacetHelpers.format(key, type)}
+            text={FacetHelpers.format(key, type, this.props.propInfos)}
             value={key}
             onChange={this.changeFacet(key)}
           />
@@ -175,7 +175,7 @@ class FacetFilterListDialog extends Widget {
             id={this.props.id}
             key={`${key}-val`}
             name={this.props.name}
-            text={FacetHelpers.format(key, type)}
+            text={FacetHelpers.format(key, type, this.props.propInfos)}
             value={key}
             onChange={this.changeFacet(key)}
           />
@@ -206,7 +206,6 @@ class FacetFilterListDialog extends Widget {
     if (this.props.loading) {
       return null;
     }
-
     const windowHeight = window.innerHeight;
     const r = this.props.parentButtonRect;
     let centerY = r.top + r.height / 2;

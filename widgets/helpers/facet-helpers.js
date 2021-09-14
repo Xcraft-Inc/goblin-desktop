@@ -23,14 +23,25 @@ function getType(keys) {
   return 'string';
 }
 
-function format(text, type) {
-  switch (type) {
+function format(key, indexType, propInfos) {
+  switch (indexType) {
     case 'datetime':
-      return DateTimeConverters.getDisplayed(text);
+      return DateTimeConverters.getDisplayed(key);
     case 'date':
-      return DateTimeConverters.getDisplayed(text, 'date');
-    default:
-      return text;
+      return DateTimeConverters.getDisplayed(key, 'date');
+    default: {
+      let labelText = key;
+      if (propInfos) {
+        const {type, valuesInfo} = propInfos.pick('type', 'valuesInfo');
+        if (type === 'enum' && valuesInfo) {
+          const value = valuesInfo.get(key);
+          if (value && value.get('text')) {
+            labelText = value.get('text');
+          }
+        }
+      }
+      return labelText;
+    }
   }
 }
 

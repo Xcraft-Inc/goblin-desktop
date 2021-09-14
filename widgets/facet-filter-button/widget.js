@@ -71,9 +71,24 @@ class FacetFilterButton extends Widget {
 
   renderFilter(glyph, array) {
     const type = FacetHelpers.getType(array);
-    const text = array.map((t) => FacetHelpers.format(t, type)).join('\n');
+    const schema = this.getSchema(this.props.entityType);
+    const prop = this.props.name.replace('/', '.');
+    const propInfos = schema.get(prop);
 
-    return <Label fontSize="80%" glyph={glyph} text={text} />;
+    return (
+      <>
+        <Label fontSize="80%" glyph={glyph} />
+        {array.map((t, k) => {
+          return (
+            <Label
+              key={k}
+              fontSize="80%"
+              text={FacetHelpers.format(t, type, propInfos)}
+            />
+          );
+        })}
+      </>
+    );
   }
 
   renderBottomList(count, total) {
@@ -158,9 +173,9 @@ class FacetFilterButton extends Widget {
         }
       }
       const disabled = this.props.numberOfCheckboxes <= 1;
-      style = disabled
-        ? this.styles.classNames.facetFilterButtonDisabled
-        : this.styles.classNames.facetFilterButton;
+      if (disabled && this.props.name !== 'meta/status') {
+        return null;
+      }
     }
 
     return (

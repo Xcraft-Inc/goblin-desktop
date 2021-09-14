@@ -6,16 +6,15 @@ export default function styles(theme, props) {
   const {active} = props;
 
   const facetFilterButton = {
-    'margin': '2px 0px',
+    'margin': '1px 0px',
     'padding': '0px 10px',
     'flexGrow': 1,
     'display': 'flex',
     'flexDirection': 'column',
     'borderRadius': '2px',
-    'border': `1px solid ${theme.palette.textFieldBorderColor}`,
     'backgroundColor': active
       ? theme.palette.facetBackgroundActive
-      : theme.palette.facetBackground,
+      : theme.palette.light,
     'overflow': 'hidden',
     ':hover': {
       backgroundColor: theme.palette.facetBackgroundHover,
@@ -41,7 +40,6 @@ export default function styles(theme, props) {
     flexGrow: 1,
     color: theme.palette.facetText,
     fontWeight: 'bold',
-    textTransform: 'uppercase',
   };
 
   const count = {

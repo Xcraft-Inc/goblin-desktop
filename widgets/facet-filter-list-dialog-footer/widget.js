@@ -98,7 +98,6 @@ class FacetFilterListDialogFooter extends Widget {
 
 export default Widget.connect((state, props) => {
   const flags = state.get(`backend.${props.id}.checkboxes.${props.name}`);
-
   const userSession = Widget.getUserSession(state);
   const prototypeMode = userSession.get('prototypeMode');
 
