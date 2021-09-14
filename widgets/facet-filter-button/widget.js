@@ -173,12 +173,9 @@ class FacetFilterButton extends Widget {
         }
       }
       const disabled = this.props.numberOfCheckboxes <= 1;
-      if (disabled) {
+      if (disabled && this.props.name !== 'meta/status') {
         return null;
       }
-      /*style = disabled
-        ? this.styles.classNames.facetFilterButtonDisabled
-        : this.styles.classNames.facetFilterButton;*/
     }
 
     return (
