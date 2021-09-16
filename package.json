@@ -14,12 +14,12 @@
     }
   },
   "dependencies": {
-    "goblin-theme": "^1.0.6",
+    "goblin-theme": "^2.0.0",
     "immutable": "4.0.0-rc.14",
     "uuid": "^8.3.2",
-    "xcraft-core-goblin": "^4.0.1",
-    "xcraft-core-shredder": "^4.0.0",
-    "xcraft-core-utils": "^3.0.0"
+    "xcraft-core-goblin": "^5.0.0",
+    "xcraft-core-shredder": "^5.0.0",
+    "xcraft-core-utils": "^4.0.0"
   },
   "devDependencies": {
     "prettier": "2.0.4",
