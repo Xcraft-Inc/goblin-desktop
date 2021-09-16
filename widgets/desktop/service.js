@@ -304,6 +304,10 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
     }
   }
 
+  if (!quest.user.canDo(`${workitem.name}.create`)) {
+    return;
+  }
+
   const desktopId = quest.goblin.id;
   const widgetId = `${workitem.name}${
     workitem.mode ? `@${workitem.mode}` : ''
