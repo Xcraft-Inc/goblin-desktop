@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
+import CommandButton from 'goblin-gadgets/widgets/command-button/widget';
 import ScrollableContainer from 'goblin-gadgets/widgets/scrollable-container/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import CheckList from 'goblin-gadgets/widgets/check-list/widget';
@@ -107,6 +108,28 @@ class Workitem extends Form {
 
   get contextId() {
     return this.context.contextId;
+  }
+
+  getCommand(button) {
+    const getQuest = (id) => {
+      switch (id) {
+        case 'validate':
+          return `close`;
+        case 'delete':
+          return `trash-entity`;
+        case 'submit':
+        case 'publish':
+        case 'trash':
+        case 'archive':
+          return `${id}-entity`;
+        default:
+          return id;
+      }
+    };
+
+    const service = button.questService ?? this.props.id.split('@', 1)[0];
+    let quest = button.quest ?? getQuest(button.id);
+    return `${service}.${quest}`;
   }
 
   onSubmit() {
@@ -256,6 +279,7 @@ class Workitem extends Form {
   }
 
   renderActionListButton(button, hasStature, index) {
+    const command = this.getCommand(button);
     return (
       <div
         key={index}
@@ -265,7 +289,8 @@ class Workitem extends Form {
             : this.styles.classNames.actionList
         }
       >
-        <Button
+        <CommandButton
+          command={command}
           kind="secondary-action"
           grow="1"
           place="1/1"
@@ -370,9 +395,11 @@ class Workitem extends Form {
 
   renderActionButton(button, layout, index, count) {
     const secondary = layout === 'secondary';
-
+    const command = this.getCommand(button);
+    console.log('renderActionButton', command);
     return (
-      <Button
+      <CommandButton
+        command={command}
         key={index}
         kind={secondary ? 'secondary-action' : 'action'}
         width={secondary ? null : '0px'}
