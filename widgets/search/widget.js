@@ -9,6 +9,7 @@ import throttle from 'lodash/throttle';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
+import CommandButton from 'goblin-gadgets/widgets/command-button/widget';
 import StatusFilters from 'goblin-desktop/widgets/status-filters/widget';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import TextField from 'goblin-gadgets/widgets/text-field/widget';
@@ -46,7 +47,7 @@ class HinterNewButton extends Widget {
   }
 
   render() {
-    const {id, onNew, title} = this.props;
+    const {id, onNew, title, type} = this.props;
 
     if (!id) {
       return null;
@@ -54,7 +55,8 @@ class HinterNewButton extends Widget {
     return (
       <>
         {onNew ? (
-          <Button
+          <CommandButton
+            command={`${type}-workitem.edit`}
             kind="action"
             place="1/1"
             glyph="solid/plus"
