@@ -4,10 +4,12 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import Container from 'goblin-gadgets/widgets/container/widget';
+import * as styles from './styles';
 
 class DatagridItem extends Widget {
   constructor() {
     super(...arguments);
+    this.styles = styles;
 
     this.renewTTL = this.renewTTL.bind(this);
     this.renderItem = this.renderItem.bind(this);
@@ -54,18 +56,8 @@ class DatagridItem extends Widget {
   }
 
   render() {
-    let {height} = this.props;
-
-    if (height < 40) {
-      height = 40;
-    }
-
     return (
-      <Container
-        minHeight={`${height}px`}
-        maxHeight={`${height}px`}
-        kind="content"
-      >
+      <Container className={this.styles.classNames.row} kind="content">
         {this.renderItem()}
       </Container>
     );
