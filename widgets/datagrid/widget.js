@@ -11,7 +11,7 @@ import Button from 'goblin-gadgets/widgets/button/widget';
 import List from 'goblin-gadgets/widgets/list/widget';
 import DatagridEntity from './datagrid-entity.js';
 import DatagridHeaders from './datagrid-headers.js';
-import DatagridItem from './datagrid-item.js';
+import DatagridItem from 'goblin-desktop/widgets/datagrid-item/widget';
 
 import importer from 'goblin_importer';
 const uiImporter = importer('ui');
@@ -81,6 +81,7 @@ class Datagrid extends Widget {
   renderListItem(props) {
     return (
       <DatagridItem
+        height={props.height ?? 40}
         renderItem={this.renderDatagridItem}
         onDrillDown={this.drillDown}
         {...props}
