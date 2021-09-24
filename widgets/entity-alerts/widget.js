@@ -231,19 +231,19 @@ class EntityAlerts extends Widget {
       a.push(T('1 erreur'));
     }
     if (nError > 1) {
-      a.push(T(`${nError} erreurs`, null, {nError}));
+      a.push(T('{nError} erreurs', null, {nError}));
     }
     if (nWarning === 1) {
       a.push(T('1 avertissement'));
     }
     if (nWarning > 1) {
-      a.push(T(`${nWarning} avertissements`, null, {nWarning}));
+      a.push(T('{nWarning} avertissements', null, {nWarning}));
     }
     if (nInfo === 1) {
       a.push(T('1 information'));
     }
     if (nInfo > 1) {
-      a.push(T(`${nInfo} informations`, null, {nInfo}));
+      a.push(T('{nInfo} informations', null, {nInfo}));
     }
     const message = StringBuilder.joinSentences(a);
 
