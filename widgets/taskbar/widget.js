@@ -5,6 +5,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
+import CommandButton from 'goblin-gadgets/widgets/command-button/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
 import SFX from '../audio/sfx.js';
 
@@ -50,9 +51,11 @@ class Taskbar extends Widget {
   renderButton(context, task, index) {
     if (task.workitem) {
       const runWorkitem = () => this.runWorkitem(task.workitem, task.context);
+      const command = `${task.workitem.name}.create`;
       return (
-        <Button
+        <CommandButton
           key={index}
+          command={command}
           kind="task-bar"
           text={task.text}
           glyph={task.glyph}
@@ -141,12 +144,7 @@ class Taskbar extends Widget {
               }
             }
 
-            let canDo = true;
-            if (task.workitem) {
-              canDo = this.canDo(`${task.workitem.name}.create`);
-            }
-
-            if (isValidScope && canDo) {
+            if (isValidScope) {
               if (task.separator) {
                 return this.renderSeparator(i);
               } else {
