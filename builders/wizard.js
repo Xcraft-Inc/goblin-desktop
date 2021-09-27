@@ -30,6 +30,7 @@ module.exports = (config) => {
   const {
     name,
     title,
+    skills,
     dialog,
     steps,
     gadgets,
@@ -120,81 +121,81 @@ module.exports = (config) => {
     },
   };
 
-  Goblin.registerQuest(goblinName, 'create', function* (
-    quest,
-    desktopId,
-    form,
-    isDialog
-  ) {
-    const id = quest.goblin.id;
-    quest.goblin.setX('desktopId', desktopId);
-    quest.goblin.setX('isDialog', isDialog);
-    quest.goblin.setX('isDisposing', false);
-    const wizardGadgets = {};
+  Goblin.registerQuest(
+    goblinName,
+    'create',
+    function* (quest, desktopId, form, isDialog) {
+      const id = quest.goblin.id;
+      quest.goblin.setX('desktopId', desktopId);
+      quest.goblin.setX('isDialog', isDialog);
+      quest.goblin.setX('isDisposing', false);
+      const wizardGadgets = {};
 
-    if (gadgets) {
-      for (const key of Object.keys(gadgets)) {
-        const gadget = gadgets[key];
-        // const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
-        const newGadgetId = `${key}@${quest.goblin.id}`; // Uses 'key' instead of 'gadget.type' to allow the same gadget to be used in a wizard more than once.
-        wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
+      if (gadgets) {
+        for (const key of Object.keys(gadgets)) {
+          const gadget = gadgets[key];
+          // const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
+          const newGadgetId = `${key}@${quest.goblin.id}`; // Uses 'key' instead of 'gadget.type' to allow the same gadget to be used in a wizard more than once.
+          wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
 
-        if (gadgets[key].onActions) {
-          for (const handler of Object.keys(gadgets[key].onActions)) {
-            quest.goblin.defer(
-              quest.sub(`*::${newGadgetId}.${handler}`, function* (
-                err,
-                {msg, resp}
-              ) {
-                const cmdName = `${key}-${handler}`;
-                yield resp.cmd(
-                  `${goblinName}.${cmdName}`,
-                  Object.assign({id}, msg.data)
-                );
-              })
-            );
+          if (gadgets[key].onActions) {
+            for (const handler of Object.keys(gadgets[key].onActions)) {
+              quest.goblin.defer(
+                quest.sub(`*::${newGadgetId}.${handler}`, function* (
+                  err,
+                  {msg, resp}
+                ) {
+                  const cmdName = `${key}-${handler}`;
+                  yield resp.cmd(
+                    `${goblinName}.${cmdName}`,
+                    Object.assign({id}, msg.data)
+                  );
+                })
+              );
+            }
           }
-        }
 
-        yield quest.create(`${gadget.type}-gadget`, {
-          id: newGadgetId,
-          desktopId,
-          options: gadget.options || null,
-        });
+          yield quest.create(`${gadget.type}-gadget`, {
+            id: newGadgetId,
+            desktopId,
+            options: gadget.options || null,
+          });
+        }
       }
-    }
-    if (hinters) {
-      yield quest.me.createHinters();
-    }
+      if (hinters) {
+        yield quest.me.createHinters();
+      }
 
-    let running = 0;
+      let running = 0;
 
-    quest.goblin.defer(
-      quest.sub.local(`*::${quest.goblin.id}.<wizard-tick>`, function* (
-        err,
-        {msg, resp}
-      ) {
-        const {calledFrom} = msg.data;
-        const isInternal = calledFrom.split('.')[0] === quest.goblin.id;
-        if (running > 0 && !isInternal) {
-          return; /* Drop this tick because a step is already running */
-        }
+      quest.goblin.defer(
+        quest.sub.local(`*::${quest.goblin.id}.<wizard-tick>`, function* (
+          err,
+          {msg, resp}
+        ) {
+          const {calledFrom} = msg.data;
+          const isInternal = calledFrom.split('.')[0] === quest.goblin.id;
+          if (running > 0 && !isInternal) {
+            return; /* Drop this tick because a step is already running */
+          }
 
-        try {
-          ++running;
-          const step = quest.goblin.getState().get('step');
-          yield resp.cmd(`${goblinName}.${step}`, {id});
-        } finally {
-          --running;
-        }
-      })
-    );
+          try {
+            ++running;
+            const step = quest.goblin.getState().get('step');
+            yield resp.cmd(`${goblinName}.${step}`, {id});
+          } finally {
+            --running;
+          }
+        })
+      );
 
-    quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
-    yield quest.me.initWizard();
-    yield quest.me.idle();
-    return quest.goblin.id;
-  });
+      quest.do({id: quest.goblin.id, initialFormState, form, wizardGadgets});
+      yield quest.me.initWizard();
+      yield quest.me.idle();
+      return quest.goblin.id;
+    },
+    {skills: skills ?? []}
+  );
 
   Goblin.registerQuest(goblinName, 'create-hinters', function* (quest, next) {
     const desktopId = quest.goblin.getX('desktopId');
