@@ -1,6 +1,6 @@
 {
   "name": "goblin-desktop",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Goblin Desktop",
   "main": "./builders/builders.js",
   "scripts": {
