@@ -25,6 +25,7 @@ class Tab extends Widget {
     this.cmd('desktop.removeWorkitem', {
       id: this.props.desktopId,
       workitemId,
+      close: true,
     });
     SFX.blop.play();
   }
