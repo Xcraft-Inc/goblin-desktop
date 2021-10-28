@@ -28,7 +28,7 @@ class Workitem extends Form {
 
     this.doAction = this.doAction.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.onCancel = this.onCancel.bind(this);
+    this.onRollback = this.onRollback.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onEdit = this.onEdit.bind(this);
     this.onTrash = this.onTrash.bind(this);
@@ -113,6 +113,7 @@ class Workitem extends Form {
   getCommand(button) {
     const getQuest = (id) => {
       switch (id) {
+        case 'rollback':
         case 'validate':
           return `close`;
         case 'delete':
@@ -139,8 +140,11 @@ class Workitem extends Form {
     });
   }
 
-  onCancel() {
-    this.doAs(this.service, 'restore-entity');
+  onRollback() {
+    this.doAs(this.service, 'close', {
+      kind: 'rollback',
+      desktopId: this.desktopId,
+    });
     //TODO-VNEXT: REPAIR ME
     //this.hideHinter();
   }
@@ -253,8 +257,8 @@ class Workitem extends Form {
       case 'edit':
         this.onEdit();
         break;
-      case 'reset':
-        this.onCancel();
+      case 'rollback':
+        this.onRollback();
         break;
       case 'delete':
         this.onDelete();
