@@ -59,8 +59,8 @@ export default function styles(theme) {
 
   const closeButton = {
     position: 'absolute',
-    top: '0px',
-    right: '0px',
+    top: '10px',
+    right: '10px',
   };
 
   return {

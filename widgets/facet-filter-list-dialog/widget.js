@@ -80,48 +80,48 @@ class FacetFilterListDialog extends Widget {
   /******************************************************************************/
 
   renderClose() {
-    return null;
-    //- return (
-    //-   <div className={this.styles.classNames.closeButton}>
-    //-     <Button
-    //-       border="none"
-    //-       glyph="solid/times"
-    //-       glyphSize="120%"
-    //-       height="32px"
-    //-       width="32px"
-    //-       onClick={this.onClose}
-    //-     />
-    //-   </div>
-    //- );
+    return (
+      <div className={this.styles.classNames.closeButton}>
+        <Button
+          border="none"
+          glyph="solid/times"
+          glyphSize="120%"
+          tooltip={T('Fermer')}
+          height="32px"
+          width="32px"
+          onClick={this.onClose}
+        />
+      </div>
+    );
   }
 
   renderHeader(keys) {
     if (this.props.numberOfCheckboxes <= 5) {
-      return null;
+      return <div className={this.styles.classNames.header}></div>;
+    } else {
+      return (
+        <div className={this.styles.classNames.header}>
+          <Label text={T('Filtre')} />
+          <TextFieldNC
+            width="300px"
+            shape={this.filter ? 'left-rounded' : 'rounded'}
+            value={this.filter}
+            changeMode="throttled"
+            throttleDelay={200}
+            onChange={this.filterChange}
+          />
+          <Button
+            kind="combo"
+            shape="right-rounded"
+            leftSpacing="overlap"
+            glyph="solid/eraser"
+            tooltip={T('Tout montrer')}
+            show={!!this.filter}
+            onClick={() => this.filterChange(null)}
+          />
+        </div>
+      );
     }
-
-    return (
-      <div className={this.styles.classNames.header}>
-        <Label text={T('Filtre')} />
-        <TextFieldNC
-          width="300px"
-          shape={this.filter ? 'left-rounded' : 'rounded'}
-          value={this.filter}
-          changeMode="throttled"
-          throttleDelay={200}
-          onChange={this.filterChange}
-        />
-        <Button
-          kind="combo"
-          shape="right-rounded"
-          leftSpacing="overlap"
-          glyph="solid/eraser"
-          tooltip={T('Tout montrer')}
-          show={!!this.filter}
-          onClick={() => this.filterChange(null)}
-        />
-      </div>
-    );
   }
 
   renderFooter(keys) {

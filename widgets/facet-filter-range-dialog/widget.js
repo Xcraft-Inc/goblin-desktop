@@ -2,6 +2,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
+import Button from 'goblin-gadgets/widgets/button/widget';
 import TextFieldTypedNC from 'goblin-gadgets/widgets/text-field-typed-nc/widget';
 import Slider from 'goblin-gadgets/widgets/slider/widget';
 import CheckList from 'goblin-gadgets/widgets/check-list/widget';
@@ -124,19 +125,19 @@ class FacetFilterRangeDialog extends Widget {
   /******************************************************************************/
 
   renderClose() {
-    return null;
-    //- return (
-    //-   <div className={this.styles.classNames.closeButton}>
-    //-     <Button
-    //-       border="none"
-    //-       glyph="solid/times"
-    //-       glyphSize="120%"
-    //-       height="32px"
-    //-       width="32px"
-    //-       onClick={this.onClose}
-    //-     />
-    //-   </div>
-    //- );
+    return (
+      <div className={this.styles.classNames.closeButton}>
+        <Button
+          border="none"
+          glyph="solid/times"
+          glyphSize="120%"
+          tooltip={T('Fermer')}
+          height="32px"
+          width="32px"
+          onClick={this.onClose}
+        />
+      </div>
+    );
   }
 
   renderRadios() {
