@@ -450,7 +450,7 @@ class EntityRow extends Widget {
     } else {
       return (
         <div className={this.styles.classNames.spinner}>
-          <Spinner size="24px" thickness="3px" />
+          <Spinner size="24px" />
         </div>
       );
     }
