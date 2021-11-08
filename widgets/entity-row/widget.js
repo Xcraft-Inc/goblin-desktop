@@ -4,6 +4,7 @@ import Widget from 'goblin-laboratory/widgets/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
 import Gauge from 'goblin-gadgets/widgets/gauge/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
+import Spinner from 'goblin-gadgets/widgets/spinner/widget';
 import ColoredContainer from 'goblin-gadgets/widgets/colored-container/widget';
 import EntityRowButton from 'goblin-desktop/widgets/entity-row-button/widget';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -425,6 +426,37 @@ class EntityRow extends Widget {
   }
 
   renderSpinner() {
+    if (this.context.theme.look.name === 'retro') {
+      return (
+        <div className={this.styles.classNames.spinner}>
+          <div className={this.styles.classNames.busyBox}>
+            <RetroGear
+              color={ColorManipulator.darken(
+                this.context.theme.palette.light,
+                0.2
+              )}
+              left="0px"
+              top="0px"
+              radius="20px"
+              toothCount={12}
+              toothThickness={6}
+              rotationDuration="3s"
+              rotationDirection="cw"
+              shadow="no"
+            />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className={this.styles.classNames.spinner}>
+          <Spinner size="24px" thickness="3px" />
+        </div>
+      );
+    }
+  }
+
+  renderSpinner_OLD() {
     if (this.context.theme.look.name === 'retro') {
       return (
         <div className={this.styles.classNames.spinner}>

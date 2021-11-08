@@ -74,7 +74,8 @@ export default function styles(theme, props) {
     position: 'relative',
     height: px(busyHeight),
     minHeight: '40px',
-    top: '10px',
+    display: 'flex',
+    alignItems: 'center',
   };
 
   const filteredCellBarre = {
