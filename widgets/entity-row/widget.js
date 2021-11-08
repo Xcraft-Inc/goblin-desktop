@@ -7,7 +7,6 @@ import Label from 'goblin-gadgets/widgets/label/widget';
 import Spinner from 'goblin-gadgets/widgets/spinner/widget';
 import ColoredContainer from 'goblin-gadgets/widgets/colored-container/widget';
 import EntityRowButton from 'goblin-desktop/widgets/entity-row-button/widget';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import T from 't';
 import ListHelpers from 'goblin-workshop/lib/list-helpers.js';
 import RetroGear from 'goblin-gadgets/widgets/retro-gear/widget';
@@ -60,7 +59,7 @@ class _Driller extends Widget {
         </div>
       );
     } else {
-      return <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />;
+      <Spinner size="24px" />;
     }
   }
 
@@ -451,37 +450,6 @@ class EntityRow extends Widget {
       return (
         <div className={this.styles.classNames.spinner}>
           <Spinner size="24px" />
-        </div>
-      );
-    }
-  }
-
-  renderSpinner_OLD() {
-    if (this.context.theme.look.name === 'retro') {
-      return (
-        <div className={this.styles.classNames.spinner}>
-          <div className={this.styles.classNames.busyBox}>
-            <RetroGear
-              color={ColorManipulator.darken(
-                this.context.theme.palette.light,
-                0.2
-              )}
-              left="0px"
-              top="0px"
-              radius="20px"
-              toothCount={12}
-              toothThickness={6}
-              rotationDuration="3s"
-              rotationDirection="cw"
-              shadow="no"
-            />
-          </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className={this.styles.classNames.spinner}>
-          <FontAwesomeIcon icon={[`fas`, 'spinner']} size={'1x'} pulse />
         </div>
       );
     }
