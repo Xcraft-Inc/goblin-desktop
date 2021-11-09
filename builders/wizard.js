@@ -229,18 +229,18 @@ module.exports = (config) => {
 
   common.registerHinters(goblinName, hinters);
 
-  Goblin.registerQuest(goblinName, 'busy', function (quest) {
+  Goblin.registerSafeQuest(goblinName, 'busy', function (quest) {
     quest.do();
   });
 
-  Goblin.registerQuest(goblinName, 'idle', function (quest) {
+  Goblin.registerSafeQuest(goblinName, 'idle', function (quest) {
     quest.do();
   });
 
   if (gadgets) {
     for (const key of Object.keys(gadgets)) {
       //Gogo gadgeto stylo!
-      Goblin.registerQuest(goblinName, `use-${key}`, function* (
+      Goblin.registerSafeQuest(goblinName, `use-${key}`, function* (
         quest,
         action,
         payload
@@ -256,7 +256,7 @@ module.exports = (config) => {
         for (const handler of Object.keys(gadgets[key].onActions)) {
           logicHandlers[`${key}-${handler}`] = gadgets[key].onActions[handler];
 
-          Goblin.registerQuest(goblinName, `${key}-${handler}`, function* (
+          Goblin.registerSafeQuest(goblinName, `${key}-${handler}`, function* (
             quest
           ) {
             quest.do();
@@ -269,32 +269,32 @@ module.exports = (config) => {
 
   if (quests) {
     Object.keys(quests).forEach((q) => {
-      Goblin.registerQuest(goblinName, q, quests[q]);
+      Goblin.registerSafeQuest(goblinName, q, quests[q]);
     });
   }
 
-  Goblin.registerQuest(goblinName, 'init-wizard', function (quest) {
+  Goblin.registerSafeQuest(goblinName, 'init-wizard', function (quest) {
     quest.do();
     quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
-  Goblin.registerQuest(goblinName, 'next', function (quest, result) {
+  Goblin.registerSafeQuest(goblinName, 'next', function (quest, result) {
     quest.do();
     quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
     return result;
   });
 
-  Goblin.registerQuest(goblinName, 'back', function (quest) {
+  Goblin.registerSafeQuest(goblinName, 'back', function (quest) {
     quest.do();
     quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
-  Goblin.registerQuest(goblinName, 'goto', function (quest, step) {
+  Goblin.registerSafeQuest(goblinName, 'goto', function (quest, step) {
     quest.do();
     quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
-  Goblin.registerQuest(goblinName, '_goto', function* (quest) {
+  Goblin.registerSafeQuest(goblinName, '_goto', function* (quest) {
     const state = quest.goblin.getState();
     const form = state.get('form').toJS();
     const nextStep = state.get('nextStep');
@@ -316,7 +316,7 @@ module.exports = (config) => {
     }
   });
 
-  Goblin.registerQuest(goblinName, 'done', function* (quest) {
+  Goblin.registerSafeQuest(goblinName, 'done', function* (quest) {
     let result = quest.goblin.getState().get('result');
     if (Shredder.isImmutable(result)) {
       result = result.toJS();
@@ -329,12 +329,16 @@ module.exports = (config) => {
     yield quest.me.dispose();
   });
 
-  Goblin.registerQuest(goblinName, 'cancel', function (quest) {
+  Goblin.registerSafeQuest(goblinName, 'cancel', function (quest) {
     quest.do();
     quest.evt('<wizard-tick>', {calledFrom: quest.calledFrom});
   });
 
-  Goblin.registerQuest(goblinName, 'change', function* (quest, path, newValue) {
+  Goblin.registerSafeQuest(goblinName, 'change', function* (
+    quest,
+    path,
+    newValue
+  ) {
     if (hinters && hinters[path]) {
       return;
     }
@@ -342,12 +346,12 @@ module.exports = (config) => {
     yield quest.me.update();
   });
 
-  Goblin.registerQuest(goblinName, 'apply', function* (quest) {
+  Goblin.registerSafeQuest(goblinName, 'apply', function* (quest) {
     quest.do();
     yield quest.me.update();
   });
 
-  Goblin.registerQuest(goblinName, 'update', function* (quest) {
+  Goblin.registerSafeQuest(goblinName, 'update', function* (quest) {
     const state = quest.goblin.getState();
     const stepName = state.get('step');
     const step = steps[stepName];
@@ -363,7 +367,7 @@ module.exports = (config) => {
     }
   });
 
-  Goblin.registerQuest(goblinName, 'update-buttons', function* (quest) {
+  Goblin.registerSafeQuest(goblinName, 'update-buttons', function* (quest) {
     const state = quest.goblin.getState();
     const stepName = state.get('step');
     const step = steps[stepName];
@@ -393,31 +397,35 @@ module.exports = (config) => {
     };
 
     if (step.quest) {
-      Goblin.registerQuest(goblinName, stepName, step.quest);
+      Goblin.registerSafeQuest(goblinName, stepName, step.quest);
     }
 
     if (step.buttons) {
-      Goblin.registerQuest(goblinName, `${stepName}-buttons`, step.buttons);
+      Goblin.registerSafeQuest(goblinName, `${stepName}-buttons`, step.buttons);
     }
 
     if (step.onChange) {
-      Goblin.registerQuest(goblinName, `${stepName}-on-change`, step.onChange);
+      Goblin.registerSafeQuest(
+        goblinName,
+        `${stepName}-on-change`,
+        step.onChange
+      );
     }
 
     for (const action in step.actions) {
       const actionQuest = `${stepName}-${action}`;
       logicHandlers[actionQuest] = step.actions[action];
-      Goblin.registerQuest(goblinName, actionQuest, function (quest) {
+      Goblin.registerSafeQuest(goblinName, actionQuest, function (quest) {
         quest.do();
       });
     }
   }
 
-  Goblin.registerQuest(goblinName, 'get-entity', common.getEntityQuest);
-  Goblin.registerQuest(goblinName, 'load-entity', common.loadEntityQuest);
-  Goblin.registerQuest(goblinName, 'open-wizard', common.openWizard);
+  Goblin.registerSafeQuest(goblinName, 'get-entity', common.getEntityQuest);
+  Goblin.registerSafeQuest(goblinName, 'load-entity', common.loadEntityQuest);
+  Goblin.registerSafeQuest(goblinName, 'open-wizard', common.openWizard);
 
-  Goblin.registerQuest(goblinName, 'showHinter', function* (
+  Goblin.registerSafeQuest(goblinName, 'showHinter', function* (
     quest,
     type,
     withDetail = true
@@ -431,14 +439,14 @@ module.exports = (config) => {
     }
   });
 
-  Goblin.registerQuest(goblinName, 'hideHinter', function* (quest, type) {
+  Goblin.registerSafeQuest(goblinName, 'hideHinter', function* (quest, type) {
     const hinterAPI = quest
       .getAPI(`${type}-hinter@${quest.goblin.id}`)
       .noThrow();
     yield hinterAPI.hide();
   });
 
-  Goblin.registerQuest(goblinName, 'setDetail', function* (
+  Goblin.registerSafeQuest(goblinName, 'setDetail', function* (
     quest,
     type,
     entityId
@@ -468,7 +476,7 @@ module.exports = (config) => {
     });
   }
 
-  Goblin.registerQuest(goblinName, 'dispose', disposeQuest);
+  Goblin.registerSafeQuest(goblinName, 'dispose', disposeQuest);
 
   Goblin.registerQuest(goblinName, 'delete', function (quest) {
     quest.evt('done', {finished: true});
