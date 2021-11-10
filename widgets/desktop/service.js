@@ -642,19 +642,28 @@ Goblin.registerQuest(goblinName, 'download-file', function (
   filePath,
   openFile
 ) {
-  const labId = quest.goblin.getX('labId');
-  const fs = require('fs');
-  const stream = fs.createReadStream;
-  const routingKey = require('xcraft-core-host').getRoutingKey();
-  if (fs.existsSync(filePath)) {
-    let file = stream(filePath);
-    quest.evt(`wm@${labId}.download-file-requested`, {
-      xcraftStream: file,
-      routingKey,
-      fileFilter: getFileFilter(filePath),
-      defaultPath: path.basename(filePath),
-      openFile,
-    });
+  if (quest.user) {
+    const {sessionType, sessionId, windowId} = quest.user.getContext();
+    const clientSessionId = `${sessionType}@${sessionId}`;
+    const clientWindowId = windowId;
+    const fs = require('fs');
+    const stream = fs.createReadStream;
+    const routingKey = require('xcraft-core-host').getRoutingKey();
+    if (fs.existsSync(filePath)) {
+      let file = stream(filePath);
+      quest.evt(
+        `<${clientSessionId}-${clientWindowId}-download-file-requested>`,
+        {
+          xcraftStream: file,
+          routingKey,
+          fileFilter: getFileFilter(filePath),
+          defaultPath: path.basename(filePath),
+          openFile,
+        }
+      );
+    }
+  } else {
+    throw new Error('Cannot identifie user requesting download');
   }
 });
 
