@@ -212,7 +212,7 @@ module.exports = (config) => {
           quest.create(
             `${hName}-hinter`,
             {
-              id: `${h}-finder@${quest.goblin.id}`,
+              id: `${h}-hinter@${quest.goblin.id}`,
               desktopId,
               hinterName: h,
               workitemId: quest.goblin.id,

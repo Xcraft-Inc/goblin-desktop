@@ -109,7 +109,6 @@ const List = Widget.connect((s, p) => {
 class Hinter extends Widget {
   constructor() {
     super(...arguments);
-
     this.onNew = this.onNew.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
