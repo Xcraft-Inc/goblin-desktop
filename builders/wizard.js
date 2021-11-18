@@ -39,11 +39,6 @@ module.exports = (config) => {
     hinters,
   } = config;
   const goblinName = `${name}-wizard`;
-  if (gadgets) {
-    for (const [alias, def] of Object.entries(gadgets)) {
-      Goblin.registerAliasNamespace(alias, `${def.type}-gadget`);
-    }
-  }
   const wizardSteps = Object.keys(steps);
   const wizardFlow = ['init'].concat(wizardSteps);
 
@@ -132,35 +127,7 @@ module.exports = (config) => {
       const wizardGadgets = {};
 
       if (gadgets) {
-        for (const key of Object.keys(gadgets)) {
-          const gadget = gadgets[key];
-          // const newGadgetId = `${gadget.type}@${quest.goblin.id}`;
-          const newGadgetId = `${key}@${quest.goblin.id}`; // Uses 'key' instead of 'gadget.type' to allow the same gadget to be used in a wizard more than once.
-          wizardGadgets[key] = {id: newGadgetId, type: gadget.type};
-
-          if (gadgets[key].onActions) {
-            for (const handler of Object.keys(gadgets[key].onActions)) {
-              quest.goblin.defer(
-                quest.sub(`*::${newGadgetId}.${handler}`, function* (
-                  err,
-                  {msg, resp}
-                ) {
-                  const cmdName = `${key}-${handler}`;
-                  yield resp.cmd(
-                    `${goblinName}.${cmdName}`,
-                    Object.assign({id}, msg.data)
-                  );
-                })
-              );
-            }
-          }
-
-          yield quest.create(`${gadget.type}-gadget`, {
-            id: newGadgetId,
-            desktopId,
-            options: gadget.options || null,
-          });
-        }
+        yield common.createGadgets(quest, goblinName, gadgets, wizardGadgets);
       }
       if (hinters) {
         yield quest.me.createHinters();
