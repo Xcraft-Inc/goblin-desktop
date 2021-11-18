@@ -41,14 +41,13 @@ class HinterNewButton extends Widget {
   onNew() {
     const model = this.getRouting().get('location.hash').substring(1);
     const value = this.getModelValue(model, true);
-    this.doAs('hinter', 'create-new', {
+    this.doFor(this.props.id, 'create-new', {
       value,
     });
   }
 
   render() {
     const {id, onNew, title, type} = this.props;
-
     if (!id) {
       return null;
     }
@@ -182,7 +181,6 @@ class Search extends Widget {
 
   renderParams() {
     const listId = `list@${this.props.id}`;
-
     return (
       <div className={this.styles.classNames.params}>
         <div className={this.styles.classNames.pane}>
@@ -222,7 +220,7 @@ class Search extends Widget {
         <div className={this.styles.classNames.sajex} />
 
         <Container kind="actions">
-          <NewEntityButton id={this.props.hinterId} />
+          <NewEntityButton id={`hinter@${this.props.type}@${this.props.id}`} />
         </Container>
       </div>
     );
