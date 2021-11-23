@@ -41,7 +41,7 @@ module.exports = (config) => {
   const goblinName = `${name}-wizard`;
   const wizardSteps = Object.keys(steps);
   const wizardFlow = ['init'].concat(wizardSteps);
-
+  const hinterIdsByName = {};
   // Define logic handlers according rc.json
   const logicHandlers = {
     'create': (state, action) => {
@@ -176,10 +176,12 @@ module.exports = (config) => {
           detailWidget = `${hName}-workitem`;
         }
         if (quest.hasAPI(`${hName}-hinter`)) {
+          const id = `${hName}-hinter@${h}@${quest.goblin.id}`;
+          hinterIdsByName[h] = id;
           quest.create(
             `${hName}-hinter`,
             {
-              id: `${h}-hinter@${quest.goblin.id}`,
+              id,
               desktopId,
               hinterName: h,
               workitemId: quest.goblin.id,
@@ -397,9 +399,8 @@ module.exports = (config) => {
     type,
     withDetail = true
   ) {
-    const hinterAPI = quest
-      .getAPI(`${type}-hinter@${quest.goblin.id}`)
-      .noThrow();
+    const hinterId = hinterIdsByName[type];
+    const hinterAPI = quest.getAPI(hinterId).noThrow();
     yield hinterAPI.show();
     if (withDetail) {
       yield hinterAPI.showDetail();
@@ -418,8 +419,8 @@ module.exports = (config) => {
     type,
     entityId
   ) {
+    const hinterId = hinterIdsByName[type];
     const deskAPI = quest.getAPI(quest.getDesktop()).noThrow();
-    const hinterId = `${type}-hinter@${quest.goblin.id}`;
     yield deskAPI.setDetail({
       hinterId,
     });
