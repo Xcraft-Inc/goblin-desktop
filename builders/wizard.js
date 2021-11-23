@@ -223,11 +223,10 @@ module.exports = (config) => {
 
       if (gadgets[key].onActions) {
         for (const handler of Object.keys(gadgets[key].onActions)) {
-          logicHandlers[`${key}-${handler}`] = gadgets[key].onActions[handler];
+          const questName = common.jsifyQuestName(`${key}-${handler}`);
+          logicHandlers[questName] = gadgets[key].onActions[handler];
 
-          Goblin.registerSafeQuest(goblinName, `${key}-${handler}`, function* (
-            quest
-          ) {
+          Goblin.registerSafeQuest(goblinName, questName, function* (quest) {
             quest.do();
             yield quest.me.update();
           });
