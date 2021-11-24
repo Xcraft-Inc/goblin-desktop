@@ -91,7 +91,7 @@ class DesktopStateMonitor extends Widget {
           kind="button-footer"
           width="120px"
           glyph="light/radar"
-          glyphColor={this.props.showed ? '#0f0' : null}
+          active={this.props.showed}
           text={T('State')}
           onClick={this.onToggleStateMonitor}
         />

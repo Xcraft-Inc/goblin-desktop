@@ -217,11 +217,9 @@ class DesktopMonitors extends Widget {
         </RetroPanel>
       );
     } else {
-      let glyph = 'light/square';
-      let glyphColor = this.context.theme.palette.buttonDisableText;
+      let glyphColor = null; // default
       if (this.props.isActive) {
-        glyph = 'solid/square';
-        glyphColor = '#0f0';
+        glyphColor = '#0f0'; // green
       }
 
       return (
@@ -230,8 +228,9 @@ class DesktopMonitors extends Widget {
             kind="button-footer"
             width="140px"
             justify="start"
-            glyph={glyph}
+            glyph="light/monitor-heart-rate"
             glyphColor={glyphColor}
+            active={this.showMonitor}
             text={T('Activité')}
             onClick={this.onMonitor}
           />

@@ -218,7 +218,6 @@ class DesktopNotebook extends Widget {
       );
     } else {
       let glyph = 'solid/pen';
-      let glyphColor = this.context.theme.palette.buttonDisableText;
 
       return (
         <>
@@ -227,8 +226,8 @@ class DesktopNotebook extends Widget {
             width="140px"
             justify="start"
             glyph={glyph}
-            glyphColor={glyphColor}
             text={T('Notes')}
+            active={this.showMonitor}
             onClick={this.onMonitor}
           />
         </>
