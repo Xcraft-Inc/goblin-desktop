@@ -42,6 +42,7 @@ module.exports = (config) => {
   const wizardSteps = Object.keys(steps);
   const wizardFlow = ['init'].concat(wizardSteps);
   const hinterIdsByName = {};
+  const hinterWidgetIdsByName = {};
   // Define logic handlers according rc.json
   const logicHandlers = {
     'create': (state, action) => {
@@ -177,7 +178,9 @@ module.exports = (config) => {
         }
         if (quest.hasAPI(`${hName}-hinter`)) {
           const id = `${hName}-hinter@${h}@${quest.goblin.id}`;
+          const widgetId = `hinter@${hName}@${quest.goblin.id}`;
           hinterIdsByName[h] = id;
+          hinterWidgetIdsByName[h] = widgetId;
           quest.create(
             `${hName}-hinter`,
             {
@@ -398,8 +401,8 @@ module.exports = (config) => {
     type,
     withDetail = true
   ) {
-    const hinterId = hinterIdsByName[type];
-    const hinterAPI = quest.getAPI(hinterId).noThrow();
+    const hinterWidgetId = hinterWidgetIdsByName[type];
+    const hinterAPI = quest.getAPI(hinterWidgetId).noThrow();
     yield hinterAPI.show();
     if (withDetail) {
       yield hinterAPI.showDetail();
@@ -418,12 +421,12 @@ module.exports = (config) => {
     type,
     entityId
   ) {
-    const hinterId = hinterIdsByName[type];
+    const hinterWidgetId = hinterWidgetIdsByName[type];
     const deskAPI = quest.getAPI(quest.getDesktop()).noThrow();
     yield deskAPI.setDetail({
-      hinterId,
+      hinterId: hinterWidgetId,
     });
-    const hinterAPI = quest.getAPI(hinterId).noThrow();
+    const hinterAPI = quest.getAPI(hinterWidgetId).noThrow();
     yield hinterAPI.setCurrentDetailEntity({entityId});
   });
 
