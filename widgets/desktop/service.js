@@ -2,7 +2,6 @@
 
 const path = require('path');
 const Goblin = require('xcraft-core-goblin');
-const {v4: uuidV4} = require('uuid');
 const watt = require('gigawatts');
 const goblinName = path.basename(module.parent.filename, '.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
@@ -530,7 +529,7 @@ Goblin.registerQuest(goblinName, 'add-notification', function (
   broadcast
 ) {
   if (!notificationId) {
-    notificationId = uuidV4();
+    notificationId = quest.uuidV4();
   }
 
   message = StringBuilder.combine(message);
