@@ -154,7 +154,7 @@ Goblin.registerQuest(goblinName, 'removeWorkitem', function* (
     quest.log.dbg(`Skipping ${workitemId} remove...`);
     return;
   }
-  quest.do({workitemId});
+  yield quest.doSync({workitemId});
 
   const api = quest.getAPI(workitemId);
   if (api && close) {
