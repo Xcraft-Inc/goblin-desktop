@@ -146,12 +146,12 @@ const TableCellWithHighlight = Widget.connect((state, props) => {
     const phonetic = highlights.get(`${props.entityId}.phonetic`);
     if (auto && !phonetic) {
       text = auto;
-    }
-    if (!auto && phonetic) {
+    } else if (!auto && phonetic) {
       text = phonetic;
-    }
-    if (auto && phonetic) {
+    } else if (auto && phonetic) {
       text = auto;
+    } else {
+      text = highlights.get(`${props.entityId}.info`);
     }
   }
   return {text};
