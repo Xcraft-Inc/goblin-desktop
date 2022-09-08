@@ -144,13 +144,14 @@ const TableCellWithHighlight = Widget.connect((state, props) => {
   if (highlights.get(props.entityId, null) !== null) {
     const auto = highlights.get(`${props.entityId}.auto`);
     const phonetic = highlights.get(`${props.entityId}.phonetic`);
+    const info = highlights.get(`${props.entityId}.info`);
     if (auto && !phonetic) {
       text = auto;
     } else if (!auto && phonetic) {
       text = phonetic;
     } else if (auto && phonetic) {
       text = auto;
-    } else {
+    } else if (info) {
       text = highlights.get(`${props.entityId}.info`);
     }
   }
