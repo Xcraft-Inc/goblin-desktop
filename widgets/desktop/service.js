@@ -8,7 +8,7 @@ const StringBuilder = require('goblin-nabu/lib/string-builder.js');
 const xUtils = require('xcraft-core-utils');
 const {getFileFilter} = xUtils.files;
 const {locks} = require('xcraft-core-utils');
-const doAddLock = locks.getMutex;
+const desktopLock = locks.getMutex;
 // Define initial logic values
 const logicState = {};
 
@@ -154,6 +154,10 @@ Goblin.registerQuest(goblinName, 'removeWorkitem', function* (
     quest.log.dbg(`Skipping ${workitemId} remove...`);
     return;
   }
+
+  yield desktopLock.lock(workitemId);
+  quest.defer(() => desktopLock.unlock(workitemId));
+
   yield quest.doSync({workitemId});
 
   const api = quest.getAPI(workitemId);
@@ -314,9 +318,12 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
 
   quest.log.dbg(`Adding ${widgetId}...`);
 
-  yield doAddLock.lock(desktopId);
+  yield desktopLock.lock(widgetId);
+  quest.defer(() => desktopLock.unlock(widgetId));
+
+  yield desktopLock.lock(desktopId);
   const res = yield doAdd(quest, widgetId, clientSessionId, workitem, navigate);
-  doAddLock.unlock(desktopId);
+  desktopLock.unlock(desktopId);
 
   if (res.skipped) {
     quest.log.dbg(`Adding ${widgetId}...[FAILED]`);
