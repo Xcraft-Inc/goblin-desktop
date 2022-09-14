@@ -89,7 +89,11 @@ class WizardButtons extends Widget {
     let index = 0;
     const size = this.props.buttons.size;
     return (
-      <Container kind={this.props.containerKind} busy={this.props.busy}>
+      <Container
+        kind={this.props.containerKind}
+        busy={this.props.busy}
+        busyLook="very-small"
+      >
         {this.props.buttons
           .entrySeq()
           .map(([id, button]) => this.renderButton(button, id, index++, size))
