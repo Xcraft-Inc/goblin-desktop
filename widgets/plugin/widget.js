@@ -497,6 +497,7 @@ class Plugin extends Widget {
     return (
       <Container
         kind="row-draggable"
+        busyLook={extended ? null : 'smallest'}
         key={index}
         ref={(n) => {
           if (n) {
