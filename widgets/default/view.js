@@ -44,10 +44,10 @@ class DefaultView extends View {
     let LeftPanel = null;
     let WiredDialog = null;
     let useHinter = true;
-
+    let canDo = true;
     if (workitemId) {
       const workitem = workitemId.split('@')[0];
-
+      canDo = this.canDo(`${workitem}.edit`);
       if (workitem.endsWith('-workitem')) {
         LeftPanel = Editor;
       } else if (workitem.endsWith('-search')) {
@@ -77,10 +77,14 @@ class DefaultView extends View {
       }
     }
 
+    const additionnalProps = {};
+    if (!canDo) {
+      additionnalProps.readonly = true;
+    }
     return (
       <Container kind="views">
         {WiredDialog ? <WiredDialog id={dialogId} kind="dialog" /> : null}
-        {LeftPanel ? <LeftPanel id={workitemId} /> : null}
+        {LeftPanel ? <LeftPanel id={workitemId} {...additionnalProps} /> : null}
         {this.renderHinter(useHinter)}
         {this.renderDetail()}
       </Container>

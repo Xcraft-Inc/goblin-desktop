@@ -36,23 +36,26 @@ class Editor extends Widget {
     }
     const type = entityId.split('@', 1)[0];
     const Editor = this.mapWidget(Workitem, 'buttons', `backend.${id}.buttons`);
-
+    let defaultPanel = 'edit';
+    if (this.props.readonly) {
+      defaultPanel = 'readonly';
+    }
     return this.buildLoader(entityId, () => {
       const workitem = this.props.id.split('@')[0];
 
       const workitemUI = uiImporter(workitem);
       let EditorUI = this.WithState(
-        workitemUI.panel.edit,
+        workitemUI.panel[defaultPanel],
         'entityId'
       )('.entityId');
       if (
         workitemUI.mappers &&
         workitemUI.mappers.panel &&
-        workitemUI.mappers.panel.edit
+        workitemUI.mappers.panel[defaultPanel]
       ) {
         EditorUI = this.mapWidget(
           EditorUI,
-          workitemUI.mappers.panel.edit,
+          workitemUI.mappers.panel[defaultPanel],
           `backend.${entityId}`
         );
       }
@@ -60,6 +63,7 @@ class Editor extends Widget {
         <Editor
           kind="editor"
           id={this.props.id}
+          readonly={this.props.readonly || false}
           entityId={this.props.entityId}
           dragServiceId={this.props.dragServiceId}
           width={this.props.width}
