@@ -632,9 +632,10 @@ class Workitem extends Form {
     return (
       <Container
         kind="view"
-        width={this.props.width || '700px'}
+        grow="1"
         horizontalSpacing="large"
         busy={this.props.loading}
+        width="100%"
       >
         <Container kind="pane-header">
           <Title kind="pane-header" singleLine={true} wrap="no" />

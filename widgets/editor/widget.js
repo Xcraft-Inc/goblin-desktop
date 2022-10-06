@@ -66,7 +66,6 @@ class Editor extends Widget {
           readonly={this.props.readonly || false}
           entityId={this.props.entityId}
           dragServiceId={this.props.dragServiceId}
-          width={this.props.width}
         >
           <EditorUI
             {...this.props}
