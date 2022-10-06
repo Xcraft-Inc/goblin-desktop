@@ -40,7 +40,6 @@ class DefaultView extends View {
   renderViews(workitemType, LeftPanel, useHinter, additionnalProps) {
     switch (workitemType) {
       case 'workitem':
-      case 'wizard':
         return (
           <Splitter
             id={`goblin-desktop/default/${workitemType}`}
