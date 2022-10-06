@@ -43,7 +43,7 @@ class DefaultView extends View {
       case 'wizard':
         return (
           <Splitter
-            id="goblin-desktop/editor"
+            id={`goblin-desktop/default/${workitemType}`}
             kind="vertical"
             firstSize={this.props.width || '800px'}
             firstMinSize={this.props.width || '800px'}
