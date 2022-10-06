@@ -92,17 +92,23 @@ class DefaultView extends View {
       const workitem = workitemId.split('@')[0];
       workitemType = workitem.substring(workitem.lastIndexOf('-') + 1);
       canDo = this.canDo(`${workitem}.edit`);
-      if (workitem.endsWith('-workitem')) {
-        LeftPanel = Editor;
-      } else if (workitem.endsWith('-search')) {
-        LeftPanel = Search;
-        useHinter = false;
-      } else if (workitem.endsWith('-datagrid')) {
-        LeftPanel = Datagrid;
-      } else if (workitem.endsWith('-wizard')) {
-        LeftPanel = Wizard;
-      } else {
-        throw new Error(`${workitem} kind not implemented in default view`);
+
+      switch (workitemType) {
+        case 'workitem':
+          LeftPanel = Editor;
+          break;
+        case 'search':
+          LeftPanel = Search;
+          useHinter = false;
+          break;
+        case 'datagrid':
+          LeftPanel = Datagrid;
+          break;
+        case 'wizard':
+          LeftPanel = Wizard;
+          break;
+        default:
+          throw new Error(`${workitem} kind not implemented in default view`);
       }
     }
 
