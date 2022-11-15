@@ -351,6 +351,7 @@ class Plugin extends Widget {
                 id={workitemId}
                 theme={this.context.theme}
                 entityId={entityId}
+                pluginProps={this.props.pluginProps}
                 embeddedLevel={this.props.embeddedLevel}
                 origin={this.props.origin}
                 contextId={this.context.contextId}
