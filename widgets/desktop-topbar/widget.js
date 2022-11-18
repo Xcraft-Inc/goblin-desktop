@@ -93,7 +93,7 @@ class DesktopTopbarNC extends Widget {
   }
 
   onChangeLocale(locale) {
-    this.doAs('desktop', 'change-locale', {locale});
+    this.doFor(this.props.clientSessionId, 'change-locale', {locale});
   }
 
   onChangeTeam(teamId) {
