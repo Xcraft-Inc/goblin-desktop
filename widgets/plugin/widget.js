@@ -164,9 +164,9 @@ class Plugin extends Widget {
 
   doProxy(index) {
     return (action, args) => {
-      const workitemId = `${this.props.editorWidget}${
-        this.props.mode ? `@${this.props.mode}` : ''
-      }@${this.context.desktopId}@${this.props.entityIds.get(index)}`;
+      const workitemId = `${this.props.editorWidget}@${
+        this.context.desktopId
+      }@${this.props.entityIds.get(index)}`;
       this.doFor(workitemId, action, args);
     };
   }
@@ -297,9 +297,9 @@ class Plugin extends Widget {
 
   renderItem(entityId, extended, index) {
     const workitemUI = uiImporter(this.props.editorWidget);
-    const workitemId = `${this.props.editorWidget}${
-      this.props.mode ? `@${this.props.mode}` : ''
-    }@${this.context.desktopId}@${this.props.entityIds.get(index)}`;
+    const workitemId = `${this.props.editorWidget}@${
+      this.context.desktopId
+    }@${this.props.entityIds.get(index)}`;
 
     if (!workitemUI.plugin) {
       return null;

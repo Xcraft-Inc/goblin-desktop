@@ -312,9 +312,7 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
   }
 
   const desktopId = quest.goblin.id;
-  const widgetId = `${workitem.name}${
-    workitem.mode ? `@${workitem.mode}` : ''
-  }@${desktopId}@${workitem.id}`;
+  const widgetId = `${workitem.name}@${desktopId}@${workitem.id}`;
 
   quest.log.dbg(`Adding ${widgetId}...`);
 
