@@ -12,7 +12,6 @@ import DesktopFooter from 'goblin-desktop/widgets/desktop-footer/widget.js';
 import RetroPanel from 'goblin-gadgets/widgets/retro-panel/widget.js';
 import {ColorManipulator} from 'goblin-theme';
 import NavigatingLayer from '../navigating-layer/widget.js';
-import SFX from '../audio/sfx.js';
 /******************************************************************************/
 class Desktop extends Widget {
   constructor() {
@@ -39,17 +38,26 @@ class Desktop extends Widget {
     super.componentDidMount();
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
-    MouseTrap.bind('ctrl+o', this.openWorkitemWizard);
-    MouseTrap.bind('mod+n', this.openNewWorkitem);
-    SFX.intro.play();
+    if (window.isBrowser) {
+      MouseTrap.bind('alt+mod+o', this.openWorkitemWizard);
+      MouseTrap.bind('alt+mod+n', this.openNewWorkitem);
+    } else {
+      MouseTrap.bind('ctrl+o', this.openWorkitemWizard);
+      MouseTrap.bind('mod+n', this.openNewWorkitem);
+    }
   }
 
   componentWillUnmount() {
     super.componentWillUnmount();
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
-    MouseTrap.unbind('ctrl+o');
-    MouseTrap.unbind('mod+n');
+    if (window.isBrowser) {
+      MouseTrap.unbind('alt+mod+o');
+      MouseTrap.unbind('alt+mod+n');
+    } else {
+      MouseTrap.unbind('ctrl+o');
+      MouseTrap.unbind('mod+n');
+    }
   }
 
   //#region get/set
