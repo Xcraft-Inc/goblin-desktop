@@ -39,6 +39,12 @@ class Desktop extends Widget {
     //- MouseTrap.bind('tab', this.onTab);
     //- MouseTrap.bind('shift+tab', this.onShiftTab);
     if (window.isBrowser) {
+      //Note: shortcuts must work under chrome / crossplatform
+      //we need differents combo for OSX
+      //for OSX users:
+      MouseTrap.bind('ctrl+shift+o', this.openWorkitemWizard);
+      MouseTrap.bind('ctrl+shift+n', this.openNewWorkitem);
+      //for win/linux users:
       MouseTrap.bind('alt+mod+o', this.openWorkitemWizard);
       MouseTrap.bind('alt+mod+n', this.openNewWorkitem);
     } else {
@@ -52,6 +58,8 @@ class Desktop extends Widget {
     //- MouseTrap.unbind('tab');
     //- MouseTrap.unbind('shift+tab');
     if (window.isBrowser) {
+      MouseTrap.unbind('ctrl+shift+o');
+      MouseTrap.unbind('ctrl+shift+n');
       MouseTrap.unbind('alt+mod+o');
       MouseTrap.unbind('alt+mod+n');
     } else {
