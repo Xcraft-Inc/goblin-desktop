@@ -1,3 +1,2 @@
 [update-version]
-	freezed = true
 	package-json = package.json
