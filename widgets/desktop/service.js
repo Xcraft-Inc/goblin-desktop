@@ -311,6 +311,13 @@ Goblin.registerQuest(goblinName, 'add-workitem', function* (
     return;
   }
 
+  if (!workitem.mode) {
+    //force readonly when adding a workitem without WORKSHOP_EDIT skills
+    if (!quest.user.canDo(`${workitem.name}.edit`)) {
+      workitem.mode = 'readonly';
+    }
+  }
+
   const desktopId = quest.goblin.id;
   const widgetId = `${workitem.name}@${desktopId}@${workitem.id}`;
 
