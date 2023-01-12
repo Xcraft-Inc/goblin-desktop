@@ -1,0 +1,9 @@
+[
+  {
+    "Module": "goblin-desktop",
+    "Version": "v3.1.0",
+    "Hash": "f643548",
+    "Dev": "master",
+    "Prod": "3.1"
+  }
+]
