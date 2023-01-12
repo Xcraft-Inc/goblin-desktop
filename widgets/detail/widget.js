@@ -73,6 +73,7 @@ class Detail extends Widget {
     return (
       <Container
         kind="view-right"
+        grow="1"
         width={width ? width : '800px'}
         busy={this.props.loading}
       >

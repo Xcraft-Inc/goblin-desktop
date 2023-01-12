@@ -32,15 +32,46 @@ class DefaultView extends View {
     return (
       <Detail
         id={this.props.detail}
+        width="100%"
         leftPanelWorkitemId={this.props.leftPanelWorkitemId}
       />
+    );
+  }
+
+  renderLeft(LeftPanel, useHinter, additionnalProps) {
+    return (
+      <>
+        {LeftPanel ? (
+          <LeftPanel id={this.props.workitemId} {...additionnalProps} />
+        ) : null}
+        {this.renderHinter(useHinter) ?? <Separator kind="sajex"></Separator>}
+      </>
     );
   }
 
   renderViews(workitemType, LeftPanel, useHinter, additionnalProps) {
     switch (workitemType) {
       case 'workitem':
-        return (
+        return this.props.detail ? (
+          <Splitter
+            id={`goblin-desktop/default/${workitemType}/detail`}
+            kind="vertical"
+            lastSize={this.props.width || '800px'}
+            lastMinSize={this.props.width || '800px'}
+            lastMaxSize="1500px"
+          >
+            <Splitter
+              id={`goblin-desktop/default/${workitemType}`}
+              kind="vertical"
+              firstSize={this.props.width || '800px'}
+              firstMinSize={this.props.width || '800px'}
+              firstMaxSize="1500px"
+            >
+              {this.renderLeft(LeftPanel, useHinter, additionnalProps)}
+            </Splitter>
+            {this.renderDetail()}
+          </Splitter>
+        ) : (
           <Splitter
             id={`goblin-desktop/default/${workitemType}`}
             kind="vertical"
@@ -48,28 +79,26 @@ class DefaultView extends View {
             firstMinSize={this.props.width || '800px'}
             firstMaxSize="1500px"
           >
-            {LeftPanel ? (
-              <LeftPanel id={this.props.workitemId} {...additionnalProps} />
-            ) : (
-              <></>
-            )}
-            <>
-              {this.renderHinter(useHinter) ?? (
-                <Separator kind="sajex"></Separator>
-              )}
-              {this.renderDetail()}
-            </>
+            {this.renderLeft(LeftPanel, useHinter, additionnalProps)}
           </Splitter>
         );
 
       default:
-        return (
-          <>
-            {LeftPanel ? (
-              <LeftPanel id={this.props.workitemId} {...additionnalProps} />
-            ) : null}
-            {this.renderHinter(useHinter)}
+        return this.props.detail ? (
+          <Splitter
+            id={`goblin-desktop/default/${workitemType}/detail`}
+            kind="vertical"
+            lastSize={this.props.width || '800px'}
+            lastMinSize={this.props.width || '800px'}
+            lastMaxSize="1500px"
+          >
+            {this.renderLeft(LeftPanel, useHinter, additionnalProps)}
             {this.renderDetail()}
+          </Splitter>
+        ) : (
+          <>
+            {this.renderLeft(LeftPanel, useHinter, additionnalProps)}
+            {this.renderHinter(useHinter)}
           </>
         );
     }
