@@ -648,12 +648,24 @@ Goblin.registerQuest(goblinName, 'forward-state-monitor', function (quest) {
 Goblin.registerQuest(goblinName, 'download-file', function (
   quest,
   filePath,
-  openFile
+  openFile,
+  userContext
 ) {
-  if (quest.user) {
-    const {sessionType, sessionId, windowId} = quest.user.getContext();
-    const clientSessionId = `${sessionType}@${sessionId}`;
-    const clientWindowId = windowId;
+  if (quest.user || userContext) {
+    let clientSessionId, clientWindowId;
+
+    if (userContext) {
+      //use provided context
+      const {sessionType, sessionId, windowId} = userContext;
+      clientSessionId = `${sessionType}@${sessionId}`;
+      clientWindowId = windowId;
+    } else {
+      //get context from current user
+      const {sessionType, sessionId, windowId} = quest.user.getContext();
+      clientSessionId = `${sessionType}@${sessionId}`;
+      clientWindowId = windowId;
+    }
+
     const fs = require('fs');
     const stream = fs.createReadStream;
     const routingKey = require('xcraft-core-host').getRoutingKey();
