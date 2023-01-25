@@ -1,4 +1,5 @@
 import React from 'react';
+import MouseTrap from 'mousetrap';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Form from 'goblin-laboratory/widgets/form';
 import WorkitemFields from '../workitem-fields/widget.js';
@@ -27,6 +28,7 @@ class Workitem extends Form {
     };
 
     this.doAction = this.doAction.bind(this);
+    this.doMainAction = this.doMainAction.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onRollback = this.onRollback.bind(this);
     this.onClose = this.onClose.bind(this);
@@ -73,11 +75,13 @@ class Workitem extends Form {
   componentDidMount() {
     // FIXME: stacked workitems not handled properly
     // MouseTrap.bind('esc', this.onClose);
+    MouseTrap.bind('ctrl+enter', this.doMainAction);
   }
 
   componentWillUnmount() {
     super.componentWillUnmount();
     // MouseTrap.unbind('esc');
+    MouseTrap.unbind('ctrl+enter', this.doMainAction);
   }
 
   getChildContext() {
@@ -188,6 +192,11 @@ class Workitem extends Form {
         'entity-view'
       );
     }
+  }
+
+  doMainAction() {
+    //TODO: actionate main action
+    console.log('main action');
   }
 
   doAction(action) {
