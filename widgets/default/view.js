@@ -52,7 +52,7 @@ class DefaultView extends View {
   renderViews(workitemType, LeftPanel, useHinter, additionnalProps) {
     switch (workitemType) {
       case 'workitem':
-        return this.props.detail ? (
+        return (
           <Splitter
             id={`goblin-desktop/default/${workitemType}/detail`}
             kind="vertical"
@@ -71,20 +71,10 @@ class DefaultView extends View {
             </Splitter>
             {this.renderDetail()}
           </Splitter>
-        ) : (
-          <Splitter
-            id={`goblin-desktop/default/${workitemType}`}
-            kind="vertical"
-            firstSize={this.props.width || '800px'}
-            firstMinSize={this.props.width || '800px'}
-            firstMaxSize="1500px"
-          >
-            {this.renderLeft(LeftPanel, useHinter, additionnalProps)}
-          </Splitter>
         );
 
       default:
-        return this.props.detail ? (
+        return (
           <Splitter
             id={`goblin-desktop/default/${workitemType}/detail`}
             kind="vertical"
@@ -95,11 +85,6 @@ class DefaultView extends View {
             {this.renderLeft(LeftPanel, useHinter, additionnalProps)}
             {this.renderDetail()}
           </Splitter>
-        ) : (
-          <>
-            {this.renderLeft(LeftPanel, useHinter, additionnalProps)}
-            {this.renderHinter(useHinter)}
-          </>
         );
     }
   }
