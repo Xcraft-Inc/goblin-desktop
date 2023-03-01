@@ -11,6 +11,10 @@ export default function styles(theme) {
     display: 'flex',
   };
 
+  const formFields = {
+    width: 'fit-content',
+  };
+
   const detail = {
     height: '100%',
     display: 'flex',
@@ -240,6 +244,7 @@ export default function styles(theme) {
 
   return {
     form,
+    formFields,
     detail,
     board,
     roadbook,

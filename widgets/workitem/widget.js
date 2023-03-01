@@ -703,12 +703,14 @@ class Workitem extends Form {
             validateOn="submit"
             model={`backend.${this.props.entityId}`}
           >
-            {this.props.children}
-            <WorkitemFields
-              id={`workitem@${this.props.id.split('@')[0]}`}
-              workitemId={this.props.id}
-              readonly={true}
-            />
+            <div className={this.styles.classNames.formFields}>
+              {this.props.children}
+              <WorkitemFields
+                id={`workitem@${this.props.id.split('@')[0]}`}
+                workitemId={this.props.id}
+                readonly={true}
+              />
+            </div>
           </Form>
         </ScrollableContainer>
         {this.renderActionButtons()}
