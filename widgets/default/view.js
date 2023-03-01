@@ -19,7 +19,7 @@ class DefaultView extends View {
       return null;
     }
     return (
-      <Container kind="row" grow="1">
+      <Container kind="row" grow="1" minWidth="300px">
         <Hinter id={this.props.hinter} />
       </Container>
     );
