@@ -50,6 +50,7 @@ class DefaultView extends View {
   }
 
   renderViews(workitemType, LeftPanel, useHinter, additionnalProps) {
+    const hide = !this.props.detail;
     switch (workitemType) {
       case 'workitem':
         return (
@@ -59,7 +60,7 @@ class DefaultView extends View {
             lastSize={this.props.width || '800px'}
             lastMinSize={this.props.width || '800px'}
             lastMaxSize="1500px"
-            hide={!this.props.detail}
+            hide={hide}
           >
             <Splitter
               id={`goblin-desktop/default/${workitemType}`}
@@ -82,7 +83,7 @@ class DefaultView extends View {
             lastSize={this.props.width || '800px'}
             lastMinSize={this.props.width || '800px'}
             lastMaxSize="1500px"
-            hide={!this.props.detail}
+            hide={hide}
           >
             {this.renderLeft(LeftPanel, useHinter, additionnalProps)}
             {this.renderDetail()}
