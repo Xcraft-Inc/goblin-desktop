@@ -57,6 +57,7 @@ class DefaultView extends View {
           <Splitter
             id={`goblin-desktop/default/${workitemType}/detail`}
             kind="vertical"
+            firstOverflow="visible"
             lastSize={this.props.width || '800px'}
             lastMinSize={this.props.width || '800px'}
             lastMaxSize="1500px"
