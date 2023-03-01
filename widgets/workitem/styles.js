@@ -12,7 +12,7 @@ export default function styles(theme) {
   };
 
   const formFields = {
-    width: 'fit-content',
+    minWidth: 'fit-content',
   };
 
   const detail = {
