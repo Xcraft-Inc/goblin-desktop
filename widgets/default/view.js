@@ -27,7 +27,7 @@ class DefaultView extends View {
 
   renderDetail() {
     if (!this.props.detail) {
-      return null;
+      return <></>;
     }
     return (
       <Detail
