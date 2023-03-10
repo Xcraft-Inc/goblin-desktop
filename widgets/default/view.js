@@ -108,11 +108,11 @@ class DefaultView extends View {
     if (workitemId) {
       const workitem = workitemId.split('@')[0];
       workitemType = workitem.substring(workitem.lastIndexOf('-') + 1);
-      canDo = this.canDo(`${workitem}.edit`);
 
       switch (workitemType) {
         case 'workitem':
           LeftPanel = Editor;
+          canDo = this.canDo(`${workitem}.edit`);
           break;
         case 'search':
           LeftPanel = Search;
