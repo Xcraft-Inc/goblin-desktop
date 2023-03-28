@@ -2,6 +2,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import FacetFilter from 'goblin-desktop/widgets/facet-filter/widget';
 import FacetFilterAdd from 'goblin-desktop/widgets/facet-filter-add/widget';
+import FacetPreFilterEditor from 'goblin-desktop/widgets/facet-pre-filter-editor/widget';
 
 /******************************************************************************/
 
@@ -82,7 +83,12 @@ class StatusFilter extends Widget {
     return (
       <>
         {this.renderFacets()}
-        <FacetFilterAdd id={this.props.id} type={this.props.type} />
+        <FacetFilterAdd key="add" id={this.props.id} type={this.props.type} />
+        <FacetPreFilterEditor
+          key="editor"
+          id={this.props.id}
+          type={this.props.type}
+        />
       </>
     );
   }
