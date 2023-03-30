@@ -11,6 +11,7 @@ import Label from 'goblin-gadgets/widgets/label/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import CommandButton from 'goblin-gadgets/widgets/command-button/widget';
 import StatusFilters from 'goblin-desktop/widgets/status-filters/widget';
+import PrefilterList from 'goblin-gadgets/widgets/prefilter-list/widget';
 import C from 'goblin-laboratory/widgets/connect-helpers/c';
 import TextField from 'goblin-gadgets/widgets/text-field/widget';
 
@@ -181,6 +182,7 @@ class Search extends Widget {
 
   renderParams() {
     const listId = `list@${this.props.id}`;
+    const prefilterListId = `prefilter-list@${this.props.id}`;
     return (
       <div className={this.styles.classNames.params}>
         <div className={this.styles.classNames.pane}>
@@ -214,6 +216,7 @@ class Search extends Widget {
 
         <div className={this.styles.classNames.scrollablePane}>
           <StatusFilters id={listId} type={this.props.type} />
+          <PrefilterList id={prefilterListId} />
           <div className={this.styles.classNames.separator} />
           <Count id={listId} />
         </div>
