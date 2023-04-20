@@ -1,4 +1,5 @@
 import React from 'react';
+import Shredder from 'xcraft-core-shredder';
 import Widget from 'goblin-laboratory/widgets/widget';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Label from 'goblin-gadgets/widgets/label/widget';
@@ -10,6 +11,21 @@ import FacetHelpers from '../helpers/facet-helpers';
 import {Unit} from 'goblin-theme';
 import T from 't';
 const px = Unit.toPx;
+
+function getTextOrNabuId(text) {
+  if (Shredder.isImmutable(text)) {
+    const nabuId = text.get('nabuId');
+    if (nabuId) {
+      return nabuId;
+    }
+  } else if (typeof text === 'object') {
+    const nabuId = text.nabuId;
+    if (nabuId) {
+      return nabuId;
+    }
+  }
+  return text;
+}
 
 class FacetFilterListDialog extends Widget {
   constructor() {
@@ -44,10 +60,15 @@ class FacetFilterListDialog extends Widget {
     const type = FacetHelpers.getType(keys);
     filter = FacetHelpers.preprocessFilter(filter);
 
-    return keys.filter((key) => {
-      const text = FacetHelpers.format(key, type);
-      return FacetHelpers.match(text, filter);
-    });
+    return keys.reduce((acc, key) => {
+      let text = FacetHelpers.format(key, type, this.props.propInfos);
+      //TODO: search should be done on translation of status, not nabuId
+      text = getTextOrNabuId(text);
+      if (FacetHelpers.match(text, filter)) {
+        acc = acc.push(key);
+      }
+      return acc;
+    }, Shredder.fromJS([]));
   }
 
   onClose() {
@@ -187,7 +208,6 @@ class FacetFilterListDialog extends Widget {
 
   renderList() {
     const keys = this.getFilteredKeys(this.filter);
-
     return (
       <div className={this.styles.classNames.facetFilterDialog}>
         {this.renderHeader(keys)}
