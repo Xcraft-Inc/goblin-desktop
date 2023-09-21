@@ -1,7 +1,6 @@
 //T:2019-02-27
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'goblin-laboratory/widgets/widget';
 import {Unit} from 'goblin-theme';
@@ -223,7 +222,7 @@ class Plugin extends Widget {
 
   renderHeaderActionMenu(numberOfIds) {
     if (this.showActionMenu) {
-      const node = ReactDOM.findDOMNode(this.comboButton);
+      const node = this.comboButton;
       const rect = node.getBoundingClientRect();
       const top = Unit.add(
         px(rect.bottom),
@@ -502,7 +501,7 @@ class Plugin extends Widget {
         key={index}
         ref={(n) => {
           if (n) {
-            this._refs[entityId] = ReactDOM.findDOMNode(n);
+            this._refs[entityId] = n;
           }
         }}
       >

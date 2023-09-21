@@ -1,6 +1,5 @@
 //T:2019-02-27
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Widget from 'goblin-laboratory/widgets/widget';
 
 import {Unit} from 'goblin-theme';
@@ -14,12 +13,11 @@ export default class MainTabMenu extends Widget {
   constructor() {
     super(...arguments);
 
-    this.comboButton = null;
-
     this.state = {
       showMenu: false,
     };
 
+    this.combo = null;
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
@@ -28,7 +26,6 @@ export default class MainTabMenu extends Widget {
 
   componentDidMount() {
     super.componentDidMount();
-    this.combo = ReactDOM.findDOMNode(this.comboButton);
   }
 
   get showMenu() {
@@ -63,46 +60,48 @@ export default class MainTabMenu extends Widget {
 
   renderMenu() {
     if (this.showMenu && this.props.items) {
-      const rect = this.combo.getBoundingClientRect();
-      const top = Unit.add(
-        px(rect.bottom),
-        this.context.theme.shapes.flyingBalloonTriangleSize
-      );
+      if (this.combo) {
+        const rect = this.combo.getBoundingClientRect();
+        const top = Unit.add(
+          px(rect.bottom),
+          this.context.theme.shapes.flyingBalloonTriangleSize
+        );
 
-      const list = this.props.items.map((item) => {
-        const text = this.props.itemsTextKey
-          ? item.get(this.props.itemsTextKey)
-          : item.text;
-        const value = this.props.itemsValueKey
-          ? item.get(this.props.itemsValueKey)
-          : item.value;
-        return {
-          text,
-          glyph: item.glyph,
-          color: item.glyphColor,
-          separator: item.separator,
-          kind: item.kind,
-          active: value === this.currentItem,
-          action: () => this.onChange(value, text),
-        };
-      });
+        const list = this.props.items.map((item) => {
+          const text = this.props.itemsTextKey
+            ? item.get(this.props.itemsTextKey)
+            : item.text;
+          const value = this.props.itemsValueKey
+            ? item.get(this.props.itemsValueKey)
+            : item.value;
+          return {
+            text,
+            glyph: item.glyph,
+            color: item.glyphColor,
+            separator: item.separator,
+            kind: item.kind,
+            active: value === this.currentItem,
+            action: () => this.onChange(value, text),
+          };
+        });
 
-      var left = px((rect.left + rect.right) / 2);
-      if (this.props.horizontalShift) {
-        left = Unit.add(left, this.props.horizontalShift);
+        var left = px((rect.left + rect.right) / 2);
+        if (this.props.horizontalShift) {
+          left = Unit.add(left, this.props.horizontalShift);
+        }
+
+        return (
+          <Combo
+            menuType="wrap"
+            width="200px"
+            left={left}
+            triangleShift={this.props.horizontalShift}
+            top={top}
+            list={list}
+            close={this.close}
+          />
+        );
       }
-
-      return (
-        <Combo
-          menuType="wrap"
-          width="200px"
-          left={left}
-          triangleShift={this.props.horizontalShift}
-          top={top}
-          list={list}
-          close={this.close}
-        />
-      );
     } else {
       return null;
     }
@@ -122,7 +121,7 @@ export default class MainTabMenu extends Widget {
     return (
       <div>
         <Button
-          ref={(x) => (this.comboButton = x)}
+          ref={(x) => (this.combo = x)}
           active={this.showMenu}
           onClick={this.onClick}
           {...otherProps}
