@@ -63,7 +63,7 @@ class Plugin extends Widget {
       return;
     }
 
-    scrollIntoViewIfNeeded(this._refs[this._scrollEntityId], {
+    scrollIntoViewIfNeeded(this._refs[this._scrollEntityId].ref, {
       duration,
       // HACK: we need to fix the transitions in order to remove this offset
       offset: {
@@ -502,6 +502,8 @@ class Plugin extends Widget {
         ref={(n) => {
           if (n) {
             this._refs[entityId] = n;
+          } else {
+            delete this._refs[entityId];
           }
         }}
       >
@@ -590,8 +592,6 @@ class Plugin extends Widget {
   }
 
   render() {
-    this._refs = {};
-
     if (!this.props.id || !this.props.entityIds) {
       return null;
     }
