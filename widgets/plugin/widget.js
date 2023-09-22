@@ -63,7 +63,7 @@ class Plugin extends Widget {
       return;
     }
 
-    scrollIntoViewIfNeeded(this._refs[this._scrollEntityId].ref, {
+    scrollIntoViewIfNeeded(this._refs[this._scrollEntityId], {
       duration,
       // HACK: we need to fix the transitions in order to remove this offset
       offset: {
@@ -501,7 +501,8 @@ class Plugin extends Widget {
         key={index}
         ref={(n) => {
           if (n) {
-            this._refs[entityId] = n;
+            // Get the html node ref via instance variable of component
+            this._refs[entityId] = n.ref;
           } else {
             delete this._refs[entityId];
           }
