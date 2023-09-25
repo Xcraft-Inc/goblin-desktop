@@ -60,4 +60,4 @@ class WorkitemFields extends Widget {
   }
 }
 
-export default Widget.Wired(WorkitemFields)();
+export default Widget.Wired(WorkitemFields);

@@ -80,4 +80,4 @@ class Editor extends Widget {
   }
 }
 
-export default Widget.Wired(Editor)();
+export default Widget.Wired(Editor);

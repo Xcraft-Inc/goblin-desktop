@@ -189,4 +189,4 @@ class Datagrid extends Widget {
   }
 }
 
-export default Widget.Wired(Datagrid)();
+export default Widget.Wired(Datagrid);

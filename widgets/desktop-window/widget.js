@@ -67,4 +67,4 @@ class DesktopWindow extends Widget {
 }
 
 /******************************************************************************/
-export default Widget.Wired(DesktopWindow)();
+export default Widget.Wired(DesktopWindow);

@@ -188,4 +188,4 @@ class Desktop extends Widget {
 }
 
 /******************************************************************************/
-export default Widget.Wired(Desktop)();
+export default Widget.Wired(Desktop);

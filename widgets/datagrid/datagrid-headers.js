@@ -170,7 +170,8 @@ class Hinter extends Widget {
   }
 
   static connectTo(datagridId) {
-    return Widget.Wired(Hinter)(`${datagridId}`);
+    const WiredHinter = Widget.Wired(Hinter);
+    return <WiredHinter id={`${datagridId}`} />;
   }
 
   static get wiring() {
@@ -214,7 +215,8 @@ class DatagridHeaders extends Form {
   }
 
   static connectTo(instance) {
-    return Widget.Wired(DatagridHeaders)(`${instance.props.id}`);
+    const WiredDatagridHeaders = Widget.Wired(DatagridHeaders);
+    return <WiredDatagridHeaders id={instance.props.id} />;
   }
 
   renderHeader(index) {

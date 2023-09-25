@@ -68,7 +68,7 @@ class HinterNewButton extends Widget {
     );
   }
 }
-const NewEntityButton = Widget.Wired(HinterNewButton)();
+const NewEntityButton = Widget.Wired(HinterNewButton);
 
 /******************************************************************************/
 
@@ -282,4 +282,4 @@ const ConnectedSearch = Widget.connect((state, prop) => {
   return {hasFilter};
 })(Search);
 
-export default Widget.Wired(ConnectedSearch)();
+export default Widget.Wired(ConnectedSearch);

@@ -296,4 +296,4 @@ class Wizard extends Form {
 
 /******************************************************************************/
 
-export default Widget.Wired(Wizard)();
+export default Widget.Wired(Wizard);

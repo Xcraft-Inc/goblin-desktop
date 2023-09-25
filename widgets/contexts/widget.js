@@ -144,4 +144,4 @@ export default Widget.Wired(
     const current = state.get(`backend.${props.desktopId}.current.workcontext`);
     return {current};
   })(Contexts)
-)();
+);

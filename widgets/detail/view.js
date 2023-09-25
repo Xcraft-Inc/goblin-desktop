@@ -2,8 +2,8 @@
 
 import React from 'react';
 import View from 'goblin-laboratory/widgets/view';
-import Widget from 'goblin-laboratory/widgets/widget';
 import Detail from 'goblin-desktop/widgets/detail/widget';
+import WithRoute from 'goblin-laboratory/widgets/with-route/with-route.js';
 
 class DetailView extends View {
   constructor() {
@@ -32,7 +32,7 @@ class DetailView extends View {
   }
 }
 
-export default Widget.WithRoute(
+export default WithRoute(
   DetailView,
   ['context', 'hinter'],
   null,

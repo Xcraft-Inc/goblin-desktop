@@ -288,4 +288,4 @@ class Hinter extends Widget {
   }
 }
 
-export default Widget.Wired(Hinter)();
+export default Widget.Wired(Hinter);

@@ -206,4 +206,4 @@ const ConnectedEntityList = Widget.connect((state, props) => {
 
 /******************************************************************************/
 
-export default Widget.Wired(ConnectedEntityList)();
+export default Widget.Wired(ConnectedEntityList);

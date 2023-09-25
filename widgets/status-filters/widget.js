@@ -118,4 +118,4 @@ const StatusFilterConnected = Widget.connect((state, props) => {
   return {columnPaths};
 })(StatusFilter);
 
-export default Widget.Wired(StatusFilterConnected)();
+export default Widget.Wired(StatusFilterConnected);

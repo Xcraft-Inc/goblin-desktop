@@ -2,7 +2,7 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Contexts from 'goblin-desktop/widgets/contexts/widget';
-const wireContexts = Widget.Wired(Contexts);
+const WiredContexts = Widget.Wired(Contexts);
 
 class ContextsView extends Widget {
   constructor() {
@@ -14,8 +14,7 @@ class ContextsView extends Widget {
     if (!isDisplayed) {
       return null;
     }
-    const WiredContexts = wireContexts(`contexts@${desktopId}`);
-    return <WiredContexts />;
+    return <WiredContexts id={`contexts@${desktopId}`} />;
   }
 }
 

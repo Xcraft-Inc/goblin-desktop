@@ -9,7 +9,7 @@ import DesktopClock from 'goblin-desktop/widgets/desktop-clock/widget';
 import Monitor from 'goblin-desktop/widgets/monitor/widget';
 import WidgetDocCaller from 'goblin-desktop/widgets/widget-doc-caller/widget';
 import {getToolbarId} from 'goblin-nabu/lib/helpers.js';
-const NabuToolbarConnected = Widget.Wired(NabuToolbar)();
+const NabuToolbarConnected = Widget.Wired(NabuToolbar);
 
 /******************************************************************************/
 

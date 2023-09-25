@@ -14,10 +14,13 @@ class TaskbarView extends Widget {
     if (!isDisplayed) {
       return null;
     }
-    const WiredTaskbar = Widget.Wired(Taskbar)(
-      `${context}-taskbar@${desktopId}`
+    const WiredTaskbar = Widget.Wired(Taskbar);
+    return (
+      <WiredTaskbar
+        id={`${context}-taskbar@${desktopId}`}
+        desktopId={desktopId}
+      />
     );
-    return <WiredTaskbar desktopId={desktopId} />;
   }
 }
 

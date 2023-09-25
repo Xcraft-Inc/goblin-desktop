@@ -83,4 +83,4 @@ class WorkitemDialog extends Widget {
   }
 }
 
-export default Widget.Wired(WorkitemDialog)();
+export default Widget.Wired(WorkitemDialog);

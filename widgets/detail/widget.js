@@ -123,4 +123,4 @@ class Detail extends Widget {
   }
 }
 
-export default Widget.Wired(Detail)();
+export default Widget.Wired(Detail);

@@ -1,6 +1,7 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Hinter from 'goblin-desktop/widgets/hinter/widget';
+import WithRoute from 'goblin-laboratory/widgets/with-route/with-route.js';
 
 class HinterView extends Widget {
   constructor() {
@@ -23,7 +24,7 @@ class HinterView extends Widget {
   }
 }
 
-export default Widget.WithRoute(
+export default WithRoute(
   HinterView,
   'hinter',
   null,

@@ -16,11 +16,10 @@ class SimpleView extends View {
     }
 
     const workitem = workitemId.split('@')[0];
-    const wireWidget = Widget.Wired(widgetImporter(workitem));
-    const WiredWidget = wireWidget(workitemId);
+    const WiredWidget = Widget.Wired(widgetImporter(workitem));
     return (
       <Container kind="views">
-        <WiredWidget />
+        <WiredWidget id={workitemId} />
       </Container>
     );
   }
