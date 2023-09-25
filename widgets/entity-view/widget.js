@@ -3,6 +3,7 @@
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import throttle from 'lodash/throttle';
+import CollectionLoader from 'goblin-laboratory/widgets/collection-loader/widget.js';
 import List from 'goblin-gadgets/widgets/list/widget';
 import TableCell from 'goblin-gadgets/widgets/table-cell/widget';
 import TableHeaderDragManager from 'goblin-gadgets/widgets/table-header-drag-manager/widget';
@@ -40,6 +41,7 @@ class EntityView extends Widget {
     this.onKeyValidate = this.onKeyValidate.bind(this);
     this._setDetail = this._setDetail.bind(this);
     this.setDetail = throttle(this._setDetail, 1200);
+    this.renderCollection = this.renderCollection.bind(this);
   }
 
   //#region get/set
@@ -430,6 +432,26 @@ class EntityView extends Widget {
     );
   }
 
+  renderCollection(columns) {
+    const width = this.getEstimatedWidth(columns);
+    const widthStyle = {
+      minWidth: width,
+    };
+
+    return (
+      <div className={this.styles.classNames.entityView}>
+        <div className={this.styles.classNames.list}>
+          <div className={this.styles.classNames.content} style={widthStyle}>
+            {this.renderHeader(columns)}
+            {this.renderRows(columns)}
+          </div>
+        </div>
+        {this.renderButton(columns)}
+        {this.renderVariants(columns)}
+      </div>
+    );
+  }
+
   render() {
     const {id, columnIds, isBad, type} = this.props;
     if (!id || !columnIds) {
@@ -443,32 +465,10 @@ class EntityView extends Widget {
       return null;
     }
 
-    return this.buildCollectionLoader(
-      columnIds.valueSeq().toArray(),
-      ({collection}) => {
-        const columns = collection;
-        const width = this.getEstimatedWidth(columns);
-        const widthStyle = {
-          minWidth: width,
-        };
-
-        return (
-          <div className={this.styles.classNames.entityView}>
-            <div className={this.styles.classNames.list}>
-              <div
-                className={this.styles.classNames.content}
-                style={widthStyle}
-              >
-                {this.renderHeader(columns)}
-                {this.renderRows(columns)}
-              </div>
-            </div>
-            {this.renderButton(columns)}
-            {this.renderVariants(columns)}
-          </div>
-        );
-      },
-      null
+    return (
+      <CollectionLoader ids={columnIds} returnCollection={true}>
+        {(collection) => this.renderCollection(collection)}
+      </CollectionLoader>
     );
   }
 }

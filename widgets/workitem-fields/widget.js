@@ -2,6 +2,7 @@ import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
 import Container from 'goblin-gadgets/widgets/container/widget';
 import Field from 'goblin-gadgets/widgets/field/widget';
+import CollectionLoader from 'goblin-laboratory/widgets/collection-loader/widget.js';
 
 /******************************************************************************/
 
@@ -39,12 +40,12 @@ class WorkitemFields extends Widget {
     if (!id) {
       return null;
     }
-
+    const fieldIds = fields.valueSeq();
     return (
       <Container kind="column" grow="1">
-        {this.buildCollectionLoader(fields.valueSeq().toArray(), () => (
+        <CollectionLoader ids={fieldIds} returnCollection={false}>
           <Container kind="pane">
-            {Array.from(fields.values()).map((fieldId, i) => {
+            {Array.from(fieldIds).map((fieldId, i) => {
               return (
                 <CustomField
                   key={i}
@@ -54,7 +55,7 @@ class WorkitemFields extends Widget {
               );
             })}
           </Container>
-        ))}
+        </CollectionLoader>
       </Container>
     );
   }
