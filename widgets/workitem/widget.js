@@ -17,6 +17,11 @@ import T from 't';
 
 /******************************************************************************/
 
+const Title = Widget.connect((state, props) => {
+  const text = `backend.${props.entityId}.meta.summaries.info`;
+  return {text};
+})(Label);
+
 class Workitem extends Form {
   constructor() {
     super(...arguments);
@@ -168,7 +173,7 @@ class Workitem extends Form {
   }
 
   onEdit() {
-    const entity = this.getEntityById(this.props.entityId);
+    const entity = this.getState(this.props.entityId);
     if (entity) {
       this.doAs(this.service, 'edit', {
         entity,
@@ -629,14 +634,9 @@ class Workitem extends Form {
 
   renderEditor() {
     const Form = this.Form;
+    const {entityId} = this.props;
 
-    const Title = this.mapWidget(
-      Label,
-      'text',
-      `backend.${this.props.entityId}.meta.summaries.info`
-    );
-
-    const scrollableId = `workitem-edit@${this.props.entityId || 'generic'}`;
+    const scrollableId = `workitem-edit@${entityId || 'generic'}`;
 
     return (
       <Container
@@ -647,7 +647,12 @@ class Workitem extends Form {
         width="100%"
       >
         <Container kind="pane-header">
-          <Title kind="pane-header" singleLine={true} wrap="no" />
+          <Title
+            entityId={entityId}
+            kind="pane-header"
+            singleLine={true}
+            wrap="no"
+          />
           {this.props.version}
         </Container>
         {this.renderStatus()}
@@ -659,7 +664,7 @@ class Workitem extends Form {
           <Form
             component={FormComponent}
             validateOn="submit"
-            model={`backend.${this.props.entityId}`}
+            model={`backend.${entityId}`}
           >
             {this.props.children}
             <WorkitemFields
@@ -676,21 +681,19 @@ class Workitem extends Form {
 
   renderDetail() {
     const Form = this.Form;
+    const {entityId} = this.props;
 
-    const Title = this.mapWidget(
-      Label,
-      'text',
-      `backend.${this.props.entityId}.meta.summaries.info`
-    );
-
-    const scrollableId = `workitem-readonly@${
-      this.props.entityId || 'generic'
-    }`;
+    const scrollableId = `workitem-readonly@${entityId || 'generic'}`;
 
     return (
       <Container kind="column-full" addClassName="hinter-container">
         <Container kind="pane-header">
-          <Title kind="pane-header" singleLine={true} wrap="no" />
+          <Title
+            entityId={entityId}
+            kind="pane-header"
+            singleLine={true}
+            wrap="no"
+          />
         </Container>
         {this.renderStatus()}
         <ScrollableContainer
@@ -720,23 +723,24 @@ class Workitem extends Form {
 
   renderDocument() {
     const Form = this.Form;
-    const Title = this.mapWidget(
-      Label,
-      'text',
-      `backend.${this.props.entityId}.meta.summaries.info`
-    );
+    const {entityId, children} = this.props;
     return (
       <Container kind="column-full">
         <Container kind="pane-header">
-          <Title kind="pane-header" singleLine={true} wrap="no" />
+          <Title
+            entityId={entityId}
+            kind="pane-header"
+            singleLine={true}
+            wrap="no"
+          />
         </Container>
         {this.renderStatus()}
         <Form
           component={FormFragmentComponent}
           validateOn="submit"
-          model={`backend.${this.props.entityId}`}
+          model={`backend.${entityId}`}
         >
-          {this.props.children}
+          {children}
         </Form>
 
         {this.renderActionButtons()}

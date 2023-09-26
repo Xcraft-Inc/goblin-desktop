@@ -3,6 +3,7 @@
 import React from 'react';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import Widget from 'goblin-laboratory/widgets/widget';
+import StateLoader from 'goblin-laboratory/widgets/state-loader/widget.js';
 import {Unit} from 'goblin-theme';
 const px = Unit.toPx;
 
@@ -16,6 +17,7 @@ import Combo from 'goblin-gadgets/widgets/combo/widget';
 
 import importer from 'goblin_importer';
 import T from 't';
+import stateMapperToProps from 'goblin-laboratory/widgets/state-mapper-to-props/widget';
 
 const uiImporter = importer('ui');
 
@@ -294,6 +296,14 @@ class Plugin extends Widget {
     }
   }
 
+  renderLoading() {
+    return (
+      <Container busy={true}>
+        <Label text={T('chargement...')} />
+      </Container>
+    );
+  }
+
   renderItem(entityId, extended, index) {
     const workitemUI = uiImporter(this.props.editorWidget);
     const workitemId = `${this.props.editorWidget}@${
@@ -314,30 +324,22 @@ class Plugin extends Widget {
 
     const key1 = this.props.readonly ? 'readonly' : 'edit';
     const key2 = extended ? 'extend' : 'compact';
-
-    let UI = workitemUI.plugin[key1][key2];
-    //let UI = this.WithState(
-    //  workitemUI.plugin[key1][key2],
-    //  'entityId'
-    //)('.entityId');
-
-    if (
+    const mapper =
       workitemUI.mappers &&
       workitemUI.mappers.plugin &&
       workitemUI.mappers.plugin[key1] &&
-      workitemUI.mappers.plugin[key1][key2]
-    ) {
-      UI = this.mapWidget(
-        UI,
-        workitemUI.mappers.plugin[key1][key2],
-        `backend.${entityId}`
-      );
-    }
+      workitemUI.mappers.plugin[key1][key2];
+    const UI = stateMapperToProps(
+      workitemUI.plugin[key1][key2],
+      mapper,
+      `backend.${entityId}`
+    );
 
     const type = entityId.split('@', 1)[0];
-    const Loader = (props) => {
-      if (props.loaded) {
-        return (
+
+    return (
+      <div className={itemClass}>
+        <StateLoader path={workitemId} FallbackComponent={this.renderLoading}>
           <Workitem
             id={workitemId}
             entityId={entityId}
@@ -345,7 +347,7 @@ class Plugin extends Widget {
             readonly={this.props.readonly}
             dragServiceId={this.props.dragServiceId}
           >
-            {this.buildLoader(entityId, () => (
+            <StateLoader path={entityId}>
               <UI
                 id={workitemId}
                 theme={this.context.theme}
@@ -357,27 +359,9 @@ class Plugin extends Widget {
                 do={this.doProxy(index)}
                 entitySchema={this.getSchema(type)}
               />
-            ))}
+            </StateLoader>
           </Workitem>
-        );
-      } else {
-        return (
-          <Container busy={true}>
-            <Label text={T('chargement...')} />
-          </Container>
-        );
-      }
-    };
-
-    const LoadedWorkitem = this.mapWidget(
-      Loader,
-      (wid) => ({loaded: !!wid}),
-      `backend.${workitemId}.id`
-    );
-
-    return (
-      <div className={itemClass}>
-        <LoadedWorkitem />
+        </StateLoader>
       </div>
     );
   }

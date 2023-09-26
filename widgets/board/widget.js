@@ -1,6 +1,7 @@
 //T:2019-02-27
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
+import stateMapperToProps from 'goblin-laboratory/widgets/state-mapper-to-props/widget.js';
 import importer from 'goblin_importer';
 import Workitem from 'goblin-desktop/widgets/workitem/widget';
 
@@ -37,14 +38,13 @@ class Board extends Widget {
     const workitem = this.props.id.split('@')[0];
 
     const workitemUI = uiImporter(workitem);
-    let EditorUI = this.WithState(workitemUI.board, 'entityId')('.entityId');
-    if (workitemUI.mappers && workitemUI.mappers.board) {
-      EditorUI = this.mapWidget(
-        EditorUI,
-        workitemUI.mappers.board,
-        `backend.${entityId}`
-      );
-    }
+    const mapper = workitemUI.mappers && workitemUI.mappers.board;
+    const EditorUI = stateMapperToProps(
+      workitemUI.board,
+      mapper,
+      `backend.${entityId}`
+    );
+
     return (
       <Workitem
         kind="board"

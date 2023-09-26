@@ -1,10 +1,16 @@
 //T:2019-02-27
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
+import StateLoader from 'goblin-laboratory/widgets/state-loader/widget';
+import stateMapperToProps from 'goblin-laboratory/widgets/state-mapper-to-props/widget.js';
 import importer from 'goblin_importer';
 import Workitem from 'goblin-desktop/widgets/workitem/widget';
 
 const uiImporter = importer('ui');
+
+const WorkitemConnected = Widget.connectBackend((state, props) => {
+  return {buttons: state.get('buttons')};
+})(Workitem);
 
 class Editor extends Widget {
   constructor() {
@@ -27,7 +33,7 @@ class Editor extends Widget {
   }
 
   render() {
-    const {id, entityId} = this.props;
+    const {id, entityId, readonly, dragServiceId} = this.props;
     if (!id) {
       return null;
     }
@@ -35,37 +41,30 @@ class Editor extends Widget {
       return null;
     }
     const type = entityId.split('@', 1)[0];
-    const Editor = this.mapWidget(Workitem, 'buttons', `backend.${id}.buttons`);
     let defaultPanel = 'edit';
-    if (this.props.readonly) {
+    if (readonly) {
       defaultPanel = 'readonly';
     }
-    return this.buildLoader(entityId, () => {
-      const workitem = this.props.id.split('@')[0];
+    const workitem = id.split('@')[0];
+    const workitemUI = uiImporter(workitem);
+    const mapper =
+      workitemUI.mappers &&
+      workitemUI.mappers.panel &&
+      workitemUI.mappers.panel[defaultPanel];
+    const EditorUI = stateMapperToProps(
+      workitemUI.panel[defaultPanel],
+      mapper,
+      `backend.${entityId}`
+    );
 
-      const workitemUI = uiImporter(workitem);
-      let EditorUI = this.WithState(
-        workitemUI.panel[defaultPanel],
-        'entityId'
-      )('.entityId');
-      if (
-        workitemUI.mappers &&
-        workitemUI.mappers.panel &&
-        workitemUI.mappers.panel[defaultPanel]
-      ) {
-        EditorUI = this.mapWidget(
-          EditorUI,
-          workitemUI.mappers.panel[defaultPanel],
-          `backend.${entityId}`
-        );
-      }
-      return (
-        <Editor
+    return (
+      <StateLoader path={entityId}>
+        <WorkitemConnected
           kind="editor"
-          id={this.props.id}
-          readonly={this.props.readonly || false}
-          entityId={this.props.entityId}
-          dragServiceId={this.props.dragServiceId}
+          id={id}
+          readonly={readonly || false}
+          entityId={entityId}
+          dragServiceId={dragServiceId}
         >
           <EditorUI
             {...this.props}
@@ -74,9 +73,9 @@ class Editor extends Widget {
             entitySchema={this.getSchema(type)}
             contextId={this.context.contextId}
           />
-        </Editor>
-      );
-    });
+        </WorkitemConnected>
+      </StateLoader>
+    );
   }
 }
 

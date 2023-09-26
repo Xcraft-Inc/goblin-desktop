@@ -6,6 +6,12 @@ import Container from 'goblin-gadgets/widgets/container/widget';
 import Button from 'goblin-gadgets/widgets/button/widget';
 import T from 't';
 
+const LocalStateMonitor = Widget.connect((state, props) => {
+  return {size: state.get('backend').size};
+})(function (props) {
+  return <div style={{fontWeight: 900}}>LocalState: {props.size}</div>;
+});
+
 class Monitor extends Widget {
   constructor() {
     super(...arguments);
@@ -17,19 +23,7 @@ class Monitor extends Widget {
     this.dispatch({type: 'TOGGLE'});
   }
 
-  connectLocalStateMonitor() {
-    return this.mapWidget(
-      (props) => {
-        const size = props.state.size;
-        return <div style={{fontWeight: 900}}>LocalState: {size}</div>;
-      },
-      'state',
-      'backend'
-    );
-  }
-
   renderMonitors() {
-    const LocalStateMonitor = this.connectLocalStateMonitor();
     return (
       <div style={{margin: '10px'}}>
         <LocalStateMonitor />

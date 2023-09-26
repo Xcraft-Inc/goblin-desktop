@@ -2,6 +2,8 @@
 
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
+import StateLoader from 'goblin-laboratory/widgets/state-loader/widget.js';
+import stateMapperToProps from 'goblin-laboratory/widgets/state-mapper-to-props/widget.js';
 import importer from 'goblin_importer';
 
 import Container from 'goblin-gadgets/widgets/container/widget';
@@ -11,6 +13,10 @@ const Spinner = () => {
   return <Container width={'100%'} height={'100%'} busy={true} />;
 };
 const uiImporter = importer('ui');
+
+const WorkitemConnected = Widget.connectBackend((state, props) => {
+  return {buttons: state.get('buttons')};
+})(Workitem);
 
 class Detail extends Widget {
   constructor() {
@@ -64,12 +70,16 @@ class Detail extends Widget {
     const workitemUI = uiImporter(detailWidget);
 
     const workitemId = detailWidgetId;
-
-    const Detail = this.mapWidget(
-      Workitem,
-      'buttons',
-      `backend.${workitemId}.buttons`
+    const mapper =
+      workitemUI.mappers &&
+      workitemUI.mappers.panel &&
+      workitemUI.mappers.panel.readonly;
+    const DetailUI = stateMapperToProps(
+      workitemUI.panel.readonly,
+      mapper,
+      `backend.${entityId}`
     );
+
     return (
       <Container
         kind="view-right"
@@ -77,7 +87,7 @@ class Detail extends Widget {
         width={width ? width : '800px'}
         busy={this.props.loading}
       >
-        <Detail
+        <WorkitemConnected
           kind={kind ? kind : 'detail'}
           id={workitemId}
           entityId={entityId}
@@ -85,39 +95,17 @@ class Detail extends Widget {
           dragServiceId={this.props.dragServiceId}
           leftPanelWorkitemId={this.props.leftPanelWorkitemId}
         >
-          {this.buildLoader(
-            entityId,
-            () => {
-              let DetailUI = this.WithState(
-                workitemUI.panel.readonly,
-                'entityId'
-              )('.entityId');
-
-              if (
-                workitemUI.mappers &&
-                workitemUI.mappers.panel &&
-                workitemUI.mappers.panel.readonly
-              ) {
-                DetailUI = this.mapWidget(
-                  DetailUI,
-                  workitemUI.mappers.panel.readonly,
-                  `backend.${entityId}`
-                );
-              }
-              return (
-                <DetailUI
-                  id={workitemId}
-                  theme={this.context.theme}
-                  do={this.doProxy}
-                  entityId={entityId}
-                  entitySchema={this.getSchema(this.props.type)}
-                  contextId={this.context.contextId}
-                />
-              );
-            },
-            Spinner
-          )}
-        </Detail>
+          <StateLoader path={entityId} FallBackComponent={Spinner}>
+            <DetailUI
+              id={workitemId}
+              theme={this.context.theme}
+              do={this.doProxy}
+              entityId={entityId}
+              entitySchema={this.getSchema(this.props.type)}
+              contextId={this.context.contextId}
+            />
+          </StateLoader>
+        </WorkitemConnected>
       </Container>
     );
   }

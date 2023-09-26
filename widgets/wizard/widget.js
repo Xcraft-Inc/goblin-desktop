@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import DialogModal from 'goblin-gadgets/widgets/dialog-modal/widget';
 import Separator from 'goblin-gadgets/widgets/separator/widget';
 import WizardButtons from '../wizard-buttons/widget';
+import stateMapperToProps from 'goblin-laboratory/widgets/state-mapper-to-props/widget';
 
 const uiImporter = importer('ui');
 
@@ -257,14 +258,12 @@ class Wizard extends Form {
         return null;
       };
     } else {
-      Step = wizardUI[this.props.step];
-      if (wizardUI.mappers && wizardUI.mappers[this.props.step]) {
-        Step = this.mapWidget(
-          Step,
-          wizardUI.mappers[this.props.step],
-          `backend.${this.props.id}`
-        );
-      }
+      const mapper = wizardUI.mappers && wizardUI.mappers[this.props.step];
+      Step = stateMapperToProps(
+        wizardUI[this.props.step],
+        mapper,
+        `backend.${this.props.id}`
+      );
     }
 
     const mode = dialog.get('mode');
