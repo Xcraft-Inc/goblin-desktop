@@ -173,7 +173,7 @@ class Workitem extends Form {
   }
 
   onEdit() {
-    const entity = this.getState(this.props.entityId);
+    const entity = this.getBackendState(this.props.entityId);
     if (entity) {
       this.doAs(this.service, 'edit', {
         entity,
