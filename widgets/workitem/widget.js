@@ -18,7 +18,8 @@ import T from 't';
 /******************************************************************************/
 
 const Title = Widget.connect((state, props) => {
-  const text = `backend.${props.entityId}.meta.summaries.info`;
+  const path = `backend.${props.entityId}.meta.summaries.info`;
+  const text = state.get(path);
   return {text};
 })(Label);
 
