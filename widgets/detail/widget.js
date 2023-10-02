@@ -95,7 +95,7 @@ class Detail extends Widget {
           dragServiceId={this.props.dragServiceId}
           leftPanelWorkitemId={this.props.leftPanelWorkitemId}
         >
-          <StateLoader path={entityId} FallBackComponent={Spinner}>
+          <StateLoader path={entityId} FallbackComponent={Spinner}>
             <DetailUI
               id={workitemId}
               theme={this.context.theme}
