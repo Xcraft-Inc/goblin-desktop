@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "goblin-theme": "^2.0.0",
+    "goblin-laboratory": "^4.0.0",
     "immutable": "4.0.0-rc.14",
     "uuid": "^8.3.2",
     "xcraft-core-goblin": "^5.0.0",
