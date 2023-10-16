@@ -40,7 +40,7 @@ class HinterNewButton extends Widget {
 
   onNew() {
     const model = this.getRouting().get('location.hash').substring(1);
-    const value = this.getModelValue(model, true);
+    const value = this.getBackendState(model);
     this.doFor(this.props.id, 'create-new', {
       value,
     });

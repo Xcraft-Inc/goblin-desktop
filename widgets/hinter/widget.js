@@ -206,7 +206,7 @@ class Hinter extends Widget {
 
   onNew() {
     const model = this.getRouting().get('location.hash').substring(1);
-    const value = this.getModelValue(model, true);
+    const value = this.getBackendState(model);
     this.do('create-new', {value});
   }
 
