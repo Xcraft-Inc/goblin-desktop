@@ -30,7 +30,6 @@ class Detail extends Widget {
       type: 'type',
       title: 'title',
       kind: 'kind',
-      width: 'width',
       detailWidget: 'detailWidget',
       detailWidgetId: 'detailWidgetId',
       entityId: 'entityId',
