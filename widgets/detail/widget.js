@@ -30,6 +30,7 @@ class Detail extends Widget {
       type: 'type',
       title: 'title',
       kind: 'kind',
+      width: 'width',
       detailWidget: 'detailWidget',
       detailWidgetId: 'detailWidgetId',
       entityId: 'entityId',
@@ -46,11 +47,12 @@ class Detail extends Widget {
     const {
       id,
       kind,
-      width,
+      customWidth,
       entityId,
       detailWidget,
       detailWidgetId,
     } = this.props;
+    let {width} = this.props;
 
     if (!id) {
       return null;
@@ -78,6 +80,10 @@ class Detail extends Widget {
       mapper,
       `backend.${entityId}`
     );
+
+    if (customWidth) {
+      width = customWidth;
+    }
 
     return (
       <Container

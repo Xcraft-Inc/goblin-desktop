@@ -32,7 +32,7 @@ class DefaultView extends View {
     return (
       <Detail
         id={this.props.detail}
-        width="100%"
+        customWidth="100%"
         leftPanelWorkitemId={this.props.leftPanelWorkitemId}
       />
     );
