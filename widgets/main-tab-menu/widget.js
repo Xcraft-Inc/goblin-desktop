@@ -17,7 +17,7 @@ export default class MainTabMenu extends Widget {
       showMenu: false,
     };
 
-    this.combo = null;
+    this.combo = React.createRef();
     this.onChange = this.onChange.bind(this);
     this.onClick = this.onClick.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
@@ -60,8 +60,8 @@ export default class MainTabMenu extends Widget {
 
   renderMenu() {
     if (this.showMenu && this.props.items) {
-      if (this.combo) {
-        const rect = this.combo.getBoundingClientRect();
+      if (this.combo.current) {
+        const rect = this.combo.current.getBoundingClientRect();
         const top = Unit.add(
           px(rect.bottom),
           this.context.theme.shapes.flyingBalloonTriangleSize
@@ -119,13 +119,8 @@ export default class MainTabMenu extends Widget {
     const contentClass = this.styles.classNames.content;
 
     return (
-      <div>
-        <Button
-          ref={(x) => (this.combo = x)}
-          active={this.showMenu}
-          onClick={this.onClick}
-          {...otherProps}
-        />
+      <div ref={this.combo}>
+        <Button active={this.showMenu} onClick={this.onClick} {...otherProps} />
         <div className={contentClass}>{this.renderMenu()}</div>
       </div>
     );
