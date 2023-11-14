@@ -224,7 +224,7 @@ class Plugin extends Widget {
 
   renderHeaderActionMenu(numberOfIds) {
     if (this.showActionMenu) {
-      const node = this.comboButton;
+      const node = this.comboButton.ref;
       const rect = node.getBoundingClientRect();
       const top = Unit.add(
         px(rect.bottom),
