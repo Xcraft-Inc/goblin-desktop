@@ -233,7 +233,7 @@ class EntityView extends Widget {
       direction: sorting.direction,
     });
 
-    const cell = columns[index - 1];
+    const cell = columns.get(index - 1);
     const path = ListHelpers.getColumnPath(cell);
 
     this.doFor(this.props.id, 'sort-list', {
