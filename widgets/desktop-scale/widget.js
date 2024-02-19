@@ -127,13 +127,13 @@ class DesktopScale extends Widget {
     );
   }
 
-  renderButton() {
+  renderButton({onClick}) {
     return (
       <Button
         glyph="solid/binoculars"
         kind="main-tab-right"
         tooltip={T('Choix du zoom')}
-        onClick={this.onToggleDialog}
+        onClick={onClick}
       />
     );
   }
@@ -142,10 +142,10 @@ class DesktopScale extends Widget {
     if (!window.zoomable) {
       return null;
     }
-
+    const renderButton = this.props.renderButton || this.renderButton;
     return (
       <div className={this.styles.classNames.desktopScale}>
-        {this.renderButton()}
+        {renderButton({onClick: this.onToggleDialog})}
         {this.renderDialog()}
       </div>
     );
