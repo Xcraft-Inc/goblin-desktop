@@ -66,6 +66,8 @@ module.exports = {
       total: action.get('total'),
       externalUrl: action.get('externalUrl'),
       isDownload: action.get('isDownload'),
+      temporary: action.get('temporary'),
+      duration: action.get('duration'),
     };
     return state.set(`notifications.${notificationId}`, notification);
   },

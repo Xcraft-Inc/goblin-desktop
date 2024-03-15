@@ -538,7 +538,9 @@ Goblin.registerQuest(goblinName, 'add-notification', function (
   command,
   externalUrl,
   isDownload,
-  broadcast
+  broadcast,
+  temporary,
+  duration
 ) {
   if (!notificationId) {
     notificationId = quest.uuidV4();
@@ -557,6 +559,8 @@ Goblin.registerQuest(goblinName, 'add-notification', function (
         command,
         externalUrl,
         isDownload,
+        temporary,
+        duration,
       }
     );
     return;
@@ -570,6 +574,8 @@ Goblin.registerQuest(goblinName, 'add-notification', function (
     command,
     externalUrl,
     isDownload,
+    temporary,
+    duration,
   });
   const dnd = quest.goblin.getState().get('dnd');
   if (!dnd) {
