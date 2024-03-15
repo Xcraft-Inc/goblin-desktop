@@ -89,6 +89,10 @@ module.exports = {
     );
     return state.set('notifications', newNotifications);
   },
+  'read-notification': (state, action) => {
+    const id = action.get('notification').id;
+    return state.set(`notifications.${id}.status`, 'read');
+  },
   'remove-notification': (state, action) => {
     const id = action.get('notification').id;
     return state.del(`notifications.${id}`);

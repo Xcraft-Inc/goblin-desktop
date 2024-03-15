@@ -529,6 +529,14 @@ Goblin.registerQuest(goblinName, 'gamepad-changed', function (
 // Notifications //
 //---------------//
 
+Goblin.registerQuest(goblinName, 'read-notification', function (
+  quest,
+  notification
+) {
+  quest.do({notification});
+  quest.dispatch('update-not-read-count');
+});
+
 Goblin.registerQuest(goblinName, 'add-notification', function (
   quest,
   notificationId,
