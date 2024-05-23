@@ -73,8 +73,13 @@ class DesktopConnectionStatusNC extends Widget {
           <Label fontWeight="bold" text={T('Réseau')} bottomSpacing="large" />
           {hordes
             .entrySeq()
-            .map(([horde, {lag, delta, noSocket}]) =>
-              this.renderRow(horde, lag, delta, noSocket)
+            .map(([horde, data]) =>
+              this.renderRow(
+                horde,
+                data.get('lag'),
+                data.get('delta'),
+                data.get('noSocket')
+              )
             )}
         </div>
       </div>
@@ -85,7 +90,7 @@ class DesktopConnectionStatusNC extends Widget {
     const lag = hordes
       .valueSeq()
       .toArray()
-      .some(({lag}) => lag);
+      .some((horde) => horde.get('lag'));
     const color = this._getColor(lag);
 
     return (
