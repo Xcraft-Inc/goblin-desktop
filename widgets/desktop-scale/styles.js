@@ -18,6 +18,7 @@ export default function styles(theme, props) {
       `${to(20, cssUnit)} ${to(45, cssUnit)} ` +
       `${to(20, cssUnit)} ${to(20, cssUnit)}`,
     borderRadius: to(10, cssUnit),
+    color: theme.palette.textColor,
     backgroundColor: theme.palette.flyingDialogBackground,
     boxShadow:
       `rgba(0, 0, 0, 1) ` +
