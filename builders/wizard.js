@@ -169,6 +169,7 @@ module.exports = (config) => {
     const desktopId = quest.goblin.getX('desktopId');
 
     if (hinters) {
+      const promises = [];
       Object.keys(hinters).forEach((h) => {
         let detailWidget = null;
         let hName = h;
@@ -181,21 +182,21 @@ module.exports = (config) => {
           const widgetId = `hinter@${hName}@${quest.goblin.id}`;
           hinterIdsByName[h] = id;
           hinterWidgetIdsByName[h] = widgetId;
-          quest.create(
-            `${hName}-hinter`,
-            {
+          promises.push(
+            quest.create(`${hName}-hinter`, {
               id,
               desktopId,
               hinterName: h,
               workitemId: quest.goblin.id,
               detailWidget,
               withDetails: true,
-            },
-            next.parallel()
+            })
           );
         }
       });
-      yield next.sync();
+      if (promises.length) {
+        yield Promise.all(promises);
+      }
     }
   });
 
