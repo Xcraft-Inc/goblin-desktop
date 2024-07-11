@@ -166,37 +166,43 @@ module.exports = (config) => {
   );
 
   Goblin.registerQuest(goblinName, 'create-hinters', function* (quest, next) {
-    const desktopId = quest.goblin.getX('desktopId');
+    if (!hinters) {
+      return;
+    }
 
-    if (hinters) {
-      const promises = [];
-      Object.keys(hinters).forEach((h) => {
-        let detailWidget = null;
-        let hName = h;
-        if (hinters[h].hinter) {
-          hName = hinters[h].hinter;
-          detailWidget = `${hName}-workitem`;
-        }
-        if (quest.hasAPI(`${hName}-hinter`)) {
-          const id = `${hName}-hinter@${h}@${quest.goblin.id}`;
-          const widgetId = `hinter@${hName}@${quest.goblin.id}`;
-          hinterIdsByName[h] = id;
-          hinterWidgetIdsByName[h] = widgetId;
-          promises.push(
-            quest.create(`${hName}-hinter`, {
-              id,
-              desktopId,
-              hinterName: h,
-              workitemId: quest.goblin.id,
-              detailWidget,
-              withDetails: true,
-            })
-          );
-        }
-      });
-      if (promises.length) {
-        yield Promise.all(promises);
+    const desktopId = quest.goblin.getX('desktopId');
+    const promises = [];
+
+    Object.keys(hinters).forEach((h) => {
+      let detailWidget = null;
+      let hName = h;
+
+      if (hinters[h].hinter) {
+        hName = hinters[h].hinter;
+        detailWidget = `${hName}-workitem`;
       }
+      if (!quest.hasAPI(`${hName}-hinter`)) {
+        return;
+      }
+
+      const id = `${hName}-hinter@${h}@${quest.goblin.id}`;
+      const widgetId = `hinter@${hName}@${quest.goblin.id}`;
+      hinterIdsByName[h] = id;
+      hinterWidgetIdsByName[h] = widgetId;
+      promises.push(
+        quest.create(`${hName}-hinter`, {
+          id,
+          desktopId,
+          hinterName: h,
+          workitemId: quest.goblin.id,
+          detailWidget,
+          withDetails: true,
+        })
+      );
+    });
+
+    if (promises.length) {
+      yield Promise.all(promises);
     }
   });
 
