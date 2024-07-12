@@ -201,9 +201,7 @@ module.exports = (config) => {
       );
     });
 
-    if (promises.length) {
-      yield Promise.all(promises);
-    }
+    yield Promise.all(promises);
   });
 
   common.registerHinters(goblinName, hinters);
