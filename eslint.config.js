@@ -15,7 +15,10 @@ module.exports = [
     languageOptions: {
       parser: babelParser,
       parserOptions: {
-        requireConfigFile: false,
+        requireConfigFile: false, // Évite de devoir spécifier un fichier de configuration Babel
+        babelOptions: {
+          presets: ['@babel/preset-react'],
+        },
         ecmaFeatures: {
           jsx: true,
         },
@@ -36,7 +39,7 @@ module.exports = [
       'eqeqeq': 'error',
       'no-console': 'off',
       'react/display-name': 'off',
-      '@babel/no-unused-expressions': 'error',
+      '@babel/no-unused-expressions': 'error', // Utilisation de règles spécifiques à Babel
       'no-unused-vars': [
         'error',
         {
