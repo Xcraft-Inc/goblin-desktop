@@ -165,7 +165,7 @@ module.exports = (config) => {
     {skills: skills ?? []}
   );
 
-  Goblin.registerQuest(goblinName, 'create-hinters', function* (quest, next) {
+  Goblin.registerQuest(goblinName, 'create-hinters', function* (quest) {
     if (!hinters) {
       return;
     }
