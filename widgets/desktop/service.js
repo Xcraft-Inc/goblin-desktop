@@ -5,9 +5,7 @@ const Goblin = require('xcraft-core-goblin');
 const watt = require('gigawatts');
 const goblinName = path.basename(module.parent.filename, '.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
-const xUtils = require('xcraft-core-utils');
-const {getFileFilter} = xUtils.files;
-const {locks} = require('xcraft-core-utils');
+const {locks} = require('xcraft-core-utils/lib/locks.js');
 const desktopLock = locks.getMutex;
 // Define initial logic values
 const logicState = {};
@@ -684,6 +682,7 @@ Goblin.registerQuest(goblinName, 'download-file', function (
     const stream = fs.createReadStream;
     const routingKey = require('xcraft-core-host').getRoutingKey();
     if (fs.existsSync(filePath)) {
+      const getFileFilter = require('xcraft-core-utils/lib/files.js');
       let file = stream(filePath);
       quest.evt(
         `<${clientSessionId}-${clientWindowId}-download-file-requested>`,
