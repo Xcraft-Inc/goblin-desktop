@@ -5,7 +5,7 @@ const Goblin = require('xcraft-core-goblin');
 const watt = require('gigawatts');
 const goblinName = path.basename(module.parent.filename, '.js');
 const StringBuilder = require('goblin-nabu/lib/string-builder.js');
-const {locks} = require('xcraft-core-utils/lib/locks.js');
+const locks = require('xcraft-core-utils/lib/locks.js');
 const desktopLock = locks.getMutex;
 // Define initial logic values
 const logicState = {};
