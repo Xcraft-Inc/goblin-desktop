@@ -682,7 +682,7 @@ Goblin.registerQuest(goblinName, 'download-file', function (
     const stream = fs.createReadStream;
     const routingKey = require('xcraft-core-host').getRoutingKey();
     if (fs.existsSync(filePath)) {
-      const getFileFilter = require('xcraft-core-utils/lib/files.js');
+      const {getFileFilter} = require('xcraft-core-utils/lib/files.js');
       let file = stream(filePath);
       quest.evt(
         `<${clientSessionId}-${clientWindowId}-download-file-requested>`,
