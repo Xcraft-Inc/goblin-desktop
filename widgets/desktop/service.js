@@ -23,7 +23,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
   session,
   configuration,
   routes,
-  mainGoblin
+  mainGoblin // FIXME: replace mainGoblin by mainGoblinModule
 ) {
   if (clientSessionId) {
     quest.goblin.setX('clientSessionId', clientSessionId);
