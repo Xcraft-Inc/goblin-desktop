@@ -55,7 +55,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
       const mainConfig = require('xcraft-core-etc')().load(
         `goblin-${mainGoblin}`
       );
-      useNabu = mainConfig.profile && mainConfig.profile.useNabu;
+      useNabu = mainConfig?.profile?.useNabu === true;
     }
 
     // CREATE NABU TOOLBAR IF NEEDED
