@@ -213,6 +213,11 @@ class EntityView extends Widget {
     };
   }
 
+  onToggleBatch = () => {
+    const listId = `list@${this.props.id}`;
+    this.doFor(listId, 'toggle-batch-select');
+  };
+
   onSortColumn(index, columns) {
     if (this.props.hasFilter || index === 0) {
       return;
@@ -386,6 +391,13 @@ class EntityView extends Widget {
           glyph="solid/columns"
           tooltip={T('Choisir les colonnes')}
           onClick={this.onEditColumns}
+        />
+        <Button
+          width="30px"
+          height="30px"
+          glyph="solid/check"
+          tooltip={T('Activer / Désactiver la séléction en lots')}
+          onClick={this.onToggleBatch}
         />
       </div>
     );
