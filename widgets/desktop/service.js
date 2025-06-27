@@ -77,7 +77,7 @@ Goblin.registerQuest(goblinName, 'create', function* (
     profileKey: configuration && configuration.id,
   });
 
-  quest.log.info(`Desktop ${quest.goblin.id} created!`);
+  quest.log.info(() => `Desktop ${quest.goblin.id} created!`);
   const id = quest.goblin.id;
 
   quest.goblin.defer(
