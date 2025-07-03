@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Widget from 'goblin-laboratory/widgets/widget';
+import Fragment from 'goblin-gadgets/widgets/fragment/widget.js';
 import throttle from 'lodash/throttle';
 import CollectionLoader from 'goblin-laboratory/widgets/collection-loader/widget.js';
 import List from 'goblin-gadgets/widgets/list/widget';
@@ -14,6 +15,7 @@ import T from 't';
 import MouseTrap from 'mousetrap';
 import {Unit} from 'goblin-theme';
 import ListHelpers from 'goblin-workshop/lib/list-helpers.js';
+import C from 'goblin-laboratory/widgets/connect-helpers/c.js';
 
 /******************************************************************************/
 
@@ -218,6 +220,16 @@ class EntityView extends Widget {
     this.doFor(listId, 'toggle-batch-select');
   };
 
+  onCheckAllBatch = () => {
+    const listId = `list@${this.props.id}`;
+    this.doFor(listId, 'check-all-batch');
+  };
+
+  onUnCheckAllBatch = () => {
+    const listId = `list@${this.props.id}`;
+    this.doFor(listId, 'uncheck-all-batch');
+  };
+
   onSortColumn(index, columns) {
     if (this.props.hasFilter || index === 0) {
       return;
@@ -382,7 +394,7 @@ class EntityView extends Widget {
     if (!this.props.prototypeMode) {
       return null;
     }
-
+    const listId = `list@${this.props.id}`;
     return (
       <div className={this.styles.classNames.button}>
         <Button
@@ -395,10 +407,28 @@ class EntityView extends Widget {
         <Button
           width="30px"
           height="30px"
-          glyph="solid/check"
+          glyph={C(`backend.${listId}.enableSelection`, (e) =>
+            e ? 'solid/times' : 'solid/check'
+          )}
           tooltip={T('Activer / Désactiver la séléction en lots')}
           onClick={this.onToggleBatch}
         />
+        <Fragment show={C(`backend.${listId}.enableSelection`)}>
+          <Button
+            width="30px"
+            height="30px"
+            glyph="solid/check-square"
+            tooltip={T('Tout cocher')}
+            onClick={this.onCheckAllBatch}
+          />
+          <Button
+            width="30px"
+            height="30px"
+            glyph="regular/square"
+            tooltip={T('Tout décocher')}
+            onClick={this.onUnCheckAllBatch}
+          />
+        </Fragment>
       </div>
     );
   }
