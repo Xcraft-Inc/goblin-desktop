@@ -16,8 +16,43 @@ import MouseTrap from 'mousetrap';
 import {Unit} from 'goblin-theme';
 import ListHelpers from 'goblin-workshop/lib/list-helpers.js';
 import C from 'goblin-laboratory/widgets/connect-helpers/c.js';
+import withC from 'goblin-laboratory/widgets/connect-helpers/with-c.js';
 
 /******************************************************************************/
+
+class BatchActionsNC extends Widget {
+  constructor() {
+    super(...arguments);
+  }
+
+  onAction = (questService, quest) => {
+    const {serviceId} = this.props;
+    this.doFor(serviceId, 'do-batch-action', {questService, questName: quest});
+  };
+
+  render() {
+    const {quests, count} = this.props;
+    return Array.from(quests).map((bq, key) => {
+      const onClick = () => {
+        this.onAction(bq.get('questService'), bq.get('quest'));
+      };
+      return (
+        <Button
+          key={key}
+          disabled={count === 0}
+          width="-1px"
+          height="30px"
+          glyph={bq.get('glyph')}
+          tooltip={bq.get('quest')}
+          onClick={onClick}
+          text={count}
+        />
+      );
+    });
+  }
+}
+
+const BatchActions = withC(BatchActionsNC);
 
 class EntityView extends Widget {
   constructor() {
@@ -427,6 +462,14 @@ class EntityView extends Widget {
             glyph="regular/square"
             tooltip={T('Tout décocher')}
             onClick={this.onUnCheckAllBatch}
+          />
+          <BatchActions
+            serviceId={listId}
+            quests={C(`backend.${listId}.batchQuests`)}
+            count={C(
+              `backend.${listId}.selected`,
+              (s) => Array.from(s.values()).filter((v) => v).length
+            )}
           />
         </Fragment>
       </div>
