@@ -167,6 +167,7 @@ export default Widget.connect((state, props) => {
     clientSessionId,
     zoom,
     dialogVisibility,
-    cssUnit: {unit: 'vmin', ratio: 0.1},
   };
-})(DesktopScale);
+})((props) => {
+  return <DesktopScale cssUnit={{unit: 'vmin', ratio: 0.1}} {...props} />;
+});
