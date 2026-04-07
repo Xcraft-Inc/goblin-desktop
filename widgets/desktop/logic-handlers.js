@@ -18,6 +18,7 @@ module.exports = {
         stack: [],
         index: -1,
       },
+      mateId: null,
       teamId: null,
       current: {
         workitems: {},
@@ -154,6 +155,14 @@ module.exports = {
   },
   'add-workitem': (state, action) => {
     return state.set('working', action.get('working'));
+  },
+  'setUserContext': (state, action) => {
+    const username = action.get('username');
+    const mateId = action.get('mateId');
+    if (mateId) {
+      state = state.set('mateId', mateId);
+    }
+    return state.set('username', username);
   },
   'setHinter': (state, action) => {
     const workcontext = state.get('current.workcontext');

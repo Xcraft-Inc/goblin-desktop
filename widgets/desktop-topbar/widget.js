@@ -69,12 +69,21 @@ const UserInfo = Widget.connect((state, props) => {
     teamIds.get(0)
   );
   const team = state.get(`backend.${currentTeam}.alias`, '');
+  const mateIds = state.get(`backend.${currentTeam}.mateIds`, '');
+  const items = mateIds.reduce((items, id) => {
+    const mate = state.get(`backend.${id}`);
+    if (mate) {
+      items.push({text: mate.get('meta.summaries.info'), value: id});
+    }
+    return items;
+  }, []);
 
   return {
     text: `${props.user} ${team}`,
     kind: 'main-tab-right',
+    items,
   };
-})(Button);
+})(MainTabMenu);
 
 /******************************************************************************/
 
@@ -85,6 +94,7 @@ class DesktopTopbarNC extends Widget {
     this.onChangeScreen = this.onChangeScreen.bind(this);
     this.onChangeLocale = this.onChangeLocale.bind(this);
     this.onChangeTeam = this.onChangeTeam.bind(this);
+    this.onChangeUser = this.onChangeUser.bind(this);
     this.onTogglePrototypeMode = this.onTogglePrototypeMode.bind(this);
   }
 
@@ -100,6 +110,12 @@ class DesktopTopbarNC extends Widget {
     this.doAs('desktop', 'change-team', {teamId});
   }
 
+  onChangeUser(mateId) {
+    const state = this.getState().backend.get(mateId);
+    const username = state.get('meta').get('summaries').get('info');
+    this.doAs('desktop', 'setUserContext', {username, mateId});
+  }
+
   onTogglePrototypeMode() {
     this.doFor(this.props.clientSessionId, 'toggle-prototype-mode');
   }
@@ -109,7 +125,11 @@ class DesktopTopbarNC extends Widget {
   renderUserPart() {
     return (
       <>
-        <UserInfo user={this.props.username} desktopId={this.props.id} />
+        <UserInfo
+          user={this.props.username}
+          desktopId={this.props.id}
+          onChange={this.onChangeUser}
+        />
         <TeamSelector
           kind="main-tab-right"
           desktopId={this.props.id}

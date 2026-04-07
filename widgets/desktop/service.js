@@ -117,6 +117,14 @@ Goblin.registerQuest(goblinName, 'change-locale', function (quest, locale) {
   quest.evt(`<${labId}>.user-locale-changed`, {locale});
 });
 
+Goblin.registerQuest(goblinName, 'setUserContext', function (
+  quest,
+  username,
+  mateId
+) {
+  quest.do({username, mateId});
+});
+
 Goblin.registerQuest(goblinName, 'setDefaultNewWorkitem', function (
   quest,
   workitem
